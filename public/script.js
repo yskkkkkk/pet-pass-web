@@ -181,26 +181,75 @@ overlay.onclick = () => {
 // Buttons & Filters
 const btnAuth = document.getElementById('btn-auth');
 const btnFetchGov = document.getElementById('btn-fetch-gov');
-const btnCloseAuth = document.getElementById('btn-close-auth');
-const filterTags = document.querySelectorAll('.filters .icon-tag');
-const regionSelect = document.querySelector('.filter-header select');
 const searchInput = document.getElementById('search-input');
 
-// Auth Modal Logic
-btnAuth.onclick = () => {
-  const isAuth = localStorage.getItem('petPassToken');
-  if (isAuth) {
-    alert("이미 인증된 펫 패스가 기기에 저장되어 있습니다.");
-    return;
-  }
+// Pet Card Elements
+const authFormView = document.getElementById('auth-form-view');
+const petCardView = document.getElementById('pet-card-view');
+const btnCloseCard = document.getElementById('btn-close-card');
+const btnUnlink = document.getElementById('btn-unlink');
+
+function displayPetCard(petData) {
+  if (!petData) return;
+
+  document.getElementById('card-pet-name').innerText = petData.dogNm || '-';
+  document.getElementById('card-pet-kind').innerText = petData.kindNm || '품종 정보 없음';
+  document.getElementById('card-pet-sex').innerText = petData.sexNm || '-';
+  document.getElementById('card-pet-neuter').innerText = petData.neuterYn || '-';
+  document.getElementById('card-pet-birth').innerText = petData.ownerBirth ? `20${petData.ownerBirth.substring(0, 2)}` : '-';
+  document.getElementById('card-reg-no').innerText = petData.dogRegNo || '-';
+
+  authFormView.style.display = 'none';
+  petCardView.style.display = 'block';
   
   overlay.style.display = 'block';
   setTimeout(() => overlay.style.opacity = '1', 10);
   authModal.classList.add('active');
+}
+
+function unlinkPetPass() {
+  if (confirm("정말로 펫 패스 연동을 해제하시겠습니까?\n기기에 저장된 인증 정보가 즉시 삭제됩니다.")) {
+    localStorage.removeItem('petPassToken');
+    localStorage.removeItem('petPassData');
+    
+    btnAuth.classList.remove('active');
+    btnAuth.innerText = "디지털 펫 패스";
+    
+    overlay.click();
+    
+    // Reset view for next open
+    setTimeout(() => {
+      authFormView.style.display = 'block';
+      petCardView.style.display = 'none';
+    }, 300);
+  }
+}
+
+// Auth Modal Logic
+btnAuth.onclick = () => {
+  const savedData = localStorage.getItem('petPassData');
+  
+  if (savedData) {
+    displayPetCard(JSON.parse(savedData));
+  } else {
+    authFormView.style.display = 'block';
+    petCardView.style.display = 'none';
+    overlay.style.display = 'block';
+    setTimeout(() => overlay.style.opacity = '1', 10);
+    authModal.classList.add('active');
+  }
 };
 
 btnCloseAuth.onclick = () => {
   overlay.click();
+};
+
+btnCloseCard.onclick = () => {
+  overlay.click();
+};
+
+btnUnlink.onclick = () => {
+  unlinkPetPass();
 };
 
 btnFetchGov.onclick = async () => {
@@ -230,12 +279,16 @@ btnFetchGov.onclick = async () => {
     const result = await response.json();
 
     if (result.success) {
+      const petData = result.data;
       localStorage.setItem('petPassToken', `VERIFIED-${dogRegNo.substring(0, 4)}***`);
+      localStorage.setItem('petPassData', JSON.stringify(petData));
+      
       btnAuth.classList.add('active');
       btnAuth.innerText = "연동 완료 🐾";
       
+      // 즉시 카드 표시
+      displayPetCard(petData);
       alert(result.message || "정부 데이터베이스 확인이 완료되었습니다! 펫 패스가 기기에 등록되었습니다.");
-      overlay.click(); 
     } else {
       // 서버에서 500 내리더라도 express.json 썼기 때문에 result로 넘어오거나 catch로 빠짐.
       alert(`[인증 실패]\n${result.error || ''}\n${result.detail || ''}`);

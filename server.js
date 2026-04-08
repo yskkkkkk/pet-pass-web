@@ -41,8 +41,14 @@ app.get('/api/auth-pet', async (req, res) => {
         success: true,
         message: "API Key 미설정 (테스트 모드)",
         data: {
+          dogNm: "초코",
+          kindNm: "푸들",
+          sexNm: "암컷",
+          neuterYn: "중성",
           dogRegNo: dogRegNo,
           ownerBirth: ownerBirth,
+          orgNm: "경기도 성남시",
+          officNm: "분당구청",
           vaccinationStatus: "완료 (2026-03-01)"
         }
       });
