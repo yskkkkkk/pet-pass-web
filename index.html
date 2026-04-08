@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>반려패스 (Pet-Pass) | 공식 반려동물 출입 매장 조회</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+KR:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <!-- Kakao Map API -->
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=af322b992c86ddadb3f373b44ecd1c9c"></script>
+  <!-- Korean Chosung Search Support -->
+  <script src="https://unpkg.com/hangul-js" type="text/javascript"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header glass">
+    <div class="logo">
+      <span>🐾 Pet-Pass</span>
+    </div>
+    <div class="search-bar glass">
+      <input id="search-input" type="text" placeholder="지역명, 상호명 검색...">
+    </div>
+    <div class="user-menu">
+      <button id="btn-auth" class="auth-btn">디지털 펫 패스</button>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main class="main-container">
+    <!-- Map Section -->
+    <section id="map-mock">
+      <button id="btn-search-here" class="glass">📍 이 지역 탐색</button>
+    </section>
+
+    <!-- Side Panel / Bottom Sheet (Mobile) -->
+    <aside class="side-panel">
+      <div class="drag-handle" style="display: none;"></div><!-- Visible only on mobile styling conditionally if needed -->
+      <div class="filter-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h2 style="font-weight: 800; font-size: 20px;">공식 인증 매장 (<span id="store-count">0</span>)</h2>
+          <select class="icon-tag glass" style="outline: none; padding-right: 10px;">
+            <option>전국</option>
+            <option>서울시</option>
+            <option>경기도</option>
+            <option>부산시</option>
+            <option>제주도</option>
+          </select>
+        </div>
+        
+        <div class="filters" style="display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px;">
+          <span class="icon-tag active">전체</span>
+          <span class="icon-tag">카페</span>
+          <span class="icon-tag">일반음식점</span>
+          <span class="icon-tag">제과점</span>
+        </div>
+      </div>
+
+      <!-- Native Ad Slot Structure -->
+      <div class="ad-slot glass">
+        광고 · 프리미엄 펫푸드브랜드 신제품 런칭 기념 특가 (예시)
+      </div>
+
+      <div id="store-list">
+        <!-- Rendered by script.js -->
+      </div>
+    </aside>
+  </main>
+
+  <!-- Store Detail Bottom Sheet -->
+  <div id="overlay" class="overlay"></div>
+  <div id="store-detail" class="bottom-sheet glass">
+    <div class="drag-handle"></div>
+    <div class="detail-header" style="text-align: center; margin-bottom: 30px;">
+      <h2 id="detail-name" style="font-size: 28px; font-weight: 900; margin-bottom: 8px;">상호명</h2>
+      <span id="detail-type" class="icon-tag">종류</span>
+    </div>
+    <div class="detail-content" style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="detail-image">
+        <img id="detail-img" src="" alt="Store" style="width: 100%; border-radius: 20px; max-height: 250px; object-fit: cover;">
+      </div>
+      <div class="detail-info">
+        <h4 style="color: var(--accent); margin-bottom: 15px;">2026 법적 기준 통과 항목</h4>
+        <ul id="compliance-list" style="list-style: none;">
+          <!-- Compliance items -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pet Pass Device Auth Modal -->
+  <div id="auth-modal" class="auth-modal glass">
+    
+    <!-- 인증 전: 입력 폼 -->
+    <div id="auth-form-view">
+      <h3 style="margin-bottom: 10px; font-size: 22px;">디지털 펫 패스 간편 인증</h3>
+      <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+        정부24(국가동물보호정보시스템) 연동을 위해 정보를 입력해주세요.<br/>
+        인증 정보는 <strong style="color:var(--peach-main)">로그인 없이 안전하게 기기에만 단방향 저장</strong>됩니다.
+      </p>
+      <div style="margin-bottom: 15px;">
+        <input type="text" id="input-dog-reg-no" placeholder="반려동물 등록번호 (15자리)" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; margin-bottom: 10px; outline: none; box-sizing: border-box;">
+        <input type="text" id="input-owner-birth" placeholder="소유자 생년월일 6자리 (예: 900101)" maxlength="6" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; outline: none; box-sizing: border-box;">
+      </div>
+      <button id="btn-fetch-gov" class="auth-btn" style="width: 100%; padding: 14px; font-size: 16px; margin-bottom: 10px;">
+        정부 데이터베이스 조회
+      </button>
+      <button id="btn-close-auth" style="width: 100%; background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 10px;">
+        닫기
+      </button>
+    </div>
+
+    <!-- 인증 후: 디지털 펫 카드 -->
+    <div id="pet-card-view" style="display: none;">
+      <div style="text-align: center; margin-bottom: 16px;">
+        <div style="font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: 2px; margin-bottom: 4px;">🛡️ 국가동물보호정보시스템 인증</div>
+        <div style="font-size: 11px; color: var(--text-secondary);">OFFICIAL PET PASS</div>
+      </div>
+
+      <!-- 동물 정보 카드 본체 -->
+      <div style="background: linear-gradient(135deg, rgba(74,111,74,0.5), rgba(210,140,90,0.2)); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden;">
+        <!-- 배경 워터마크 -->
+        <div style="position: absolute; right: -10px; bottom: -15px; font-size: 80px; opacity: 0.08; pointer-events: none;">🐾</div>
+
+        <!-- 동물 이름 & 종 -->
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+          <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 30px; border: 2px solid rgba(255,255,255,0.2);">🐶</div>
+          <div>
+            <div id="card-pet-name" style="font-size: 24px; font-weight: 700; letter-spacing: 1px;">-</div>
+            <div id="card-pet-kind" style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">-</div>
+          </div>
+        </div>
+
+        <!-- 상세 정보 그리드 -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 12px;">
+            <div style="font-size: 11px; color: var(--accent); margin-bottom: 4px;">성별</div>
+            <div id="card-pet-sex" style="font-size: 14px; font-weight: 600;">-</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 12px;">
+            <div style="font-size: 11px; color: var(--accent); margin-bottom: 4px;">중성화</div>
+            <div id="card-pet-neuter" style="font-size: 14px; font-weight: 600;">-</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 12px;">
+            <div style="font-size: 11px; color: var(--accent); margin-bottom: 4px;">출생연도</div>
+            <div id="card-pet-birth" style="font-size: 14px; font-weight: 600;">-</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 12px;">
+            <div style="font-size: 11px; color: var(--accent); margin-bottom: 4px;">등록번호</div>
+            <div id="card-reg-no" style="font-size: 11px; font-weight: 600; word-break: break-all;">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 버튼 영역 -->
+      <button id="btn-close-card" class="auth-btn" style="width: 100%; padding: 12px; font-size: 15px; margin-bottom: 8px; background: rgba(255,255,255,0.1);">
+        확인 완료
+      </button>
+      <button id="btn-unlink" style="width: 100%; background: transparent; border: 1px solid rgba(255,100,100,0.4); border-radius: 12px; color: rgba(255,120,120,0.8); cursor: pointer; padding: 10px; font-size: 13px;">
+        🔓 펫 패스 연동 해제
+      </button>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
