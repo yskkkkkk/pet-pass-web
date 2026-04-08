@@ -233,15 +233,25 @@ btnAuth.onclick = () => {
   const savedData = localStorage.getItem('petPassData');
   
   if (savedData) {
-    displayPetCard(JSON.parse(savedData));
+    try {
+      displayPetCard(JSON.parse(savedData));
+    } catch (e) {
+      console.error("저장된 펫 데이터 파싱 실패:", e);
+      localStorage.removeItem('petPassData'); // 손상된 데이터 삭제
+      showAuthForm();
+    }
   } else {
-    authFormView.style.display = 'block';
-    petCardView.style.display = 'none';
-    overlay.style.display = 'block';
-    setTimeout(() => overlay.style.opacity = '1', 10);
-    authModal.classList.add('active');
+    showAuthForm();
   }
 };
+
+function showAuthForm() {
+  authFormView.style.display = 'block';
+  petCardView.style.display = 'none';
+  overlay.style.display = 'block';
+  setTimeout(() => overlay.style.opacity = '1', 10);
+  authModal.classList.add('active');
+}
 
 btnCloseAuth.onclick = () => {
   overlay.click();
@@ -381,10 +391,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initMap();
   applyFilters();
   
-  // Restore Button State
-  if (localStorage.getItem('petPassToken')) {
+  // Restore Button State (Data 위주로 판단)
+  if (localStorage.getItem('petPassData')) {
     btnAuth.classList.add('active');
     btnAuth.innerText = "연동 완료 🐾";
+  } else {
+    btnAuth.classList.remove('active');
+    btnAuth.innerText = "디지털 펫 패스";
   }
 });
 
