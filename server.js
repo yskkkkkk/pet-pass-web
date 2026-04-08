@@ -10,8 +10,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// 프론트엔드 파일(현재 폴더)을 정적으로 서빙합니다.
-app.use(express.static(__dirname));
+// 프론트엔드 자원(HTML, JS, CSS 등)을 public 폴더에서 서빙합니다.
+app.use(express.static(path.join(__dirname, 'public')));
 
 /**
  * [Proxy Endpoint]
