@@ -181,6 +181,9 @@ overlay.onclick = () => {
 // Buttons & Filters
 const btnAuth = document.getElementById('btn-auth');
 const btnFetchGov = document.getElementById('btn-fetch-gov');
+const btnCloseAuth = document.getElementById('btn-close-auth');
+const filterTags = document.querySelectorAll('.filters .icon-tag');
+const regionSelect = document.querySelector('.filter-header select');
 const searchInput = document.getElementById('search-input');
 
 // Pet Card Elements
