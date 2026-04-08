@@ -65,12 +65,12 @@ app.get('/api/auth-pet', async (req, res) => {
     const rawServiceKey = process.env.DATA_GO_KR_API_KEY;
     const serviceKey = encodeURIComponent(rawServiceKey);
 
-    // v3 필수 파라미터들 (생년월일 기반 조회로 전환)
-    const rfid_cd = ""; 
-    const owner_nm = ""; // 성명은 비우고 생년월일만 사용
+    // v3 필수 파라미터들 (사용자 curl 예시와 일치하도록 명시적 설정)
+    const rfid_cd = dogRegNo;  // 등록번호와 동일하게 설정
+    const owner_nm = " ";      // 공백 한 칸 필수 (%20)
     
     // 최종 URL 조립 (모든 필수 파라미터 포함)
-    const fullURL = `${GOV_API_URL}?serviceKey=${serviceKey}&dog_reg_no=${dogRegNo}&rfid_cd=${rfid_cd}&owner_nm=${owner_nm}&owner_birth=${ownerBirth}&_type=json`;
+    const fullURL = `${GOV_API_URL}?serviceKey=${serviceKey}&dog_reg_no=${dogRegNo}&rfid_cd=${rfid_cd}&owner_nm=${encodeURIComponent(owner_nm)}&owner_birth=${ownerBirth}&_type=json`;
 
     console.log(`[REQUEST] 정부 API 호출 시작 (V3 / HTTPS / All Params)`);
     console.log(`[DEBUG] Key(Encoded): ${serviceKey.substring(0, 15)}...`);
