@@ -120,11 +120,11 @@ body {
 }
 
 #btn-search-here {
-  position: absolute;
+  position: fixed;
   bottom: 40px;
-  left: 50%;
+  left: calc(50% - 210px); /* 사이드패널(420px) 절반을 빼서 지도 중앙에 위치 */
   transform: translateX(-50%);
-  z-index: 300;
+  z-index: 9999;
   padding: 12px 24px;
   border-radius: 30px;
   background: var(--forest-main);
@@ -137,6 +137,7 @@ body {
   display: none;
   opacity: 0;
   transition: opacity 0.3s;
+  pointer-events: auto;
 }
 
 .side-panel {
