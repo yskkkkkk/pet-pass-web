@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +13,69 @@ app.use(express.json());
 
 // 프론트엔드 자원(HTML, JS, CSS 등)을 public 폴더에서 서빙합니다.
 app.use(express.static(path.join(__dirname, 'public')));
+
+/**
+ * [Stores API]
+ * 서버측 JSON 파일에서 매장 데이터를 읽어 반환합니다.
+ */
+app.get('/api/stores', (req, res) => {
+  const filePath = path.join(__dirname, 'data', 'stores.json');
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error("매장 데이터를 읽는 중 오류 발생:", err);
+      return res.status(500).json({ error: "매장 데이터를 불러올 수 없습니다." });
+    }
+    try {
+      const stores = JSON.parse(data);
+      res.json(stores);
+    } catch (parseErr) {
+      console.error("JSON 파싱 에러:", parseErr);
+      res.status(500).json({ error: "데이터 형식이 올바르지 않습니다." });
+    }
+  });
+});
+
+/**
+ * [Registration API]
+ * 사용자가 새로운 매장을 제안(등록 신청)하면 pending_stores.json에 저장합니다.
+ */
+app.post('/api/register-store', (req, res) => {
+  const newStore = req.body;
+  if (!newStore.name || !newStore.address) {
+    return res.status(400).json({ error: "매장명과 주소는 필수 입력 사항입니다." });
+  }
+
+  const filePath = path.join(__dirname, 'data', 'pending_stores.json');
+  
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    let pendingList = [];
+    if (!err && data) {
+      try {
+        pendingList = JSON.parse(data);
+      } catch (e) {
+        pendingList = [];
+      }
+    }
+
+    // 간단한 ID 부여 및 타임스탬프 추가
+    const submission = {
+      ...newStore,
+      id: Date.now(),
+      submittedAt: new Date().toISOString(),
+      status: 'pending'
+    };
+
+    pendingList.push(submission);
+
+    fs.writeFile(filePath, JSON.stringify(pendingList, null, 2), (writeErr) => {
+      if (writeErr) {
+        console.error("등록 신청 저장 중 오류:", writeErr);
+        return res.status(500).json({ error: "신청 정보를 저장하지 못했습니다." });
+      }
+      res.json({ success: true, message: "매장 등록 신청이 완료되었습니다. 관리자 검토 후 반영됩니다." });
+    });
+  });
+});
 
 /**
  * [Proxy Endpoint]

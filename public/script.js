@@ -1,5 +1,7 @@
 let map;
+let clusterer = null;
 let markers = [];
+let stores = []; // Global store data, fetched from API
 let currentBoundsFilter = null; // Store map bounds for filtering
 
 const storeList = document.getElementById('store-list');
@@ -29,6 +31,22 @@ function initMap() {
   
   try {
     map = new kakao.maps.Map(container, options);
+    
+    // Clusterer 초기화
+    clusterer = new kakao.maps.MarkerClusterer({
+      map: map,
+      averageCenter: true,
+      minLevel: 6,
+      styles: [{
+        width: '53px', height: '52px',
+        background: 'rgba(255, 120, 150, 0.9)',
+        color: '#fff',
+        textAlign: 'center',
+        lineHeight: '54px',
+        borderRadius: '50%',
+        fontWeight: 'bold'
+      }]
+    });
     
     // Catch panning and zooming to show "Search Here" button
     kakao.maps.event.addListener(map, 'dragend', showSearchHereBtn);
@@ -78,7 +96,7 @@ function updateMapMarkers(data) {
         title: store.name
       });
       
-      marker.setMap(map);
+      // marker.setMap(map); // Remove direct mapping, use clusterer instead
       
       kakao.maps.event.addListener(marker, 'click', function() {
         showDetail(store);
@@ -88,6 +106,11 @@ function updateMapMarkers(data) {
       bounds.extend(position);
     }
   });
+  
+  if (clusterer) {
+    clusterer.clear();
+    clusterer.addMarkers(markers);
+  }
 
   // Automatically adjust bounds only when a specific filter/search is applied
   if (currentBoundsFilter !== null) {
@@ -114,29 +137,59 @@ function renderStores(data) {
     return;
   }
 
-  data.forEach((store, index) => {
+  const PAGE_SIZE = 50;
+  let renderData = data;
+  let page = 0;
+
+  function renderPage() {
+    const slice = renderData.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+    slice.forEach((store, idx) => {
+      const index = page * PAGE_SIZE + idx;
     const card = document.createElement('div');
     card.className = 'store-card glass animate-in';
-    card.style.animationDelay = `${index * 0.1}s`;
+    card.style.animationDelay = `${Math.min(index, 20) * 0.05}s`; // cap delay for large lists
     
+    const typeEmoji = { '카페': '☕', '일반음식점': '🍽️', '제과점': '🥐', '기타': '🏪' };
+    const emoji = typeEmoji[store.type] || '🐾';
+
     card.innerHTML = `
       <div class="verified-badge">
         <span style="font-size: 14px;">🛡️</span>
-        <span>2026 OFFICIAL</span>
+        <span>2026 공식인증</span>
       </div>
-      <img src="${store.image}" alt="${store.name}">
-      <div class="store-info">
+      <div class="store-info" style="padding-top: 8px;">
+        <div style="font-size: 28px; margin-bottom: 10px;">${emoji}</div>
         <h3>${store.name}</h3>
-        <p>${store.address}</p>
+        <p style="margin-bottom: 8px;">${store.address}</p>
         <div class="facility-icons">
-          ${store.facilities.map(f => `<span class="icon-tag">${f}</span>`).join('')}
+          <span class="icon-tag">${store.type}</span>
+          <span class="icon-tag">${store.region}</span>
         </div>
       </div>
     `;
 
     card.onclick = () => showDetail(store);
     storeList.appendChild(card);
-  });
+    });
+
+    // '더 보기' 버튼 추가
+    const total = renderData.length;
+    const shown = (page + 1) * PAGE_SIZE;
+    if (shown < total) {
+      const loadMoreBtn = document.createElement('button');
+      loadMoreBtn.className = 'auth-btn glass';
+      loadMoreBtn.style.cssText = 'width:100%; margin: 10px 0 20px; padding: 14px; font-size: 14px;';
+      loadMoreBtn.innerText = `더 보기 (${shown}/${total})`;
+      loadMoreBtn.onclick = () => {
+        page++;
+        loadMoreBtn.remove();
+        renderPage();
+      };
+      storeList.appendChild(loadMoreBtn);
+    }
+  }
+
+  renderPage();
 }
 
 // Show Store Details Bottom Sheet
@@ -148,20 +201,20 @@ function showDetail(store) {
 
   detailName.innerText = store.name;
   detailType.innerText = store.type;
-  detailImg.src = store.image;
+  if (detailImg) detailImg.style.display = 'none'; // 이미지 없으므로 숨김
   
   complianceList.innerHTML = `
     <li style="margin-bottom: 12px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid var(--peach-main);">
-      <p style="font-size: 12px; color: var(--peach-main); margin-bottom: 4px;">조리장 격리</p>
-      <p style="font-size: 14px; font-weight: 500;">${store.compliance.separation}</p>
+      <p style="font-size: 12px; color: var(--peach-main); margin-bottom: 4px;">공식 주소</p>
+      <p style="font-size: 14px; font-weight: 500;">${store.address}</p>
     </li>
     <li style="margin-bottom: 12px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px;">
-      <p style="font-size: 12px; color: var(--accent); margin-bottom: 4px;">환기 시스템</p>
-      <p style="font-size: 14px; font-weight: 500;">${store.compliance.ventilation}</p>
+      <p style="font-size: 12px; color: var(--accent); margin-bottom: 4px;">업종</p>
+      <p style="font-size: 14px; font-weight: 500;">${store.type}</p>
     </li>
     <li style="margin-bottom: 12px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px;">
-      <p style="font-size: 12px; color: var(--accent); margin-bottom: 4px;">위생 관리</p>
-      <p style="font-size: 14px; font-weight: 500;">${store.compliance.hygiene}</p>
+      <p style="font-size: 12px; color: var(--accent); margin-bottom: 4px;">인증 상태</p>
+      <p style="font-size: 14px; font-weight: 500;">🛡️ 식품안전나라 공식 시범사업 참여 업소</p>
     </li>
   `;
 
@@ -176,6 +229,7 @@ overlay.onclick = () => {
   setTimeout(() => overlay.style.display = 'none', 300);
   storeDetail.classList.remove('active');
   authModal.classList.remove('active');
+  if (registerModal) registerModal.classList.remove('active');
 };
 
 // Buttons & Filters
@@ -185,6 +239,10 @@ const btnCloseAuth = document.getElementById('btn-close-auth');
 const filterTags = document.querySelectorAll('.filters .icon-tag');
 const regionSelect = document.querySelector('.filter-header select');
 const searchInput = document.getElementById('search-input');
+const btnRegister = document.getElementById('btn-register');
+const registerModal = document.getElementById('register-modal');
+const btnCloseReg = document.getElementById('btn-close-reg');
+const btnSubmitReg = document.getElementById('btn-submit-reg');
 
 // Pet Card Elements
 const authFormView = document.getElementById('auth-form-view');
@@ -265,6 +323,56 @@ btnUnlink.onclick = () => {
   unlinkPetPass();
 };
 
+// Registration Logic
+btnRegister.onclick = () => {
+  overlay.style.display = 'block';
+  setTimeout(() => overlay.style.opacity = '1', 10);
+  registerModal.classList.add('active');
+};
+
+btnCloseReg.onclick = () => {
+  overlay.click();
+  registerModal.classList.remove('active');
+};
+
+btnSubmitReg.onclick = async () => {
+  const name = document.getElementById('reg-name').value.trim();
+  const type = document.getElementById('reg-type').value;
+  const address = document.getElementById('reg-address').value.trim();
+
+  if (!name || !address) {
+    alert("매장명과 주소를 입력해주세요.");
+    return;
+  }
+
+  btnSubmitReg.innerText = "제출 중...";
+  btnSubmitReg.style.pointerEvents = 'none';
+
+  try {
+    const response = await fetch('/api/register-store', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, type, address })
+    });
+    const result = await response.json();
+
+    if (result.success) {
+      alert(result.message);
+      overlay.click();
+      // Reset fields
+      document.getElementById('reg-name').value = '';
+      document.getElementById('reg-address').value = '';
+    } else {
+      alert("등록 실패: " + result.error);
+    }
+  } catch (error) {
+    alert("서버 통신 에러가 발생했습니다.");
+  } finally {
+    btnSubmitReg.innerText = "신청서 제출하기";
+    btnSubmitReg.style.pointerEvents = 'auto';
+  }
+};
+
 btnFetchGov.onclick = async () => {
   const dogRegNo = document.getElementById('input-dog-reg-no').value.trim();
   const ownerBirth = document.getElementById('input-owner-birth').value.trim();
@@ -313,6 +421,18 @@ btnFetchGov.onclick = async () => {
     btnFetchGov.style.pointerEvents = 'auto';
   }
 };
+
+async function fetchStores() {
+  try {
+    const response = await fetch('/api/stores');
+    if (!response.ok) throw new Error('데이터 로딩 실패');
+    stores = await response.json();
+    applyFilters(); // Initial render with fetched data
+  } catch (err) {
+    console.error('매장 정보를 가져오는데 실패했습니다:', err);
+    storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">매장 정보를 불러올 수 없습니다. 서버 상태를 확인해주세요.</div>`;
+  }
+}
 
 // Filter State & Logic
 let currentCategory = '전체';
@@ -389,7 +509,7 @@ if (searchInput) {
 // Initialization on load
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
-  applyFilters();
+  fetchStores(); // Fetch data from API instead of direct call to applyFilters
   
   // Restore Button State (Data 위주로 판단)
   if (localStorage.getItem('petPassData')) {
