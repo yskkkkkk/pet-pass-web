@@ -87,7 +87,8 @@ function updateMapMarkers(data) {
 
   const bounds = new kakao.maps.LatLngBounds();
 
-  data.forEach(store => {
+  for (let i = 0; i < data.length; i++) {
+    const store = data[i];
     if (store.lat && store.lng) {
       const position = new kakao.maps.LatLng(store.lat, store.lng);
       
@@ -96,8 +97,6 @@ function updateMapMarkers(data) {
         title: store.name
       });
       
-      // marker.setMap(map); // Remove direct mapping, use clusterer instead
-      
       kakao.maps.event.addListener(marker, 'click', function() {
         showDetail(store);
       });
@@ -105,7 +104,7 @@ function updateMapMarkers(data) {
       markers.push(marker);
       bounds.extend(position);
     }
-  });
+  }
   
   if (clusterer) {
     clusterer.clear();
@@ -115,7 +114,8 @@ function updateMapMarkers(data) {
   }
 
   // Automatically adjust bounds only when a specific filter/search is applied
-  if (currentBoundsFilter !== null) {
+  // 검색 중일 때는 검색 결과를 한눈에 볼 수 있도록 영역을 조정함 (Issue 3)
+  if (currentBoundsFilter !== null && currentSearch.trim() === '') {
     // Do NOT alter the camera if the user is explicitly searching within their current dragged bounds
   } else if (currentRegion1 === '전국' && currentSearch === '') {
     // Re-center to Default Kakao HQ if completely default state
@@ -494,9 +494,17 @@ function applyFilters() {
   if (lastFilterKey === currentFilterKey) return;
   lastFilterKey = currentFilterKey;
 
-  const filteredStores = stores.filter(store => {
+  const keyword = currentSearch.trim();
+  const resultsWithScore = [];
+
+  // 성능 최적화: 1,572개 데이터를 위해 고속 for 루프 사용 (Issue 5)
+  for (let i = 0; i < stores.length; i++) {
+    const store = stores[i];
+    let score = 0;
+
     // 1. Category Filter
     const matchCategory = (currentCategory === '전체') || (store.type === currentCategory);
+    if (!matchCategory) continue;
     
     // 2. Region Filter
     let matchRegion = true;
@@ -508,35 +516,62 @@ function applyFilters() {
       }
       matchRegion = matchRegion1 && matchRegion2;
     }
+    if (!matchRegion) continue;
     
-    // 3. Text Search Filter (Name or Address match with Hangul JS)
+    // 3. Text Search Filter with Weighting (Issue 4)
     let matchSearch = true;
-    if (currentSearch.trim() !== '') {
-      const keyword = currentSearch;
+    if (keyword !== '') {
+      matchSearch = false;
+      const addressParts = store.address.split(' ');
+
+      // 행정구역 매칭 가중치 부여
+      for (const part of addressParts) {
+        if (part === keyword) {
+          score += 100; // 정확히 일치 시 높은 가중치
+          matchSearch = true;
+        } else if (part.startsWith(keyword)) {
+          score += 50;  // 전방 일치 시 가중치
+          matchSearch = true;
+        }
+      }
+
       if (typeof Hangul !== 'undefined') {
-        // 행망, 자음, 부분합성 등 한국어 검색 특징 지원
         const matchName = Hangul.search(store.name, keyword) !== -1;
         const matchAddr = Hangul.search(store.address, keyword) !== -1;
-        matchSearch = matchName || matchAddr;
+        if (matchName) score += 10;
+        if (matchAddr) score += 5;
+        if (matchName || matchAddr) matchSearch = true;
       } else {
-        // Fallback
         const lowerKeyword = keyword.toLowerCase();
-        matchSearch = store.name.toLowerCase().includes(lowerKeyword) || store.address.toLowerCase().includes(lowerKeyword);
+        const matchName = store.name.toLowerCase().includes(lowerKeyword);
+        const matchAddr = store.address.toLowerCase().includes(lowerKeyword);
+        if (matchName) score += 10;
+        if (matchAddr) score += 5;
+        if (matchName || matchAddr) matchSearch = true;
       }
     }
+    if (!matchSearch) continue;
     
-    // 4. Map Bounds Filter
+    // 4. Map Bounds Filter - 검색어 입력 시에는 지도 영역 제한을 무시하고 전체 검색 (Issue 3)
     let matchBounds = true;
-    if (currentBoundsFilter && window.kakao) {
+    if (currentBoundsFilter && window.kakao && keyword === '') {
       const position = new kakao.maps.LatLng(store.lat, store.lng);
       matchBounds = currentBoundsFilter.contain(position);
     }
-    
-    return matchCategory && matchRegion && matchSearch && matchBounds;
-  });
+    if (!matchBounds) continue;
+
+    resultsWithScore.push({ store, score });
+  }
+
+  // 가중치 기반 정렬 (Issue 4)
+  if (keyword !== '') {
+    resultsWithScore.sort((a, b) => b.score - a.score);
+  }
   
-  renderStores(filteredStores);
-  updateMapMarkers(filteredStores);
+  const finalResults = resultsWithScore.map(r => r.store);
+
+  renderStores(finalResults);
+  updateMapMarkers(finalResults);
 }
 
 // Event Listeners for Filters
@@ -565,11 +600,19 @@ regionDepth2.addEventListener('change', (e) => {
   applyFilters();
 });
 
-// Event Listener for Search Bar (Live Search)
+// Event Listener for Search Bar (Live Search) - 300ms 디바운싱 및 최소 글자 수 제한
+let searchTimer;
 if (searchInput) {
   searchInput.addEventListener('input', (e) => {
-    currentSearch = e.target.value;
-    applyFilters();
+    const val = e.target.value;
+    // 2글자 미만(빈 문자열 제외)인 경우 필터링을 수행하지 않음 (성능 최적화)
+    if (val.length === 1) return;
+
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      currentSearch = val;
+      applyFilters();
+    }, 300);
   });
 }
 
