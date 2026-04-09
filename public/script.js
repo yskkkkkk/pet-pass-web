@@ -110,6 +110,8 @@ function updateMapMarkers(data) {
   if (clusterer) {
     clusterer.clear();
     clusterer.addMarkers(markers);
+  } else {
+    markers.forEach(m => m.setMap(map));
   }
 
   // Automatically adjust bounds only when a specific filter/search is applied
