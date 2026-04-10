@@ -477,19 +477,12 @@ select.icon-tag:focus {
     color: var(--peach-main);
   }
 
-  /* 맨 위로 버튼 */
-  #btn-scroll-top {
-    position: fixed;
-    bottom: 20px;
-    right: 16px;
-    z-index: 1100;
-  }
 }
 
 /* 맨 위로 플로팅 버튼 (기본 숨김) */
 #btn-scroll-top {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--peach-main);
   color: white;
@@ -497,11 +490,16 @@ select.icon-tag:focus {
   font-size: 18px;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-  display: none;
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.3s, transform 0.3s;
-  z-index: 600;
+  transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
 }
 #btn-scroll-top:active {
   transform: scale(0.9);
