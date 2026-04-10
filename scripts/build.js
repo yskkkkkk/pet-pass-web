@@ -17,7 +17,15 @@ async function build() {
     await fs.copy(srcDir, distDir);
     console.log('✅ Public files copied to dist.');
 
-    // 3. index.html에서 카카오맵 API 키 치환
+    // 3. api 폴더를 dist/api로 복사 (Vercel 서버리스 함수)
+    const apiSrcDir = path.join(__dirname, '..', 'api');
+    const apiDistDir = path.join(distDir, 'api');
+    if (fs.existsSync(apiSrcDir)) {
+      await fs.copy(apiSrcDir, apiDistDir);
+      console.log('✅ API files copied to dist/api.');
+    }
+
+    // 4. index.html에서 카카오맵 API 키 치환
     const indexPath = path.join(distDir, 'index.html');
     let indexContent = await fs.readFile(indexPath, 'utf8');
 
