@@ -19,7 +19,52 @@ const overlay = document.getElementById('overlay');
 const storeDetail = document.getElementById('store-detail');
 const authModal = document.getElementById('auth-modal');
 const btnSearchHere = document.getElementById('btn-search-here');
+const btnBackStep = document.getElementById('btn-back-step');
+const btnResetFilters = document.getElementById('btn-reset-filters');
+const btnViewMap = document.getElementById('btn-view-map');
 
+// [Issue 3] Map Button State Management
+const MapButtonState = {
+  NONE: 'NONE',
+  SEARCH_HERE: 'SEARCH_HERE',
+  GO_BACK: 'GO_BACK'
+};
+
+let currentMapButtonState = MapButtonState.NONE;
+let mapButtonTimeout = null;
+
+function updateMapButtonUI(state) {
+  currentMapButtonState = state;
+  if (mapButtonTimeout) clearTimeout(mapButtonTimeout);
+
+  if (state === MapButtonState.NONE) {
+    btnSearchHere.style.opacity = '0';
+    btnBackStep.style.opacity = '0';
+    mapButtonTimeout = setTimeout(() => {
+      btnSearchHere.style.display = 'none';
+      btnBackStep.style.display = 'none';
+    }, 300);
+  } else if (state === MapButtonState.SEARCH_HERE) {
+    // Exclusive: Hide GO_BACK immediately
+    btnBackStep.style.display = 'none';
+    btnBackStep.style.opacity = '0';
+    lastMapState = null; // Clear back-step state when searching here
+
+    btnSearchHere.style.display = 'block';
+    setTimeout(() => {
+      btnSearchHere.style.opacity = '1';
+    }, 10);
+  } else if (state === MapButtonState.GO_BACK) {
+    // Exclusive: Hide SEARCH_HERE immediately
+    btnSearchHere.style.display = 'none';
+    btnSearchHere.style.opacity = '0';
+
+    btnBackStep.style.display = 'block';
+    setTimeout(() => {
+      btnBackStep.style.opacity = '1';
+    }, 10);
+  }
+}
 
 // Init Map
 function initMap() {
@@ -74,23 +119,24 @@ function initMap() {
 
 function showSearchHereBtn() {
   if (isSystemMoving) return;
-  btnSearchHere.style.display = 'block';
-  setTimeout(() => {
-    btnSearchHere.style.opacity = '1';
-  }, 10);
+  updateMapButtonUI(MapButtonState.SEARCH_HERE);
 }
 
 btnSearchHere.onclick = () => {
-  currentBoundsFilter = map.getBounds();
-  
-  // Hide Button softly
-  btnSearchHere.style.opacity = '0';
-  setTimeout(() => {
-    btnSearchHere.style.display = 'none';
-  }, 300);
-  
-  applyFilters();
+  handleSearchInThisArea();
 };
+
+function handleSearchInThisArea() {
+  // 1. 완전 초기화 (skipMapReset = true 로 지도 위치는 유지)
+  resetAllFilters(true);
+
+  // 2. 현재 지도 영역 설정
+  currentBoundsFilter = map.getBounds();
+
+  // 3. 버튼 숨김 및 검색 실행
+  updateMapButtonUI(MapButtonState.NONE);
+  applyFilters();
+}
 
 // Add markers for stores
 function updateMapMarkers(data) {
@@ -281,10 +327,6 @@ const filterTags = document.querySelectorAll('.filters .icon-tag');
 const regionDepth1 = document.getElementById('region-depth1');
 const regionDepth2 = document.getElementById('region-depth2');
 const searchInput = document.getElementById('search-input');
-const btnBackStep = document.getElementById('btn-back-step');
-const btnResetFilters = document.getElementById('btn-reset-filters');
-const btnViewMap = document.getElementById('btn-view-map');
-
 // [지도에서 위치 보기] 버튼 클릭 이벤트
 if (btnViewMap) {
   btnViewMap.onclick = () => {
@@ -305,10 +347,7 @@ if (btnViewMap) {
     map.panTo(moveLatLon);
 
     // 3. 이전 위치로 버튼 활성화
-    if (btnBackStep) {
-      btnBackStep.style.display = 'block';
-      btnBackStep.style.opacity = '1';
-    }
+    updateMapButtonUI(MapButtonState.GO_BACK);
 
     // 4. 상세 페이지 닫기
     overlay.click();
@@ -700,14 +739,14 @@ regionDepth1.addEventListener('change', (e) => {
   updateRegionDepth2(currentRegion1);
   // Clear map bounds filter when user actively changes region via dropdown
   currentBoundsFilter = null;
-  btnSearchHere.style.display = 'none';
+  updateMapButtonUI(MapButtonState.NONE);
   applyFilters();
 });
 
 regionDepth2.addEventListener('change', (e) => {
   currentRegion2 = e.target.value;
   currentBoundsFilter = null;
-  btnSearchHere.style.display = 'none';
+  updateMapButtonUI(MapButtonState.NONE);
   applyFilters();
 });
 
@@ -743,58 +782,63 @@ if (btnBackStep) {
     updateMapMarkers(currentFilteredStores);
 
     // 3. 버튼 숨김 및 상태 초기화
-    btnBackStep.style.opacity = '0';
-    setTimeout(() => {
-      btnBackStep.style.display = 'none';
-    }, 300);
+    updateMapButtonUI(MapButtonState.NONE);
     lastMapState = null;
   };
 }
 
-// 필터 초기화
-if (btnResetFilters) {
-  btnResetFilters.onclick = () => {
-    // '이 지역 탐색' 버튼 즉시 숨김
-    if (btnSearchHere) {
-      btnSearchHere.style.display = 'none';
-      btnSearchHere.style.opacity = '0';
-    }
+// 모든 필터 및 검색어 초기화 함수
+function resetAllFilters(skipMapReset = false) {
+  currentCategory = '전체';
+  currentRegion1 = '전국';
+  currentRegion2 = '전체';
+  currentSearch = '';
+  currentBoundsFilter = null;
 
-    currentCategory = '전체';
-    currentRegion1 = '전국';
-    currentRegion2 = '전체';
-    currentSearch = '';
-    currentBoundsFilter = null;
-
-    // UI 업데이트
-    if (searchInput) searchInput.value = '';
-    if (mobileSearchInput) mobileSearchInput.value = '';
+  // UI 동기화
+  if (searchInput) searchInput.value = '';
+  if (mobileSearchInput) mobileSearchInput.value = '';
+  if (regionDepth1) {
     regionDepth1.value = '전국';
     updateRegionDepth2('전국');
+  }
+  if (filterTags) {
     filterTags.forEach(t => {
       t.classList.remove('active');
       if (t.innerText === '전체') t.classList.add('active');
     });
+  }
 
+  if (!skipMapReset) {
+    updateMapButtonUI(MapButtonState.NONE);
     isSystemMoving = true;
-    applyFilters();
 
     // 지도를 초기 전국 단위 설정값으로 리셋
     if (map) {
       map.setLevel(6);
       map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
     }
+    applyFilters();
+  }
+}
 
-    // 이전 위치 버튼도 숨김
-    if (btnBackStep) {
-      btnBackStep.style.display = 'none';
-      lastMapState = null;
-    }
+// 필터 초기화 버튼 클릭
+if (btnResetFilters) {
+  btnResetFilters.onclick = () => {
+    resetAllFilters();
   };
 }
 
 // 모바일 검색창 동기화
 const mobileSearchInput = document.getElementById('mobile-search-input');
+const btnResetMobile = document.getElementById('btn-reset-mobile');
+
+if (btnResetMobile) {
+  btnResetMobile.onclick = () => {
+    resetAllFilters();
+  };
+}
+
 if (mobileSearchInput && searchInput) {
   mobileSearchInput.addEventListener('input', (e) => {
     const val = e.target.value;
