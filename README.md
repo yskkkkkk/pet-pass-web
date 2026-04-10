@@ -1,6 +1,6 @@
-# 🐾 Pet-Pass (이미지 기반 디지털 반려견 증명 서비스)
+# 🐾 Pet-Pass (디지털 반려견 증명 & 공식 인증 매장 서비스)
 
-공공데이터포털(국가동물보호정보시스템)과 실시간 연동되어 반려견의 등록 여부를 인증하고, 인증된 정보를 디지털 패스로 관리하는 웹 애플리케이션입니다.
+공공데이터포털(국가동물보호정보시스템)과 실시간 연동되어 반려견의 등록 여부를 인증하고, 인증된 정보를 디지털 패스로 관리하며 반려동물 출입이 가능한 공식 인증 매장을 탐색할 수 있는 웹 애플리케이션입니다.
 
 ---
 
@@ -43,39 +43,99 @@
 
 ---
 
+## 🚀 프로젝트 개요 (Overview)
+
+본 프로젝트는 반려인들이 안심하고 방문할 수 있는 매장 정보를 제공하고, 복잡한 증명서 없이 모바일 하나로 반려견 등록 여부를 인증할 수 있는 서비스입니다. 최근 아키텍처 고도화를 통해 Vercel Serverless 환경으로 전환되었으며, 강력한 검색 및 지도 인터랙션 기능을 제공합니다.
+
+---
+
+## 🛠️ 기술 스택 (Tech Stack)
+
+### Frontend
+- **Vanilla JS**: 외부 라이브러리 의존성을 최소화한 고성능 로직 구현.
+- **Kakao Maps API**: 위치 기반 매장 탐색 및 커스텀 마커/클러스터링.
+- **Hangul.js**: 한국어 초성 검색 및 형태소 매칭 지원.
+- **Glassmorphism UI**: 현대적이고 고급스러운 디자인 시스템 적용.
+
+### Backend (Serverless)
+- **Vercel Serverless Functions (Node.js)**: `/api` 구조를 통한 확장성 있는 백엔드 API.
+- **Axios**: 정부 API 및 외부 통신 처리.
+- **Supabase**: 매장 등록 신청 데이터의 안전한 유지 및 관리.
+
+### CI/CD & Security
+- **GitHub Actions**: `main` 브랜치 푸시 시 자동 빌드 및 Vercel 배포.
+- **Environment Variables**: API Key 보안을 위한 환경 변수(`Secrets`) 관리 및 빌드 타임 주입.
+
+---
+
+## 📱 주요 기능 (Key Features)
+
+### 1. 지능형 매장 검색 및 필터링
+- **2단계 지역 필터**: 광역시/도 단위의 Depth 1과 시/군/구 단위의 Depth 2를 결합한 정교한 지역 선택.
+- **가중치 기반 검색 알고리즘**: 상호명 정확도, 전방 일치, 초성 검색, 행정구역 매칭 등을 고려한 스코어링 시스템 적용.
+- **실시간 데이터 처리**: 1,500개 이상의 매장 데이터를 `for` 루프 최적화를 통해 지연 없이 필터링.
+
+### 2. 고도화된 지도 인터랙션 (UX Optimized)
+- **이 지역 탐색 (Search Here)**: 사용자가 지도를 이동하거나 확대/축소할 때 현재 뷰포트 기준으로 매장을 재탐색하는 기능.
+- **이전 위치로 (Back-step)**: 매장 상세 정보를 본 후, 클릭 직전의 지도 위치와 필터링 상태로 즉시 복구하는 기능.
+- **시스템 이동 감지**: 프로그램에 의한 지도 이동과 사용자의 수동 조작을 구분하여 '이 지역 탐색' 버튼의 노출을 정교하게 제어.
+
+### 3. 디지털 펫 패스 (Pet-Pass)
+- **정부 데이터 실시간 인증**: 국가동물보호정보시스템(V3) API와 연동하여 실제 등록번호와 소유자 정보 확인.
+- **보안 중심 저장**: 인증된 정보는 별도의 가입 없이 브라우저 로컬 스토리지에 안전하게 보관(단방향).
+
+---
+
 ## 📂 프로젝트 구조 (Structure)
 
 ```text
 /
+├── api/                    # Vercel Serverless Functions (Backend)
+│   ├── auth-pet.js         # 정부 API 연동 및 인증 로직
+│   ├── stores.js           # 매장 데이터 서빙 API
+│   └── register-store.js    # 신규 매장 등록 신청 (Supabase 연동)
 ├── public/                 # 프론트엔드 정적 자원
-│   ├── index.html          # 메인 페이지 및 UI 구조
-│   ├── style.css           # 프로젝트 스타일시트
-│   ├── script.js           # 지도 로직 및 인증 핸들러
-│   └── data.js             # 지역 데이터 및 초기 데이터베이스
-├── server.js               # Node.js (Express) 백엔드 프록시 서버
-├── .env                    # 민감 정보 (정부 API Key 등, .gitignore 대상)
-├── .gitignore              # Git 제외 파일 목록
-├── package.json            # 프로젝트 의존성 관리
-└── README.md               # 프로젝트 지침서 (본 파일)
+│   ├── index.html          # UI 구조 및 카카오맵 플레이스홀더
+│   ├── script.js           # 지도 인터랙션 및 필터링 핵심 로직
+│   └── style.css           # 반응형 디자인 및 스타일시트
+├── scripts/                # 빌드 및 유틸리티 스크립트
+│   └── build.js            # API Key 주입 및 배포용 파일 생성
+├── data/                   # 정적 데이터 리소스 (JSON)
+├── .github/workflows/      # GitHub Actions 자동 배포 설정
+└── vercel.json             # Vercel 라우팅 및 환경 설정
 ```
 
 ---
 
-## 🛠️ 실행 방법
+## 🛠️ 실행 및 배포 방법 (Setup & Deployment)
 
-1. **의존성 설치**: `npm install`
-2. **API 키 설정**: `.env` 파일을 생성하고 `DATA_GO_KR_API_KEY` 발급 키를 입력합니다.
-3. **서버 실행**: `node server.js`
-4. **접속**: `http://localhost:3000`
+### 1. 환경 변수 설정
+로컬 개발 및 배포를 위해 루트 디렉토리에 `.env` 파일을 생성하고 아래 변수들을 설정해야 합니다:
+- `KAKAO_MAP_API_KEY`: 카카오 개발자 센터에서 발급받은 JavaScript 키.
+- `DATA_GO_KR_API_KEY`: 공공데이터포털에서 발급받은 동물등록정보조회 API 키.
+- `SUPABASE_URL` / `SUPABASE_ANON_KEY`: 매장 등록 신청 저장을 위한 Supabase 정보.
+
+### 2. 로컬 실행
+```bash
+npm install
+node server.js
+```
+`http://localhost:3000`에서 접속 가능합니다.
+
+### 3. 빌드 및 배포
+- **Build**: `npm run build` 실행 시 `dist/` 폴더에 환경 변수가 주입된 정적 파일이 생성됩니다.
+- **Deployment**: `main` 브랜치에 `push` 하면 GitHub Actions를 통해 Vercel Production으로 자동 배포됩니다.
 
 ---
 
-## 🛡️ 기술 스택
-- **Frontend**: Vanilla JS, Kakao Maps API, Hangul.js
-- **Backend**: Node.js, Express, Axios
-- **API**: 농림축산식품부_동물등록정보조회 (V3)
+## 🗺️ 향후 계획 (Roadmap)
+
+- [ ] **모바일 퀵 스크롤**: 매장 리스트가 길어질 경우 상단으로 즉시 이동하는 'Top-to-back' 플로팅 버튼 추가.
+- [ ] **정부 API 연동 고도화**: 대량 트래픽에 대응하기 위한 API 호출 캐싱 전략 강화.
+- [ ] **매장 등록 검토 대시보드**: 관리자가 신청된 매장을 승인/반려할 수 있는 관리 도구 구축.
+
+---
 
 ## 📊 데이터 출처 (Data Sources)
-본 서비스의 매장 정보는 식품의약품안전처의 오픈 데이터를 기반으로 합니다.
-- **식품안전나라 (Food Safety Korea)**: [반려동물 동반 가능 업소 현황](https://www.foodsafetykorea.go.kr/portal/petKorea.do)
-- 공공데이터포털 기반 시범사업 참여 업체 명단
+- **식품안전나라**: 반려동물 동반 가능 업소 현황 공식 데이터.
+- **공공데이터포털**: 농림축산식품부 동물등록정보조회 서비스.
