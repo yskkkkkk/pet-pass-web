@@ -36,14 +36,20 @@
   <button id="btn-search-here" class="glass">📍 이 지역 탐색</button>
 
     <!-- Map Section -->
-    <section id="map-mock"></section>
+    <section id="map-mock">
+      <!-- 이전 위치로 버튼: 매장 상세 진입 시 표시 -->
+      <button id="btn-back-step" class="glass" style="display: none; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; padding: 12px 24px; border-radius: 30px; background: var(--peach-main); color: white; border: 1px solid white; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">이전 위치로</button>
+    </section>
 
     <!-- Side Panel / Bottom Sheet (Mobile) -->
     <aside class="side-panel">
       <div class="drag-handle" style="display: none;"></div><!-- Visible only on mobile styling conditionally if needed -->
       <div class="filter-header">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h2 style="font-weight: 800; font-size: 20px;">공식 인증 매장 (<span id="store-count">0</span>)</h2>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <h2 style="font-weight: 800; font-size: 20px;">공식 인증 매장 (<span id="store-count">0</span>)</h2>
+            <button id="btn-reset-filters" class="icon-tag glass" style="cursor: pointer; border: 1px solid var(--peach-main); color: var(--peach-main);">필터 초기화 ↺</button>
+          </div>
           <div style="display: flex; gap: 8px;">
             <select id="region-depth1" class="icon-tag glass" style="outline: none;">
               <option value="전국">전국</option>

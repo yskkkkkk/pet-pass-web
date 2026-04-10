@@ -140,6 +140,21 @@ body {
   pointer-events: auto;
 }
 
+#btn-back-step {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+#btn-back-step:hover {
+  background: white !important;
+  color: var(--peach-main) !important;
+  transform: translateX(-50%) scale(1.05);
+}
+
+#btn-reset-filters:hover {
+  background: var(--peach-main) !important;
+  color: white !important;
+}
+
 .side-panel {
 
   width: 420px;
