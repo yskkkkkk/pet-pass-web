@@ -1,5 +1,4 @@
 const axios = require('axios');
-const https = require('https');
 
 module.exports = async (req, res) => {
   const { dogRegNo, ownerBirth } = req.query;
@@ -8,8 +7,12 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: "동물등록번호와 생년월일이 필요합니다." });
   }
 
-  if (dogRegNo.length < 15) {
-    return res.status(400).json({ error: "유효하지 않은 등록번호 형식입니다. (15자리 필수)" });
+  // 입력값 검증: 숫자만 허용
+  if (!/^\d{15}$/.test(dogRegNo)) {
+    return res.status(400).json({ error: "유효하지 않은 등록번호 형식입니다. (숫자 15자리 필수)" });
+  }
+  if (!/^\d{6}$/.test(ownerBirth)) {
+    return res.status(400).json({ error: "생년월일은 숫자 6자리(예: 900101)로 입력해주세요." });
   }
 
   const API_KEY = process.env.DATA_GO_KR_API_KEY;
@@ -40,10 +43,7 @@ module.exports = async (req, res) => {
     const rfid_cd = dogRegNo;
     const fullURL = `${GOV_API_URL}?serviceKey=${API_KEY}&dog_reg_no=${dogRegNo}&rfid_cd=${rfid_cd}&owner_nm=%20&owner_birth=${ownerBirth}`;
 
-    const agent = new https.Agent({ rejectUnauthorized: false });
-
     const response = await axios.get(fullURL, {
-      httpsAgent: agent,
       headers: { 'accept': '*/*' }
     });
 
@@ -97,8 +97,7 @@ module.exports = async (req, res) => {
   } catch (error) {
     console.error("정부 API 통신 에러:", error.message);
     return res.status(500).json({
-      error: "정부망 통신 오류",
-      detail: error.message
+      error: "정부망 통신 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
     });
   }
 };

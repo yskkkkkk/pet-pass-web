@@ -101,6 +101,7 @@
 ├── scripts/                # 빌드 및 유틸리티 스크립트
 │   └── build.js            # API Key 주입 및 배포용 파일 생성
 ├── data/                   # 정적 데이터 리소스 (JSON)
+├── server.js               # 로컬 개발용 Express 서버 (API Key 동적 주입)
 ├── .github/workflows/      # GitHub Actions 자동 배포 설정
 └── vercel.json             # Vercel 라우팅 및 환경 설정
 ```
@@ -121,16 +122,17 @@ npm install
 node server.js
 ```
 `http://localhost:3000`에서 접속 가능합니다.
+> `server.js`는 로컬 개발 전용 Express 서버입니다. Vercel 배포 시에는 `api/` 폴더의 Serverless Functions가 사용됩니다.
 
 ### 3. 빌드 및 배포
-- **Build**: `npm run build` 실행 시 `dist/` 폴더에 환경 변수가 주입된 정적 파일이 생성됩니다.
+- **Build**: `npm run build` 실행 시 `public/index.html`에 Kakao Map API Key가 주입됩니다 (Vercel 빌드 환경에서 in-place 치환).
 - **Deployment**: `main` 브랜치에 `push` 하면 GitHub Actions를 통해 Vercel Production으로 자동 배포됩니다.
 
 ---
 
 ## 🗺️ 향후 계획 (Roadmap)
 
-- [ ] **모바일 퀵 스크롤**: 매장 리스트가 길어질 경우 상단으로 즉시 이동하는 'Top-to-back' 플로팅 버튼 추가.
+- [x] **모바일 퀵 스크롤**: 매장 리스트가 길어질 경우 상단으로 즉시 이동하는 '맨 위로' 플로팅 버튼 추가.
 - [ ] **정부 API 연동 고도화**: 대량 트래픽에 대응하기 위한 API 호출 캐싱 전략 강화.
 - [ ] **매장 등록 검토 대시보드**: 관리자가 신청된 매장을 승인/반려할 수 있는 관리 도구 구축.
 

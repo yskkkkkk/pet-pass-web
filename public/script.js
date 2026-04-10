@@ -1,3 +1,9 @@
+// HTML 이스케이프 (XSS 방지)
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 let map;
 let clusterer = null;
 let markers = [];
@@ -191,11 +197,11 @@ function renderStores(data) {
       </div>
       <div class="store-info" style="padding-top: 8px;">
         <div style="font-size: 28px; margin-bottom: 10px;">${emoji}</div>
-        <h3>${store.name}</h3>
-        <p style="margin-bottom: 8px;">${store.address}</p>
+        <h3>${escapeHtml(store.name)}</h3>
+        <p style="margin-bottom: 8px;">${escapeHtml(store.address)}</p>
         <div class="facility-icons">
-          <span class="icon-tag">${store.type}</span>
-          <span class="icon-tag">${store.region}</span>
+          <span class="icon-tag">${escapeHtml(store.type)}</span>
+          <span class="icon-tag">${escapeHtml(store.region)}</span>
         </div>
       </div>
     `;
@@ -241,11 +247,11 @@ function showDetail(store) {
   complianceList.innerHTML = `
     <li style="margin-bottom: 12px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid var(--peach-main);">
       <p style="font-size: 12px; color: var(--peach-main); margin-bottom: 4px;">공식 주소</p>
-      <p style="font-size: 14px; font-weight: 500;">${store.address}</p>
+      <p style="font-size: 14px; font-weight: 500;">${escapeHtml(store.address)}</p>
     </li>
     <li style="margin-bottom: 12px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px;">
       <p style="font-size: 12px; color: var(--accent); margin-bottom: 4px;">업종</p>
-      <p style="font-size: 14px; font-weight: 500;">${store.type}</p>
+      <p style="font-size: 14px; font-weight: 500;">${escapeHtml(store.type)}</p>
     </li>
     <li style="margin-bottom: 12px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px;">
       <p style="font-size: 12px; color: var(--accent); margin-bottom: 4px;">인증 상태</p>
@@ -444,6 +450,7 @@ btnSubmitReg.onclick = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, type, address })
     });
+    if (!response.ok) throw new Error(`서버 오류 (${response.status})`);
     const result = await response.json();
 
     if (result.success) {
@@ -453,7 +460,7 @@ btnSubmitReg.onclick = async () => {
       document.getElementById('reg-name').value = '';
       document.getElementById('reg-address').value = '';
     } else {
-      alert("등록 실패: " + result.error);
+      alert("등록 실패: " + (result.error || "알 수 없는 오류"));
     }
   } catch (error) {
     alert("서버 통신 에러가 발생했습니다.");
@@ -487,22 +494,22 @@ btnFetchGov.onclick = async () => {
 
   try {
     const response = await fetch(`/api/auth-pet?dogRegNo=${encodeURIComponent(dogRegNo)}&ownerBirth=${encodeURIComponent(ownerBirth)}`);
+    if (!response.ok) throw new Error(`서버 오류 (${response.status})`);
     const result = await response.json();
 
     if (result.success) {
       const petData = result.data;
       localStorage.setItem('petPassToken', `VERIFIED-${dogRegNo.substring(0, 4)}***`);
       localStorage.setItem('petPassData', JSON.stringify(petData));
-      
+
       btnAuth.classList.add('active');
       btnAuth.innerText = "연동 완료 🐾";
-      
+
       // 즉시 카드 표시
       displayPetCard(petData);
       alert(result.message || "정부 데이터베이스 확인이 완료되었습니다! 펫 패스가 기기에 등록되었습니다.");
     } else {
-      // 서버에서 500 내리더라도 express.json 썼기 때문에 result로 넘어오거나 catch로 빠짐.
-      alert(`[인증 실패]\n${result.error || ''}\n${result.detail || ''}`);
+      alert(`[인증 실패]\n${result.error || '알 수 없는 오류'}`);
     }
   } catch (error) {
     alert("서버 연결 실패 또는 정부망 통신 에러가 발생했습니다.\n서버 터미널 콘솔을 확인해주세요.");
