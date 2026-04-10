@@ -20,7 +20,7 @@
 }
 
 body {
-  font-family: 'Inter', 'Noto Sans KR', sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
   background-color: var(--forest-dark);
   color: var(--text-primary);
   min-height: 100vh;
@@ -217,6 +217,11 @@ body {
   text-align: center;
 }
 
+/* 모바일 검색창 (데스크톱에서 기본 숨김) */
+.mobile-search-bar {
+  display: none;
+}
+
 /* Cards */
 .store-card {
   border-radius: 20px;
@@ -391,7 +396,8 @@ select.icon-tag:focus {
     flex-direction: column;
   }
   #map-mock {
-    height: 60vh;
+    height: calc(100vh - 70px - 68px - 40vh); /* 헤더(70) + 검색창영역(68) 제외 후 하단 패널 공간(40vh) 확보 */
+    min-height: 300px;
     flex: none;
   }
   .side-panel {
@@ -407,10 +413,16 @@ select.icon-tag:focus {
   .header { padding: 0 16px; }
   .search-bar { display: none; }
 
+  .main-container {
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
   /* '이 지역 탐색' 버튼: 모바일에서 지도 상단 중앙으로 이동 */
   #btn-search-here {
     position: absolute;
-    top: 80px;
+    top: 140px; /* 검색창(약 60px) 고려하여 하단으로 조정 */
     bottom: auto;
     left: 50%;
     transform: translateX(-50%);
@@ -422,14 +434,17 @@ select.icon-tag:focus {
   /* 모바일 검색창 */
   .mobile-search-bar {
     display: flex;
+    position: relative;
+    z-index: 1001;
     align-items: center;
     gap: 10px;
-    margin: 0 16px 12px;
+    margin: 12px 16px;
     padding: 0 16px;
     height: 44px;
     border-radius: 22px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
+    flex-shrink: 0;
   }
   .mobile-search-bar input {
     background: transparent;
@@ -476,7 +491,3 @@ select.icon-tag:focus {
   background: var(--forest-main);
 }
 
-/* 모바일 검색창 (데스크톱에서 숨김) */
-.mobile-search-bar {
-  display: none;
-}
