@@ -21,9 +21,10 @@ function initMap() {
   
   if (typeof kakao === 'undefined' || !kakao.maps) {
     console.warn("Kakao Map API가 로드되지 않았습니다.");
-    container.innerHTML = `<div style="display:flex; height:100%; align-items:center; justify-content:center; text-align:center; padding:20px; line-height:1.6; background: rgba(0,0,0,0.5);">
-      <p><b>지도 스크립트가 차단되었습니다.</b><br/>1. 카카오 플랫폼(Web) 설정에 <b>file://</b> 이 등록되었는지 확인하세요.<br/>2. 브라우저의 광고 차단(AdBlock) 확장이 켜져있다면 잠시 꺼주세요.</p>
-    </div>`;
+    const fallback = document.createElement('div');
+    fallback.style.cssText = 'display:flex; height:100%; align-items:center; justify-content:center; text-align:center; padding:20px; line-height:1.6; background: rgba(0,0,0,0.5); position:absolute; top:0; left:0; width:100%; z-index:50;';
+    fallback.innerHTML = `<p><b>지도 스크립트가 차단되었습니다.</b><br/>1. 카카오 플랫폼(Web) 설정에 <b>file://</b> 이 등록되었는지 확인하세요.<br/>2. 브라우저의 광고 차단(AdBlock) 확장이 켜져있다면 잠시 꺼주세요.</p>`;
+    container.appendChild(fallback);
     return;
   }
 
@@ -760,6 +761,7 @@ if (btnResetFilters) {
 
     // UI 업데이트
     if (searchInput) searchInput.value = '';
+    if (mobileSearchInput) mobileSearchInput.value = '';
     regionDepth1.value = '전국';
     updateRegionDepth2('전국');
     filterTags.forEach(t => {
@@ -784,11 +786,48 @@ if (btnResetFilters) {
   };
 }
 
+// 모바일 검색창 동기화
+const mobileSearchInput = document.getElementById('mobile-search-input');
+if (mobileSearchInput && searchInput) {
+  mobileSearchInput.addEventListener('input', (e) => {
+    const val = e.target.value;
+    searchInput.value = val; // 데스크톱 검색창에 동기화
+    if (val.length === 1) return;
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      currentSearch = val;
+      applyFilters();
+    }, 300);
+  });
+
+  // 데스크톱 → 모바일 동기화
+  searchInput.addEventListener('input', () => {
+    mobileSearchInput.value = searchInput.value;
+  });
+}
+
+// 맨 위로 플로팅 버튼
+const btnScrollTop = document.getElementById('btn-scroll-top');
+const sidePanel = document.querySelector('.side-panel');
+if (btnScrollTop && sidePanel) {
+  sidePanel.addEventListener('scroll', () => {
+    if (sidePanel.scrollTop > 300) {
+      btnScrollTop.style.display = 'flex';
+    } else {
+      btnScrollTop.style.display = 'none';
+    }
+  });
+
+  btnScrollTop.onclick = () => {
+    sidePanel.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+}
+
 // Initialization on load
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
   fetchStores(); // Fetch data from API instead of direct call to applyFilters
-  
+
   // Restore Button State (Data 위주로 판단)
   if (localStorage.getItem('petPassData')) {
     btnAuth.classList.add('active');

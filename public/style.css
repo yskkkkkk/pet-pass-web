@@ -158,6 +158,11 @@ body {
   pointer-events: auto;
 }
 
+#btn-search-here:active {
+  transform: translateX(-50%) scale(0.95);
+  background: var(--peach-main);
+}
+
 #btn-back-step {
   transition: opacity 0.3s, transform 0.3s;
 }
@@ -384,18 +389,92 @@ select.icon-tag:focus {
     flex-direction: column;
   }
   #map-mock {
-    height: 40vh; /* map takes top part */
+    height: 60vh;
     flex: none;
   }
   .side-panel {
     width: 100%;
-    height: 60vh; /* list takes bottom part */
+    height: 50vh;
     border-left: none;
     border-top: 1px solid var(--glass-border);
     border-radius: 24px 24px 0 0;
-    margin-top: -20px; /* pull up over map slightly */
-    padding-top: 30px;
+    margin-top: -20px;
+    padding-top: 16px;
+    position: relative;
   }
   .header { padding: 0 16px; }
-  .search-bar { display: none; /* Hide on small mobile, use icon instead */ }
+  .search-bar { display: none; }
+
+  /* '이 지역 탐색' 버튼: 모바일에서 지도 상단 중앙으로 이동 */
+  #btn-search-here {
+    position: absolute;
+    top: 80px;
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  #btn-search-here:active {
+    transform: translateX(-50%) scale(0.95);
+  }
+
+  /* 모바일 검색창 */
+  .mobile-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 16px 12px;
+    padding: 0 16px;
+    height: 44px;
+    border-radius: 22px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+  }
+  .mobile-search-bar input {
+    background: transparent;
+    border: none;
+    color: white;
+    flex: 1;
+    outline: none;
+    font-size: 14px;
+  }
+  .mobile-search-bar .search-icon {
+    color: var(--text-secondary);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* 맨 위로 버튼 */
+  #btn-scroll-top {
+    position: absolute;
+    bottom: 20px;
+    right: 16px;
+    z-index: 600;
+  }
+}
+
+/* 맨 위로 플로팅 버튼 (기본 숨김) */
+#btn-scroll-top {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--peach-main);
+  color: white;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 600;
+}
+#btn-scroll-top:active {
+  transform: scale(0.9);
+  background: var(--forest-main);
+}
+
+/* 모바일 검색창 (데스크톱에서 숨김) */
+.mobile-search-bar {
+  display: none;
 }
