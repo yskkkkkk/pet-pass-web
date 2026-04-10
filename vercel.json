@@ -3,7 +3,6 @@
   "public": false,
   "cleanUrls": true,
   "buildCommand": "node scripts/build.js",
-  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/api/(.*)",
