@@ -11,8 +11,20 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// 프론트엔드 자원(HTML, JS, CSS 등)을 public 폴더에서 서빙합니다.
-app.use(express.static(path.join(__dirname, 'public')));
+// CSS, JS 등 정적 자원 서빙 (index.html 제외)
+app.use(express.static(path.join(__dirname, 'public'), { index: false }));
+
+// index.html 요청 시 Kakao Map API Key를 동적으로 주입
+app.get('/', (req, res) => {
+  const indexPath = path.join(__dirname, 'public', 'index.html');
+  fs.readFile(indexPath, 'utf8', (err, html) => {
+    if (err) return res.status(500).send('Server error');
+    const KAKAO_KEY = process.env.KAKAO_MAP_API_KEY || '';
+    const result = html.replace('__KAKAO_MAP_API_KEY__', KAKAO_KEY);
+    res.setHeader('Content-Type', 'text/html');
+    res.send(result);
+  });
+});
 
 /**
  * [Stores API]
