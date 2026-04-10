@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>반려패스 (Pet-Pass) | 공식 반려동물 출입 매장 조회</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+KR:wght@300;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <!-- Kakao Map API -->
   <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=__KAKAO_MAP_API_KEY__&libraries=services,clusterer"></script>
   <!-- Korean Chosung Search Support -->
@@ -33,8 +31,14 @@
   <!-- Main View -->
   <main class="main-container">
 
-  <!-- 이 지역 탐색 버튼: 지도 위에 띄우기 위해 fixed 배치 -->
-  <button id="btn-search-here" class="glass">📍 이 지역 탐색</button>
+    <!-- 모바일 전용 검색창: 가시성 확보를 위해 최상단으로 이동 -->
+    <div class="mobile-search-bar">
+      <span class="search-icon">🔍</span>
+      <input id="mobile-search-input" type="text" placeholder="지역명, 상호명 검색...">
+    </div>
+
+    <!-- 이 지역 탐색 버튼: 지도 위에 띄우기 위해 fixed 배치 -->
+    <button id="btn-search-here" class="glass">📍 이 지역 탐색</button>
 
     <!-- Map Section -->
     <section id="map-mock">
@@ -45,11 +49,6 @@
     <!-- Side Panel / Bottom Sheet (Mobile) -->
     <aside class="side-panel">
       <div class="drag-handle" style="display: none;"></div>
-      <!-- 모바일 전용 검색창 -->
-      <div class="mobile-search-bar">
-        <span class="search-icon">🔍</span>
-        <input id="mobile-search-input" type="text" placeholder="지역명, 상호명 검색...">
-      </div>
       <div class="filter-header">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
           <div style="display: flex; align-items: center; gap: 10px;">

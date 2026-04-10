@@ -3411,8 +3411,8 @@
   },
   {
     "id": 311,
-    "name": "？커피,MOCC",
-    "originalName": "？커피,MOCC",
+    "name": "뫀커피,MOCC",
+    "originalName": "뫀커피,MOCC",
     "type": "카페",
     "region": "서울",
     "address": "서울특별시 관악구 미성길 7(1층 신림동)",
@@ -6700,8 +6700,8 @@
   },
   {
     "id": 610,
-    "name": "우？(WooDic)",
-    "originalName": "우？(WooDic)",
+    "name": "우딬(WooDic)",
+    "originalName": "우딬(WooDic)",
     "type": "일반음식점",
     "region": "울산",
     "address": "울산광역시 중구 명정3길 24-1(1층 태화동)",
@@ -9131,8 +9131,8 @@
   },
   {
     "id": 831,
-    "name": "잇？(IT COF.)",
-    "originalName": "잇？(IT COF.)",
+    "name": "잇뫀(IT COF.)",
+    "originalName": "잇뫀(IT COF.)",
     "type": "일반음식점",
     "region": "경기",
     "address": "경기도 남양주시 화도읍 북한강로1503번길 27(1층일부호)",
@@ -15280,8 +15280,8 @@
   },
   {
     "id": 1390,
-    "name": "프？츠",
-    "originalName": "프？츠",
+    "name": "프릳츠",
+    "originalName": "프릳츠",
     "type": "일반음식점",
     "region": "제주",
     "address": "제주특별자치도 서귀포시 성산읍 일출로 222(1층)",
