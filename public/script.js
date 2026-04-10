@@ -464,6 +464,18 @@ let currentRegion1 = '전국';
 let currentRegion2 = '전체';
 let currentSearch = '';
 
+// 가중치 설정 (Issue 4 및 고도화 요구사항 반영)
+const WEIGHTS = {
+  NAME_EXACT: 1000,           // 매장명 정확히 일치
+  ADDR_PART_EXACT: 800,       // 행정구역(시/군/구) 정확히 일치
+  NAME_STARTS_WITH: 600,      // 매장명 전방 일치
+  ADDR_PART_STARTS_WITH: 400,  // 행정구역 전방 일치
+  CHOSUNG_MATCH: 350,         // 초성 검색 일치
+  NAME_CONTAINS: 300,         // 매장명 포함
+  IN_BOUNDS_BONUS: 150,       // 현재 지도 영역 내 보너스
+  ADDR_CONTAINS: 100          // 주소 단순 포함
+};
+
 function updateRegionDepth2(region1) {
   if (region1 === '전국') {
     regionDepth2.style.display = 'none';
@@ -494,19 +506,19 @@ function applyFilters() {
   if (lastFilterKey === currentFilterKey) return;
   lastFilterKey = currentFilterKey;
 
-  const keyword = currentSearch.trim();
+  const keyword = currentSearch.trim().toLowerCase();
   const resultsWithScore = [];
+  const mapBounds = (window.kakao && map) ? map.getBounds() : null;
 
   // 성능 최적화: 1,572개 데이터를 위해 고속 for 루프 사용 (Issue 5)
   for (let i = 0; i < stores.length; i++) {
     const store = stores[i];
     let score = 0;
 
-    // 1. Category Filter
+    // 1. 하드 필터 (카테고리 및 지역 선택)
     const matchCategory = (currentCategory === '전체') || (store.type === currentCategory);
     if (!matchCategory) continue;
     
-    // 2. Region Filter
     let matchRegion = true;
     if (currentRegion1 !== '전국') {
       const matchRegion1 = store.address.includes(currentRegion1);
@@ -518,55 +530,80 @@ function applyFilters() {
     }
     if (!matchRegion) continue;
     
-    // 3. Text Search Filter with Weighting (Issue 4)
-    let matchSearch = true;
-    if (keyword !== '') {
-      matchSearch = false;
-      const addressParts = store.address.split(' ');
+    // 2. 현재 지도 영역 내 보너스 점수 (UI 상의 매장 우선순위 반영)
+    if (mapBounds && store.lat && store.lng) {
+      const pos = new kakao.maps.LatLng(store.lat, store.lng);
+      if (mapBounds.contain(pos)) {
+        score += WEIGHTS.IN_BOUNDS_BONUS;
+      }
+    }
 
-      // 행정구역 매칭 가중치 부여
-      for (const part of addressParts) {
-        if (part === keyword) {
-          score += 100; // 정확히 일치 시 높은 가중치
-          matchSearch = true;
-        } else if (part.startsWith(keyword)) {
-          score += 50;  // 전방 일치 시 가중치
-          matchSearch = true;
+    // 3. 텍스트 검색 가중치 로직 (Issue 4 고도화)
+    if (keyword !== '') {
+      let hasMatch = false;
+      const lowerName = store.name.toLowerCase();
+      const lowerAddr = store.address.toLowerCase();
+
+      // [매장명 매칭]
+      if (lowerName === keyword) {
+        score += WEIGHTS.NAME_EXACT;
+        hasMatch = true;
+      } else if (lowerName.startsWith(keyword)) {
+        score += WEIGHTS.NAME_STARTS_WITH;
+        hasMatch = true;
+      } else if (lowerName.includes(keyword)) {
+        score += WEIGHTS.NAME_CONTAINS;
+        hasMatch = true;
+      }
+
+      // [초성 매칭]
+      if (!hasMatch && typeof Hangul !== 'undefined') {
+        if (Hangul.search(store.name, keyword) !== -1) {
+          score += WEIGHTS.CHOSUNG_MATCH;
+          hasMatch = true;
         }
       }
 
-      if (typeof Hangul !== 'undefined') {
-        const matchName = Hangul.search(store.name, keyword) !== -1;
-        const matchAddr = Hangul.search(store.address, keyword) !== -1;
-        if (matchName) score += 10;
-        if (matchAddr) score += 5;
-        if (matchName || matchAddr) matchSearch = true;
-      } else {
-        const lowerKeyword = keyword.toLowerCase();
-        const matchName = store.name.toLowerCase().includes(lowerKeyword);
-        const matchAddr = store.address.toLowerCase().includes(lowerKeyword);
-        if (matchName) score += 10;
-        if (matchAddr) score += 5;
-        if (matchName || matchAddr) matchSearch = true;
+      // [주소/행정구역 매칭]
+      const addressParts = lowerAddr.split(' ');
+      let addrPartMatch = false;
+      for (const part of addressParts) {
+        if (part === keyword) {
+          score += WEIGHTS.ADDR_PART_EXACT;
+          addrPartMatch = true;
+        } else if (part.startsWith(keyword)) {
+          score += WEIGHTS.ADDR_PART_STARTS_WITH;
+          addrPartMatch = true;
+        }
       }
+
+      if (addrPartMatch) {
+        hasMatch = true;
+      } else if (lowerAddr.includes(keyword)) {
+        score += WEIGHTS.ADDR_CONTAINS;
+        hasMatch = true;
+      }
+
+      // 검색어가 있는데 매칭되는 것이 없으면 제외
+      if (!hasMatch) continue;
     }
-    if (!matchSearch) continue;
     
-    // 4. Map Bounds Filter - 검색어 입력 시에는 지도 영역 제한을 무시하고 전체 검색 (Issue 3)
-    let matchBounds = true;
+    // 4. 지도 영역 필터 (검색어가 없을 때만 적용 - Issue 3)
     if (currentBoundsFilter && window.kakao && keyword === '') {
-      const position = new kakao.maps.LatLng(store.lat, store.lng);
-      matchBounds = currentBoundsFilter.contain(position);
+      const pos = new kakao.maps.LatLng(store.lat, store.lng);
+      if (!currentBoundsFilter.contain(pos)) continue;
     }
-    if (!matchBounds) continue;
 
     resultsWithScore.push({ store, score });
   }
 
-  // 가중치 기반 정렬 (Issue 4)
-  if (keyword !== '') {
-    resultsWithScore.sort((a, b) => b.score - a.score);
-  }
+  // 5. 최종 정렬: 가중치 점수 내림차순 -> 이름 오름차순
+  resultsWithScore.sort((a, b) => {
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+    return a.store.name.localeCompare(b.store.name);
+  });
   
   const finalResults = resultsWithScore.map(r => r.store);
 
