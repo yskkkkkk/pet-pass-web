@@ -102,9 +102,12 @@ app.get('/api/auth-pet', async (req, res) => {
     return res.status(400).json({ error: "동물등록번호와 생년월일이 필요합니다." });
   }
 
-  // 15자리 미만 보안 체크
-  if (dogRegNo.length < 15) {
-    return res.status(400).json({ error: "유효하지 않은 등록번호 형식입니다. (15자리 필수)" });
+  // 입력값 검증: 숫자만 허용
+  if (!/^\d{15}$/.test(dogRegNo)) {
+    return res.status(400).json({ error: "유효하지 않은 등록번호 형식입니다. (숫자 15자리 필수)" });
+  }
+  if (!/^\d{6}$/.test(ownerBirth)) {
+    return res.status(400).json({ error: "생년월일은 숫자 6자리(예: 900101)로 입력해주세요." });
   }
 
   // 아직 사용자가 .env 에 API Key를 발급받아 넣지 않은 경우 (Mock 응답 반환)
@@ -147,21 +150,10 @@ app.get('/api/auth-pet', async (req, res) => {
     // 사용자 curl 예시와 100% 일치시키기 위해 _type=json 제거
     const fullURL = `${GOV_API_URL}?serviceKey=${serviceKey}&dog_reg_no=${dogRegNo}&rfid_cd=${rfid_cd}&owner_nm=%20&owner_birth=${ownerBirth}`;
     
-    console.log(`[DEBUG] Final URL: ${fullURL.replace(serviceKey, serviceKey.substring(0, 5) + "...")}`);
-
-    const https = require('https');
-    const agent = new https.Agent({  
-      rejectUnauthorized: false
-    });
-
-    const response = await axios.get(fullURL, { 
-      httpsAgent: agent,
+    const response = await axios.get(fullURL, {
       headers: { 'accept': '*/*' }
     });
     
-    const rawData = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
-    console.log(`[DEBUG] RAW RESPONSE: ${rawData}`);
-
     let header, body;
     
     // 응답이 XML 문자열인 경우 간단하게 파싱 시도
@@ -219,20 +211,9 @@ app.get('/api/auth-pet', async (req, res) => {
 
   } catch (error) {
     console.error("정부 API 통신 에러:", error.message);
-    
-    // axios 통신에서 에러 응답(4xx, 5xx)이 온 경우 서버 응답 데이터 추출
-    let errorDetail = error.message;
-    if (error.response && error.response.data) {
-      if (typeof error.response.data === 'string') {
-        errorDetail = error.response.data; // 보통 XML 형태의 에러 응답이 옴
-      } else {
-        errorDetail = JSON.stringify(error.response.data);
-      }
-    }
-    
-    return res.status(500).json({ 
-      error: "정부망 통신 오류 (" + Math.floor(error.response?.status || 500) + ")", 
-      detail: errorDetail 
+
+    return res.status(500).json({
+      error: "정부망 통신 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
     });
   }
 });
