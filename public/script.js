@@ -862,10 +862,12 @@ const btnScrollTop = document.getElementById('btn-scroll-top');
 const sidePanel = document.querySelector('.side-panel');
 if (btnScrollTop && sidePanel) {
   sidePanel.addEventListener('scroll', () => {
-    if (sidePanel.scrollTop > 300) {
-      btnScrollTop.style.display = 'flex';
+    if (sidePanel.scrollTop > 250) {
+      btnScrollTop.style.opacity = '1';
+      btnScrollTop.style.visibility = 'visible';
     } else {
-      btnScrollTop.style.display = 'none';
+      btnScrollTop.style.opacity = '0';
+      btnScrollTop.style.visibility = 'hidden';
     }
   });
 
