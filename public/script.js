@@ -5,6 +5,7 @@ let stores = []; // Global store data, fetched from API
 let currentBoundsFilter = null; // Store map bounds for filtering
 let currentFilteredStores = []; // 현재 필터링된 매장 리스트 (Back-step용)
 let lastMapState = null; // 매장 클릭 직전의 지도 상태 저장
+let isProgrammaticMove = false; // 프로그램에 의한 지도 이동 플래그
 
 const storeList = document.getElementById('store-list');
 const overlay = document.getElementById('overlay');
@@ -59,6 +60,7 @@ function initMap() {
 }
 
 function showSearchHereBtn() {
+  if (isProgrammaticMove) return;
   btnSearchHere.style.display = 'block';
   setTimeout(() => {
     btnSearchHere.style.opacity = '1';
@@ -181,9 +183,20 @@ function renderStores(data) {
       };
 
       // 2. 지도 이동 및 확대
+      // Issue 2: 프로그래밍 방식 이동 플래그 설정
+      isProgrammaticMove = true;
+
+      // Issue 3: 클로저 문제 방지 및 개별 매장 좌표(store.lat, store.lng) 정확히 참조
       const moveLatLon = new kakao.maps.LatLng(store.lat, store.lng);
-      map.panTo(moveLatLon);
+
+      // 부드러운 이동(panTo) 사용
       map.setLevel(3);
+      map.panTo(moveLatLon);
+
+      // 이동 애니메이션 시간을 고려하여 플래그 해제
+      setTimeout(() => {
+        isProgrammaticMove = false;
+      }, 600);
 
       // 3. 이전 위치로 버튼 활성화
       const btnBackStep = document.getElementById('btn-back-step');
@@ -724,8 +737,12 @@ if (btnResetFilters) {
 
     // 지도를 초기 전국 단위 설정값으로 리셋
     if (map) {
-      map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
+      isProgrammaticMove = true;
       map.setLevel(6);
+      map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
+      setTimeout(() => {
+        isProgrammaticMove = false;
+      }, 500);
     }
 
     // 이전 위치 버튼도 숨김
