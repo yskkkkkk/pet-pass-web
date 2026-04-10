@@ -2,6 +2,7 @@ let map;
 let clusterer = null;
 let markers = [];
 let stores = []; // Global store data, fetched from API
+let selectedStore = null; // 현재 상세 페이지에 표시 중인 매장 정보
 let currentBoundsFilter = null; // Store map bounds for filtering
 let currentFilteredStores = []; // 현재 필터링된 매장 리스트 (Back-step용)
 let lastMapState = null; // 매장 클릭 직전의 지도 상태 저장
@@ -175,36 +176,6 @@ function renderStores(data) {
     `;
 
     card.onclick = () => {
-      // 1. 현재 상태 저장 (Back-step용)
-      lastMapState = {
-        center: map.getCenter(),
-        level: map.getLevel(),
-        filteredStores: [...currentFilteredStores]
-      };
-
-      // 2. 지도 이동 및 확대
-      // Issue 2: 프로그래밍 방식 이동 플래그 설정
-      isProgrammaticMove = true;
-
-      // Issue 3: 클로저 문제 방지 및 개별 매장 좌표(store.lat, store.lng) 정확히 참조
-      const moveLatLon = new kakao.maps.LatLng(store.lat, store.lng);
-
-      // 부드러운 이동(panTo) 사용
-      map.setLevel(3);
-      map.panTo(moveLatLon);
-
-      // 이동 애니메이션 시간을 고려하여 플래그 해제
-      setTimeout(() => {
-        isProgrammaticMove = false;
-      }, 600);
-
-      // 3. 이전 위치로 버튼 활성화
-      const btnBackStep = document.getElementById('btn-back-step');
-      if (btnBackStep) {
-        btnBackStep.style.display = 'block';
-        btnBackStep.style.opacity = '1';
-      }
-
       showDetail(store);
     };
     storeList.appendChild(card);
@@ -232,6 +203,7 @@ function renderStores(data) {
 
 // Show Store Details Bottom Sheet
 function showDetail(store) {
+  selectedStore = store; // 현재 선택된 매장 정보 저장
   const detailName = document.getElementById('detail-name');
   const detailType = document.getElementById('detail-type');
   const detailImg = document.getElementById('detail-img');
@@ -280,6 +252,42 @@ const regionDepth2 = document.getElementById('region-depth2');
 const searchInput = document.getElementById('search-input');
 const btnBackStep = document.getElementById('btn-back-step');
 const btnResetFilters = document.getElementById('btn-reset-filters');
+const btnViewMap = document.getElementById('btn-view-map');
+
+// [지도에서 위치 보기] 버튼 클릭 이벤트
+if (btnViewMap) {
+  btnViewMap.onclick = () => {
+    if (!selectedStore) return;
+
+    // 1. 현재 상태 저장 (Back-step용)
+    lastMapState = {
+      center: map.getCenter(),
+      level: map.getLevel(),
+      filteredStores: [...currentFilteredStores]
+    };
+
+    // 2. 지도 이동 및 확대
+    isProgrammaticMove = true;
+    const moveLatLon = new kakao.maps.LatLng(selectedStore.lat, selectedStore.lng);
+
+    map.setLevel(3);
+    map.panTo(moveLatLon);
+
+    // 이동 애니메이션 시간을 고려하여 플래그 해제
+    setTimeout(() => {
+      isProgrammaticMove = false;
+    }, 600);
+
+    // 3. 이전 위치로 버튼 활성화
+    if (btnBackStep) {
+      btnBackStep.style.display = 'block';
+      btnBackStep.style.opacity = '1';
+    }
+
+    // 4. 상세 페이지 닫기
+    overlay.click();
+  };
+}
 
 // Region Data Mapping
 const regionData = {
@@ -698,8 +706,13 @@ if (btnBackStep) {
     if (!lastMapState) return;
 
     // 1. 지도 복구
+    isProgrammaticMove = true;
     map.setCenter(lastMapState.center);
     map.setLevel(lastMapState.level);
+
+    setTimeout(() => {
+      isProgrammaticMove = false;
+    }, 500);
 
     // 2. 검색 결과 및 마커 복구
     currentFilteredStores = lastMapState.filteredStores;
@@ -733,17 +746,24 @@ if (btnResetFilters) {
       if (t.innerText === '전체') t.classList.add('active');
     });
 
+    // '이 지역 탐색' 버튼 즉시 숨김
+    if (btnSearchHere) {
+      btnSearchHere.style.display = 'none';
+      btnSearchHere.style.opacity = '0';
+    }
+
+    isProgrammaticMove = true;
     applyFilters();
 
     // 지도를 초기 전국 단위 설정값으로 리셋
     if (map) {
-      isProgrammaticMove = true;
       map.setLevel(6);
       map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
-      setTimeout(() => {
-        isProgrammaticMove = false;
-      }, 500);
     }
+
+    setTimeout(() => {
+      isProgrammaticMove = false;
+    }, 600);
 
     // 이전 위치 버튼도 숨김
     if (btnBackStep) {

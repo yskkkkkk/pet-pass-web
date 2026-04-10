@@ -168,6 +168,16 @@ body {
   transform: translateX(-50%) scale(1.05);
 }
 
+#btn-view-map {
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+#btn-view-map:hover {
+  background-color: #ff7060 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255,138,122,0.6) !important;
+}
+
 #btn-reset-filters:hover {
   background: var(--peach-main) !important;
   color: white !important;
