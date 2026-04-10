@@ -460,12 +460,29 @@ select.icon-tag:focus {
     flex-shrink: 0;
   }
 
+  .reset-search-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+  }
+
+  .reset-search-btn:hover {
+    color: var(--peach-main);
+  }
+
   /* 맨 위로 버튼 */
   #btn-scroll-top {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     right: 16px;
-    z-index: 600;
+    z-index: 1100;
   }
 }
 
