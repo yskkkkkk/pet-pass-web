@@ -3,6 +3,8 @@ let clusterer = null;
 let markers = [];
 let stores = []; // Global store data, fetched from API
 let currentBoundsFilter = null; // Store map bounds for filtering
+let currentFilteredStores = []; // 현재 필터링된 매장 리스트 (Back-step용)
+let lastMapState = null; // 매장 클릭 직전의 지도 상태 저장
 
 const storeList = document.getElementById('store-list');
 const overlay = document.getElementById('overlay');
@@ -170,7 +172,28 @@ function renderStores(data) {
       </div>
     `;
 
-    card.onclick = () => showDetail(store);
+    card.onclick = () => {
+      // 1. 현재 상태 저장 (Back-step용)
+      lastMapState = {
+        center: map.getCenter(),
+        level: map.getLevel(),
+        filteredStores: [...currentFilteredStores]
+      };
+
+      // 2. 지도 이동 및 확대
+      const moveLatLon = new kakao.maps.LatLng(store.lat, store.lng);
+      map.panTo(moveLatLon);
+      map.setLevel(3);
+
+      // 3. 이전 위치로 버튼 활성화
+      const btnBackStep = document.getElementById('btn-back-step');
+      if (btnBackStep) {
+        btnBackStep.style.display = 'block';
+        btnBackStep.style.opacity = '1';
+      }
+
+      showDetail(store);
+    };
     storeList.appendChild(card);
     });
 
@@ -242,6 +265,8 @@ const filterTags = document.querySelectorAll('.filters .icon-tag');
 const regionDepth1 = document.getElementById('region-depth1');
 const regionDepth2 = document.getElementById('region-depth2');
 const searchInput = document.getElementById('search-input');
+const btnBackStep = document.getElementById('btn-back-step');
+const btnResetFilters = document.getElementById('btn-reset-filters');
 
 // Region Data Mapping
 const regionData = {
@@ -569,6 +594,7 @@ function applyFilters() {
   }
   
   const finalResults = resultsWithScore.map(r => r.store);
+  currentFilteredStores = finalResults; // 상태 업데이트
 
   renderStores(finalResults);
   updateMapMarkers(finalResults);
@@ -614,6 +640,63 @@ if (searchInput) {
       applyFilters();
     }, 300);
   });
+}
+
+// Back-step: 이전 위치로 복구
+if (btnBackStep) {
+  btnBackStep.onclick = () => {
+    if (!lastMapState) return;
+
+    // 1. 지도 복구
+    map.setCenter(lastMapState.center);
+    map.setLevel(lastMapState.level);
+
+    // 2. 검색 결과 및 마커 복구
+    currentFilteredStores = lastMapState.filteredStores;
+    renderStores(currentFilteredStores);
+    updateMapMarkers(currentFilteredStores);
+
+    // 3. 버튼 숨김 및 상태 초기화
+    btnBackStep.style.opacity = '0';
+    setTimeout(() => {
+      btnBackStep.style.display = 'none';
+    }, 300);
+    lastMapState = null;
+  };
+}
+
+// 필터 초기화
+if (btnResetFilters) {
+  btnResetFilters.onclick = () => {
+    currentCategory = '전체';
+    currentRegion1 = '전국';
+    currentRegion2 = '전체';
+    currentSearch = '';
+    currentBoundsFilter = null;
+
+    // UI 업데이트
+    if (searchInput) searchInput.value = '';
+    regionDepth1.value = '전국';
+    updateRegionDepth2('전국');
+    filterTags.forEach(t => {
+      t.classList.remove('active');
+      if (t.innerText === '전체') t.classList.add('active');
+    });
+
+    applyFilters();
+
+    // 지도를 초기 전국 단위 설정값으로 리셋
+    if (map) {
+      map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
+      map.setLevel(6);
+    }
+
+    // 이전 위치 버튼도 숨김
+    if (btnBackStep) {
+      btnBackStep.style.display = 'none';
+      lastMapState = null;
+    }
+  };
 }
 
 // Initialization on load
