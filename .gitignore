@@ -5,3 +5,4 @@ node_modules/
 server_log.txt
 data/*.xlsx
 data/*.xls
+dist/
