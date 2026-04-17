@@ -91,7 +91,6 @@ Pet-Pass는 반려인들이 안심하고 방문할 수 있는 장소를 찾고, 
 ### Backend (Serverless)
 - **Vercel Serverless Functions (Node.js)**: `/api` 구조를 통한 확장성 있는 백엔드 API.
 - **Axios**: 정부 API 및 외부 통신 처리.
-- **Supabase**: 매장 등록 신청 데이터의 안전한 유지 및 관리.
 
 ### CI/CD & Security
 - **GitHub Actions**: `main` 브랜치 푸시 시 자동 빌드 및 Vercel 배포.
@@ -123,8 +122,7 @@ Pet-Pass는 반려인들이 안심하고 방문할 수 있는 장소를 찾고, 
 /
 ├── api/                    # Vercel Serverless Functions (Backend)
 │   ├── auth-pet.js         # 정부 API 연동 및 인증 로직
-│   ├── stores.js           # 매장 데이터 서빙 API
-│   └── register-store.js    # 신규 매장 등록 신청 (Supabase 연동)
+│   └── stores.js           # 매장 데이터 서빙 API
 ├── public/                 # 프론트엔드 정적 자원
 │   ├── index.html          # UI 구조 및 카카오맵 플레이스홀더
 │   ├── script.js           # 지도 인터랙션 및 필터링 핵심 로직
@@ -145,7 +143,6 @@ Pet-Pass는 반려인들이 안심하고 방문할 수 있는 장소를 찾고, 
 로컬 개발 및 배포를 위해 루트 디렉토리에 `.env` 파일을 생성하고 아래 변수들을 설정해야 합니다:
 - `KAKAO_MAP_API_KEY`: 카카오 개발자 센터에서 발급받은 JavaScript 키.
 - `DATA_GO_KR_API_KEY`: 공공데이터포털에서 발급받은 동물등록정보조회 API 키.
-- `SUPABASE_URL` / `SUPABASE_ANON_KEY`: 매장 등록 신청 저장을 위한 Supabase 정보.
 
 ### 2. 로컬 실행
 ```bash
@@ -165,7 +162,6 @@ node server.js
 
 - [x] **모바일 퀵 스크롤**: 매장 리스트가 길어질 경우 상단으로 즉시 이동하는 '맨 위로' 플로팅 버튼 추가.
 - [ ] **정부 API 연동 고도화**: 대량 트래픽에 대응하기 위한 API 호출 캐싱 전략 강화.
-- [ ] **매장 등록 검토 대시보드**: 관리자가 신청된 매장을 승인/반려할 수 있는 관리 도구 구축.
 
 ---
 
