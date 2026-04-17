@@ -58,6 +58,7 @@ const storeList = document.getElementById('store-list');
 const overlay = document.getElementById('overlay');
 const storeDetail = document.getElementById('store-detail');
 const authModal = document.getElementById('auth-modal');
+const infoModal = document.getElementById('info-modal');
 const btnSearchHere = document.getElementById('btn-search-here');
 const btnBackStep = document.getElementById('btn-back-step');
 const btnResetFilters = document.getElementById('btn-reset-filters');
@@ -391,6 +392,7 @@ overlay.onclick = () => {
   setTimeout(() => overlay.style.display = 'none', 300);
   storeDetail.classList.remove('active');
   authModal.classList.remove('active');
+  if (infoModal) infoModal.classList.remove('active');
 };
 
 // Buttons & Filters
@@ -488,6 +490,31 @@ function unlinkPetPass() {
       petCardView.style.display = 'none';
     }, 300);
   }
+}
+
+// Info Modal Logic
+const logo = document.querySelector('.logo');
+const btnCloseInfo = document.getElementById('btn-close-info');
+const btnGithub = document.getElementById('btn-github');
+
+if (logo) {
+  logo.onclick = () => {
+    overlay.style.display = 'block';
+    setTimeout(() => overlay.style.opacity = '1', 10);
+    if (infoModal) infoModal.classList.add('active');
+  };
+}
+
+if (btnCloseInfo) {
+  btnCloseInfo.onclick = () => {
+    overlay.click();
+  };
+}
+
+if (btnGithub) {
+  btnGithub.onclick = () => {
+    window.open('https://github.com/yskkkkkk/pet-pass-web', '_blank');
+  };
 }
 
 // Auth Modal Logic
