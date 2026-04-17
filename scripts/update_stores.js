@@ -22,10 +22,14 @@ const DELAY_MS = 200; // API delay between requests
 
 const OUTPUT_DIR = path.join(__dirname, '../data');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'stores.json');
+const HISTORY_FILE = path.join(__dirname, '../docs/schedule_history.md');
 
-// Ensure output directory exists
+// Ensure directories exist
 if (!fs.existsSync(OUTPUT_DIR)) {
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+}
+if (!fs.existsSync(path.dirname(HISTORY_FILE))) {
+    fs.mkdirSync(path.dirname(HISTORY_FILE), { recursive: true });
 }
 
 /**
@@ -69,7 +73,6 @@ function getRegionFromAddress(address) {
  */
 async function geocodeAddress(address) {
     if (!KAKAO_API_KEY) {
-        console.warn('Warning: KAKAO_REST_API_KEY is not set. Skipping geocoding.');
         return null;
     }
 
@@ -98,7 +101,6 @@ async function geocodeAddress(address) {
  */
 async function fetchPage(startIdx, endIdx) {
     const url = `http://openapi.foodsafetykorea.go.kr/api/${FOOD_SAFETY_API_KEY}/${SERVICE_ID}/${DATA_TYPE}/${startIdx}/${endIdx}`;
-    console.log(`Fetching: ${startIdx} to ${endIdx}...`);
     
     try {
         const response = await axios.get(url);
@@ -107,7 +109,6 @@ async function fetchPage(startIdx, endIdx) {
         if (data[SERVICE_ID] && data[SERVICE_ID].RESULT && data[SERVICE_ID].RESULT.CODE !== 'INFO-000') {
             const result = data[SERVICE_ID].RESULT;
             if (result.CODE === 'INFO-200') {
-                console.log('No more data (INFO-200).');
                 return { row: [], total_count: 0 };
             }
             throw new Error(`API Error: ${result.CODE} - ${result.MSG}`);
@@ -116,7 +117,24 @@ async function fetchPage(startIdx, endIdx) {
         return data[SERVICE_ID] || { row: [], total_count: 0 };
     } catch (error) {
         console.error(`Error fetching page ${startIdx}-${endIdx}:`, error.message);
-        return null;
+        throw error;
+    }
+}
+
+/**
+ * Log to schedule_history.md
+ */
+function logHistory(success, count, error = null) {
+    const now = new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' });
+    const status = success ? '✅ 성공' : '❌ 실패';
+    const message = success ? `${count}개 수집 완료` : `에러: ${error}`;
+    const logLine = `| ${now} | ${status} | ${message} |\n`;
+
+    if (!fs.existsSync(HISTORY_FILE)) {
+        const header = '# 🕒 데이터 수집 스케줄링 이력\n\n| 일시 (KST) | 결과 | 비고 |\n| :--- | :--- | :--- |\n';
+        fs.writeFileSync(HISTORY_FILE, header + logLine, 'utf8');
+    } else {
+        fs.appendFileSync(HISTORY_FILE, logLine, 'utf8');
     }
 }
 
@@ -132,58 +150,74 @@ async function syncStores() {
 
     console.log('Starting Pet-Friendly Store Sync...');
 
-    while (hasMore) {
-        const result = await fetchPage(startIdx, endIdx);
-        
-        if (!result || !result.row || result.row.length === 0) {
-            hasMore = false;
-            break;
-        }
+    try {
+        while (hasMore) {
+            const result = await fetchPage(startIdx, endIdx);
 
-        const rows = result.row;
-        const totalCount = parseInt(result.total_count);
-
-        // Filter for pet-friendly stores (PET_OUTIN_YN: 'Y')
-        const filteredRows = rows.filter(item => item.PET_OUTIN_YN === 'Y');
-
-        for (const item of filteredRows) {
-            const coords = await geocodeAddress(item.LOCP_ADDR);
-
-            if (coords) {
-                petFriendlyStores.push({
-                    id: parseInt(item.BSN_LCNS_LEDG_NO),
-                    name: (item.BSSH_NM || '').replace(/^\(주\)/, '').trim(),
-                    originalName: item.BSSH_NM,
-                    type: item.INDUTY_NM,
-                    region: getRegionFromAddress(item.LOCP_ADDR),
-                    address: item.LOCP_ADDR,
-                    lat: coords.lat,
-                    lng: coords.lng,
-                    verified: true
-                });
+            if (!result || !result.row || result.row.length === 0) {
+                hasMore = false;
+                break;
             }
-            // Add a delay for geocoding to avoid rate limits (100ms is safer)
-            await sleep(100);
+
+            const rows = result.row;
+            const totalCount = parseInt(result.total_count);
+
+            // Filter for pet-friendly stores (PET_OUTIN_YN: 'Y' or 'y')
+            const filteredRows = rows.filter(item => item.PET_OUTIN_YN && item.PET_OUTIN_YN.toUpperCase() === 'Y');
+
+            for (const item of filteredRows) {
+                const coords = await geocodeAddress(item.LOCP_ADDR);
+
+                if (coords) {
+                    petFriendlyStores.push({
+                        id: parseInt(item.BSN_LCNS_LEDG_NO),
+                        name: (item.BSSH_NM || '').replace(/^\(주\)/, '').trim(),
+                        originalName: item.BSSH_NM,
+                        type: item.INDUTY_NM,
+                        region: getRegionFromAddress(item.LOCP_ADDR),
+                        address: item.LOCP_ADDR,
+                        lat: coords.lat,
+                        lng: coords.lng,
+                        verified: true
+                    });
+                }
+                await sleep(50); // Slight delay for Kakao API
+            }
+
+            totalCollected += rows.length;
+            console.log(`Progress: ${totalCollected}/${totalCount} - Found ${filteredRows.length} pet-friendly stores`);
+
+            if (totalCollected >= totalCount || rows.length < PAGE_SIZE) {
+                hasMore = false;
+            } else {
+                startIdx += PAGE_SIZE;
+                endIdx += PAGE_SIZE;
+                await sleep(DELAY_MS);
+            }
         }
 
-        totalCollected += rows.length;
-        console.log(`Read ${totalCollected}/${totalCount} - Found ${filteredRows.length} pet-friendly stores (Valid with coords: ${petFriendlyStores.length})`);
-
-        if (totalCollected >= totalCount || rows.length < PAGE_SIZE) {
-            hasMore = false;
+        if (petFriendlyStores.length > 0) {
+            // Save to file (Overwrite only on success)
+            fs.writeFileSync(OUTPUT_FILE, JSON.stringify(petFriendlyStores, null, 2), 'utf-8');
+            console.log(`Successfully synced ${petFriendlyStores.length} stores to ${OUTPUT_FILE}`);
+            logHistory(true, petFriendlyStores.length);
         } else {
-            startIdx += PAGE_SIZE;
-            endIdx += PAGE_SIZE;
-            await sleep(DELAY_MS);
+            console.warn('No pet-friendly stores found. Skipping file update.');
+            logHistory(true, 0, '수집된 데이터 없음');
         }
+        return { success: true, count: petFriendlyStores.length };
+    } catch (err) {
+        console.error('Sync failed:', err.message);
+        logHistory(false, 0, err.message);
+        return { success: false, error: err.message };
     }
-
-    // Save to file (Overwrite as requested)
-    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(petFriendlyStores, null, 2), 'utf-8');
-    console.log(`Successfully synced ${petFriendlyStores.length} pet-friendly stores to ${OUTPUT_FILE}`);
 }
 
-syncStores().catch(err => {
-    console.error('Sync failed:', err);
-    process.exit(1);
-});
+// Run if called directly
+if (require.main === module) {
+    syncStores().then(res => {
+        if (!res.success) process.exit(1);
+    });
+}
+
+module.exports = { syncStores };
