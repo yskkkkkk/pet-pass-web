@@ -887,10 +887,10 @@ if (mobileSearchInput && searchInput) {
 
 // 맨 위로 플로팅 버튼
 const btnScrollTop = document.getElementById('btn-scroll-top');
-const sidePanel = document.querySelector('.side-panel');
-if (btnScrollTop && sidePanel) {
-  sidePanel.addEventListener('scroll', throttle(() => {
-    if (sidePanel.scrollTop > 250) {
+const sidePanelBody = document.getElementById('side-panel-body');
+if (btnScrollTop && sidePanelBody) {
+  sidePanelBody.addEventListener('scroll', throttle(() => {
+    if (sidePanelBody.scrollTop > 250) {
       btnScrollTop.classList.add('visible');
     } else {
       btnScrollTop.classList.remove('visible');
@@ -898,7 +898,7 @@ if (btnScrollTop && sidePanel) {
   }, 100));
 
   btnScrollTop.onclick = () => {
-    sidePanel.scrollTo({ top: 0, behavior: 'smooth' });
+    sidePanelBody.scrollTo({ top: 0, behavior: 'smooth' });
   };
 }
 
@@ -996,8 +996,13 @@ if (btnMyLocation) {
      );
      setSheetHeight(nearest);
      
-     if (nearest === snapPoints.min && sidePanel.scrollTop > 0) {
-        sidePanel.scrollTo({top:0, behavior:'smooth'});
+     // Full 상태에 안착하면 내부 스크롤 복구
+     if (nearest === snapPoints.max) {
+       sidePanelBody.style.overflowY = 'auto';
+     }
+     
+     if (nearest === snapPoints.min && sidePanelBody.scrollTop > 0) {
+        sidePanelBody.scrollTo({top:0, behavior:'smooth'});
      }
 
      // 🧪 Debug: Snap 결과
@@ -1027,7 +1032,10 @@ if (btnMyLocation) {
     const isHandleArea = e.target.closest('.handle-area') || e.target.closest('.drag-handle');
     
     // 핸들이 아니면 무조건 리스트 스크롤 등 기본 동작을 하도록 무시 (드래그 안 함)
-    if (!isHandleArea) return;
+    if (!isHandleArea) {
+      const isScrollTop = sidePanelBody.scrollTop <= 0;
+      if (!isScrollTop) return;
+    }
 
     isDragging = true;
     sidePanel.classList.add('dragging');
@@ -1049,13 +1057,23 @@ if (btnMyLocation) {
   function handleTouchMove(e) {
     if (!isDragging) return;
     
-    // 핸들을 잡은 상태이므로 기본 브라우저 동작 완전 차단
+    const currentY = e.touches[0].clientY;
+    const deltaY = startY - currentY;  // 양수 = 위로 드래그(시트 확장), 음수 = 아래로 드래그(시트 축소)
+    const dragDirection = deltaY > 0 ? 'Up' : 'Down';
+    const isFull = getSheetState() === 'Full';
+    const scrollTop = sidePanelBody.scrollTop;
+
+    // 🛠️ 핵심 로직: Full 상태에서의 스크롤 vs 드래그 주도권 판정
+    if (isFull && scrollTop > 0 && deltaY < 0) {
+      isDragging = false;
+      sidePanel.classList.remove('dragging');
+      sidePanelBody.style.overflowY = 'auto';
+      return;
+    }
+    
     if (e.cancelable) {
       e.preventDefault();
     }
-    
-    const currentY = e.touches[0].clientY;
-    const deltaY = startY - currentY;  // 양수 = 위로 드래그(시트 확장), 음수 = 아래로 드래그(시트 축소)
     
     const rawHeight = startHeight + deltaY;
     setSheetHeight(rawHeight);
@@ -1073,6 +1091,12 @@ if (btnMyLocation) {
     }
     
     snapToNearest();
+    
+    // 🔒 CSS Overflow 복구: snapToNearest에서 Full이면 auto 복구됨
+    // Full이 아닌 경우에는 overflowY를 기본값으로 복구
+    if (getSheetState() !== 'Full') {
+      sidePanelBody.style.overflowY = '';
+    }
   }
   
   sidePanel.addEventListener('touchstart', handleTouchStart, {passive: false});

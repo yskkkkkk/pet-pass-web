@@ -38,7 +38,7 @@ if (!fs.existsSync(path.dirname(HISTORY_FILE))) {
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
- * Extract region from address and abbreviate it
+ * Extract region from address
  */
 function getRegionFromAddress(address) {
     if (!address) return '기타';
