@@ -648,16 +648,16 @@ select.icon-tag:focus {
   background: rgba(15, 28, 20, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  margin: -16px -24px 16px;
-  padding: 16px 24px 8px;
+  margin: -24px -24px 0px; /* PC 패딩(24px) 완전 상쇄 및 하단 유격 제거 */
+  padding: 16px 24px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   touch-action: none;
 }
 
 @media (max-width: 768px) {
   .handle-area {
-    margin: -16px -16px 12px;
-    padding: 16px 16px 0px;
+    margin: -16px -24px 0px; /* 모바일 padding-top(16px) 상쇄 및 하단 유격 제거 */
+    padding: 12px 24px 8px;
   }
 }
 
