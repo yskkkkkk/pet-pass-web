@@ -624,7 +624,7 @@ select.icon-tag:focus {
   width: 40px; height: 4px;
   background: rgba(255,255,255,0.2);
   border-radius: 2px;
-  margin: 0 auto 20px;
+  margin: 0 auto 12px;
   position: relative;
   cursor: grab;
 }
@@ -637,6 +637,26 @@ select.icon-tag:focus {
   left: -50px;
   right: -50px;
   bottom: -20px;
+}
+
+/* Sticky Header Area for Side Panel */
+.side-panel-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 28, 20, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin: -16px -24px 16px;
+  padding: 16px 24px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 768px) {
+  .side-panel-header {
+    margin: -16px -16px 12px;
+    padding: 16px 16px 4px;
+  }
 }
 
 /* Animations */
@@ -713,6 +733,7 @@ select.icon-tag:focus {
 #btn-my-location.hidden,
 #btn-my-location.is-dragging {
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   transform: translateY(10px);
 }

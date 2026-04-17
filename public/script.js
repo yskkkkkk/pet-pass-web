@@ -1022,7 +1022,9 @@ if (btnMyLocation) {
     // 상태 기반 가시성 제어 (Mode 1: 지도 최소화 시 숨김)
     const btnMyLocation = document.getElementById('btn-my-location');
     if (btnMyLocation) {
-      if (newHeight >= snapPoints.max - 10) {
+      // 85vh(max) 상태에 근접할 때 버튼 숨김 (약간의 임계값 여유 부여)
+      const isNearMax = newHeight >= snapPoints.max - 20;
+      if (isNearMax) {
         btnMyLocation.classList.add('hidden');
       } else {
         btnMyLocation.classList.remove('hidden');
@@ -1066,16 +1068,26 @@ if (btnMyLocation) {
   function handleTouchStart(e) {
     if (window.innerWidth > 768) return;
     
-    const isHeaderArea = e.target.closest('.filter-header') || e.target.closest('.drag-handle');
+    // 헤더 영역 체크 (핸들, 필터 헤더, 그리고 새롭게 추가된 sticky 헤더 래퍼 포함)
+    const isHeaderArea = e.target.closest('.side-panel-header') || 
+                         e.target.closest('.filter-header') || 
+                         e.target.closest('.drag-handle');
+    
     const isScrollTop = sidePanel.scrollTop <= 0;
     
-    // 헤더/핸들 영역은 스크롤 상태와 상관없이 항상 드래그 시작 도구가 됨 (MAX 상태 탈출 보장)
+    // 헤더 영역은 스크롤 상태와 상관없이 항상 드래그 시작 도구가 됨 (MAX 상태 탈출 보장)
     if (!isHeaderArea && !isScrollTop) return; 
+    
+    // 버튼이나 입력창 등을 조작할 때는 드래그 방지
     if (['INPUT', 'SELECT', 'BUTTON', 'OPTION'].includes(e.target.tagName)) return;
 
     isDragging = true;
     sidePanel.classList.add('dragging');
     sidePanel.style.overflowY = 'hidden';
+
+    // 드래그 핸들 강제 노출 (모바일)
+    const handle = sidePanel.querySelector('.drag-handle');
+    if (handle) handle.style.display = 'block';
 
     // [내 위치] 버튼 드래그 상태 추가 (즉시 숨김 정책)
     const btnMyLocation = document.getElementById('btn-my-location');
