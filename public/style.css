@@ -215,16 +215,33 @@ body {
 }
 
 .side-panel {
-
   width: 420px;
   height: calc(100vh - 70px);
-  overflow-y: auto;
   border-left: 1px solid var(--glass-border);
   background: rgba(15, 28, 20, 0.95);
   backdrop-filter: blur(10px);
   padding: 24px;
   z-index: var(--z-panel);
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: visible; /* 내부 스크롤을 위해 상위는 visible */
+}
+
+#side-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 -24px;
+  padding: 0 24px;
+  scrollbar-gutter: stable;
+}
+
+@media (max-width: 768px) {
+  #side-panel-body {
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
 }
 
 /* Ad Slot */
@@ -684,38 +701,8 @@ select.icon-tag:focus {
 }
 .animate-in { animation: fadeIn 0.6s ease forwards; }
 
-/* 플로팅 버튼 그룹 */
-.floating-btns {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 9999;
-}
-
-#btn-scroll-top {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--peach-main);
-  color: white;
-  border: 1px solid rgba(255,255,255,0.3);
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* 내 위치 버튼: 글로벌 표준 디자인 (White Rounded Square) */
-#btn-my-location {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+/* 플로팅 버튼 공통 스타일 (White Rounded Square) */
+.map-fab-style {
   width: 36px;
   height: 36px;
   background: #FFFFFF;
@@ -726,19 +713,39 @@ select.icon-tag:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 950;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  padding: 0;
+  outline: none;
+  position: relative;
 }
 
-#btn-my-location.hidden,
-#btn-my-location.is-dragging {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(10px);
+.map-fab-style::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  /* 터치 영역 44px 확보 */
+}
+
+.map-fab-style svg {
+  width: 20px;
+  height: 20px;
+  stroke: #000000;
+  stroke-width: 2.5px;
+}
+
+.map-fab-style:active {
+  transform: scale(0.92);
+  filter: brightness(0.95);
 }
 
 #btn-scroll-top {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 90;
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
@@ -750,16 +757,36 @@ select.icon-tag:focus {
   transform: translateY(0);
 }
 
-#btn-my-location svg {
-  width: 20px;
-  height: 20px;
-  stroke: #000000;
-  stroke-width: 2.5px;
+/* PC 버전 레이아웃: 버튼을 지도 우측 하단(사이드패널 왼쪽)에 나란히 배치 */
+@media (min-width: 769px) {
+  #btn-scroll-top {
+    right: auto;
+    left: -56px; /* 20px 마진 + 36px 버튼 */
+    bottom: 68px; /* 20px(내위치 마진) + 36px(내위치 높이) + 12px(간격) */
+  }
+
+  /* PC에서 내 위치 버튼은 지도 영역(사이드패널 왼쪽)에 배치됨 */
+  #btn-my-location {
+    right: auto;
+    left: -56px;
+    bottom: 20px;
+  }
 }
 
-#btn-scroll-top:active, #btn-my-location:active {
-  transform: scale(0.92);
-  filter: brightness(1.1);
+/* 내 위치 버튼 전용 */
+#btn-my-location {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 950;
+}
+
+#btn-my-location.hidden,
+#btn-my-location.is-dragging {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px);
 }
 
 /* 📱 Responsive adjustments - Moved to end to ensure correct overrides */
@@ -860,18 +887,18 @@ select.icon-tag:focus {
     color: var(--peach-main);
   }
  
-  /* 플로팅 버튼 모바일 연동 */
+  /* 모바일에서 플로팅 버튼 그룹 컨테이너 불필요 (사이드패널 내부로 이동됨) */
   .floating-btns {
-    bottom: calc(var(--sheet-height, 50vh) + 20px) !important;
-    transition: bottom 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: none;
   }
  
-  /* 내 위치 버튼 모바일 전용 위치 및 연동 */
+  /* 내 위치 버튼 모바일 전용 위치 및 연동: 사이드패널 위로 띄움 */
   #btn-my-location {
-    bottom: calc(var(--sheet-height, 50vh) + 16px);
+    bottom: auto;
+    top: -52px; /* 36px 버튼 + 16px 간격 */
     right: 16px;
     z-index: 999; /* Ensure it stays above side-panel (500) */
-    transition: bottom 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease, transform 0.3s ease;
+    transition: opacity 0.2s ease, transform 0.3s ease;
   }
 
   /* 모바일에서도 확실히 숨김 처리 (우선순위 강화) */

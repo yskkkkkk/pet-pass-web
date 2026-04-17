@@ -887,10 +887,10 @@ if (mobileSearchInput && searchInput) {
 
 // 맨 위로 플로팅 버튼
 const btnScrollTop = document.getElementById('btn-scroll-top');
-const sidePanel = document.querySelector('.side-panel');
-if (btnScrollTop && sidePanel) {
-  sidePanel.addEventListener('scroll', throttle(() => {
-    if (sidePanel.scrollTop > 250) {
+const sidePanelBody = document.getElementById('side-panel-body');
+if (btnScrollTop && sidePanelBody) {
+  sidePanelBody.addEventListener('scroll', throttle(() => {
+    if (sidePanelBody.scrollTop > 250) {
       btnScrollTop.classList.add('visible');
     } else {
       btnScrollTop.classList.remove('visible');
@@ -898,7 +898,7 @@ if (btnScrollTop && sidePanel) {
   }, 100));
 
   btnScrollTop.onclick = () => {
-    sidePanel.scrollTo({ top: 0, behavior: 'smooth' });
+    sidePanelBody.scrollTo({ top: 0, behavior: 'smooth' });
   };
 }
 
@@ -998,11 +998,11 @@ if (btnMyLocation) {
      
      // Full 상태에 안착하면 내부 스크롤 복구
      if (nearest === snapPoints.max) {
-       sidePanel.style.overflowY = 'auto';
+       sidePanelBody.style.overflowY = 'auto';
      }
      
-     if (nearest === snapPoints.min && sidePanel.scrollTop > 0) {
-        sidePanel.scrollTo({top:0, behavior:'smooth'});
+     if (nearest === snapPoints.min && sidePanelBody.scrollTop > 0) {
+        sidePanelBody.scrollTo({top:0, behavior:'smooth'});
      }
 
      // 🧪 Debug: Snap 결과
@@ -1033,7 +1033,7 @@ if (btnMyLocation) {
                          e.target.closest('.filter-header') || 
                          e.target.closest('.drag-handle');
     
-    const isScrollTop = sidePanel.scrollTop <= 0;
+    const isScrollTop = sidePanelBody.scrollTop <= 0;
     
     // 버튼이나 입력창 등을 조작할 때는 드래그 방지
     if (['INPUT', 'SELECT', 'BUTTON', 'OPTION'].includes(e.target.tagName)) return;
@@ -1045,7 +1045,7 @@ if (btnMyLocation) {
     sidePanel.classList.add('dragging');
     
     // 🔒 CSS Overflow 강제 스위칭: 드래그 시작 시 내부 스크롤 잠금
-    sidePanel.style.overflowY = 'hidden';
+    sidePanelBody.style.overflowY = 'hidden';
 
     // 드래그 핸들 강제 노출 (모바일)
     const handle = sidePanel.querySelector('.drag-handle');
@@ -1061,7 +1061,7 @@ if (btnMyLocation) {
     startHeight = isNaN(computedHeight) ? snapPoints.mid : computedHeight;
 
     // 🧪 Debug
-    console.log(`[BottomSheet] TouchStart | State: ${getSheetState()} | ScrollTop: ${sidePanel.scrollTop} | isHeader: ${!!isHeaderArea}`);
+    console.log(`[BottomSheet] TouchStart | State: ${getSheetState()} | ScrollTop: ${sidePanelBody.scrollTop} | isHeader: ${!!isHeaderArea}`);
   }
   
   function handleTouchMove(e) {
@@ -1071,7 +1071,7 @@ if (btnMyLocation) {
     const deltaY = startY - currentY;  // 양수 = 위로 드래그(시트 확장), 음수 = 아래로 드래그(시트 축소)
     const dragDirection = deltaY > 0 ? 'Up' : 'Down';
     const isFull = getSheetState() === 'Full';
-    const scrollTop = sidePanel.scrollTop;
+    const scrollTop = sidePanelBody.scrollTop;
 
     // 🧪 Debug
     console.log(`[BottomSheet] TouchMove | State: ${getSheetState()} | ScrollTop: ${scrollTop} | Direction: ${dragDirection} | deltaY: ${deltaY.toFixed(1)}`);
@@ -1083,7 +1083,7 @@ if (btnMyLocation) {
       // → scrollTop이 0에 도달하면 다음 touchmove에서 드래그로 전환됨
       isDragging = false;
       sidePanel.classList.remove('dragging');
-      sidePanel.style.overflowY = 'auto';
+      sidePanelBody.style.overflowY = 'auto';
       console.log(`[BottomSheet] → Yielding to internal scroll (scrollTop: ${scrollTop})`);
       return;
     }
@@ -1119,7 +1119,7 @@ if (btnMyLocation) {
     // 🔒 CSS Overflow 복구: snapToNearest에서 Full이면 auto 복구됨
     // Full이 아닌 경우에는 overflowY를 기본값으로 복구
     if (getSheetState() !== 'Full') {
-      sidePanel.style.overflowY = '';
+      sidePanelBody.style.overflowY = '';
     }
   }
   

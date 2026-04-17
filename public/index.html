@@ -44,18 +44,6 @@
     <section id="map-mock">
       <!-- 이전 위치로 버튼: 매장 상세 진입 시 표시 -->
       <button id="btn-back-step" class="glass" style="display: none; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; padding: 12px 24px; border-radius: 30px; background: var(--peach-main); color: white; border: 1px solid white; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">이전 위치로</button>
-      
-      <!-- 내 위치 버튼: 지도 전용 컨트롤로 이동 (Global Standard) -->
-      <button id="btn-my-location" aria-label="내 위치">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="22" y1="12" x2="18" y2="12"></line>
-          <line x1="6" y1="12" x2="2" y2="12"></line>
-          <line x1="12" y1="6" x2="12" y2="2"></line>
-          <line x1="12" y1="22" x2="12" y2="18"></line>
-          <circle cx="12" cy="12" r="3"></circle>
-        </svg>
-      </button>
     </section>
 
     <!-- Side Panel / Bottom Sheet (Mobile) -->
@@ -64,60 +52,76 @@
       <div class="side-panel-header">
         <div class="drag-handle" style="display: none;"></div>
         <div class="filter-header">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <h2 style="font-weight: 800; font-size: 20px;">공식 인증 매장 (<span id="store-count">0</span>)</h2>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <h2 style="font-weight: 800; font-size: 20px;">공식 인증 매장 (<span id="store-count">0</span>)</h2>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <select id="region-depth1" class="icon-tag glass" style="outline: none;">
+                <option value="전국">전국</option>
+                <option value="서울특별시">서울특별시</option>
+                <option value="경기도">경기도</option>
+                <option value="부산광역시">부산광역시</option>
+                <option value="대구광역시">대구광역시</option>
+                <option value="인천광역시">인천광역시</option>
+                <option value="광주광역시">광주광역시</option>
+                <option value="대전광역시">대전광역시</option>
+                <option value="울산광역시">울산광역시</option>
+                <option value="세종특별자치시">세종특별자치시</option>
+                <option value="강원특별자치도">강원특별자치도</option>
+                <option value="충청북도">충청북도</option>
+                <option value="충청남도">충청남도</option>
+                <option value="전라북도">전라북도</option>
+                <option value="전라남도">전라남도</option>
+                <option value="경상북도">경상북도</option>
+                <option value="경상남도">경상남도</option>
+                <option value="제주특별자치도">제주특별자치도</option>
+              </select>
+              <select id="region-depth2" class="icon-tag glass" style="outline: none; display: none;">
+                <option value="전체">전체</option>
+              </select>
+            </div>
           </div>
-          <div style="display: flex; gap: 8px;">
-            <select id="region-depth1" class="icon-tag glass" style="outline: none;">
-              <option value="전국">전국</option>
-              <option value="서울특별시">서울특별시</option>
-              <option value="경기도">경기도</option>
-              <option value="부산광역시">부산광역시</option>
-              <option value="대구광역시">대구광역시</option>
-              <option value="인천광역시">인천광역시</option>
-              <option value="광주광역시">광주광역시</option>
-              <option value="대전광역시">대전광역시</option>
-              <option value="울산광역시">울산광역시</option>
-              <option value="세종특별자치시">세종특별자치시</option>
-              <option value="강원특별자치도">강원특별자치도</option>
-              <option value="충청북도">충청북도</option>
-              <option value="충청남도">충청남도</option>
-              <option value="전라북도">전라북도</option>
-              <option value="전라남도">전라남도</option>
-              <option value="경상북도">경상북도</option>
-              <option value="경상남도">경상남도</option>
-              <option value="제주특별자치도">제주특별자치도</option>
-            </select>
-            <select id="region-depth2" class="icon-tag glass" style="outline: none; display: none;">
-              <option value="전체">전체</option>
-            </select>
+
+          <div class="filters" style="display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px;">
+            <span class="icon-tag active">전체</span>
+            <span class="icon-tag">카페</span>
+            <span class="icon-tag">일반음식점</span>
+            <span class="icon-tag">제과점</span>
           </div>
         </div>
-        
-        <div class="filters" style="display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 4px;">
-          <span class="icon-tag active">전체</span>
-          <span class="icon-tag">카페</span>
-          <span class="icon-tag">일반음식점</span>
-          <span class="icon-tag">제과점</span>
+      </div> <!-- End of side-panel-header -->
+
+      <div id="side-panel-body">
+        <!-- Native Ad Slot Structure -->
+        <div class="ad-slot glass">
+          광고 · 프리미엄 펫푸드브랜드 신제품 런칭 기념 특가 (예시)
+        </div>
+
+        <div id="store-list">
+          <!-- Rendered by script.js -->
         </div>
       </div>
-    </div> <!-- End of side-panel-header -->
 
-      <!-- Native Ad Slot Structure -->
-      <div class="ad-slot glass">
-        광고 · 프리미엄 펫푸드브랜드 신제품 런칭 기념 특가 (예시)
-      </div>
+      <!-- 상단 이동 버튼: 사이드패널 내부에 배치하여 바텀시트와 함께 이동 -->
+      <button id="btn-scroll-top" class="map-fab-style" aria-label="맨 위로">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
 
-      <div id="store-list">
-        <!-- Rendered by script.js -->
-      </div>
+      <!-- 내 위치 버튼: 사이드패널 내부에 배치하여 정렬 및 모바일 연동 최적화 -->
+      <button id="btn-my-location" class="map-fab-style" aria-label="내 위치">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="22" y1="12" x2="18" y2="12"></line>
+          <line x1="6" y1="12" x2="2" y2="12"></line>
+          <line x1="12" y1="6" x2="12" y2="2"></line>
+          <line x1="12" y1="22" x2="12" y2="18"></line>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </button>
     </aside>
-
-    <!-- 플로팅 버튼 그룹 (상단 이동 버튼 등) -->
-    <div class="floating-btns">
-      <button id="btn-scroll-top" aria-label="맨 위로">↑</button>
-    </div>
   </main>
 
   <!-- Store Detail Bottom Sheet -->
