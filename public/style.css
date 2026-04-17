@@ -498,8 +498,21 @@ select.icon-tag:focus {
 }
 
 .auth-modal.active #pet-card-view,
-.auth-modal.active #auth-form-view {
+.auth-modal.active #auth-form-view,
+.auth-modal.active > div {
   animation: fadeIn 0.4s ease-out forwards;
+}
+
+#btn-github {
+  transition: transform 0.2s, background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#btn-github:hover {
+  background-color: #333 !important;
+  transform: translateY(-2px);
 }
 
 #btn-unlink:hover {
@@ -722,5 +735,11 @@ select.icon-tag:focus {
   .side-panel.dragging ~ .floating-btns,
   #map-mock #btn-my-location.is-dragging {
     transition: none !important;
+  }
+
+  .bottom-sheet {
+    padding: 24px;
+    height: auto;
+    max-height: 85vh;
   }
 }

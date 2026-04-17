@@ -58,6 +58,7 @@ const storeList = document.getElementById('store-list');
 const overlay = document.getElementById('overlay');
 const storeDetail = document.getElementById('store-detail');
 const authModal = document.getElementById('auth-modal');
+const infoModal = document.getElementById('info-modal');
 const btnSearchHere = document.getElementById('btn-search-here');
 const btnBackStep = document.getElementById('btn-back-step');
 const btnResetFilters = document.getElementById('btn-reset-filters');
@@ -357,26 +358,26 @@ function renderStores(data) {
 function showDetail(store) {
   selectedStore = store; // 현재 선택된 매장 정보 저장
   const detailName = document.getElementById('detail-name');
-  const detailType = document.getElementById('detail-type');
   const detailImg = document.getElementById('detail-img');
   const complianceList = document.getElementById('compliance-list');
 
   detailName.innerText = store.name;
-  detailType.innerText = store.type;
   if (detailImg) detailImg.style.display = 'none'; // 이미지 없으므로 숨김
   
   complianceList.innerHTML = `
-    <li style="margin-bottom: 12px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid var(--peach-main);">
-      <p style="font-size: 12px; color: var(--peach-main); margin-bottom: 4px;">공식 주소</p>
-      <p style="font-size: 14px; font-weight: 500;">${escapeHtml(store.address)}</p>
+    <li style="margin-bottom: 8px; padding: 9px 14px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 16px;">📍</span>
+      <p style="font-size: 14px; font-weight: 500; line-height: 1.4; color: var(--text-secondary);">${escapeHtml(store.address)}</p>
     </li>
-    <li style="margin-bottom: 12px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px;">
-      <p style="font-size: 12px; color: var(--accent); margin-bottom: 4px;">업종</p>
-      <p style="font-size: 14px; font-weight: 500;">${escapeHtml(store.type)}</p>
-    </li>
-    <li style="margin-bottom: 12px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px;">
-      <p style="font-size: 12px; color: var(--accent); margin-bottom: 4px;">인증 상태</p>
-      <p style="font-size: 14px; font-weight: 500;">🛡️ 식품안전나라 공식 시범사업 참여 업소</p>
+    <li style="margin-bottom: 8px; padding: 9px 14px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <span style="font-size: 14px; color: var(--accent); opacity: 0.8;">🏷️</span>
+        <span style="font-size: 14px; font-weight: 600; color: var(--text-secondary);">${escapeHtml(store.type)}</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 4px; background: var(--forest-main); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--accent); flex-shrink: 0;">
+        <span style="font-size: 12px;">🛡️</span>
+        <span style="font-size: 11px; font-weight: 800; color: var(--accent); letter-spacing: -0.2px;">공식 인증</span>
+      </div>
     </li>
   `;
 
@@ -391,6 +392,7 @@ overlay.onclick = () => {
   setTimeout(() => overlay.style.display = 'none', 300);
   storeDetail.classList.remove('active');
   authModal.classList.remove('active');
+  if (infoModal) infoModal.classList.remove('active');
 };
 
 // Buttons & Filters
@@ -488,6 +490,31 @@ function unlinkPetPass() {
       petCardView.style.display = 'none';
     }, 300);
   }
+}
+
+// Info Modal Logic
+const logo = document.querySelector('.logo');
+const btnCloseInfo = document.getElementById('btn-close-info');
+const btnGithub = document.getElementById('btn-github');
+
+if (logo) {
+  logo.onclick = () => {
+    overlay.style.display = 'block';
+    setTimeout(() => overlay.style.opacity = '1', 10);
+    if (infoModal) infoModal.classList.add('active');
+  };
+}
+
+if (btnCloseInfo) {
+  btnCloseInfo.onclick = () => {
+    overlay.click();
+  };
+}
+
+if (btnGithub) {
+  btnGithub.onclick = () => {
+    window.open('https://github.com/yskkkkkk/pet-pass-web', '_blank');
+  };
 }
 
 // Auth Modal Logic
