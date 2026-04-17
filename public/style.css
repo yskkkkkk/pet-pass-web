@@ -225,6 +225,7 @@ body {
   padding: 24px;
   z-index: var(--z-panel);
   transition: transform 0.3s ease;
+  touch-action: pan-y;
 }
 
 /* Ad Slot */
@@ -640,7 +641,7 @@ select.icon-tag:focus {
 }
 
 /* Sticky Header Area for Side Panel */
-.side-panel-header {
+.handle-area {
   position: sticky;
   top: 0;
   z-index: 100;
@@ -650,12 +651,13 @@ select.icon-tag:focus {
   margin: -16px -24px 16px;
   padding: 16px 24px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  touch-action: none;
 }
 
 @media (max-width: 768px) {
-  .side-panel-header {
+  .handle-area {
     margin: -16px -16px 12px;
-    padding: 16px 16px 4px;
+    padding: 16px 16px 0px;
   }
 }
 

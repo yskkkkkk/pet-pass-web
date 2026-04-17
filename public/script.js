@@ -996,11 +996,6 @@ if (btnMyLocation) {
      );
      setSheetHeight(nearest);
      
-     // Full 상태에 안착하면 내부 스크롤 복구
-     if (nearest === snapPoints.max) {
-       sidePanel.style.overflowY = 'auto';
-     }
-     
      if (nearest === snapPoints.min && sidePanel.scrollTop > 0) {
         sidePanel.scrollTo({top:0, behavior:'smooth'});
      }
@@ -1028,24 +1023,14 @@ if (btnMyLocation) {
   function handleTouchStart(e) {
     if (window.innerWidth > 768) return;
     
-    // 헤더 영역 체크 (핸들, 필터 헤더, sticky 헤더 래퍼 포함)
-    const isHeaderArea = e.target.closest('.side-panel-header') || 
-                         e.target.closest('.filter-header') || 
-                         e.target.closest('.drag-handle');
+    // 오직 핸들 영역에서만 바텀 시트 높이 조절 드래그 가능
+    const isHandleArea = e.target.closest('.handle-area') || e.target.closest('.drag-handle');
     
-    const isScrollTop = sidePanel.scrollTop <= 0;
-    
-    // 버튼이나 입력창 등을 조작할 때는 드래그 방지
-    if (['INPUT', 'SELECT', 'BUTTON', 'OPTION'].includes(e.target.tagName)) return;
-
-    // 헤더 영역이 아니고 스크롤이 최상단이 아니라면 드래그 시작 불가 (내부 스크롤 우선)
-    if (!isHeaderArea && !isScrollTop) return; 
+    // 핸들이 아니면 무조건 리스트 스크롤 등 기본 동작을 하도록 무시 (드래그 안 함)
+    if (!isHandleArea) return;
 
     isDragging = true;
     sidePanel.classList.add('dragging');
-    
-    // 🔒 CSS Overflow 강제 스위칭: 드래그 시작 시 내부 스크롤 잠금
-    sidePanel.style.overflowY = 'hidden';
 
     // 드래그 핸들 강제 노출 (모바일)
     const handle = sidePanel.querySelector('.drag-handle');
@@ -1059,42 +1044,18 @@ if (btnMyLocation) {
     
     const computedHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sheet-height'), 10);
     startHeight = isNaN(computedHeight) ? snapPoints.mid : computedHeight;
-
-    // 🧪 Debug
-    console.log(`[BottomSheet] TouchStart | State: ${getSheetState()} | ScrollTop: ${sidePanel.scrollTop} | isHeader: ${!!isHeaderArea}`);
   }
   
   function handleTouchMove(e) {
     if (!isDragging) return;
     
-    const currentY = e.touches[0].clientY;
-    const deltaY = startY - currentY;  // 양수 = 위로 드래그(시트 확장), 음수 = 아래로 드래그(시트 축소)
-    const dragDirection = deltaY > 0 ? 'Up' : 'Down';
-    const isFull = getSheetState() === 'Full';
-    const scrollTop = sidePanel.scrollTop;
-
-    // 🧪 Debug
-    console.log(`[BottomSheet] TouchMove | State: ${getSheetState()} | ScrollTop: ${scrollTop} | Direction: ${dragDirection} | deltaY: ${deltaY.toFixed(1)}`);
-
-    // 🛠️ 핵심 로직: Full 상태에서의 스크롤 vs 드래그 주도권 판정
-    if (isFull && scrollTop > 0 && deltaY < 0) {
-      // Full 상태 + 리스트가 스크롤된 상태 + 아래로 끌기
-      // → 내부 리스트 스크롤을 우선 허용 (드래그 중단)
-      // → scrollTop이 0에 도달하면 다음 touchmove에서 드래그로 전환됨
-      isDragging = false;
-      sidePanel.classList.remove('dragging');
-      sidePanel.style.overflowY = 'auto';
-      console.log(`[BottomSheet] → Yielding to internal scroll (scrollTop: ${scrollTop})`);
-      return;
-    }
-    
-    // scrollTop === 0이고 아래로 끌기 → 브라우저 기본 스크롤 완전 차단, 시트 드래그 강제
+    // 핸들을 잡은 상태이므로 기본 브라우저 동작 완전 차단
     if (e.cancelable) {
       e.preventDefault();
     }
     
-    // 🔒 내부 스크롤 강제 잠금 (드래그 도중)
-    sidePanel.style.overflowY = 'hidden';
+    const currentY = e.touches[0].clientY;
+    const deltaY = startY - currentY;  // 양수 = 위로 드래그(시트 확장), 음수 = 아래로 드래그(시트 축소)
     
     const rawHeight = startHeight + deltaY;
     setSheetHeight(rawHeight);
@@ -1105,9 +1066,6 @@ if (btnMyLocation) {
     isDragging = false;
     sidePanel.classList.remove('dragging');
 
-    // 🧪 Debug
-    console.log(`[BottomSheet] TouchEnd | Height: ${Math.round(currentHeight)}px`);
-
     // [내 위치] 버튼: Snap 안착 후 노출
     const btnMyLocation = document.getElementById('btn-my-location');
     if (btnMyLocation) {
@@ -1115,12 +1073,6 @@ if (btnMyLocation) {
     }
     
     snapToNearest();
-    
-    // 🔒 CSS Overflow 복구: snapToNearest에서 Full이면 auto 복구됨
-    // Full이 아닌 경우에는 overflowY를 기본값으로 복구
-    if (getSheetState() !== 'Full') {
-      sidePanel.style.overflowY = '';
-    }
   }
   
   sidePanel.addEventListener('touchstart', handleTouchStart, {passive: false});
