@@ -15,7 +15,7 @@ require('dotenv').config();
 // Configuration
 const FOOD_SAFETY_API_KEY = process.env.FOOD_SAFETY_API_KEY || 'sample';
 const KAKAO_API_KEY = process.env.KAKAO_REST_API_KEY;
-const SERVICE_ID = 'I1250'; // 식품접객업
+const SERVICE_ID = 'I1200'; // 식품접객업 인허가 정보
 const DATA_TYPE = 'json';
 const PAGE_SIZE = 1000;
 const DELAY_MS = 200; // API delay between requests
@@ -101,22 +101,32 @@ async function geocodeAddress(address) {
  */
 async function fetchPage(startIdx, endIdx) {
     const url = `http://openapi.foodsafetykorea.go.kr/api/${FOOD_SAFETY_API_KEY}/${SERVICE_ID}/${DATA_TYPE}/${startIdx}/${endIdx}`;
+    console.log(`[Fetch] Requesting: ${startIdx} ~ ${endIdx}`);
     
     try {
         const response = await axios.get(url);
         const data = response.data;
         
+        // Handle API Key error or Server alert
+        if (typeof data === 'string' && data.includes('<script')) {
+            console.error('[API Error] 인증키가 유효하지 않거나 서버 오류가 발생했습니다.');
+            throw new Error('Invalid API Key or Server Alert');
+        }
+
         if (data[SERVICE_ID] && data[SERVICE_ID].RESULT && data[SERVICE_ID].RESULT.CODE !== 'INFO-000') {
             const result = data[SERVICE_ID].RESULT;
             if (result.CODE === 'INFO-200') {
+                console.log(`[Fetch] No more data (INFO-200)`);
                 return { row: [], total_count: 0 };
             }
             throw new Error(`API Error: ${result.CODE} - ${result.MSG}`);
         }
 
-        return data[SERVICE_ID] || { row: [], total_count: 0 };
+        const resultData = data[SERVICE_ID] || { row: [], total_count: 0 };
+        console.log(`[Fetch] Success: Received ${resultData.row ? resultData.row.length : 0} rows`);
+        return resultData;
     } catch (error) {
-        console.error(`Error fetching page ${startIdx}-${endIdx}:`, error.message);
+        console.error(`[Fetch Error] ${startIdx}-${endIdx}:`, error.message);
         throw error;
     }
 }
@@ -148,7 +158,7 @@ async function syncStores() {
     let petFriendlyStores = [];
     let hasMore = true;
 
-    console.log('Starting Pet-Friendly Store Sync...');
+    console.log(`Starting Pet-Friendly Store Sync (Service: ${SERVICE_ID})...`);
 
     try {
         while (hasMore) {
@@ -165,12 +175,25 @@ async function syncStores() {
             // Filter for pet-friendly stores (PET_OUTIN_YN: 'Y' or 'y')
             const filteredRows = rows.filter(item => item.PET_OUTIN_YN && item.PET_OUTIN_YN.toUpperCase() === 'Y');
 
+            if (filteredRows.length > 0) {
+                console.log(`[Filter] Found ${filteredRows.length} pet-friendly stores in this page.`);
+            }
+
             for (const item of filteredRows) {
-                const coords = await geocodeAddress(item.LOCP_ADDR);
+                // Use Kakao API for geocoding if key is available
+                let coords = await geocodeAddress(item.LOCP_ADDR);
+
+                // Fallback to API coordinates if Kakao fails or key is missing
+                if (!coords && item.SITE_X && item.SITE_Y) {
+                    coords = {
+                        lat: parseFloat(item.SITE_Y),
+                        lng: parseFloat(item.SITE_X)
+                    };
+                }
 
                 if (coords) {
                     petFriendlyStores.push({
-                        id: parseInt(item.BSN_LCNS_LEDG_NO),
+                        id: item.BSN_LCNS_LEDG_NO,
                         name: (item.BSSH_NM || '').replace(/^\(주\)/, '').trim(),
                         originalName: item.BSSH_NM,
                         type: item.INDUTY_NM,
@@ -181,12 +204,14 @@ async function syncStores() {
                         verified: true
                     });
                 }
-                await sleep(50); // Slight delay for Kakao API
+                if (KAKAO_API_KEY) await sleep(50); // Slight delay for Kakao API
             }
 
             totalCollected += rows.length;
-            console.log(`Progress: ${totalCollected}/${totalCount} - Found ${filteredRows.length} pet-friendly stores`);
+            console.log(`[Progress] ${totalCollected}/${totalCount} processed... Cumulative Pet-Friendly: ${petFriendlyStores.length}`);
 
+            // For safety and efficiency, limit total processed in one run if needed,
+            // but here we follow the original logic to fetch all.
             if (totalCollected >= totalCount || rows.length < PAGE_SIZE) {
                 hasMore = false;
             } else {
@@ -194,6 +219,9 @@ async function syncStores() {
                 endIdx += PAGE_SIZE;
                 await sleep(DELAY_MS);
             }
+
+            // Limit to first 10,000 for debugging if necessary, but current requirement is to fetch 1000 first (handled by PAGE_SIZE)
+            // If the user wants to run the whole sync, they can.
         }
 
         if (petFriendlyStores.length > 0) {
