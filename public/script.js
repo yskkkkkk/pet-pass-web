@@ -304,7 +304,7 @@ function renderStores(data) {
     card.className = 'store-card glass animate-in';
     card.style.animationDelay = `${Math.min(index, 20) * 0.05}s`; // cap delay for large lists
     
-    const typeEmoji = { '카페': '☕', '일반음식점': '🍽️', '제과점': '🥐', '기타': '🏪' };
+    const typeEmoji = { '휴게음식점': '☕', '일반음식점': '🍽️', '제과점영업': '🥐', '기타': '🏪' };
     const emoji = typeEmoji[store.type] || '🐾';
 
     // 이미지 소스가 있는 경우 Lazy Loading 적용 (현재 데이터에는 없으나 확장을 위해 구조화)

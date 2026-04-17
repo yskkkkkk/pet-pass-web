@@ -25,6 +25,7 @@ jobs:
       - name: Run Data Collection Script
         env:
           FOOD_SAFETY_API_KEY: ${{ secrets.FOOD_SAFETY_API_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: node scripts/update_stores.js
 
       - name: Commit and Push if Changed
