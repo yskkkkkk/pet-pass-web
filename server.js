@@ -48,48 +48,6 @@ app.get('/api/stores', (req, res) => {
 });
 
 /**
- * [Registration API]
- * 사용자가 새로운 매장을 제안(등록 신청)하면 pending_stores.json에 저장합니다.
- */
-app.post('/api/register-store', (req, res) => {
-  const newStore = req.body;
-  if (!newStore.name || !newStore.address) {
-    return res.status(400).json({ error: "매장명과 주소는 필수 입력 사항입니다." });
-  }
-
-  const filePath = path.join(__dirname, 'data', 'pending_stores.json');
-  
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    let pendingList = [];
-    if (!err && data) {
-      try {
-        pendingList = JSON.parse(data);
-      } catch (e) {
-        pendingList = [];
-      }
-    }
-
-    // 간단한 ID 부여 및 타임스탬프 추가
-    const submission = {
-      ...newStore,
-      id: Date.now(),
-      submittedAt: new Date().toISOString(),
-      status: 'pending'
-    };
-
-    pendingList.push(submission);
-
-    fs.writeFile(filePath, JSON.stringify(pendingList, null, 2), (writeErr) => {
-      if (writeErr) {
-        console.error("등록 신청 저장 중 오류:", writeErr);
-        return res.status(500).json({ error: "신청 정보를 저장하지 못했습니다." });
-      }
-      res.json({ success: true, message: "매장 등록 신청이 완료되었습니다. 관리자 검토 후 반영됩니다." });
-    });
-  });
-});
-
-/**
  * [Proxy Endpoint]
  * 공공데이터포털 - 농림축산식품부_동물등록정보조회
  * 클라이언트(브라우저)에서 CORS 우회를 위해 이 서버로 요청을 보내면,

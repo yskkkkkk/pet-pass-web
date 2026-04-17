@@ -391,7 +391,6 @@ overlay.onclick = () => {
   setTimeout(() => overlay.style.display = 'none', 300);
   storeDetail.classList.remove('active');
   authModal.classList.remove('active');
-  if (registerModal) registerModal.classList.remove('active');
 };
 
 // Buttons & Filters
@@ -449,11 +448,6 @@ const regionData = {
   "경상남도": ["창원시", "진주시", "통영시", "사천시", "김해시", "밀양시", "거제시", "양산시", "의령군", "함안군", "창녕군", "고성군", "남해군", "하동군", "산청군", "함양군", "거창군", "합천군"],
   "제주특별자치도": ["제주시", "서귀포시"]
 };
-const btnRegister = document.getElementById('btn-register');
-const registerModal = document.getElementById('register-modal');
-const btnCloseReg = document.getElementById('btn-close-reg');
-const btnSubmitReg = document.getElementById('btn-submit-reg');
-
 // Pet Card Elements
 const authFormView = document.getElementById('auth-form-view');
 const petCardView = document.getElementById('pet-card-view');
@@ -531,57 +525,6 @@ btnCloseCard.onclick = () => {
 
 btnUnlink.onclick = () => {
   unlinkPetPass();
-};
-
-// Registration Logic
-btnRegister.onclick = () => {
-  overlay.style.display = 'block';
-  setTimeout(() => overlay.style.opacity = '1', 10);
-  registerModal.classList.add('active');
-};
-
-btnCloseReg.onclick = () => {
-  overlay.click();
-  registerModal.classList.remove('active');
-};
-
-btnSubmitReg.onclick = async () => {
-  const name = document.getElementById('reg-name').value.trim();
-  const type = document.getElementById('reg-type').value;
-  const address = document.getElementById('reg-address').value.trim();
-
-  if (!name || !address) {
-    alert("매장명과 주소를 입력해주세요.");
-    return;
-  }
-
-  btnSubmitReg.innerText = "제출 중...";
-  btnSubmitReg.style.pointerEvents = 'none';
-
-  try {
-    const response = await fetch('/api/register-store', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, type, address })
-    });
-    if (!response.ok) throw new Error(`서버 오류 (${response.status})`);
-    const result = await response.json();
-
-    if (result.success) {
-      alert(result.message);
-      overlay.click();
-      // Reset fields
-      document.getElementById('reg-name').value = '';
-      document.getElementById('reg-address').value = '';
-    } else {
-      alert("등록 실패: " + (result.error || "알 수 없는 오류"));
-    }
-  } catch (error) {
-    alert("서버 통신 에러가 발생했습니다.");
-  } finally {
-    btnSubmitReg.innerText = "신청서 제출하기";
-    btnSubmitReg.style.pointerEvents = 'auto';
-  }
 };
 
 btnFetchGov.onclick = async () => {
