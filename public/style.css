@@ -871,7 +871,14 @@ select.icon-tag:focus {
     bottom: calc(var(--sheet-height, 50vh) + 16px);
     right: 16px;
     z-index: 999; /* Ensure it stays above side-panel (500) */
-    transition: bottom 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease, transform 0.3s ease;
+    transition: bottom 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease, transform 0.3s ease;
+  }
+
+  /* 모바일에서도 확실히 숨김 처리 (우선순위 강화) */
+  #btn-my-location.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
   
   /* 드래깅 중 트랜지션 해제 (셀렉터 수정) */
