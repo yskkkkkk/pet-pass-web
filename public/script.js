@@ -1066,15 +1066,20 @@ if (btnMyLocation) {
   function handleTouchStart(e) {
     if (window.innerWidth > 768) return;
     
-    const isHeader = e.target.closest('.filter-header') || e.target.closest('.drag-handle');
+    const isHeaderArea = e.target.closest('.filter-header') || e.target.closest('.drag-handle');
     const isScrollTop = sidePanel.scrollTop <= 0;
     
-    if (!isHeader && !isScrollTop) return; 
+    // 헤더/핸들 영역은 스크롤 상태와 상관없이 항상 드래그 시작 도구가 됨 (MAX 상태 탈출 보장)
+    if (!isHeaderArea && !isScrollTop) return; 
     if (['INPUT', 'SELECT', 'BUTTON', 'OPTION'].includes(e.target.tagName)) return;
 
     isDragging = true;
     sidePanel.classList.add('dragging');
     sidePanel.style.overflowY = 'hidden';
+
+    // [내 위치] 버튼 드래그 상태 추가 (즉시 숨김 정책)
+    const btnMyLocation = document.getElementById('btn-my-location');
+    if (btnMyLocation) btnMyLocation.classList.add('is-dragging');
     
     startY = e.touches[0].clientY;
     
@@ -1087,6 +1092,7 @@ if (btnMyLocation) {
     const currentY = e.touches[0].clientY;
     const deltaY = startY - currentY; 
     
+    // 핸들을 조작할 때는 브라우저 기본 스크롤 방지
     if (e.cancelable && e.target.closest('.drag-handle')) {
        e.preventDefault(); 
     }
@@ -1100,6 +1106,13 @@ if (btnMyLocation) {
     isDragging = false;
     sidePanel.classList.remove('dragging');
     sidePanel.style.overflowY = '';
+
+    // [내 위치] 버튼 드래그 상태 해제 (안착 후 노출)
+    const btnMyLocation = document.getElementById('btn-my-location');
+    if (btnMyLocation) {
+      // 아주 짧은 지연을 주어 Snap 애니메이션과 동기화
+      setTimeout(() => btnMyLocation.classList.remove('is-dragging'), 50);
+    }
     
     snapToNearest();
   }
