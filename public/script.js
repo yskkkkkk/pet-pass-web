@@ -304,7 +304,7 @@ function renderStores(data) {
     card.className = 'store-card glass animate-in';
     card.style.animationDelay = `${Math.min(index, 20) * 0.05}s`; // cap delay for large lists
     
-    const typeEmoji = { '카페': '☕', '일반음식점': '🍽️', '제과점': '🥐', '기타': '🏪' };
+    const typeEmoji = { '휴게음식점': '☕', '일반음식점': '🍽️', '제과점영업': '🥐', '기타': '🏪' };
     const emoji = typeEmoji[store.type] || '🐾';
 
     // 이미지 소스가 있는 경우 Lazy Loading 적용 (현재 데이터에는 없으나 확장을 위해 구조화)
@@ -1028,24 +1028,17 @@ if (btnMyLocation) {
   function handleTouchStart(e) {
     if (window.innerWidth > 768) return;
     
-    // 헤더 영역 체크 (핸들, 필터 헤더, sticky 헤더 래퍼 포함)
-    const isHeaderArea = e.target.closest('.side-panel-header') || 
-                         e.target.closest('.filter-header') || 
-                         e.target.closest('.drag-handle');
+    // 오직 핸들 영역에서만 바텀 시트 높이 조절 드래그 가능
+    const isHandleArea = e.target.closest('.handle-area') || e.target.closest('.drag-handle');
     
-    const isScrollTop = sidePanelBody.scrollTop <= 0;
-    
-    // 버튼이나 입력창 등을 조작할 때는 드래그 방지
-    if (['INPUT', 'SELECT', 'BUTTON', 'OPTION'].includes(e.target.tagName)) return;
-
-    // 헤더 영역이 아니고 스크롤이 최상단이 아니라면 드래그 시작 불가 (내부 스크롤 우선)
-    if (!isHeaderArea && !isScrollTop) return; 
+    // 핸들이 아니면 무조건 리스트 스크롤 등 기본 동작을 하도록 무시 (드래그 안 함)
+    if (!isHandleArea) {
+      const isScrollTop = sidePanelBody.scrollTop <= 0;
+      if (!isScrollTop) return;
+    }
 
     isDragging = true;
     sidePanel.classList.add('dragging');
-    
-    // 🔒 CSS Overflow 강제 스위칭: 드래그 시작 시 내부 스크롤 잠금
-    sidePanelBody.style.overflowY = 'hidden';
 
     // 드래그 핸들 강제 노출 (모바일)
     const handle = sidePanel.querySelector('.drag-handle');
@@ -1059,9 +1052,6 @@ if (btnMyLocation) {
     
     const computedHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sheet-height'), 10);
     startHeight = isNaN(computedHeight) ? snapPoints.mid : computedHeight;
-
-    // 🧪 Debug
-    console.log(`[BottomSheet] TouchStart | State: ${getSheetState()} | ScrollTop: ${sidePanelBody.scrollTop} | isHeader: ${!!isHeaderArea}`);
   }
   
   function handleTouchMove(e) {
@@ -1073,28 +1063,17 @@ if (btnMyLocation) {
     const isFull = getSheetState() === 'Full';
     const scrollTop = sidePanelBody.scrollTop;
 
-    // 🧪 Debug
-    console.log(`[BottomSheet] TouchMove | State: ${getSheetState()} | ScrollTop: ${scrollTop} | Direction: ${dragDirection} | deltaY: ${deltaY.toFixed(1)}`);
-
     // 🛠️ 핵심 로직: Full 상태에서의 스크롤 vs 드래그 주도권 판정
     if (isFull && scrollTop > 0 && deltaY < 0) {
-      // Full 상태 + 리스트가 스크롤된 상태 + 아래로 끌기
-      // → 내부 리스트 스크롤을 우선 허용 (드래그 중단)
-      // → scrollTop이 0에 도달하면 다음 touchmove에서 드래그로 전환됨
       isDragging = false;
       sidePanel.classList.remove('dragging');
       sidePanelBody.style.overflowY = 'auto';
-      console.log(`[BottomSheet] → Yielding to internal scroll (scrollTop: ${scrollTop})`);
       return;
     }
     
-    // scrollTop === 0이고 아래로 끌기 → 브라우저 기본 스크롤 완전 차단, 시트 드래그 강제
     if (e.cancelable) {
       e.preventDefault();
     }
-    
-    // 🔒 내부 스크롤 강제 잠금 (드래그 도중)
-    sidePanel.style.overflowY = 'hidden';
     
     const rawHeight = startHeight + deltaY;
     setSheetHeight(rawHeight);
@@ -1104,9 +1083,6 @@ if (btnMyLocation) {
     if (!isDragging) return;
     isDragging = false;
     sidePanel.classList.remove('dragging');
-
-    // 🧪 Debug
-    console.log(`[BottomSheet] TouchEnd | Height: ${Math.round(currentHeight)}px`);
 
     // [내 위치] 버튼: Snap 안착 후 노출
     const btnMyLocation = document.getElementById('btn-my-location');

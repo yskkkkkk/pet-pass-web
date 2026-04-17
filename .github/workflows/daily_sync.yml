@@ -25,13 +25,14 @@ jobs:
       - name: Run Data Collection Script
         env:
           FOOD_SAFETY_API_KEY: ${{ secrets.FOOD_SAFETY_API_KEY }}
+          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: node scripts/update_stores.js
 
       - name: Commit and Push if Changed
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/stores.json
+          git add data/stores.json docs/schedule_history.md
           if git diff --staged --quiet; then
             echo "No changes found."
           else
