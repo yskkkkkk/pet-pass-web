@@ -235,12 +235,15 @@ body {
   margin: 0 -24px;
   padding: 0 24px;
   scrollbar-gutter: stable;
+  touch-action: pan-y;
+  position: relative;
 }
 
 @media (max-width: 768px) {
   #side-panel-body {
     margin: 0 -16px;
     padding: 0 16px;
+    touch-action: pan-y;
   }
 }
 
@@ -566,9 +569,9 @@ select.icon-tag:focus {
 /* PC 버전 레이아웃: 버튼을 지도 우측 하단(사이드패널 왼쪽)에 나란히 배치 */
 @media (min-width: 769px) {
   #btn-scroll-top {
-    right: auto;
-    left: -56px; /* 20px 마진 + 36px 버튼 */
-    bottom: 68px; /* 20px(내위치 마진) + 36px(내위치 높이) + 12px(간격) */
+    position: absolute;
+    right: 20px;
+    bottom: 20px; /* PC에서는 내위치 버튼이 지도 영역으로 나가므로, 리스트 하단에 단독 배치 */
   }
 
   /* PC에서 내 위치 버튼은 지도 영역(사이드패널 왼쪽)에 배치됨 */
