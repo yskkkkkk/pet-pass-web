@@ -901,6 +901,10 @@ function resetAllFilters(skipMapReset = false) {
     }
     applyFilters();
   }
+  
+  if (window.resetBottomSheet) {
+    window.resetBottomSheet();
+  }
 }
 
 // 필터 초기화 버튼 클릭
@@ -988,6 +992,123 @@ if (btnMyLocation) {
     );
   };
 }
+
+// --- 3-Stage Variable Bottom Sheet Logic ---
+(function initBottomSheet() {
+  const sidePanel = document.querySelector('.side-panel');
+  if (!sidePanel) return;
+  
+  let startY = 0;
+  let startHeight = 0;
+  let currentHeight = 0;
+  let isDragging = false;
+  
+  const snapPoints = {
+    get min() { return 140; }, 
+    get mid() { return window.innerHeight * 0.5; },
+    get max() { return window.innerHeight * 0.85; }
+  };
+  
+  function setSheetHeight(heightpx) {
+    const minBound = snapPoints.min - 20;
+    const maxBound = snapPoints.max + 20;
+    let newHeight = heightpx;
+    if (newHeight < minBound) newHeight = minBound;
+    if (newHeight > maxBound) newHeight = maxBound;
+    
+    currentHeight = newHeight;
+    document.documentElement.style.setProperty('--sheet-height', `${newHeight}px`);
+
+    // 상태 기반 가시성 제어 (Mode 1: 지도 최소화 시 숨김)
+    const btnMyLocation = document.getElementById('btn-my-location');
+    if (btnMyLocation) {
+      if (newHeight >= snapPoints.max - 10) {
+        btnMyLocation.classList.add('hidden');
+      } else {
+        btnMyLocation.classList.remove('hidden');
+      }
+    }
+  }
+  
+  if (window.innerWidth <= 768) {
+    setSheetHeight(snapPoints.mid);
+    currentHeight = snapPoints.mid;
+  }
+
+  window.addEventListener('resize', throttle(() => {
+     if (window.innerWidth <= 768) {
+        snapToNearest();
+     } else {
+        document.documentElement.style.removeProperty('--sheet-height');
+     }
+  }, 150));
+
+  function snapToNearest() {
+     const h = currentHeight || snapPoints.mid;
+     const pts = [snapPoints.min, snapPoints.mid, snapPoints.max];
+     const nearest = pts.reduce((prev, curr) => 
+       Math.abs(curr - h) < Math.abs(prev - h) ? curr : prev
+     );
+     setSheetHeight(nearest);
+     
+     if (nearest === snapPoints.min && sidePanel.scrollTop > 0) {
+        sidePanel.scrollTo({top:0, behavior:'smooth'});
+     }
+  }
+  
+  window.resetBottomSheet = () => {
+    if (window.innerWidth <= 768) {
+      setSheetHeight(snapPoints.mid);
+      snapToNearest();
+    }
+  };
+
+  function handleTouchStart(e) {
+    if (window.innerWidth > 768) return;
+    
+    const isHeader = e.target.closest('.filter-header') || e.target.closest('.drag-handle');
+    const isScrollTop = sidePanel.scrollTop <= 0;
+    
+    if (!isHeader && !isScrollTop) return; 
+    if (['INPUT', 'SELECT', 'BUTTON', 'OPTION'].includes(e.target.tagName)) return;
+
+    isDragging = true;
+    sidePanel.classList.add('dragging');
+    sidePanel.style.overflowY = 'hidden';
+    
+    startY = e.touches[0].clientY;
+    
+    const computedHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sheet-height'), 10);
+    startHeight = isNaN(computedHeight) ? snapPoints.mid : computedHeight;
+  }
+  
+  function handleTouchMove(e) {
+    if (!isDragging) return;
+    const currentY = e.touches[0].clientY;
+    const deltaY = startY - currentY; 
+    
+    if (e.cancelable && e.target.closest('.drag-handle')) {
+       e.preventDefault(); 
+    }
+    
+    const rawHeight = startHeight + deltaY;
+    setSheetHeight(rawHeight);
+  }
+  
+  function handleTouchEnd(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    sidePanel.classList.remove('dragging');
+    sidePanel.style.overflowY = '';
+    
+    snapToNearest();
+  }
+  
+  sidePanel.addEventListener('touchstart', handleTouchStart, {passive: false});
+  sidePanel.addEventListener('touchmove', handleTouchMove, {passive: false});
+  sidePanel.addEventListener('touchend', handleTouchEnd);
+  sidePanel.addEventListener('touchcancel', handleTouchEnd);
+})();
 
 // Initialization on load
 document.addEventListener('DOMContentLoaded', () => {
