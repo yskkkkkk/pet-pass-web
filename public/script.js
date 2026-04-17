@@ -1028,15 +1028,6 @@ if (btnMyLocation) {
   function handleTouchStart(e) {
     if (window.innerWidth > 768) return;
     
-    // 오직 핸들 영역에서만 바텀 시트 높이 조절 드래그 가능
-    const isHandleArea = e.target.closest('.handle-area') || e.target.closest('.drag-handle');
-    
-    // 핸들이 아니면 무조건 리스트 스크롤 등 기본 동작을 하도록 무시 (드래그 안 함)
-    if (!isHandleArea) {
-      const isScrollTop = sidePanelBody.scrollTop <= 0;
-      if (!isScrollTop) return;
-    }
-
     isDragging = true;
     sidePanel.classList.add('dragging');
 
@@ -1052,6 +1043,11 @@ if (btnMyLocation) {
     
     const computedHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sheet-height'), 10);
     startHeight = isNaN(computedHeight) ? snapPoints.mid : computedHeight;
+
+    // 드래그 중에는 윈도우 레벨에서 이벤트 추적
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener('touchcancel', handleTouchEnd);
   }
   
   function handleTouchMove(e) {
@@ -1059,17 +1055,6 @@ if (btnMyLocation) {
     
     const currentY = e.touches[0].clientY;
     const deltaY = startY - currentY;  // 양수 = 위로 드래그(시트 확장), 음수 = 아래로 드래그(시트 축소)
-    const dragDirection = deltaY > 0 ? 'Up' : 'Down';
-    const isFull = getSheetState() === 'Full';
-    const scrollTop = sidePanelBody.scrollTop;
-
-    // 🛠️ 핵심 로직: Full 상태에서의 스크롤 vs 드래그 주도권 판정
-    if (isFull && scrollTop > 0 && deltaY < 0) {
-      isDragging = false;
-      sidePanel.classList.remove('dragging');
-      sidePanelBody.style.overflowY = 'auto';
-      return;
-    }
     
     if (e.cancelable) {
       e.preventDefault();
@@ -1097,12 +1082,18 @@ if (btnMyLocation) {
     if (getSheetState() !== 'Full') {
       sidePanelBody.style.overflowY = '';
     }
+
+    // 윈도우 리스너 제거
+    window.removeEventListener('touchmove', handleTouchMove);
+    window.removeEventListener('touchend', handleTouchEnd);
+    window.removeEventListener('touchcancel', handleTouchEnd);
   }
   
-  sidePanel.addEventListener('touchstart', handleTouchStart, {passive: false});
-  sidePanel.addEventListener('touchmove', handleTouchMove, {passive: false});
-  sidePanel.addEventListener('touchend', handleTouchEnd);
-  sidePanel.addEventListener('touchcancel', handleTouchEnd);
+  // 오직 핸들 영역에서만 바텀 시트 높이 조절 드래그 시작 가능
+  const handleArea = sidePanel.querySelector('.handle-area');
+  if (handleArea) {
+    handleArea.addEventListener('touchstart', handleTouchStart, {passive: false});
+  }
 })();
 
 // Initialization on load
