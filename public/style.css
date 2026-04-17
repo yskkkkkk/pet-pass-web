@@ -24,6 +24,7 @@ body {
   background-color: var(--forest-dark);
   color: var(--text-primary);
   min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   overflow: hidden; /* Prevent full page scroll, handle inside containers */
   line-height: 1.5;
 }
@@ -102,6 +103,8 @@ body {
 
 /* Auth Button */
 .auth-btn {
+  min-width: 44px;
+  min-height: 44px;
   padding: 8px 16px; 
   border-radius: 20px;
   background: var(--forest-main);
@@ -109,8 +112,30 @@ body {
   border: none;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.3s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
+
+.auth-btn:active {
+  transform: scale(0.98);
+}
+
+.auth-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.2s;
+}
+
+.auth-btn:active::after {
+  background: rgba(0, 0, 0, 0.05);
+}
+
 .auth-btn.active {
   background: var(--peach-main);
 }
@@ -120,6 +145,7 @@ body {
   padding-top: 70px;
   display: flex;
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 }
 
 #map-mock {
@@ -231,7 +257,30 @@ body {
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  background: var(--glass-bg);
 }
+
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-title {
+  height: 28px;
+  width: 80%;
+  margin-bottom: 15px;
+  background: linear-gradient(90deg, rgba(255,138,122,0.1) 25%, rgba(255,138,122,0.2) 50%, rgba(255,138,122,0.1) 75%);
+  background-size: 200% 100%;
+}
+.skeleton-text { height: 16px; width: 90%; margin-bottom: 8px; opacity: 0.6; }
+.skeleton-image { height: 160px; width: 100%; border-radius: 12px; margin-bottom: 16px; opacity: 0.4; }
 
 .store-card:hover {
   transform: translateY(-4px);
@@ -276,11 +325,23 @@ body {
 .icon-tag {
   background: rgba(255, 255, 255, 0.08);
   padding: 6px 12px;
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 8px;
   font-size: 12px;
   color: #fff;
   border: 1px solid transparent;
   cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.icon-tag:active {
+  transform: scale(0.98);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* Select Box UI Fix */
@@ -377,6 +438,12 @@ select.icon-tag:focus {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(45, 90, 39, 0.7); }
+  70% { transform: scale(0.95); box-shadow: 0 0 0 10px rgba(45, 90, 39, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(45, 90, 39, 0); }
+}
+
 .auth-modal.active #pet-card-view,
 .auth-modal.active #auth-form-view {
   animation: fadeIn 0.4s ease-out forwards;
@@ -396,7 +463,7 @@ select.icon-tag:focus {
     flex-direction: column;
   }
   #map-mock {
-    height: calc(100vh - 70px - 68px - 40vh); /* 헤더(70) + 검색창영역(68) 제외 후 하단 패널 공간(40vh) 확보 */
+    height: calc(var(--vh, 1vh) * 60); /* 60% of viewport */
     min-height: 300px;
     flex: none;
   }
@@ -409,6 +476,7 @@ select.icon-tag:focus {
     margin-top: -20px;
     padding-top: 16px;
     position: relative;
+    -webkit-overflow-scrolling: touch;
   }
   .header { padding: 0 16px; }
   .search-bar { display: none; }
@@ -416,6 +484,7 @@ select.icon-tag:focus {
   .main-container {
     flex-direction: column;
     height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     overflow: hidden;
   }
 
@@ -466,6 +535,8 @@ select.icon-tag:focus {
     color: var(--text-secondary);
     font-size: 18px;
     cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
     padding: 4px;
     display: flex;
     align-items: center;
@@ -473,36 +544,62 @@ select.icon-tag:focus {
     transition: color 0.3s;
   }
 
+#btn-reset-filters:active {
+  transform: scale(0.9);
+}
+
   .reset-search-btn:hover {
     color: var(--peach-main);
   }
 
 }
 
-/* 맨 위로 플로팅 버튼 (기본 숨김) */
-#btn-scroll-top {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--peach-main);
-  color: white;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-  display: flex;
-  opacity: 0;
-  visibility: hidden;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+/* 플로팅 버튼 그룹 */
+.floating-btns {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   z-index: 9999;
 }
-#btn-scroll-top:active {
-  transform: scale(0.9);
+
+#btn-scroll-top, #btn-my-location {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--peach-main);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#btn-scroll-top {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+}
+
+#btn-scroll-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+#btn-my-location {
   background: var(--forest-main);
+  border-color: var(--accent);
+}
+
+#btn-scroll-top:active, #btn-my-location:active {
+  transform: scale(0.92);
+  filter: brightness(1.1);
 }
 

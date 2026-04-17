@@ -4,6 +4,46 @@ function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+/**
+ * Throttling utility for performance
+ */
+function throttle(func, limit) {
+  let inThrottle;
+  return function() {
+    const args = arguments;
+    const context = this;
+    if (!inThrottle) {
+      func.apply(context, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  }
+}
+
+/**
+ * Mobile Viewport Height Fix
+ * To prevent layout jumps when the virtual keyboard appears,
+ * we only update --vh if the width changes (orientation)
+ * or the height change is significant (not just the keyboard).
+ */
+let lastWidth = window.innerWidth;
+function setViewportHeight() {
+  const currentWidth = window.innerWidth;
+  const currentHeight = window.innerHeight;
+
+  // Update only if width changes or for initial load
+  if (currentWidth !== lastWidth) {
+    const vh = currentHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    lastWidth = currentWidth;
+  }
+}
+
+// Initial set and throttled resize listener
+const vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+window.addEventListener('resize', throttle(setViewportHeight, 150));
+
 let map;
 let clusterer = null;
 let markers = [];
@@ -33,36 +73,49 @@ const MapButtonState = {
 let currentMapButtonState = MapButtonState.NONE;
 let mapButtonTimeout = null;
 
+/**
+ * [State Machine] Map UI Button Management
+ * Ensures 'Search Here' and 'Go Back' buttons never overlap.
+ */
 function updateMapButtonUI(state) {
   currentMapButtonState = state;
   if (mapButtonTimeout) clearTimeout(mapButtonTimeout);
 
+  // Helper to hide buttons with transition
+  const hide = (btn) => {
+    btn.style.opacity = '0';
+    btn.style.pointerEvents = 'none';
+  };
+
+  // Helper to show buttons with transition
+  const show = (btn) => {
+    btn.style.display = 'block';
+    btn.style.pointerEvents = 'auto';
+    setTimeout(() => {
+      btn.style.opacity = '1';
+    }, 10);
+  };
+
   if (state === MapButtonState.NONE) {
-    btnSearchHere.style.opacity = '0';
-    btnBackStep.style.opacity = '0';
+    hide(btnSearchHere);
+    hide(btnBackStep);
     mapButtonTimeout = setTimeout(() => {
       btnSearchHere.style.display = 'none';
       btnBackStep.style.display = 'none';
     }, 300);
   } else if (state === MapButtonState.SEARCH_HERE) {
-    // Exclusive: Hide GO_BACK immediately
+    // State: SEARCH_HERE (Exclusive)
+    hide(btnBackStep);
     btnBackStep.style.display = 'none';
-    btnBackStep.style.opacity = '0';
-    lastMapState = null; // Clear back-step state when searching here
+    lastMapState = null;
 
-    btnSearchHere.style.display = 'block';
-    setTimeout(() => {
-      btnSearchHere.style.opacity = '1';
-    }, 10);
+    show(btnSearchHere);
   } else if (state === MapButtonState.GO_BACK) {
-    // Exclusive: Hide SEARCH_HERE immediately
+    // State: GO_BACK (Exclusive)
+    hide(btnSearchHere);
     btnSearchHere.style.display = 'none';
-    btnSearchHere.style.opacity = '0';
 
-    btnBackStep.style.display = 'block';
-    setTimeout(() => {
-      btnBackStep.style.opacity = '1';
-    }, 10);
+    show(btnBackStep);
   }
 }
 
@@ -199,6 +252,24 @@ function updateMapMarkers(data) {
   }
 }
 
+/**
+ * Render Skeleton UI
+ */
+function renderSkeleton() {
+  storeList.innerHTML = '';
+  for (let i = 0; i < 5; i++) {
+    const skeleton = document.createElement('div');
+    skeleton.className = 'store-card glass';
+    skeleton.innerHTML = `
+      <div class="skeleton skeleton-image"></div>
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton skeleton-text"></div>
+      <div class="skeleton skeleton-text" style="width: 50%"></div>
+    `;
+    storeList.appendChild(skeleton);
+  }
+}
+
 // Render store cards
 function renderStores(data) {
   storeList.innerHTML = '';
@@ -236,14 +307,18 @@ function renderStores(data) {
     const typeEmoji = { '카페': '☕', '일반음식점': '🍽️', '제과점': '🥐', '기타': '🏪' };
     const emoji = typeEmoji[store.type] || '🐾';
 
+    // 이미지 소스가 있는 경우 Lazy Loading 적용 (현재 데이터에는 없으나 확장을 위해 구조화)
+    const storeImg = store.imgUrl ? `<img src="${store.imgUrl}" loading="lazy" alt="${escapeHtml(store.name)}">` : '';
+
     card.innerHTML = `
+      ${storeImg}
       <div class="verified-badge">
         <span style="font-size: 14px;">🛡️</span>
         <span>2026 공식인증</span>
       </div>
       <div class="store-info" style="padding-top: 8px;">
         <div style="font-size: 28px; margin-bottom: 10px;">${emoji}</div>
-        <h3>${escapeHtml(store.name)}</h3>
+        <h3 class="store-name">${escapeHtml(store.name)}</h3>
         <p style="margin-bottom: 8px;">${escapeHtml(store.address)}</p>
         <div class="facility-icons">
           <span class="icon-tag">${escapeHtml(store.type)}</span>
@@ -559,11 +634,16 @@ btnFetchGov.onclick = async () => {
 };
 
 async function fetchStores() {
+  renderSkeleton();
   try {
     const response = await fetch('/api/stores');
     if (!response.ok) throw new Error('데이터 로딩 실패');
     stores = await response.json();
-    applyFilters(); // Initial render with fetched data
+
+    // Slight delay for smooth transition from skeleton
+    setTimeout(() => {
+      applyFilters();
+    }, 400);
   } catch (err) {
     console.error('매장 정보를 가져오는데 실패했습니다:', err);
     storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">매장 정보를 불러올 수 없습니다. 서버 상태를 확인해주세요.</div>`;
@@ -798,6 +878,7 @@ function resetAllFilters(skipMapReset = false) {
   // UI 동기화
   if (searchInput) searchInput.value = '';
   if (mobileSearchInput) mobileSearchInput.value = '';
+  currentSearch = ''; // Ensure internal state is also cleared
   if (regionDepth1) {
     regionDepth1.value = '전국';
     updateRegionDepth2('전국');
@@ -861,18 +942,50 @@ if (mobileSearchInput && searchInput) {
 const btnScrollTop = document.getElementById('btn-scroll-top');
 const sidePanel = document.querySelector('.side-panel');
 if (btnScrollTop && sidePanel) {
-  sidePanel.addEventListener('scroll', () => {
+  sidePanel.addEventListener('scroll', throttle(() => {
     if (sidePanel.scrollTop > 250) {
-      btnScrollTop.style.opacity = '1';
-      btnScrollTop.style.visibility = 'visible';
+      btnScrollTop.classList.add('visible');
     } else {
-      btnScrollTop.style.opacity = '0';
-      btnScrollTop.style.visibility = 'hidden';
+      btnScrollTop.classList.remove('visible');
     }
-  });
+  }, 100));
 
   btnScrollTop.onclick = () => {
     sidePanel.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+}
+
+// GPS '내 위치' 기능
+const btnMyLocation = document.getElementById('btn-my-location');
+if (btnMyLocation) {
+  btnMyLocation.onclick = () => {
+    if (!navigator.geolocation) {
+      alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+      return;
+    }
+
+    btnMyLocation.style.animation = 'pulse 1s infinite';
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const locPosition = new kakao.maps.LatLng(lat, lng);
+
+        isSystemMoving = true;
+        map.panTo(locPosition);
+
+        // 내 위치 마커 표시 (선택 사항, 여기서는 이동만 수행)
+        btnMyLocation.style.animation = 'none';
+      },
+      (error) => {
+        btnMyLocation.style.animation = 'none';
+        let msg = "위치 정보를 가져올 수 없습니다.";
+        if (error.code === 1) msg = "위치 정보 공유 승인이 거부되었습니다.";
+        alert(msg);
+      },
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
   };
 }
 
