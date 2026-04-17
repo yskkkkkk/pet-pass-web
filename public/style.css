@@ -215,7 +215,6 @@ body {
 }
 
 .side-panel {
-
   width: 420px;
   height: calc(100vh - 70px);
   overflow-y: auto;
@@ -224,7 +223,16 @@ body {
   backdrop-filter: blur(10px);
   padding: 24px;
   z-index: var(--z-panel);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, height 0.3s ease;
+}
+
+.drag-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  margin: 0 auto 20px;
+  display: none; /* Default desktop hidden */
 }
 
 /* Ad Slot */
@@ -425,12 +433,6 @@ select.icon-tag:focus {
   transform: translate(-50%, -50%);
 }
 
-.drag-handle {
-  width: 40px; height: 4px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 2px;
-  margin: 0 auto 20px;
-}
 
 /* Animations */
 @keyframes fadeIn {
@@ -463,20 +465,46 @@ select.icon-tag:focus {
     flex-direction: column;
   }
   #map-mock {
-    height: calc(var(--vh, 1vh) * 60); /* 60% of viewport */
+    height: calc(var(--vh, 1vh) * 100); /* 지도가 배경 전체를 차지 */
     min-height: 300px;
     flex: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
   .side-panel {
     width: 100%;
-    height: 50vh;
+    height: 50vh; /* JS에서 초기화할 예정이지만 기본값 설정 */
     border-left: none;
     border-top: 1px solid var(--glass-border);
     border-radius: 24px 24px 0 0;
-    margin-top: -20px;
-    padding-top: 16px;
-    position: relative;
+    padding-top: 12px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: var(--z-panel);
+    transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     -webkit-overflow-scrolling: touch;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+    overflow-y: hidden; /* 시트 전체 드래그를 위해 내부 스크롤 기본 차단 */
+  }
+
+  .drag-handle {
+    display: block;
+    cursor: grab;
+    padding: 10px 0; /* 터치 영역 확장 */
+    margin-bottom: 5px;
+  }
+
+  .drag-handle::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    margin: 0 auto;
   }
   .header { padding: 0 16px; }
   .search-bar { display: none; }
@@ -596,6 +624,12 @@ select.icon-tag:focus {
 #btn-my-location {
   background: var(--forest-main);
   border-color: var(--accent);
+}
+
+#btn-my-location svg {
+  width: 24px;
+  height: 24px;
+  stroke: white;
 }
 
 #btn-scroll-top:active, #btn-my-location:active {
