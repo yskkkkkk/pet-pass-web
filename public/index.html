@@ -61,8 +61,10 @@
 
     <!-- Side Panel / Bottom Sheet (Mobile) -->
     <aside class="side-panel">
-      <div class="drag-handle" style="display: none;"></div>
-      <div class="filter-header">
+      <!-- Sticky Header Area for Mobile Drag Control -->
+      <div class="side-panel-header">
+        <div class="drag-handle" style="display: none;"></div>
+        <div class="filter-header">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
           <div style="display: flex; align-items: center; gap: 10px;">
             <h2 style="font-weight: 800; font-size: 20px;">공식 인증 매장 (<span id="store-count">0</span>)</h2>
@@ -101,6 +103,7 @@
           <span class="icon-tag">제과점</span>
         </div>
       </div>
+    </div> <!-- End of side-panel-header -->
 
       <!-- Native Ad Slot Structure -->
       <div class="ad-slot glass">
