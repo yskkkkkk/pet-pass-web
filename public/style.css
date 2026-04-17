@@ -461,22 +461,31 @@ select.icon-tag:focus {
 @media (max-width: 768px) {
   .main-container {
     flex-direction: column;
+    position: relative; /* Add relative to contain absolute side-panel */
   }
   #map-mock {
-    height: calc(var(--vh, 1vh) * 60); /* 60% of viewport */
+    height: 100%; /* Take full available height */
+    flex: 1;
     min-height: 300px;
-    flex: none;
   }
   .side-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: 50vh;
+    height: var(--sheet-height, 50vh);
     border-left: none;
     border-top: 1px solid var(--glass-border);
     border-radius: 24px 24px 0 0;
-    margin-top: -20px;
+    margin-top: 0;
     padding-top: 16px;
-    position: relative;
     -webkit-overflow-scrolling: touch;
+    z-index: var(--z-panel);
+    transition: height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  
+  .side-panel .drag-handle {
+    display: block !important;
   }
   .header { padding: 0 16px; }
   .search-bar { display: none; }
@@ -552,6 +561,26 @@ select.icon-tag:focus {
     color: var(--peach-main);
   }
 
+  /* 플로팅 버튼 모바일 연동 */
+  .floating-btns {
+    bottom: calc(var(--sheet-height, 50vh) + 20px) !important;
+    transition: bottom 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* 내 위치 버튼 모바일 전용 위치 및 연동 */
+  #btn-my-location {
+    bottom: calc(var(--sheet-height, 50vh) + 16px);
+    right: 16px;
+    transition: bottom 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* 드래깅 중 트랜지션 해제 */
+  .side-panel.dragging,
+  .side-panel.dragging ~ .floating-btns,
+  .side-panel.dragging ~ #map-mock #btn-my-location {
+    transition: none !important;
+  }
+
 }
 
 /* 플로팅 버튼 그룹 */
@@ -565,9 +594,9 @@ select.icon-tag:focus {
   z-index: 9999;
 }
 
-#btn-scroll-top, #btn-my-location {
-  width: 48px;
-  height: 48px;
+#btn-scroll-top {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--peach-main);
   color: white;
@@ -579,6 +608,31 @@ select.icon-tag:focus {
   align-items: center;
   justify-content: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 내 위치 버튼: 글로벌 표준 디자인 (White Rounded Square) */
+#btn-my-location {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.1);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 950;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+#btn-my-location.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
 }
 
 #btn-scroll-top {
@@ -593,13 +647,14 @@ select.icon-tag:focus {
   transform: translateY(0);
 }
 
-#btn-my-location {
-  background: var(--forest-main);
-  border-color: var(--accent);
+#btn-my-location svg {
+  width: 20px;
+  height: 20px;
+  stroke: #000000;
+  stroke-width: 2.5px;
 }
 
 #btn-scroll-top:active, #btn-my-location:active {
   transform: scale(0.92);
   filter: brightness(1.1);
-}
 
