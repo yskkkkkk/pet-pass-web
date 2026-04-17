@@ -736,4 +736,10 @@ select.icon-tag:focus {
   #map-mock #btn-my-location.is-dragging {
     transition: none !important;
   }
+
+  .bottom-sheet {
+    padding: 24px;
+    height: auto;
+    max-height: 85vh;
+  }
 }
