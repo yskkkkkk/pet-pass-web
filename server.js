@@ -3,7 +3,8 @@ const cors = require('cors');
 const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
-const { syncStores } = require('./scripts/update_stores');
+const cron = require('node-cron');
+const { syncPetFriendlyStores } = require('./scripts/sync-stores');
 require('dotenv').config();
 
 const app = express();
@@ -184,7 +185,7 @@ app.listen(PORT, () => {
 
   // 서버 시작 시 초기 데이터 동기화 1회 실행
   console.log('🔄 서버 시작 시 초기 데이터 동기화를 시작합니다...');
-  syncStores().then(result => {
+  syncPetFriendlyStores().then(result => {
     if (result.success) {
       console.log(`✅ 초기 데이터 동기화 완료: ${result.count}개 매장`);
     } else {
@@ -192,5 +193,22 @@ app.listen(PORT, () => {
     }
   }).catch(err => {
     console.error('❌ 초기 데이터 동기화 중 예상치 못한 에러 발생:', err.message);
+  });
+
+  // 매일 새벽 4시에 데이터 동기화 스케줄링
+  cron.schedule('0 4 * * *', async () => {
+    console.log('⏰ 정기 데이터 동기화를 시작합니다 (새벽 4시)...');
+    try {
+      const result = await syncPetFriendlyStores();
+      if (result.success) {
+        console.log(`✅ 정기 데이터 동기화 완료: ${result.count}개 매장`);
+      } else {
+        console.warn(`⚠️ 정기 데이터 동기화 실패: ${result.error}`);
+      }
+    } catch (err) {
+      console.error('❌ 정기 데이터 동기화 중 에러 발생:', err.message);
+    }
+  }, {
+    timezone: "Asia/Seoul"
   });
 });
