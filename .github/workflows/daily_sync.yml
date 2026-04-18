@@ -20,13 +20,12 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Run Data Collection Script
         env:
-          FOOD_SAFETY_API_KEY: ${{ secrets.FOOD_SAFETY_API_KEY }}
-          KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
-        run: node scripts/update_stores.js
+          PET_PORTAL_URL: ${{ secrets.PET_PORTAL_URL }}
+        run: node scripts/sync-stores.js
 
       - name: Commit and Push if Changed
         run: |
