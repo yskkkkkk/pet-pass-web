@@ -305,8 +305,9 @@ function renderStores(data) {
     card.className = 'store-card glass animate-in';
     card.style.animationDelay = `${Math.min(index, 20) * 0.05}s`; // cap delay for large lists
     
-    const typeEmoji = { '휴게음식점': '☕', '일반음식점': '🍽️', '제과점영업': '🥐', '기타': '🏪' };
-    const emoji = typeEmoji[store.type] || '🐾';
+    const typeEmoji = { '카페': '☕', '일반음식점': '🍽️', '제과점': '🥐', '기타': '🏪' };
+    const uiType = UI_CATEGORY_MAP[store.type] || store.type;
+    const emoji = typeEmoji[uiType] || '🐾';
 
     // 이미지 소스가 있는 경우 Lazy Loading 적용 (현재 데이터에는 없으나 확장을 위해 구조화)
     const storeImg = store.imgUrl ? `<img src="${store.imgUrl}" loading="lazy" alt="${escapeHtml(store.name)}">` : '';
@@ -322,7 +323,7 @@ function renderStores(data) {
         <h3 class="store-name">${escapeHtml(store.name)}</h3>
         <p style="margin-bottom: 8px;">${escapeHtml(store.address)}</p>
         <div class="facility-icons">
-          <span class="icon-tag">${escapeHtml(store.type)}</span>
+          <span class="icon-tag">${escapeHtml(uiType)}</span>
           <span class="icon-tag">${escapeHtml(store.region)}</span>
         </div>
       </div>
@@ -363,6 +364,8 @@ function showDetail(store) {
 
   detailName.innerText = store.name;
   if (detailImg) detailImg.style.display = 'none'; // 이미지 없으므로 숨김
+
+  const uiType = UI_CATEGORY_MAP[store.type] || store.type;
   
   complianceList.innerHTML = `
     <li style="margin-bottom: 8px; padding: 9px 14px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px;">
@@ -372,7 +375,7 @@ function showDetail(store) {
     <li style="margin-bottom: 8px; padding: 9px 14px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 6px;">
         <span style="font-size: 14px; color: var(--accent); opacity: 0.8;">🏷️</span>
-        <span style="font-size: 14px; font-weight: 600; color: var(--text-secondary);">${escapeHtml(store.type)}</span>
+        <span style="font-size: 14px; font-weight: 600; color: var(--text-secondary);">${escapeHtml(uiType)}</span>
       </div>
       <div style="display: flex; align-items: center; gap: 4px; background: var(--forest-main); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--accent); flex-shrink: 0;">
         <span style="font-size: 12px;">🛡️</span>
@@ -620,6 +623,18 @@ async function fetchStores() {
   }
 }
 
+// Category Mapping for UI and Data
+const CATEGORY_MAP = {
+  '카페': ['카페', '휴게음식점'],
+  '일반음식점': ['일반음식점'],
+  '제과점': ['제과점', '제과점영업']
+};
+
+const UI_CATEGORY_MAP = {
+  '휴게음식점': '카페',
+  '제과점영업': '제과점'
+};
+
 // Filter State & Logic
 let currentCategory = '전체';
 let currentRegion1 = '전국';
@@ -678,7 +693,8 @@ function applyFilters() {
     let score = 0;
 
     // 1. 하드 필터 (카테고리 및 지역 선택)
-    const matchCategory = (currentCategory === '전체') || (store.type === currentCategory);
+    const targetTypes = CATEGORY_MAP[currentCategory] || [currentCategory];
+    const matchCategory = (currentCategory === '전체') || targetTypes.includes(store.type);
     if (!matchCategory) continue;
     
     let matchRegion = true;
