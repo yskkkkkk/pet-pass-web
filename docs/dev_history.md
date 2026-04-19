@@ -4,6 +4,25 @@
 
 ---
 
+## [2026-04-19] - Jules
+### ✅ 작업 요약
+- 파비콘(Favicon) 디자인 전면 개편 및 PNG 소스 기반 자동화 시스템 전환
+
+### 🔧 변경 사항
+- **파비콘 소스 교체**: 기존 SVG 소스에서 제공된 고유 이미지(`public/favicon-source.png`)로 전면 교체. 다크 배경에 반려동물 발자국이 강조된 새로운 디자인 적용.
+- **생성 스크립트 고도화**: `scripts/generate-favicons.js`가 SVG 대신 PNG 소스를 입력받아 Playwright를 통해 다양한 규격으로 리사이징하도록 로직 수정.
+- **멀티 규격 재생성**:
+  - `favicon-512.png`, `favicon-192.png`, `favicon-180.png`, `favicon-32.png`, `favicon-16.png` 업데이트.
+  - `android-chrome-*.png`, `apple-touch-icon.png`, `favicon-*.png` 파일들 동기화.
+  - `favicon.ico` (16px, 32px 포함) 재생성.
+- **검증**: Playwright 기반의 UI 테스트를 통해 자산 서빙 및 모바일 뷰포트에서의 정합성 확인.
+
+### 📌 비고 (Issues & Decisions)
+- **디자인 변경**: 기존의 민트-화이트 그라디언트 SVG 대신, 사용자 요청에 따른 특정 비트맵 이미지를 소스로 채택하여 브랜드 정체성 강화.
+- **유지보수성**: 소스 이미지만 교체하면 `npm run favicon` 명령어로 모든 배포용 자산을 즉시 갱신할 수 있는 파이프라인 유지.
+
+---
+
 ## [2026-04-19] - Antigravity
 ### ✅ 작업 요약
 - 반려동물 동반 가능 업소 데이터 최신화 (2026.04.18 기준)

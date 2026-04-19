@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-const SVG_PATH = path.join(__dirname, '..', 'public', 'favicon.svg');
+const SOURCE_PATH = path.join(__dirname, '..', 'public', 'favicon-source.png');
 const OUTPUT_DIR = path.join(__dirname, '..', 'public');
 
 const SIZES = [512, 192, 180, 32, 16];
@@ -11,16 +11,18 @@ async function generateFavicons() {
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
-  // Load SVG content
-  const svgContent = fs.readFileSync(SVG_PATH, 'utf8');
+  // Load image content as base64
+  const imageBuffer = fs.readFileSync(SOURCE_PATH);
+  const base64Image = imageBuffer.toString('base64');
+  const dataUri = `data:image/png;base64,${base64Image}`;
 
   // Set content directly to ensure proper rendering without background
   await page.setContent(`
     <style>
       body, html { margin: 0; padding: 0; overflow: hidden; background: transparent; }
-      svg { display: block; width: 100%; height: 100%; }
+      img { display: block; width: 100vw; height: 100vh; object-fit: contain; }
     </style>
-    ${svgContent}
+    <img src="${dataUri}" />
   `);
 
   for (const size of SIZES) {
