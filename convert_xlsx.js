@@ -5,7 +5,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 // Kakao REST API Key
-const KAKAO_API_KEY = process.env.KAKAO_REST_API_KEY;
+const KAKAO_API_KEY = process.env.KAKAO_REST_API_KEY || process.env.KAKAO_MAP_API_KEY;
 
 /**
  * 주소를 위경도로 변환하는 함수 (Kakao Local API 사용)
@@ -32,7 +32,7 @@ async function geocodeAddress(address) {
 }
 
 async function run() {
-  const filePath = path.join(__dirname, 'data', '반려동물_동반가능_업소현황(2026.4.9 8시42분 기준).xlsx');
+  const filePath = path.join(__dirname, '반려동물_동반가능_업소현황(2026.4.18 18시13분 기준).xlsx');
 
   if (!fs.existsSync(filePath)) {
     console.error("엑셀 파일을 찾을 수 없습니다:", filePath);
