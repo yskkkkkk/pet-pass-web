@@ -161,7 +161,12 @@ async function syncPetFriendlyStores() {
     const stores = jsonData.map((row, index) => {
       const name = row['업소명'] || row['상호명'] || row['사업장명'] || 'Unknown';
       const address = row['소재지(도로명)'] || row['도로명주소'] || row['소재지'] || '';
-      const type = row['업태명'] || row['업종'] || row['업태'] || '기타';
+      let type = row['업태명'] || row['업종'] || row['업태'] || '기타';
+
+      // 업종 명칭 정규화 (UI 요구사항 반영)
+      if (type === '휴게음식점') type = '카페';
+      if (type === '제과점영업') type = '제과점';
+
       const lat = parseFloat(row['위도'] || row['Y좌표'] || '0');
       const lng = parseFloat(row['경도'] || row['X좌표'] || '0');
       const region = address.split(' ')[0] || '';
