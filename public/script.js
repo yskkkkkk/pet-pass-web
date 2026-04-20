@@ -53,6 +53,22 @@ let currentBoundsFilter = null; // Store map bounds for filtering
 let currentFilteredStores = []; // 현재 필터링된 매장 리스트 (Back-step용)
 let lastMapState = null; // 매장 클릭 직전의 지도 상태 저장
 let isSystemMoving = false; // 시스템에 의한 지도 이동 플래그
+let _systemMoveTimer = null;  // 시스템 이동 락 타이머
+
+/**
+ * 시스템 지도 이동 시작 — isSystemMoving 플래그를 true로 설정하고
+ * 최대 1500ms 동안 유지하는 안전망 타이머를 추가.
+ * setCenter + setLevel 분리 호출 사이에 idle 이벤트가 끼어드는
+ * 레이스 컨디션을 방지합니다.
+ */
+function beginSystemMove() {
+  isSystemMoving = true;
+  if (_systemMoveTimer) clearTimeout(_systemMoveTimer);
+  _systemMoveTimer = setTimeout(() => {
+    isSystemMoving = false;
+    _systemMoveTimer = null;
+  }, 1500);
+}
 
 const storeList = document.getElementById('store-list');
 const overlay = document.getElementById('overlay');
@@ -162,8 +178,13 @@ function initMap() {
     kakao.maps.event.addListener(map, 'dragend', showSearchHereBtn);
     kakao.maps.event.addListener(map, 'zoom_changed', showSearchHereBtn);
 
-    // 시스템 이동이 완전히 끝났을 때 플래그 해제 (Step 2)
+    // 시스템 이동이 완전히 끝났을 때 플래그 해제
+    // 타이머가 살아있으면 함께 클리어 (beginSystemMove와 연동)
     kakao.maps.event.addListener(map, 'idle', () => {
+      if (_systemMoveTimer) {
+        clearTimeout(_systemMoveTimer);
+        _systemMoveTimer = null;
+      }
       isSystemMoving = false;
     });
   } catch (e) {
@@ -223,7 +244,7 @@ function updateMapMarkers(data) {
   if (data.length === 0) {
     // Re-center to Default Kakao HQ if completely default state
     if (currentRegion1 === '전국' && currentSearch === '') {
-      isSystemMoving = true;
+      beginSystemMove();
       map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
       map.setLevel(6);
     }
@@ -264,11 +285,11 @@ function updateMapMarkers(data) {
     // Do NOT alter the camera if the user is explicitly searching within their current dragged bounds
   } else if (currentRegion1 === '전국' && currentSearch === '') {
     // Handled in data.length === 0 block if no markers
-    isSystemMoving = true;
+    beginSystemMove();
     map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
     map.setLevel(6);
   } else if (markers.length > 0) {
-    isSystemMoving = true;
+    beginSystemMove();
     map.setBounds(bounds);
   }
 }
@@ -441,7 +462,7 @@ if (btnViewMap) {
     };
 
     // 2. 지도 이동 및 확대
-    isSystemMoving = true;
+    beginSystemMove();
     const moveLatLon = new kakao.maps.LatLng(selectedStore.lat, selectedStore.lng);
 
     map.setLevel(3);
@@ -943,7 +964,7 @@ if (btnBackStep) {
     if (!lastMapState) return;
 
     // 1. 지도 복구
-    isSystemMoving = true;
+    beginSystemMove();
     map.setCenter(lastMapState.center);
     map.setLevel(lastMapState.level);
 
@@ -985,7 +1006,7 @@ function resetAllFilters(skipMapReset = false) {
 
   if (!skipMapReset) {
     updateMapButtonUI(MapButtonState.NONE);
-    isSystemMoving = true;
+    beginSystemMove();
 
     // 지도를 초기 전국 단위 설정값으로 리셋
     if (map) {
@@ -1069,7 +1090,7 @@ if (btnMyLocation) {
         const lng = position.coords.longitude;
         const locPosition = new kakao.maps.LatLng(lat, lng);
 
-        isSystemMoving = true;
+        beginSystemMove();
         map.panTo(locPosition);
 
         // 내 위치 마커 표시 (선택 사항, 여기서는 이동만 수행)
