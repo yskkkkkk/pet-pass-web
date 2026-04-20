@@ -35,6 +35,26 @@ async function build() {
       console.log('✅ Kakao Map API Key injected into dist/index.html');
     }
 
+    // 5. 서버 측 파일들에서 정부 API 키 치환 (배포용)
+    const GOV_KEY = process.env.DATA_GO_KR_API_KEY;
+    if (GOV_KEY) {
+      const serverFiles = [
+        path.join(__dirname, '..', 'server.js'),
+        path.join(__dirname, '..', 'api', 'auth-pet.js')
+      ];
+
+      for (const file of serverFiles) {
+        if (await fs.pathExists(file)) {
+          let content = await fs.readFile(file, 'utf8');
+          content = content.replace(/YOUR_GOVERNMENT_API_KEY_HERE/g, GOV_KEY);
+          await fs.writeFile(file, content);
+          console.log(`✅ Government API Key injected into ${path.basename(file)}`);
+        }
+      }
+    } else {
+      console.warn('⚠️ DATA_GO_KR_API_KEY 환경 변수가 없습니다. 플레이스홀더를 유지합니다.');
+    }
+
     console.log('🚀 Build completed successfully!');
   } catch (err) {
     console.error('❌ Build failed:', err);
