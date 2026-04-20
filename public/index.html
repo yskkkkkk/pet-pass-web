@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>반려패스 (Pet-Pass) | 공식 반려동물 출입 매장 조회</title>
 
   <!-- Favicons & PWA -->
@@ -195,8 +195,8 @@
         인증 정보는 <strong style="color:var(--peach-main)">로그인 없이 안전하게 기기에만 단방향 저장</strong>됩니다.
       </p>
       <div style="margin-bottom: 15px;">
-        <input type="text" id="input-dog-reg-no" placeholder="반려동물 등록번호 (15자리)" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; margin-bottom: 10px; outline: none; box-sizing: border-box;">
-        <input type="text" id="input-owner-birth" placeholder="소유자 생년월일 6자리 (예: 900101)" maxlength="6" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; outline: none; box-sizing: border-box;">
+        <input type="text" id="input-dog-reg-no" placeholder="반려동물 등록번호 (15자리)" aria-label="반려동물 등록번호 15자리 입력" inputmode="numeric" autocomplete="off" pattern="[0-9]{15}" maxlength="15" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; margin-bottom: 10px; box-sizing: border-box;">
+        <input type="text" id="input-owner-birth" placeholder="소유자 생년월일 6자리 (예: 900101)" aria-label="소유자 생년월일 6자리 입력" inputmode="numeric" autocomplete="bday" pattern="[0-9]{6}" maxlength="6" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box;">
       </div>
       <button id="btn-fetch-gov" class="auth-btn" style="width: 100%; padding: 14px; font-size: 16px; margin-bottom: 10px;">
         정부 데이터베이스 조회
