@@ -143,7 +143,7 @@ function initMap() {
   if (typeof kakao === 'undefined' || !kakao.maps) {
     console.warn("Kakao Map API가 로드되지 않았습니다.");
     const fallback = document.createElement('div');
-    fallback.style.cssText = 'display:flex; height:100%; align-items:center; justify-content:center; text-align:center; padding:20px; line-height:1.6; background: rgba(0,0,0,0.5); position:absolute; top:0; left:0; width:100%; z-index:50;';
+    fallback.style.cssText = 'display:flex; height:100%; align-items:center; justify-content:center; text-align:center; padding:20px; line-height:1.6; background: var(--bg-secondary); color: var(--text-primary); position:absolute; top:0; left:0; width:100%; z-index:50; border: 1px solid var(--border);';
     fallback.innerHTML = `<p><b>지도 스크립트가 차단되었습니다.</b><br/>1. 카카오 플랫폼(Web) 설정에 <b>file://</b> 이 등록되었는지 확인하세요.<br/>2. 브라우저의 광고 차단(AdBlock) 확장이 켜져있다면 잠시 꺼주세요.</p>`;
     container.appendChild(fallback);
     return;
@@ -165,12 +165,14 @@ function initMap() {
       minLevel: 6,
       styles: [{
         width: '53px', height: '52px',
-        background: 'rgba(255, 120, 150, 0.9)',
+        background: 'rgba(211, 149, 48, 0.9)',
         color: '#fff',
         textAlign: 'center',
         lineHeight: '54px',
         borderRadius: '50%',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        border: '2px solid #fff',
+        boxShadow: '0 2px 6px rgba(80, 60, 20, 0.2)'
       }]
     });
     
@@ -237,6 +239,20 @@ function updateMapMarkers(data) {
 
   const bounds = new kakao.maps.LatLngBounds();
 
+  // Custom Marker Image: Honey Gold pin (#D39530) with white outline
+  // Using a data URI SVG for the custom pin
+  const pinSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42">
+      <path d="M16 42L4.686 28.523C1.657 24.945 0 20.55 0 16C0 7.163 7.163 0 16 0C24.837 0 32 7.163 32 16C32 20.55 30.343 24.945 27.314 28.523L16 42Z" fill="#D39530" stroke="#FFFFFF" stroke-width="2"/>
+      <circle cx="16" cy="16" r="6" fill="#FFFFFF"/>
+    </svg>
+  `.trim();
+  const markerImage = new kakao.maps.MarkerImage(
+    'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(pinSvg))),
+    new kakao.maps.Size(32, 42),
+    { offset: new kakao.maps.Point(16, 42) }
+  );
+
   for (let i = 0; i < data.length; i++) {
     const store = data[i];
     if (store.lat && store.lng) {
@@ -244,7 +260,8 @@ function updateMapMarkers(data) {
       
       const marker = new kakao.maps.Marker({
         position: position,
-        title: store.name
+        title: store.name,
+        image: markerImage
       });
       
       kakao.maps.event.addListener(marker, 'click', function() {
@@ -312,13 +329,13 @@ function renderStores(data) {
   if (data.length === 0) {
     // 지역 필터가 켜져 있고(전국이 아님) 검색어가 비어있지 않은 경우 (Condition A)
     if (currentRegion1 !== '전국' && currentSearch.trim() !== '') {
-      storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-secondary); line-height:1.6;">
+      storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-tertiary); line-height:1.6;">
         선택하신 지역 내에 해당 검색어와 일치하는 매장이 없습니다.<br/>
         지역 설정을 변경하거나 검색어를 다시 확인해 주세요.
       </div>`;
     } else {
       // 그 외 일반 상황 (Condition B)
-      storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">해당 조건의 공식 인증 매장이 없습니다.</div>`;
+      storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-tertiary);">해당 조건의 공식 인증 매장이 없습니다.</div>`;
     }
     return;
   }
@@ -398,18 +415,18 @@ function showDetail(store) {
   const uiType = UI_CATEGORY_MAP[store.type] || store.type;
   
   complianceList.innerHTML = `
-    <li style="margin-bottom: 8px; padding: 9px 14px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px;">
+    <li style="margin-bottom: 8px; padding: 9px 14px; background: var(--bg-primary); border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 8px;">
       <span style="font-size: 16px;">📍</span>
-      <p style="font-size: 14px; font-weight: 500; line-height: 1.4; color: var(--text-secondary);">${escapeHtml(store.address)}</p>
+      <p style="font-size: 14px; font-weight: 500; line-height: 1.4; color: var(--text-primary);">${escapeHtml(store.address)}</p>
     </li>
-    <li style="margin-bottom: 8px; padding: 9px 14px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between;">
+    <li style="margin-bottom: 8px; padding: 9px 14px; background: var(--bg-primary); border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 6px;">
-        <span style="font-size: 14px; color: var(--accent); opacity: 0.8;">🏷️</span>
-        <span style="font-size: 14px; font-weight: 600; color: var(--text-secondary);">${escapeHtml(uiType)}</span>
+        <span style="font-size: 14px; color: var(--primary); opacity: 0.8;">🏷️</span>
+        <span style="font-size: 14px; font-weight: 600; color: var(--text-primary);">${escapeHtml(uiType)}</span>
       </div>
-      <div style="display: flex; align-items: center; gap: 4px; background: var(--forest-main); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--accent); flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 4px; background: var(--accent-green); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--on-primary); flex-shrink: 0;">
         <span style="font-size: 12px;">🛡️</span>
-        <span style="font-size: 11px; font-weight: 800; color: var(--accent); letter-spacing: -0.2px;">공식 인증</span>
+        <span style="font-size: 11px; font-weight: 800; color: var(--on-primary); letter-spacing: -0.2px;">공식 인증</span>
       </div>
     </li>
   `;

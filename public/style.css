@@ -1,13 +1,35 @@
 :root {
-  --forest-dark: #0f1c14;
-  --forest-main: #2D5A27;
-  --peach-main: #FF8A7A;
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --accent: #FFC09F;
-  --shadow-premium: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  /* Background — 연한 크림 베이지 */
+  --bg-primary:    #FBF5E6;  /* 앱 전체 배경 (기존 검은색 대체) */
+  --bg-secondary:  #F1E8CE;  /* 카드/칩 비활성 배경, 구분 영역 */
+  --surface:       #FFFCF2;  /* 바텀시트, 모달, 드롭다운 등 상단 surface */
+
+  /* Primary — 허니 골드 (메인 브랜드 컬러) */
+  --primary:       #D39530;  /* CTA 버튼, 활성 탭, 선택 상태, 맵 핀 */
+  --primary-hover: #B87E22;  /* hover/pressed */
+  --primary-soft:  #F5E4BF;  /* primary의 10~15% tint, 배경 강조용 */
+  --on-primary:    #FFFFFF;  /* primary 위 올라가는 글자색 */
+
+  /* Accent — 세이지 그린 (기존 인증 녹색 계승 · 조정) */
+  --accent-green:  #5A7738;  /* "2026 공식인증" 뱃지, 검증 표시 */
+  --accent-green-bg: #E4EAD0; /* 녹색 뱃지 연한 배경 버전 */
+
+  /* Text */
+  --text-primary:   #3B2F1A;  /* 본문 주요 텍스트 (거의 검정 대체) */
+  --text-secondary: #6B5A3A;  /* 보조 설명, 라벨 */
+  --text-tertiary:  #8A7A54;  /* placeholder, 주소, 메타 정보 */
+  --text-on-dark:   #FFFCF2;  /* primary 버튼 위 글자 */
+
+  /* Border / Divider */
+  --border:        rgba(80, 60, 20, 0.12);   /* 카드 테두리, 구분선 */
+  --border-strong: rgba(80, 60, 20, 0.20);   /* 강조 구분선 */
+
+  /* Status */
+  --error:   #C44A2E;
+  --warning: #D39530;  /* primary와 공유 가능 */
+  --success: #5A7738;  /* accent-green과 공유 가능 */
+
+  --shadow-premium: 0 1px 2px rgba(80, 60, 20, 0.06), 0 4px 12px rgba(80, 60, 20, 0.04);
   --z-header: 1000;
   --z-panel: 500;
   --z-modal: 2000;
@@ -21,7 +43,7 @@
 
 body {
   font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-  background-color: var(--forest-dark);
+  background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
   min-height: calc(var(--vh, 1vh) * 100);
@@ -31,17 +53,17 @@ body {
 
 /* Keyboard Accessibility */
 :where(button, [role="button"], input, select, textarea, a, .icon-tag, .map-fab-style):focus-visible {
-  outline: 3px solid var(--peach-main);
+  outline: 3px solid var(--primary);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(255, 138, 122, 0.25);
+  box-shadow: 0 0 0 4px rgba(211, 149, 48, 0.25);
 }
 
-/* Glassmorphism */
+/* Glassmorphism - Adjusted for bright theme */
 .glass {
-  background: var(--glass-bg);
+  background: var(--surface);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-premium);
 }
 
@@ -61,14 +83,15 @@ body {
 .logo {
   font-size: 24px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--peach-main), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
+}
+
+.logo span:first-child {
+  color: var(--primary);
 }
 
 .search-bar {
@@ -84,16 +107,20 @@ body {
 .search-bar input {
   background: transparent;
   border: none;
-  color: white;
+  color: var(--text-primary);
   flex: 1;
   outline: none;
   font-size: 15px;
 }
 
+.search-bar input::placeholder {
+  color: var(--text-tertiary);
+}
+
 #btn-reset-filters {
   background: transparent;
   border: none;
-  color: var(--text-secondary);
+  color: var(--primary);
   font-size: 18px;
   cursor: pointer;
   padding: 4px 8px;
@@ -104,7 +131,7 @@ body {
 }
 
 #btn-reset-filters:hover {
-  color: var(--peach-main);
+  color: var(--primary);
   transform: rotate(-30deg);
 }
 
@@ -114,8 +141,8 @@ body {
   min-height: 44px;
   padding: 8px 16px; 
   border-radius: 20px;
-  background: var(--forest-main);
-  color: #fff;
+  background: var(--primary);
+  color: var(--on-primary);
   border: none;
   cursor: pointer;
   font-weight: 600;
@@ -144,7 +171,7 @@ body {
 }
 
 .auth-btn.active {
-  background: var(--peach-main);
+  background: var(--primary-hover);
 }
 
 /* Layout */
@@ -157,7 +184,7 @@ body {
 
 #map-mock {
   flex: 1;
-  background: var(--forest-dark);
+  background: var(--bg-primary);
   position: relative;
   /* z-index removed to allow children (like My Location button) to stack correctly against siblings */
 }
@@ -178,13 +205,13 @@ body {
   z-index: 900;
   padding: 12px 24px;
   border-radius: 30px;
-  background: var(--forest-main);
+  background: var(--primary);
   color: white;
-  border: 1px solid var(--accent);
+  border: 1px solid white;
   font-weight: 700;
   font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 15px rgba(80, 60, 20, 0.2);
   display: none;
   opacity: 0;
   transition: opacity 0.3s;
@@ -193,7 +220,7 @@ body {
 
 #btn-search-here:active {
   transform: translateX(-50%) scale(0.95);
-  background: var(--peach-main);
+  background: var(--primary-hover);
 }
 
 #btn-back-step {
@@ -201,8 +228,8 @@ body {
 }
 
 #btn-back-step:hover {
-  background: white !important;
-  color: var(--peach-main) !important;
+  background: var(--on-primary) !important;
+  color: var(--primary) !important;
   transform: translateX(-50%) scale(1.05);
 }
 
@@ -211,21 +238,21 @@ body {
 }
 
 #btn-view-map:hover {
-  background-color: #ff7060 !important;
+  background-color: var(--primary-hover) !important;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255,138,122,0.6) !important;
+  box-shadow: 0 6px 20px rgba(211, 149, 48, 0.4) !important;
 }
 
 #btn-reset-filters:hover {
-  background: var(--peach-main) !important;
+  background: var(--primary) !important;
   color: white !important;
 }
 
 .side-panel {
   width: 420px;
   height: calc(100vh - 70px);
-  border-left: 1px solid var(--glass-border);
-  background: rgba(15, 28, 20, 0.95);
+  border-left: 1px solid var(--border);
+  background: var(--surface);
   backdrop-filter: blur(10px);
   padding: 24px;
   z-index: var(--z-panel);
@@ -259,13 +286,13 @@ body {
   width: 100%;
   height: 90px;
   border-radius: 16px;
-  background: linear-gradient(45deg, rgba(255,255,255,0.05), rgba(255,255,255,0.1));
+  background: var(--bg-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  border: 1px dashed rgba(255,255,255,0.2);
-  color: var(--text-secondary);
+  border: 1px dashed var(--border-strong);
+  color: var(--text-primary);
   font-size: 13px;
   text-align: center;
 }
@@ -284,11 +311,12 @@ body {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  background: var(--glass-bg);
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .skeleton {
-  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+  background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--primary-soft) 50%, var(--bg-secondary) 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
   border-radius: 4px;
@@ -303,7 +331,7 @@ body {
   height: 28px;
   width: 80%;
   margin-bottom: 15px;
-  background: linear-gradient(90deg, rgba(255,138,122,0.1) 25%, rgba(255,138,122,0.2) 50%, rgba(255,138,122,0.1) 75%);
+  background: linear-gradient(90deg, var(--primary-soft) 25%, var(--bg-secondary) 50%, var(--primary-soft) 75%);
   background-size: 200% 100%;
 }
 .skeleton-text { height: 16px; width: 90%; margin-bottom: 8px; opacity: 0.6; }
@@ -311,7 +339,7 @@ body {
 
 .store-card:hover {
   transform: translateY(-4px);
-  border-color: var(--peach-main);
+  border-color: var(--primary);
 }
 
 .store-card img {
@@ -320,14 +348,15 @@ body {
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 16px;
+  background-color: var(--bg-secondary);
 }
 
 .verified-badge {
   position: absolute;
   top: 30px;
   right: 30px;
-  background: var(--forest-main);
-  color: var(--accent);
+  background: var(--accent-green);
+  color: #FFFFFF;
   padding: 6px 12px;
   border-radius: 100px;
   font-size: 12px;
@@ -335,8 +364,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  border: 1px solid var(--accent);
+  box-shadow: 0 4px 12px rgba(80, 60, 20, 0.1);
 }
 
 .store-info h3 { font-size: 18px; margin-bottom: 4px; }
@@ -350,7 +378,7 @@ body {
 }
 
 .icon-tag {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-secondary);
   padding: 6px 12px;
   min-height: 44px;
   min-width: 44px;
@@ -359,7 +387,7 @@ body {
   justify-content: center;
   border-radius: 8px;
   font-size: 12px;
-  color: #fff;
+  color: var(--text-secondary);
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.2s;
@@ -368,33 +396,34 @@ body {
 
 .icon-tag:active {
   transform: scale(0.98);
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--primary-soft);
 }
 
 /* Select Box UI Fix */
 select.icon-tag {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%233B2F1A' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
   padding-right: 30px;
 }
 
 select.icon-tag option {
-  background-color: var(--forest-dark);
-  color: #fff;
+  background-color: var(--surface);
+  color: var(--text-primary);
 }
 
 select.icon-tag:focus {
-  border-color: var(--peach-main);
+  border-color: var(--primary);
   outline: none;
 }
 .icon-tag.active {
-  background: var(--peach-main);
-  color: var(--forest-dark);
+  background: var(--primary);
+  color: var(--on-primary);
   font-weight: 600;
 }
 
@@ -402,7 +431,7 @@ select.icon-tag:focus {
 .overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
+  background: rgba(59, 47, 26, 0.4);
   backdrop-filter: blur(4px);
   z-index: var(--z-modal);
   display: none;
@@ -419,6 +448,7 @@ select.icon-tag:focus {
   max-width: 600px;
   height: 85vh;
   border-radius: 30px 30px 0 0;
+  background: var(--surface);
   padding: 40px;
   z-index: calc(var(--z-modal) + 1);
   transition: bottom 0.4s cubic-bezier(0.19, 1, 0.22, 1);
@@ -438,6 +468,7 @@ select.icon-tag:focus {
   width: 90%;
   max-width: 400px;
   max-height: 90vh;
+  background: var(--surface);
   overflow-y: auto;
   border-radius: 24px;
   padding: 30px;
@@ -454,7 +485,7 @@ select.icon-tag:focus {
 
 .drag-handle {
   width: 40px; height: 4px;
-  background: rgba(255,255,255,0.2);
+  background: var(--border-strong);
   border-radius: 2px;
   margin: 0 auto 12px;
   position: relative;
@@ -476,12 +507,12 @@ select.icon-tag:focus {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(15, 28, 20, 0.98);
+  background: var(--surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   margin: -24px -24px 0px; /* PC 패딩(24px) 완전 상쇄 및 하단 유격 제거 */
   padding: 16px 24px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border);
   touch-action: none;
 }
 
@@ -499,9 +530,9 @@ select.icon-tag:focus {
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(45, 90, 39, 0.7); }
-  70% { transform: scale(0.95); box-shadow: 0 0 0 10px rgba(45, 90, 39, 0); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(45, 90, 39, 0); }
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 149, 48, 0.7); }
+  70% { transform: scale(0.95); box-shadow: 0 0 0 10px rgba(211, 149, 48, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(211, 149, 48, 0); }
 }
 
 .auth-modal.active #pet-card-view,
@@ -534,11 +565,11 @@ select.icon-tag:focus {
 .map-fab-style {
   width: 36px;
   height: 36px;
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 8px;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid var(--border);
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(80, 60, 20, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -561,7 +592,7 @@ select.icon-tag:focus {
 .map-fab-style svg {
   width: 20px;
   height: 20px;
-  stroke: #000000;
+  stroke: var(--primary);
   stroke-width: 2.5px;
 }
 
@@ -639,7 +670,7 @@ select.icon-tag:focus {
     width: 100%;
     height: var(--sheet-height, 50vh);
     border-left: none;
-    border-top: 1px solid var(--glass-border);
+    border-top: 1px solid var(--border);
     border-radius: 24px 24px 0 0;
     margin-top: 0;
     padding-top: 16px;
@@ -675,20 +706,20 @@ select.icon-tag:focus {
     padding: 0 16px;
     height: 44px;
     border-radius: 22px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
+    background: var(--surface);
+    border: 1px solid var(--border);
     flex-shrink: 0;
   }
   .mobile-search-bar input {
     background: transparent;
     border: none;
-    color: white;
+    color: var(--text-primary);
     flex: 1;
     outline: none;
     font-size: 14px;
   }
   .mobile-search-bar .search-icon {
-    color: var(--text-secondary);
+    color: var(--primary);
     font-size: 16px;
     flex-shrink: 0;
   }
@@ -696,7 +727,7 @@ select.icon-tag:focus {
   .reset-search-btn {
     background: transparent;
     border: none;
-    color: var(--text-secondary);
+    color: var(--primary);
     font-size: 18px;
     cursor: pointer;
     min-width: 44px;
@@ -713,7 +744,7 @@ select.icon-tag:focus {
   }
  
   .reset-search-btn:hover {
-    color: var(--peach-main);
+    color: var(--primary);
   }
  
   /* 모바일에서 플로팅 버튼 그룹 컨테이너 불필요 (사이드패널 내부로 이동됨) */
