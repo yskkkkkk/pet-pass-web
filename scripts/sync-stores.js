@@ -157,9 +157,31 @@ async function syncPetFriendlyStores() {
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
+    // 한글 디코딩 깨짐 보정 맵 (복잡한 한글이 '?'나 '？'로 깨지는 경우 대응)
+    const KOREAN_NAME_PATCH_MAP = {
+      '？커피,MOCC': '뫀커피,MOCC',
+      '?커피,MOCC': '뫀커피,MOCC',
+      '우？(WooDic)': '우딬(WooDic)',
+      '우?(WooDic)': '우딬(WooDic)',
+      '잇？(IT COF.)': '잇컾(IT COF.)',
+      '잇?(IT COF.)': '잇컾(IT COF.)',
+      '율？당': '율뭌당',
+      '율?당': '율뭌당',
+      '카페 드 조？': '카페 드 죠즈',
+      '카페 드 조?': '카페 드 죠즈',
+      '프？츠': '프릳츠',
+      '프?츠': '프릳츠'
+    };
+
     // 5. 데이터 변환 (사용자 요청 포맷)
     const stores = jsonData.map((row, index) => {
-      const name = row['업소명'] || row['상호명'] || row['사업장명'] || 'Unknown';
+      let name = row['업소명'] || row['상호명'] || row['사업장명'] || 'Unknown';
+
+      // 이름 깨짐 보정 적용
+      if (KOREAN_NAME_PATCH_MAP[name]) {
+        name = KOREAN_NAME_PATCH_MAP[name];
+      }
+
       const address = row['소재지(도로명)'] || row['도로명주소'] || row['소재지'] || '';
       let type = row['업태명'] || row['업종'] || row['업태'] || '기타';
 
