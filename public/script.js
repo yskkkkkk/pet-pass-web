@@ -402,6 +402,8 @@ overlay.onclick = () => {
 const btnAuth = document.getElementById('btn-auth');
 const btnFetchGov = document.getElementById('btn-fetch-gov');
 const btnCloseAuth = document.getElementById('btn-close-auth');
+const inputDogRegNo = document.getElementById('input-dog-reg-no');
+const inputOwnerBirth = document.getElementById('input-owner-birth');
 const filterTags = document.querySelectorAll('.filters .icon-tag');
 const regionDepth1 = document.getElementById('region-depth1');
 const regionDepth2 = document.getElementById('region-depth2');
@@ -545,6 +547,24 @@ function showAuthForm() {
   authModal.classList.add('active');
 }
 
+/**
+ * 숫자 입력 필드 정규화
+ * - 숫자 이외 문자를 즉시 제거
+ * - maxlength와 동일한 길이 제한 유지
+ */
+function bindNumericInput(inputEl, maxLength) {
+  if (!inputEl) return;
+  inputEl.addEventListener('input', () => {
+    const digitsOnly = inputEl.value.replace(/\D/g, '').slice(0, maxLength);
+    if (inputEl.value !== digitsOnly) {
+      inputEl.value = digitsOnly;
+    }
+  });
+}
+
+bindNumericInput(inputDogRegNo, 15);
+bindNumericInput(inputOwnerBirth, 6);
+
 btnCloseAuth.onclick = () => {
   overlay.click();
 };
@@ -558,8 +578,8 @@ btnUnlink.onclick = () => {
 };
 
 btnFetchGov.onclick = async () => {
-  const dogRegNo = document.getElementById('input-dog-reg-no').value.trim();
-  const ownerBirth = document.getElementById('input-owner-birth').value.trim();
+  const dogRegNo = (inputDogRegNo?.value || '').trim();
+  const ownerBirth = (inputOwnerBirth?.value || '').trim();
 
   if (!dogRegNo || !ownerBirth) {
     alert("동물등록번호와 생년월일 6자리를 정확히 입력해주세요.");
@@ -567,11 +587,11 @@ btnFetchGov.onclick = async () => {
   }
 
   // 데이터 상세 검증
-  if (dogRegNo.length < 15) {
+  if (!/^\d{15}$/.test(dogRegNo)) {
     alert("동물등록번호는 15자리 숫자입니다.");
     return;
   }
-  if (ownerBirth.length < 6) {
+  if (!/^\d{6}$/.test(ownerBirth)) {
     alert("생년월일은 6자리(예: 900101)로 입력해야 합니다.");
     return;
   }
@@ -1153,4 +1173,3 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAuth.innerText = "디지털 펫 패스";
   }
 });
-

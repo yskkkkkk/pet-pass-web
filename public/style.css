@@ -29,6 +29,13 @@ body {
   line-height: 1.5;
 }
 
+/* Keyboard Accessibility */
+:where(button, [role="button"], input, select, textarea, a, .icon-tag, .map-fab-style):focus-visible {
+  outline: 3px solid var(--peach-main);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 138, 122, 0.25);
+}
+
 /* Glassmorphism */
 .glass {
   background: var(--glass-bg);
