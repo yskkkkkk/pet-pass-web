@@ -40,8 +40,9 @@ module.exports = async (req, res) => {
 
   try {
     const GOV_API_URL = 'https://apis.data.go.kr/1543061/animalInfoSrvc_v3/animalInfo_v3';
-    const rfid_cd = dogRegNo;
-    const fullURL = `${GOV_API_URL}?serviceKey=${API_KEY}&dog_reg_no=${dogRegNo}&rfid_cd=${rfid_cd}&owner_nm=%20&owner_birth=${ownerBirth}`;
+    // v3 API에서는 dog_reg_no 또는 rfid_cd 중 하나만 있어도 되지만,
+    // 둘 다 보내는 것이 안전하며 owner_nm은 데이터가 없는 경우 조회가 안 될 수 있으므로 제외합니다.
+    const fullURL = `${GOV_API_URL}?serviceKey=${API_KEY}&dog_reg_no=${dogRegNo}&rfid_cd=${dogRegNo}&owner_birth=${ownerBirth}&_type=json`;
 
     const response = await axios.get(fullURL, {
       headers: { 'accept': '*/*' }
@@ -49,6 +50,7 @@ module.exports = async (req, res) => {
 
     let header, body;
 
+    // _type=json을 요청했지만 서버에서 XML을 반환하는 경우에 대비한 방어 코드
     if (typeof response.data === 'string' && response.data.includes('<?xml')) {
       const getValue = (tag) => {
         const match = response.data.match(new RegExp(`<${tag}>(.*?)<\/${tag}>`));
