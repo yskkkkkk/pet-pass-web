@@ -84,9 +84,9 @@ Pet-Pass는 반려인들이 안심하고 방문할 수 있는 장소를 찾고, 
 
 ### Frontend
 - **Vanilla JS**: 외부 라이브러리 의존성을 최소화한 고성능 로직 구현.
-- **Kakao Maps API**: 위치 기반 매장 탐색 및 커스텀 마커/클러스터링.
+- **Kakao Maps API**: 위치 기반 매장 탐색 및 커스텀 마커/클러스터링 (Honey Gold 브랜드 테마 적용).
 - **Hangul.js**: 한국어 초성 검색 및 형태소 매칭 지원.
-- **Glassmorphism UI**: 현대적이고 고급스러운 디자인 시스템 적용.
+- **Honey Beige Design System**: 따뜻하고 편안한 무드의 "허니 베이지" 테마와 Glassmorphism UI를 결합한 현대적인 디자인.
 
 ### Backend (Serverless)
 - **Vercel Serverless Functions (Node.js)**: `/api` 구조를 통한 확장성 있는 백엔드 API.
