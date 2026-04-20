@@ -178,7 +178,9 @@ app.get('/api/auth-pet', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Pet-Pass 백엔드 서버가 시작되었습니다!`);
   console.log(`🌐 주소: http://localhost:${PORT}`);
-  console.log(`🔑 상태: 정부 API Key ${process.env.DATA_GO_KR_API_KEY === 'YOUR_GOVERNMENT_API_KEY_HERE' ? '미설정 (모의 응답 작동)' : '적용 완료'}`);
+  const govKey = process.env.DATA_GO_KR_API_KEY;
+  const isMock = !govKey || govKey === 'YOUR_GOVERNMENT_API_KEY_HERE';
+  console.log(`🔑 상태: 정부 API Key ${isMock ? '미설정 (모의 응답 작동)' : '적용 완료'}`);
 
   // 서버 시작 시 초기 데이터 동기화 1회 실행
   console.log('🔄 서버 시작 시 초기 데이터 동기화를 시작합니다...');
