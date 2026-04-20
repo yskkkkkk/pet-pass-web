@@ -948,7 +948,9 @@ if (btnBackStep) {
     map.setLevel(lastMapState.level);
 
     // 2. 검색 결과 및 마커 복구
-    currentFilteredStores = lastMapState.filteredStores;
+    // filteredStores가 없는 경우 현재 필터링된 결과를 유지 (방어 코드)
+    const restoredStores = lastMapState.filteredStores ?? currentFilteredStores;
+    currentFilteredStores = restoredStores;
     renderStores(currentFilteredStores);
     updateMapMarkers(currentFilteredStores);
 
