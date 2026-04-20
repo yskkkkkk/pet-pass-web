@@ -103,12 +103,9 @@ app.get('/api/auth-pet', async (req, res) => {
     // 인증키 이중 인코딩 방지를 위해 원본 키 그대로 사용
     const serviceKey = process.env.DATA_GO_KR_API_KEY;
 
-    // v3 필수 파라미터들 (사용자 curl 예시와 최대한 일치하도록 설정)
-    const rfid_cd = dogRegNo;  // 등록번호와 동일하게 설정
-    
-    // 최종 URL 조립 (디버깅을 위해 URL 출력, 키는 일부 숨김)
-    // 사용자 curl 예시와 100% 일치시키기 위해 _type=json 제거
-    const fullURL = `${GOV_API_URL}?serviceKey=${serviceKey}&dog_reg_no=${dogRegNo}&rfid_cd=${rfid_cd}&owner_nm=%20&owner_birth=${ownerBirth}`;
+    // v3 필수 파라미터들
+    // owner_nm=%20 (공백) 포함 시 데이터가 조회되지 않는 문제가 있어 제외함
+    const fullURL = `${GOV_API_URL}?serviceKey=${serviceKey}&dog_reg_no=${dogRegNo}&rfid_cd=${dogRegNo}&owner_birth=${ownerBirth}&_type=json`;
     
     const response = await axios.get(fullURL, {
       headers: { 'accept': '*/*' }
@@ -116,7 +113,7 @@ app.get('/api/auth-pet', async (req, res) => {
     
     let header, body;
     
-    // 응답이 XML 문자열인 경우 간단하게 파싱 시도
+    // _type=json을 요청했지만 서버에서 XML을 반환하는 경우에 대비한 방어 코드
     if (typeof response.data === 'string' && response.data.includes('<?xml')) {
       const getValue = (tag) => {
         const match = response.data.match(new RegExp(`<${tag}>(.*?)<\/${tag}>`));
