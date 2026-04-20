@@ -24,7 +24,7 @@
   <!-- Header -->
   <header class="header glass">
     <div class="logo">
-      <span>🐾 Pet-Pass</span>
+      <span>🐾</span><span>Pet-Pass</span>
     </div>
     <div class="search-bar glass">
       <input id="search-input" type="text" placeholder="지역명, 상호명 검색...">
@@ -51,7 +51,7 @@
     <!-- Map Section -->
     <section id="map-mock">
       <!-- 이전 위치로 버튼: 매장 상세 진입 시 표시 -->
-      <button id="btn-back-step" class="glass" style="display: none; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; padding: 12px 24px; border-radius: 30px; background: var(--peach-main); color: white; border: 1px solid white; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">이전 위치로</button>
+      <button id="btn-back-step" class="glass" style="display: none; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; padding: 12px 24px; border-radius: 30px; background: var(--primary); color: var(--on-primary); border: 1px solid var(--border); font-weight: 700; cursor: pointer; box-shadow: var(--shadow-premium);">이전 위치로</button>
     </section>
 
     <!-- Side Panel / Bottom Sheet (Mobile) -->
@@ -99,7 +99,7 @@
           </div>
 
           <!-- Total Result Count: Small and faint below filters -->
-          <div id="total-count-display" style="display: none; font-size: 11px; color: var(--text-secondary); opacity: 0.6; margin-bottom: 16px; padding-left: 4px;">
+          <div id="total-count-display" style="display: none; font-size: 11px; color: var(--text-tertiary); opacity: 0.6; margin-bottom: 16px; padding-left: 4px;">
             총 <span id="store-count">0</span>개의 매장
           </div>
         </div>
@@ -147,11 +147,11 @@
         <img id="detail-img" src="" alt="Store" style="width: 100%; border-radius: 20px; max-height: 250px; object-fit: cover;">
       </div>
       <div class="detail-info">
-        <h4 style="color: var(--accent); margin-bottom: 12px; font-size: 14px; opacity: 0.9;">🛡️ 2026 법적 기준 통과 항목</h4>
+        <h4 style="color: var(--primary); margin-bottom: 12px; font-size: 14px; opacity: 0.9;">🛡️ 2026 법적 기준 통과 항목</h4>
         <ul id="compliance-list" style="list-style: none; margin-bottom: 24px;">
           <!-- Compliance items -->
         </ul>
-        <button id="btn-view-map" class="auth-btn" style="width: 100%; padding: 14px; font-size: 15px; font-weight: 800; border-radius: 12px; background: var(--peach-main); border: 1px solid white; box-shadow: 0 4px 15px rgba(255,138,122,0.4);">📍 지도에서 위치 보기</button>
+        <button id="btn-view-map" class="auth-btn" style="width: 100%; padding: 14px; font-size: 15px; font-weight: 800; border-radius: 12px; background: var(--primary); border: 1px solid var(--on-primary); box-shadow: var(--shadow-premium);">📍 지도에서 위치 보기</button>
       </div>
     </div>
   </div>
@@ -160,8 +160,8 @@
   <!-- 서비스 정보 팝업 (이스터에그 느낌) -->
   <div id="info-modal" class="auth-modal glass" style="max-width: 320px;">
     <div style="text-align: center;">
-      <h3 style="margin-bottom: 5px; font-size: 22px;">Pet-Pass 🐾</h3>
-      <div style="font-size: 13px; color: var(--accent); font-weight: 600; margin-bottom: 15px;">v1.0.0</div>
+      <h3 style="margin-bottom: 5px; font-size: 22px;">Pet-Pass <span>🐾</span></h3>
+      <div style="font-size: 13px; color: var(--primary); font-weight: 600; margin-bottom: 15px;">v1.0.0</div>
 
       <p style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px;">
         반려동물 동반 가능 매장을<br/>한눈에 확인하는 지도 서비스
@@ -171,7 +171,7 @@
         반려동물과 함께하는 외출이 더 쉬워지도록, 공공데이터를 활용한 실시간 출입 가능 매장 지도 서비스입니다.
       </p>
 
-      <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 15px; margin-bottom: 20px; text-align: left;">
+      <div style="background: var(--bg-primary); border-radius: 16px; padding: 15px; margin-bottom: 20px; text-align: left; border: 1px solid var(--border);">
         <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 5px;">Developer</div>
         <div style="font-size: 15px; font-weight: 700;">yskkkkkk</div>
       </div>
@@ -194,11 +194,11 @@
       <h3 style="margin-bottom: 10px; font-size: 22px;">디지털 펫 패스 간편 인증</h3>
       <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
         정부24(국가동물보호정보시스템) 연동을 위해 정보를 입력해주세요.<br/>
-        인증 정보는 <strong style="color:var(--peach-main)">로그인 없이 안전하게 기기에만 단방향 저장</strong>됩니다.
+        인증 정보는 <strong style="color:var(--primary)">로그인 없이 안전하게 기기에만 단방향 저장</strong>됩니다.
       </p>
       <div style="margin-bottom: 15px;">
-        <input type="text" id="input-dog-reg-no" placeholder="반려동물 등록번호 (15자리)" aria-label="반려동물 등록번호 15자리 입력" inputmode="numeric" autocomplete="off" pattern="[0-9]{15}" maxlength="15" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; margin-bottom: 10px; box-sizing: border-box;">
-        <input type="text" id="input-owner-birth" placeholder="소유자 생년월일 6자리 (예: 900101)" aria-label="소유자 생년월일 6자리 입력" inputmode="numeric" autocomplete="bday" pattern="[0-9]{6}" maxlength="6" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box;">
+        <input type="text" id="input-dog-reg-no" placeholder="반려동물 등록번호 (15자리)" aria-label="반려동물 등록번호 15자리 입력" inputmode="numeric" autocomplete="off" pattern="[0-9]{15}" maxlength="15" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text-primary); margin-bottom: 10px; box-sizing: border-box;">
+        <input type="text" id="input-owner-birth" placeholder="소유자 생년월일 6자리 (예: 900101)" aria-label="소유자 생년월일 6자리 입력" inputmode="numeric" autocomplete="bday" pattern="[0-9]{6}" maxlength="6" style="width: 100%; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text-primary); box-sizing: border-box;">
       </div>
       <button id="btn-fetch-gov" class="auth-btn" style="width: 100%; padding: 14px; font-size: 16px; margin-bottom: 10px;">
         정부 데이터베이스 조회
@@ -211,50 +211,50 @@
     <!-- 인증 후: 디지털 펫 카드 -->
     <div id="pet-card-view" style="display: none;">
       <div style="text-align: center; margin-bottom: 16px;">
-        <div style="font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: 2px; margin-bottom: 4px;">🛡️ 국가동물보호정보시스템 인증</div>
-        <div style="font-size: 11px; color: var(--text-secondary);">OFFICIAL PET PASS</div>
+        <div style="font-size: 13px; color: var(--primary); font-weight: 600; letter-spacing: 2px; margin-bottom: 4px;">🛡️ 국가동물보호정보시스템 인증</div>
+        <div style="font-size: 11px; color: var(--text-tertiary);">OFFICIAL PET PASS</div>
       </div>
 
       <!-- 동물 정보 카드 본체 -->
-      <div style="background: linear-gradient(135deg, rgba(74,111,74,0.5), rgba(210,140,90,0.2)); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden;">
+      <div style="background: linear-gradient(135deg, var(--accent-green-bg), var(--primary-soft)); border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden;">
         <!-- 배경 워터마크 -->
-        <div style="position: absolute; right: -10px; bottom: -15px; font-size: 80px; opacity: 0.08; pointer-events: none;">🐾</div>
+        <div style="position: absolute; right: -10px; bottom: -15px; font-size: 80px; opacity: 0.1; pointer-events: none;">🐾</div>
 
         <!-- 동물 이름 & 종 -->
         <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
-          <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 30px; border: 2px solid rgba(255,255,255,0.2);">🐶</div>
+          <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 30px; border: 2px solid var(--border);">🐶</div>
           <div>
-            <div id="card-pet-name" style="font-size: 24px; font-weight: 700; letter-spacing: 1px;">-</div>
+            <div id="card-pet-name" style="font-size: 24px; font-weight: 700; letter-spacing: 1px; color: var(--text-primary);">-</div>
             <div id="card-pet-kind" style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">-</div>
           </div>
         </div>
 
         <!-- 상세 정보 그리드 -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 12px;">
-            <div style="font-size: 11px; color: var(--accent); margin-bottom: 4px;">성별</div>
-            <div id="card-pet-sex" style="font-size: 14px; font-weight: 600;">-</div>
+          <div style="background: var(--bg-primary); border-radius: 12px; padding: 12px; border: 1px solid var(--border);">
+            <div style="font-size: 11px; color: var(--text-tertiary); margin-bottom: 4px;">성별</div>
+            <div id="card-pet-sex" style="font-size: 14px; font-weight: 600; color: var(--text-primary);">-</div>
           </div>
-          <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 12px;">
-            <div style="font-size: 11px; color: var(--accent); margin-bottom: 4px;">중성화</div>
-            <div id="card-pet-neuter" style="font-size: 14px; font-weight: 600;">-</div>
+          <div style="background: var(--bg-primary); border-radius: 12px; padding: 12px; border: 1px solid var(--border);">
+            <div style="font-size: 11px; color: var(--text-tertiary); margin-bottom: 4px;">중성화</div>
+            <div id="card-pet-neuter" style="font-size: 14px; font-weight: 600; color: var(--text-primary);">-</div>
           </div>
-          <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 12px;">
-            <div style="font-size: 11px; color: var(--accent); margin-bottom: 4px;">출생연도</div>
-            <div id="card-pet-birth" style="font-size: 14px; font-weight: 600;">-</div>
+          <div style="background: var(--bg-primary); border-radius: 12px; padding: 12px; border: 1px solid var(--border);">
+            <div style="font-size: 11px; color: var(--text-tertiary); margin-bottom: 4px;">출생연도</div>
+            <div id="card-pet-birth" style="font-size: 14px; font-weight: 600; color: var(--text-primary);">-</div>
           </div>
-          <div style="background: rgba(0,0,0,0.25); border-radius: 12px; padding: 12px;">
-            <div style="font-size: 11px; color: var(--accent); margin-bottom: 4px;">등록번호</div>
-            <div id="card-reg-no" style="font-size: 11px; font-weight: 600; word-break: break-all;">-</div>
+          <div style="background: var(--bg-primary); border-radius: 12px; padding: 12px; border: 1px solid var(--border);">
+            <div style="font-size: 11px; color: var(--text-tertiary); margin-bottom: 4px;">등록번호</div>
+            <div id="card-reg-no" style="font-size: 11px; font-weight: 600; word-break: break-all; color: var(--text-primary);">-</div>
           </div>
         </div>
       </div>
 
       <!-- 버튼 영역 -->
-      <button id="btn-close-card" class="auth-btn" style="width: 100%; padding: 12px; font-size: 15px; margin-bottom: 8px; background: rgba(255,255,255,0.1);">
+      <button id="btn-close-card" class="auth-btn" style="width: 100%; padding: 12px; font-size: 15px; margin-bottom: 8px; background: var(--bg-secondary); color: var(--text-primary);">
         확인 완료
       </button>
-      <button id="btn-unlink" style="width: 100%; background: transparent; border: 1px solid rgba(255,100,100,0.4); border-radius: 12px; color: rgba(255,120,120,0.8); cursor: pointer; padding: 10px; font-size: 13px;">
+      <button id="btn-unlink" style="width: 100%; background: transparent; border: 1px solid var(--error); border-radius: 12px; color: var(--error); cursor: pointer; padding: 10px; font-size: 13px;">
         🔓 펫 패스 연동 해제
       </button>
     </div>

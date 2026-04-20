@@ -4,8 +4,8 @@
   "description": "공식 반려동물 출입 매장 조회 및 디지털 펫 패스 서비스",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f1c14",
-  "theme_color": "#2D5A27",
+  "background_color": "#FBF5E6",
+  "theme_color": "#D39530",
   "icons": [
     {
       "src": "android-chrome-192x192.png",
