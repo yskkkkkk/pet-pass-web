@@ -743,3 +743,13 @@ select.icon-tag:focus {
     max-height: 85vh;
   }
 }
+
+select.icon-tag option:disabled {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+select.icon-tag option:disabled {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}

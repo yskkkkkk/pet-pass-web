@@ -181,8 +181,24 @@ btnSearchHere.onclick = () => {
 };
 
 function handleSearchInThisArea() {
-  // 1. 완전 초기화 (skipMapReset = true 로 지도 위치는 유지)
-  resetAllFilters(true);
+  currentCategory = '전체';
+  currentRegion1 = '전국';
+  currentRegion2 = '전체';
+  currentSearch = '';
+  currentBoundsFilter = null;
+
+  if (searchInput) searchInput.value = '';
+  if (mobileSearchInput) mobileSearchInput.value = '';
+  if (regionDepth1) {
+    regionDepth1.value = '전국';
+    updateRegionDepth2('전국');
+  }
+  if (filterTags) {
+    filterTags.forEach(t => {
+      t.classList.remove('active');
+      if (t.innerText === '전체') t.classList.add('active');
+    });
+  }
 
   // 2. 현재 지도 영역 설정
   currentBoundsFilter = map.getBounds();
@@ -190,6 +206,10 @@ function handleSearchInThisArea() {
   // 3. 버튼 숨김 및 검색 실행
   updateMapButtonUI(MapButtonState.NONE);
   applyFilters();
+
+  if (window.minimizeBottomSheet) {
+    window.minimizeBottomSheet();
+  }
 }
 
 // Add markers for stores
@@ -447,7 +467,7 @@ const regionData = {
   "강원특별자치도": ["춘천시", "원주시", "강릉시", "동해시", "태백시", "속초시", "삼척시", "홍천군", "횡성군", "영월군", "평창군", "정선군", "철원군", "화천군", "양구군", "인제군", "고성군", "양양군"],
   "충청북도": ["청주시", "충주시", "제천시", "보은군", "옥천군", "영동군", "증평군", "진천군", "괴산군", "음성군", "단양군"],
   "충청남도": ["천안시", "공주시", "보령시", "아산시", "서산시", "논산시", "계룡시", "당진시", "금산군", "부여군", "서천군", "청양군", "홍성군", "예산군", "태안군"],
-  "전라북도": ["전주시", "군산시", "익산시", "정읍시", "남원시", "김제시", "완주군", "진안군", "무주군", "장수군", "임실군", "순창군", "고창군", "부안군"],
+  "전북특별자치도": ["전주시", "군산시", "익산시", "정읍시", "남원시", "김제시", "완주군", "진안군", "무주군", "장수군", "임실군", "순창군", "고창군", "부안군"],
   "전라남도": ["목포시", "여수시", "순천시", "나주시", "광양시", "담양군", "곡성군", "구례군", "고흥군", "보성군", "화순군", "장흥군", "강진군", "해남군", "영암군", "무안군", "함평군", "영광군", "장성군", "완도군", "진도군", "신안군"],
   "경상북도": ["포항시", "경주시", "김천시", "안동시", "구미시", "영주시", "영천시", "상주시", "문경시", "경산시", "의성군", "청송군", "영양군", "영덕군", "청도군", "고령군", "성주군", "칠곡군", "예천군", "봉화군", "울진군", "울릉군"],
   "경상남도": ["창원시", "진주시", "통영시", "사천시", "김해시", "밀양시", "거제시", "양산시", "의령군", "함안군", "창녕군", "고성군", "남해군", "하동군", "산청군", "함양군", "거창군", "합천군"],
@@ -613,6 +633,9 @@ async function fetchStores() {
     if (!response.ok) throw new Error('데이터 로딩 실패');
     stores = await response.json();
 
+    calculateRegionCounts();
+    updateRegionDepth1UI();
+
     // Slight delay for smooth transition from skeleton
     setTimeout(() => {
       applyFilters();
@@ -637,6 +660,62 @@ const UI_CATEGORY_MAP = {
 
 // Filter State & Logic
 let currentCategory = '전체';
+
+/**
+ * Pre-calculate store counts for each region
+ */
+let regionCounts = { depth1: {}, depth2: {} };
+
+function calculateRegionCounts() {
+  const counts = {
+    depth1: { "전국": stores.length },
+    depth2: {}
+  };
+
+  for (const r1 in regionData) {
+    counts.depth1[r1] = 0;
+    counts.depth2[r1] = { "전체": 0 };
+    regionData[r1].forEach(r2 => {
+      counts.depth2[r1][r2] = 0;
+    });
+  }
+
+  stores.forEach(store => {
+    for (const r1 in regionData) {
+      if (store.address.includes(r1)) {
+        counts.depth1[r1]++;
+        counts.depth2[r1]["전체"]++;
+        const districts = regionData[r1];
+        for (const r2 of districts) {
+          if (store.address.includes(r2)) {
+            counts.depth2[r1][r2]++;
+          }
+        }
+        break;
+      }
+    }
+  });
+
+  regionCounts = counts;
+}
+
+/**
+ * Update the labels and disabled status of Depth 1 region options
+ */
+function updateRegionDepth1UI() {
+  const options = regionDepth1.querySelectorAll('option');
+  options.forEach(opt => {
+    const regionName = opt.value;
+    const count = regionCounts.depth1[regionName] || 0;
+    opt.innerText = `${regionName} (${count})`;
+    if (count === 0 && regionName !== '전국') {
+      opt.disabled = true;
+    } else {
+      opt.disabled = false;
+    }
+  });
+}
+
 let currentRegion1 = '전국';
 let currentRegion2 = '전체';
 let currentSearch = '';
@@ -663,12 +742,18 @@ function updateRegionDepth2(region1) {
 
   const districts = regionData[region1] || [];
   regionDepth2.style.display = 'block';
-  regionDepth2.innerHTML = '<option value="전체">전체</option>';
+
+  const totalCountForRegion = regionCounts.depth2[region1]?.["전체"] || 0;
+  regionDepth2.innerHTML = `<option value="전체">전체 (${totalCountForRegion})</option>`;
 
   districts.forEach(district => {
+    const count = regionCounts.depth2[region1]?.[district] || 0;
     const option = document.createElement('option');
     option.value = district;
-    option.innerText = district;
+    option.innerText = `${district} (${count})`;
+    if (count === 0) {
+      option.disabled = true;
+    }
     regionDepth2.appendChild(option);
   });
 
@@ -1064,6 +1149,13 @@ if (btnMyLocation) {
   window.resetBottomSheet = () => {
     if (window.innerWidth <= 768) {
       setSheetHeight(snapPoints.mid);
+      snapToNearest();
+    }
+  };
+
+  window.minimizeBottomSheet = () => {
+    if (window.innerWidth <= 768) {
+      setSheetHeight(snapPoints.min);
       snapToNearest();
     }
   };
