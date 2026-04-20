@@ -22,6 +22,20 @@
 
 ## [2026-04-19] - Jules
 ### ✅ 작업 요약
+- 배포 실패(exit code 1) 해결 및 빌드 프로세스 최적화
+
+### 🔧 변경 사항
+- **빌드 아티팩트 분리**: `scripts/build.js`를 수정하여 `public` 폴더 직접 수정 대신 `dist` 폴더에 결과물을 생성하도록 변경. 원본 소스 보존 및 빌드 결과물의 명확한 관리를 가능케 함.
+- **Node.js 버전 최적화**: Vercel 및 CI 환경과의 호환성을 위해 GitHub Actions 워크플로우(`.github/workflows/deploy.yml`, `daily_sync.yml`)의 Node.js 버전을 24에서 안정적인 22로 조정.
+- **배포 설정 연동**: `DEPLOY.md` 가이드에 명시된 `dist` 출력 디렉토리 구조와 실제 빌드 프로세스를 일치시킴.
+
+### 📌 비고 (Issues & Decisions)
+- **결정**: 기존의 인플레이스(In-place) 빌드 방식은 소스 관리에 위험 요소가 있어, 표준적인 `dist` 폴더 기반 빌드 방식으로 전환함. Vercel 배포 설정에서 Output Directory를 `dist`로 설정해야 함.
+
+---
+
+## [2026-04-19] - Jules
+### ✅ 작업 요약
 - 한글 디코딩 깨짐(Extended Hangul) 보정 및 데이터 정제
 
 ### 🔧 변경 사항
