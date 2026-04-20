@@ -202,24 +202,8 @@ btnSearchHere.onclick = () => {
 };
 
 function handleSearchInThisArea() {
-  currentCategory = '전체';
-  currentRegion1 = '전국';
-  currentRegion2 = '전체';
-  currentSearch = '';
-  currentBoundsFilter = null;
-
-  if (searchInput) searchInput.value = '';
-  if (mobileSearchInput) mobileSearchInput.value = '';
-  if (regionDepth1) {
-    regionDepth1.value = '전국';
-    updateRegionDepth2('전국');
-  }
-  if (filterTags) {
-    filterTags.forEach(t => {
-      t.classList.remove('active');
-      if (t.innerText === '전체') t.classList.add('active');
-    });
-  }
+  // 1. 모든 필터 및 검색어 초기화 (지도 리셋 제외)
+  resetAllFilters(true);
 
   // 2. 현재 지도 영역 설정
   currentBoundsFilter = map.getBounds();
@@ -318,7 +302,12 @@ function renderStores(data) {
   
   // Update dynamic count
   const countEl = document.getElementById('store-count');
-  if(countEl) countEl.innerText = data.length;
+  const totalCountEl = document.getElementById('total-count-display');
+
+  if (countEl) countEl.innerText = data.length;
+  if (totalCountEl) {
+    totalCountEl.style.display = data.length > 0 ? 'block' : 'none';
+  }
 
   if (data.length === 0) {
     // 지역 필터가 켜져 있고(전국이 아님) 검색어가 비어있지 않은 경우 (Condition A)
