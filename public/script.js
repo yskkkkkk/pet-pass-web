@@ -516,7 +516,11 @@ function displayPetCard(petData) {
   document.getElementById('card-pet-sex').innerText = petData.sexNm || '-';
   document.getElementById('card-pet-neuter').innerText = petData.neuterYn || '-';
   document.getElementById('card-pet-birth').innerText = petData.ownerBirth ? `20${petData.ownerBirth.substring(0, 2)}` : '-';
-  document.getElementById('card-reg-no').innerText = petData.dogRegNo || '-';
+
+  // 등록번호 마스킹 처리 (보안 및 줄바꿈 방지: 6자리 노출 + 4자리 별표)
+  const regNo = petData.dogRegNo || '';
+  const maskedRegNo = regNo.length >= 10 ? `${regNo.substring(0, 6)}****` : regNo;
+  document.getElementById('card-reg-no').innerText = maskedRegNo || '-';
 
   authFormView.style.display = 'none';
   petCardView.style.display = 'block';
