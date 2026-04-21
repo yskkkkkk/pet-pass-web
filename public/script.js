@@ -515,7 +515,13 @@ function displayPetCard(petData) {
   document.getElementById('card-pet-kind').innerText = petData.kindNm || '품종 정보 없음';
   document.getElementById('card-pet-sex').innerText = petData.sexNm || '-';
   document.getElementById('card-pet-neuter').innerText = petData.neuterYn || '-';
-  document.getElementById('card-pet-birth').innerText = petData.ownerBirth ? `20${petData.ownerBirth.substring(0, 2)}` : '-';
+
+  // 생일 데이터 표시 (birthDt 우선, 없으면 ownerBirth 기반 연도)
+  if (petData.birthDt) {
+    document.getElementById('card-pet-birth').innerText = petData.birthDt;
+  } else {
+    document.getElementById('card-pet-birth').innerText = petData.ownerBirth ? `20${petData.ownerBirth.substring(0, 2)}` : '-';
+  }
 
   // 등록번호 마스킹 처리 (보안 및 줄바꿈 방지: 6자리 노출 + 4자리 별표)
   const regNo = petData.dogRegNo || '';
@@ -667,7 +673,8 @@ btnFetchGov.onclick = async () => {
       displayPetCard(petData);
       alert(result.message || "정부 데이터베이스 확인이 완료되었습니다! 펫 패스가 기기에 등록되었습니다.");
     } else {
-      alert(`[인증 실패]\n${result.error || '알 수 없는 오류'}`);
+      const errorMsg = result.errorTitle ? `[${result.errorTitle}]\n${result.error}` : `[인증 실패]\n${result.error || '알 수 없는 오류'}`;
+      alert(errorMsg);
     }
   } catch (error) {
     alert("서버 연결 실패 또는 정부망 통신 에러가 발생했습니다.\n서버 터미널 콘솔을 확인해주세요.");
