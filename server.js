@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const cron = require('node-cron');
 const { syncPetFriendlyStores } = require('./scripts/sync-stores');
+const getPetData = require('./api/get-pet-data');
 require('dotenv').config();
 
 const app = express();
@@ -71,7 +72,7 @@ app.get('/api/auth-pet', async (req, res) => {
   }
 
   // 아직 사용자가 .env 에 API Key를 발급받아 넣지 않은 경우 (Mock 응답 반환)
-  if (!process.env.DATA_GO_KR_API_KEY || process.env.DATA_GO_KR_API_KEY === 'YOUR_GOVERNMENT_API_KEY_HERE') {
+  if (!process.env.DATA_GO_KR_API_KEY) {
     console.log("[DEV MODE] 정부 API 키가 세팅되지 않아 가상의 인증 성공 응답을 내보냅니다.");
     
     // 단순 지연 시뮬레이션
@@ -105,9 +106,14 @@ app.get('/api/auth-pet', async (req, res) => {
 
     // v3 필수 파라미터들
     // owner_nm=%20 (공백) 포함 시 데이터가 조회되지 않는 문제가 있어 제외함
-    const fullURL = `${GOV_API_URL}?serviceKey=${serviceKey}&dog_reg_no=${dogRegNo}&rfid_cd=${dogRegNo}&owner_birth=${ownerBirth}&_type=json`;
-    
-    const response = await axios.get(fullURL, {
+    const response = await axios.get(GOV_API_URL, {
+      params: {
+        serviceKey: serviceKey,
+        dog_reg_no: dogRegNo,
+        rfid_cd: dogRegNo,
+        owner_birth: ownerBirth,
+        _type: 'json'
+      },
       headers: { 'accept': '*/*' }
     });
     
@@ -175,11 +181,17 @@ app.get('/api/auth-pet', async (req, res) => {
   }
 });
 
+/**
+ * [New Proxy Endpoint]
+ * Vercel Serverless Function과 동일한 로직을 로컬 express 서버에서도 제공합니다.
+ */
+app.get('/api/get-pet-data', getPetData);
+
 app.listen(PORT, () => {
   console.log(`🚀 Pet-Pass 백엔드 서버가 시작되었습니다!`);
   console.log(`🌐 주소: http://localhost:${PORT}`);
   const govKey = process.env.DATA_GO_KR_API_KEY;
-  const isMock = !govKey || govKey === 'YOUR_GOVERNMENT_API_KEY_HERE';
+  const isMock = !govKey;
   console.log(`🔑 상태: 정부 API Key ${isMock ? '미설정 (모의 응답 작동)' : '적용 완료'}`);
 
   // 서버 시작 시 초기 데이터 동기화 1회 실행

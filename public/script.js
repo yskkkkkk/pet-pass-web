@@ -647,7 +647,7 @@ btnFetchGov.onclick = async () => {
   btnFetchGov.style.pointerEvents = 'none';
 
   try {
-    const response = await fetch(`/api/auth-pet?dogRegNo=${encodeURIComponent(dogRegNo)}&ownerBirth=${encodeURIComponent(ownerBirth)}`);
+    const response = await fetch(`/api/get-pet-data?dogRegNo=${encodeURIComponent(dogRegNo)}&ownerBirth=${encodeURIComponent(ownerBirth)}`);
     if (!response.ok) throw new Error(`서버 오류 (${response.status})`);
     const result = await response.json();
 
