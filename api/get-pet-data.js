@@ -1,26 +1,26 @@
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-  const { dogRegNo, ownerBirth } = req.query;
+  // CORS 헤더 설정
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
 
-  if (!dogRegNo || !ownerBirth) {
-    return res.status(400).json({ error: "동물등록번호와 생년월일이 필요합니다." });
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
   }
 
-  // 입력값 검증: 숫자만 허용
-  if (!/^\d{15}$/.test(dogRegNo)) {
-    return res.status(400).json({ error: "유효하지 않은 등록번호 형식입니다. (숫자 15자리 필수)" });
-  }
-  if (!/^\d{6}$/.test(ownerBirth)) {
-    return res.status(400).json({ error: "생년월일은 숫자 6자리(예: 900101)로 입력해주세요." });
-  }
-
+  const { dogRegNo, ownerBirth, pageNo, numOfRows, ...otherParams } = req.query;
   const API_KEY = process.env.DATA_GO_KR_API_KEY;
 
-  if (!API_KEY) {
+  if (!API_KEY || API_KEY === 'YOUR_GOVERNMENT_API_KEY_HERE') {
+    // 개발 모드 지원 (API 키 미설정 시 Mock 응답)
     console.log("[DEV MODE] 정부 API 키가 세팅되지 않아 가상의 인증 성공 응답을 내보냅니다.");
-
-    // Mock response
     return res.status(200).json({
       success: true,
       message: "API Key 미설정 (테스트 모드)",
@@ -29,8 +29,8 @@ module.exports = async (req, res) => {
         kindNm: "푸들",
         sexNm: "암컷",
         neuterYn: "중성",
-        dogRegNo: dogRegNo,
-        ownerBirth: ownerBirth,
+        dogRegNo: dogRegNo || '410123456789012',
+        ownerBirth: ownerBirth || '900101',
         orgNm: "경기도 성남시",
         officNm: "분당구청",
         vaccinationStatus: "완료 (2026-03-01)"
@@ -40,22 +40,28 @@ module.exports = async (req, res) => {
 
   try {
     const GOV_API_URL = 'https://apis.data.go.kr/1543061/animalInfoSrvc_v3/animalInfo_v3';
-    // v3 API에서는 dog_reg_no 또는 rfid_cd 중 하나만 있어도 되지만,
-    // 둘 다 보내는 것이 안전하며 owner_nm은 데이터가 없는 경우 조회가 안 될 수 있으므로 제외합니다.
+
+    // 기본 파라미터 구성
+    const params = {
+      serviceKey: API_KEY,
+      _type: 'json',
+      dog_reg_no: dogRegNo,
+      rfid_cd: dogRegNo, // v3에서는 rfid_cd와 dog_reg_no가 혼용되기도 함
+      owner_birth: ownerBirth,
+      ...otherParams
+    };
+
+    if (pageNo) params.pageNo = pageNo;
+    if (numOfRows) params.numOfRows = numOfRows;
+
     const response = await axios.get(GOV_API_URL, {
-      params: {
-        serviceKey: API_KEY,
-        dog_reg_no: dogRegNo,
-        rfid_cd: dogRegNo,
-        owner_birth: ownerBirth,
-        _type: 'json'
-      },
+      params,
       headers: { 'accept': '*/*' }
     });
 
     let header, body;
 
-    // _type=json을 요청했지만 서버에서 XML을 반환하는 경우에 대비한 방어 코드
+    // XML 반환 대비 방어 코드
     if (typeof response.data === 'string' && response.data.includes('<?xml')) {
       const getValue = (tag) => {
         const match = response.data.match(new RegExp(`<${tag}>(.*?)<\/${tag}>`));
@@ -78,17 +84,25 @@ module.exports = async (req, res) => {
     const hasData = body?.item && (body.item.dogNm || Object.keys(body.item).length > 5);
 
     if (isSuccess) {
-      const petData = hasData ? body.item : {
-        dogNm: "두부",
-        kindNm: "말티즈 (테스트)",
-        sexNm: "암컷",
-        neuterYn: "중성",
-        dogRegNo: dogRegNo,
-        ownerBirth: ownerBirth,
-        orgNm: "서울특별시 강남구",
-        officNm: "역삼1동 주민센터",
-        vaccinationStatus: "완료 (2026-04-01)"
-      };
+      let petData;
+      if (hasData) {
+        petData = { ...body.item };
+        // UI에서 기대하는 필드명 보정 및 입력값 병합
+        petData.dogRegNo = petData.dogRegNo || dogRegNo;
+        petData.ownerBirth = petData.ownerBirth || ownerBirth;
+      } else {
+        petData = {
+          dogNm: "두부",
+          kindNm: "말티즈 (테스트)",
+          sexNm: "암컷",
+          neuterYn: "중성",
+          dogRegNo: dogRegNo,
+          ownerBirth: ownerBirth,
+          orgNm: "서울특별시 강남구",
+          officNm: "역삼1동 주민센터",
+          vaccinationStatus: "완료 (2026-04-01)"
+        };
+      }
 
       return res.status(200).json({
         success: true,
