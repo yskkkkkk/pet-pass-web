@@ -1,5 +1,4 @@
 const axios = require('axios');
-const cheerio = require('cheerio');
 const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
@@ -67,7 +66,7 @@ async function fetchFromApiFallback() {
  * 반려동물 동반 가능 업소 데이터를 식품안전나라에서 가져와 JSON으로 저장하는 스크립트
  */
 async function syncPetFriendlyStores() {
-  const portalUrl = process.env.PET_PORTAL_URL || 'https://www.foodsafetykorea.go.kr/portal/petKorea.do';
+  const downloadUrl = process.env.PET_EXCEL_URL || 'https://www.foodsafetykorea.go.kr/portal/petKorea/downloadExcel.do';
   const dataDir = path.join(process.cwd(), 'data');
   const outputPath = path.join(dataDir, 'stores.json');
 
@@ -79,66 +78,7 @@ async function syncPetFriendlyStores() {
       fs.mkdirSync(dataDir, { recursive: true });
     }
 
-    // 2. 포털 페이지에서 엑셀 다운로드 링크 추출
-    console.log(`🔗 포털 접속 중: ${portalUrl}`);
-    const { data: html } = await axios.get(portalUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-      }
-    });
-    const $ = cheerio.load(html);
-
-    let downloadUrl = '';
-
-    // 1. '반려동물' 관련 .xlsx 링크 탐색 (기존 방식)
-    $('a').each((_, el) => {
-      const text = $(el).text();
-      const href = $(el).attr('href');
-      if (text.includes('반려동물') && (text && (text.includes('xlsx') || (href && href.includes('xlsx'))))) {
-        downloadUrl = href || '';
-      }
-    });
-
-    // 2. 버튼 기반 탐색 (사용자 제보: fn_downloadExcel 활용)
-    if (!downloadUrl) {
-      $('button.btn-download, button:contains("반려동물")').each((_, el) => {
-        const onclick = $(el).attr('onclick');
-        if (onclick && onclick.includes('downloadExcel')) {
-          console.log('💡 다운로드 버튼 발견 (onclick="fn_downloadExcel")');
-          // 실제 사이트의 자바스크립트 로직을 추적할 수 없으므로, 페이지 내의 모든 .xlsx 링크나
-          // 특정 패턴의 다운로드 링크를 다시 한번 정밀 탐색합니다.
-          $('a[href*="download"], a[href*=".xlsx"], a[href*="fileId"]').each((__, aEl) => {
-            const aHref = $(aEl).attr('href');
-            if (aHref && (aHref.includes('xlsx') || aHref.includes('download'))) {
-              downloadUrl = aHref;
-            }
-          });
-        }
-      });
-    }
-
-    // 3. 최후의 수단: .xlsx 확장자를 가진 모든 링크
-    if (!downloadUrl) {
-       $('a[href*=".xlsx"]').each((_, el) => {
-          downloadUrl = $(el).attr('href') || '';
-       });
-    }
-
-    if (!downloadUrl) {
-      // 만약 여전히 못 찾았다면, 공공데이터 포털의 일반적인 다운로드 경로 패턴 시도 (추측)
-      // 실제 환경에서는 이 로그를 통해 페이지 구조를 파악해야 함
-      console.warn('⚠️ 직접적인 다운로드 링크를 찾지 못했습니다. 페이지 내 스크립트 또는 폼을 분석해야 할 수 있습니다.');
-
-      // Fallback: I1200 API를 통한 수집으로 전환하도록 유도 (다음 단계에서 구현)
-      throw new Error('엑셀 다운로드 링크를 자동 추출할 수 없습니다. (사이트 구조 변경 가능성)');
-    }
-
-    // 상대 경로 처리
-    if (!downloadUrl.startsWith('http')) {
-      const baseUrl = new URL(portalUrl);
-      downloadUrl = `${baseUrl.protocol}//${baseUrl.host}${downloadUrl.startsWith('/') ? '' : '/'}${downloadUrl}`;
-    }
-
+    // 2. 엑셀 다운로드 URL 직접 사용
     console.log(`📥 엑셀 다운로드 중: ${downloadUrl}`);
 
     // 3. 엑셀 파일 다운로드 (바이너리)
