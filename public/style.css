@@ -565,7 +565,7 @@ select.icon-tag:focus {
 .map-fab-style {
   width: 36px;
   height: 36px;
-  background: var(--surface);
+  background: #FFFFFF;
   border-radius: 8px;
   border: 1px solid var(--border);
   cursor: pointer;
@@ -592,7 +592,7 @@ select.icon-tag:focus {
 .map-fab-style svg {
   width: 20px;
   height: 20px;
-  stroke: var(--primary);
+  stroke: #000000;
   stroke-width: 2.5px;
 }
 

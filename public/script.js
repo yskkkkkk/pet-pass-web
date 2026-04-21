@@ -243,7 +243,7 @@ function updateMapMarkers(data) {
   // Using a data URI SVG for the custom pin
   const pinSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42">
-      <path d="M16 42L4.686 28.523C1.657 24.945 0 20.55 0 16C0 7.163 7.163 0 16 0C24.837 0 32 7.163 32 16C32 20.55 30.343 24.945 27.314 28.523L16 42Z" fill="#D39530" stroke="#FFFFFF" stroke-width="2"/>
+      <path d="M16 42L4.686 28.523C1.657 24.945 0 20.55 0 16C0 7.163 7.163 0 16 0C24.837 0 32 7.163 32 16C32 20.55 30.343 24.945 27.314 28.523L16 42Z" fill="#A3E635" stroke="#FFFFFF" stroke-width="2"/>
       <circle cx="16" cy="16" r="6" fill="#FFFFFF"/>
     </svg>
   `.trim();
@@ -1109,6 +1109,10 @@ if (btnMyLocation) {
 
         beginSystemMove();
         map.panTo(locPosition);
+
+        if (window.minimizeBottomSheet) {
+          window.minimizeBottomSheet();
+        }
 
         // 내 위치 마커 표시 (선택 사항, 여기서는 이동만 수행)
         btnMyLocation.style.animation = 'none';
