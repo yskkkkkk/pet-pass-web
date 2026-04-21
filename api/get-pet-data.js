@@ -1,5 +1,16 @@
 const axios = require('axios');
 
+const ERROR_MESSAGES = {
+  'Unauthorized': 'API 인증키가 존재하지 않거나 유효하지 않습니다.\n공공데이터포털에서 발급받은 인증키 정보를 확인해 주세요.',
+  'Forbidden': 'API 서비스에 대한 신청내역이 확인되지 않습니다.\n해당 API의 활용신청 여부와 승인 상태를 확인해 주세요.',
+  'API not found': 'API 서비스가 존재하지 않습니다.\n호출 URL에 오타가 없는지, 폐기된 API는 아닌지 확인해 주세요.',
+  'Error forwarding request to backend server': '기관 API 서버와의 연결에 실패했습니다.\n일시적인 네트워크 오류일 수 있으니 잠시 후 다시 시도해 주세요.',
+  'Error receiving response from backend server': '기관 API 서버로부터 응답을 받지 못했습니다.\n문제가 계속될 경우, 제공기관에 문의바랍니다.',
+  'API rate limit exceeded': '현재 많은 사용자가 API를 호출하고 있어, 서버의 최대 동시 요청 수를 초과하였습니다.\n잠시 후 다시 호출해주시기 바랍니다.',
+  'API token quota exceeded': 'API 서비스의 일일 호출 허용량을 초과하였습니다.\n초기화된 이후 다시 이용 바랍니다.',
+  'Unexpected error': '일시적인 시스템 오류가 발생하였습니다.\n문제가 반복될 경우 활용지원센터로 문의바랍니다.'
+};
+
 module.exports = async (req, res) => {
   // CORS 헤더 설정
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -19,8 +30,6 @@ module.exports = async (req, res) => {
   const API_KEY = process.env.DATA_GO_KR_API_KEY;
 
   if (!API_KEY || API_KEY === 'YOUR_GOVERNMENT_API_KEY_HERE') {
-    // 개발 모드 지원 (API 키 미설정 시 Mock 응답)
-    console.log("[DEV MODE] 정부 API 키가 세팅되지 않아 가상의 인증 성공 응답을 내보냅니다.");
     return res.status(200).json({
       success: true,
       message: "API Key 미설정 (테스트 모드)",
@@ -31,6 +40,7 @@ module.exports = async (req, res) => {
         neuterYn: "중성",
         dogRegNo: dogRegNo || '410123456789012',
         ownerBirth: ownerBirth || '900101',
+        birthDt: "2024-03-01",
         orgNm: "경기도 성남시",
         officNm: "분당구청",
         vaccinationStatus: "완료 (2026-03-01)"
@@ -41,12 +51,11 @@ module.exports = async (req, res) => {
   try {
     const GOV_API_URL = 'https://apis.data.go.kr/1543061/animalInfoSrvc_v3/animalInfo_v3';
 
-    // 기본 파라미터 구성
     const params = {
       serviceKey: API_KEY,
       _type: 'json',
       dog_reg_no: dogRegNo,
-      rfid_cd: dogRegNo, // v3에서는 rfid_cd와 dog_reg_no가 혼용되기도 함
+      rfid_cd: dogRegNo,
       owner_birth: ownerBirth,
       ...otherParams
     };
@@ -59,9 +68,17 @@ module.exports = async (req, res) => {
       headers: { 'accept': '*/*' }
     });
 
+    // 공공데이터포털 에러 메시지 처리 (바디에 텍스트로 에러가 오는 경우)
+    if (typeof response.data === 'string') {
+      for (const [key, msg] of Object.entries(ERROR_MESSAGES)) {
+        if (response.data.includes(key)) {
+          return res.status(400).json({ success: false, error: msg });
+        }
+      }
+    }
+
     let header, body;
 
-    // XML 반환 대비 방어 코드
     if (typeof response.data === 'string' && response.data.includes('<?xml')) {
       const getValue = (tag) => {
         const match = response.data.match(new RegExp(`<${tag}>(.*?)<\/${tag}>`));
@@ -73,7 +90,8 @@ module.exports = async (req, res) => {
         kindNm: getValue('kindNm'),
         sexNm: getValue('sexNm'),
         neuterYn: getValue('neuterYn'),
-        orgNm: getValue('orgNm')
+        orgNm: getValue('orgNm'),
+        birthDt: getValue('birthDt')
       }};
     } else {
       header = response.data?.response?.header;
@@ -84,41 +102,34 @@ module.exports = async (req, res) => {
     const hasData = body?.item && (body.item.dogNm || Object.keys(body.item).length > 5);
 
     if (isSuccess) {
-      let petData;
-      if (hasData) {
-        petData = { ...body.item };
-        // UI에서 기대하는 필드명 보정 및 입력값 병합
-        petData.dogRegNo = petData.dogRegNo || dogRegNo;
-        petData.ownerBirth = petData.ownerBirth || ownerBirth;
-      } else {
-        petData = {
-          dogNm: "두부",
-          kindNm: "말티즈 (테스트)",
-          sexNm: "암컷",
-          neuterYn: "중성",
-          dogRegNo: dogRegNo,
-          ownerBirth: ownerBirth,
-          orgNm: "서울특별시 강남구",
-          officNm: "역삼1동 주민센터",
-          vaccinationStatus: "완료 (2026-04-01)"
-        };
+      if (!hasData) {
+        return res.status(200).json({
+          success: false,
+          errorTitle: "등록 정보를 확인할 수 없어요",
+          error: "국가동물보호관리시스템에 등록된 정보를 가져오지 못했습니다. 번호가 정확한데도 계속 안 된다면, 아직 승인 대기 중일 수 있습니다."
+        });
       }
+
+      const petData = { ...body.item };
+      petData.dogRegNo = petData.dogRegNo || dogRegNo;
+      petData.ownerBirth = petData.ownerBirth || ownerBirth;
 
       return res.status(200).json({
         success: true,
-        message: hasData ? "국가동물보호정보시스템 인증에 성공하였습니다." : "정부 시스템 인증 성공 (테스트 데이터 모드입니다.)",
+        message: "국가동물보호정보시스템 인증에 성공하였습니다.",
         data: petData
       });
     } else {
+      const errMsg = ERROR_MESSAGES[header?.resultMsg] || header?.resultMsg || "인증 실패";
       return res.status(400).json({
         success: false,
-        error: header?.resultMsg || "인증 실패"
+        error: errMsg
       });
     }
   } catch (error) {
     console.error("정부 API 통신 에러:", error.message);
     return res.status(500).json({
-      error: "정부망 통신 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+      error: "기관 API 서버와의 연결에 실패했습니다.\n일시적인 네트워크 오류일 수 있으니 잠시 후 다시 시도해 주세요."
     });
   }
 };
