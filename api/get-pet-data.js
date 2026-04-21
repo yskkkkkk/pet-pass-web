@@ -84,17 +84,25 @@ module.exports = async (req, res) => {
     const hasData = body?.item && (body.item.dogNm || Object.keys(body.item).length > 5);
 
     if (isSuccess) {
-      const petData = hasData ? body.item : {
-        dogNm: "두부",
-        kindNm: "말티즈 (테스트)",
-        sexNm: "암컷",
-        neuterYn: "중성",
-        dogRegNo: dogRegNo,
-        ownerBirth: ownerBirth,
-        orgNm: "서울특별시 강남구",
-        officNm: "역삼1동 주민센터",
-        vaccinationStatus: "완료 (2026-04-01)"
-      };
+      let petData;
+      if (hasData) {
+        petData = { ...body.item };
+        // UI에서 기대하는 필드명 보정 및 입력값 병합
+        petData.dogRegNo = petData.dogRegNo || dogRegNo;
+        petData.ownerBirth = petData.ownerBirth || ownerBirth;
+      } else {
+        petData = {
+          dogNm: "두부",
+          kindNm: "말티즈 (테스트)",
+          sexNm: "암컷",
+          neuterYn: "중성",
+          dogRegNo: dogRegNo,
+          ownerBirth: ownerBirth,
+          orgNm: "서울특별시 강남구",
+          officNm: "역삼1동 주민센터",
+          vaccinationStatus: "완료 (2026-04-01)"
+        };
+      }
 
       return res.status(200).json({
         success: true,
