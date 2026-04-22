@@ -4,11 +4,18 @@ const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
 const cron = require('node-cron');
+const { createClient } = require('@supabase/supabase-js');
 const { syncPetFriendlyStores } = require('./scripts/sync-stores');
 const getPetData = require('./api/get-pet-data');
 require('dotenv').config();
 
 const app = express();
+
+// Supabase 초기화
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
@@ -31,23 +38,34 @@ app.get('/', (req, res) => {
 
 /**
  * [Stores API]
- * 서버측 JSON 파일에서 매장 데이터를 읽어 반환합니다.
+ * Supabase DB에서 매장 데이터를 조회하여 반환합니다.
  */
-app.get('/api/stores', (req, res) => {
-  const filePath = path.join(__dirname, 'data', 'stores.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error("매장 데이터를 읽는 중 오류 발생:", err);
-      return res.status(500).json({ error: "매장 데이터를 불러올 수 없습니다." });
+app.get('/api/stores', async (req, res) => {
+  try {
+    const allStores = [];
+    let from = 0;
+    let to = 999;
+
+    while (true) {
+      const { data, error } = await supabase
+        .from('stores')
+        .select('*')
+        .range(from, to)
+        .order('name', { ascending: true });
+
+      if (error) throw error;
+      allStores.push(...data);
+
+      if (data.length < 1000) break;
+      from += 1000;
+      to += 1000;
     }
-    try {
-      const stores = JSON.parse(data);
-      res.json(stores);
-    } catch (parseErr) {
-      console.error("JSON 파싱 에러:", parseErr);
-      res.status(500).json({ error: "데이터 형식이 올바르지 않습니다." });
-    }
-  });
+
+    res.json(allStores);
+  } catch (err) {
+    console.error("매장 데이터를 가져오는 중 오류 발생:", err);
+    res.status(500).json({ error: "매장 데이터를 불러올 수 없습니다." });
+  }
 });
 
 /**

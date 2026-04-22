@@ -2,7 +2,14 @@ const axios = require('axios');
 const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
+const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
+
+// Supabase 초기화 (배치 작업은 서비스 롤 키 사용 권장)
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY
+);
 
 function pickFirst(row, keys) {
   for (const key of keys) {
@@ -50,35 +57,57 @@ async function geocodeAddress(address) {
 }
 
 /**
- * 반려동물 동반 가능 업소 데이터를 식품안전나라에서 가져와 JSON으로 저장하는 스크립트
+ * 반려동물 동반 가능 업소 데이터를 식품안전나라에서 가져와 Supabase DB로 저장하는 스크립트
  */
 async function syncPetFriendlyStores() {
   const downloadUrl = process.env.PET_EXCEL_URL || 'https://www.foodsafetykorea.go.kr/portal/petKorea/downloadExcel.do';
-  const dataDir = path.join(process.cwd(), 'data');
-  const outputPath = path.join(dataDir, 'stores.json');
   const kakaoApiKey = getKakaoApiKey();
 
-  console.log('🚀 데이터 동기화 시작...');
+  console.log('🚀 데이터 동기화 시작 (Supabase 기반)...');
 
   try {
     if (!kakaoApiKey) {
       throw new Error('KAKAO_REST_API_KEY가 설정되어 있지 않습니다.');
     }
 
-    // 1. 데이터 저장 디렉토리 확인 및 생성
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
+    // 1. 기존 DB 데이터로부터 지오코딩 캐시 로드 (Pagination 적용하여 전체 로드)
+    console.log('📡 기존 DB에서 좌표 데이터 로드 중...');
+    const existingNameByAddress = new Map();
+    const geocodeCache = new Map();
 
-    let existingStores = [];
-    if (fs.existsSync(outputPath)) {
-      existingStores = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+    let from = 0;
+    let to = 999;
+    let totalLoaded = 0;
+
+    while (true) {
+      const { data: dbStores, error: dbError } = await supabase
+        .from('stores')
+        .select('name, address, lat, lng')
+        .range(from, to);
+
+      if (dbError) {
+        console.warn('⚠️ DB 데이터 로드 실패 (캐시 없이 진행):', dbError.message);
+        break;
+      }
+
+      if (dbStores) {
+        dbStores.forEach(s => {
+          if (s.address && s.name) {
+            existingNameByAddress.set(s.address, s.name);
+          }
+          if (s.address && s.lat && s.lng) {
+            geocodeCache.set(s.address, { lat: s.lat, lng: s.lng });
+          }
+        });
+        totalLoaded += dbStores.length;
+        if (dbStores.length < 1000) break;
+      } else {
+        break;
+      }
+      from += 1000;
+      to += 1000;
     }
-    const existingNameByAddress = new Map(
-      existingStores
-        .filter(store => store?.address && store?.originalName)
-        .map(store => [store.address, store.originalName])
-    );
+    console.log(`✅ ${totalLoaded}개의 데이터를 불러와 ${geocodeCache.size}개의 좌표 캐시를 확보했습니다.`);
 
     // 2. 엑셀 다운로드 URL 직접 사용
     console.log(`📥 엑셀 다운로드 중: ${downloadUrl}`);
@@ -115,10 +144,11 @@ async function syncPetFriendlyStores() {
       '프?츠': '프릳츠'
     };
 
-    // 5. 데이터 변환 (사용자 요청 포맷)
+    // 5. 데이터 변환 및 지오코딩
     const stores = [];
-    const geocodeCache = new Map();
     let hasFirstGeocodeAttempt = false;
+
+    console.log('🔄 데이터 정규화 및 지오코딩 진행 중...');
     for (let index = 0; index < jsonData.length; index++) {
       const row = jsonData[index];
       let name = row['업소명'] || 'Unknown';
@@ -150,14 +180,17 @@ async function syncPetFriendlyStores() {
       if (address) {
         if (!geocodeCache.has(address)) {
           const geocoded = await geocodeAddress(address);
-          if (!hasFirstGeocodeAttempt) {
+          if (!hasFirstGeocodeAttempt && !geocodeCache.size) {
             hasFirstGeocodeAttempt = true;
             if (!geocoded) {
-              throw new Error(`첫 번째 지오코딩 시도 실패: ${address}`);
+              // 첫 시도 실패는 API 키나 네트워크 문제일 가능성이 큼
+              console.warn(`⚠️ 첫 번째 신규 지오코딩 시도 실패: ${address}`);
             }
           }
           geocodeCache.set(address, geocoded);
-          await new Promise(resolve => setTimeout(resolve, 50));
+          if (geocoded) {
+            await new Promise(resolve => setTimeout(resolve, 100)); // Rate limit 방지
+          }
         }
         const geocoded = geocodeCache.get(address);
         lat = geocoded?.lat || 0;
@@ -165,29 +198,56 @@ async function syncPetFriendlyStores() {
       }
 
       stores.push({
-        id: index + 1,
         name,
-        originalName: name,
+        address,
         type,
         region,
-        address,
         lat,
         lng,
-        verified: true
+        verified: true,
+        phone_number: row['전화번호'] || row['연락처'] || null,
+        description: row['설명'] || row['개요'] || null,
+        naver_smartplace_link: row['네이버링크'] || row['스마트플레이스'] || null,
+        updated_at: new Date().toISOString()
       });
     }
 
-    // 안전장치: 데이터가 없을 경우 기존 파일을 덮어쓰지 않음
+    // 안전장치: 데이터가 없을 경우 중단
     if (stores.length === 0) {
-      console.error('❌ 수집된 데이터가 0건입니다. 기존 파일을 유지합니다.');
+      console.error('❌ 수집된 데이터가 0건입니다.');
       return { success: false, error: 'No data collected' };
     }
 
-    // 6. JSON 파일로 저장
-    fs.writeFileSync(outputPath, JSON.stringify(stores, null, 2), 'utf8');
+    // 6. Supabase UPSERT (Chunk 단위)
+    console.log(`📤 DB에 데이터 저장 중... (총 ${stores.length}건)`);
+    const CHUNK_SIZE = 100;
+    let successCount = 0;
 
-    console.log(`✅ 저장 완료: ${outputPath} (${stores.length} 개의 데이터)`);
-    return { success: true, count: stores.length };
+    for (let i = 0; i < stores.length; i += CHUNK_SIZE) {
+      const chunk = stores.slice(i, i + CHUNK_SIZE);
+      const { error } = await supabase
+        .from('stores')
+        .upsert(chunk, {
+          onConflict: 'name,address',
+          ignoreDuplicates: false
+        });
+
+      if (error) {
+        console.error(`❌ 청크 저장 실패 (인덱스 ${i}):`, error.message);
+      } else {
+        successCount += chunk.length;
+        process.stdout.write(`\r진행률: ${Math.round((successCount / stores.length) * 100)}% (${successCount}/${stores.length})`);
+      }
+    }
+
+    console.log(`\n✅ DB 동기화 완료: ${successCount} 개의 데이터가 처리되었습니다.`);
+
+    // 로컬 백업용 (선택 사항)
+    const dataDir = path.join(process.cwd(), 'data');
+    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(path.join(dataDir, 'stores.json'), JSON.stringify(stores, null, 2), 'utf8');
+
+    return { success: true, count: successCount };
   } catch (error) {
     console.error(`❌ 데이터 동기화 실패: ${error.message}`);
     return { success: false, error: error.message };
