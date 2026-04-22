@@ -18,8 +18,12 @@ function hasBrokenKoreanText(value) {
   return /[?？�]/.test(String(value || ''));
 }
 
+function getKakaoApiKey() {
+  return process.env.KAKAO_REST_API_KEY;
+}
+
 async function geocodeAddress(address) {
-  const kakaoApiKey = process.env.KAKAO_MAP_API_KEY;
+  const kakaoApiKey = getKakaoApiKey();
   if (!kakaoApiKey || !address) return null;
 
   try {
@@ -38,8 +42,10 @@ async function geocodeAddress(address) {
       lng: parseFloat(first.x)
     };
   } catch (error) {
-    console.warn(`⚠️ 주소 지오코딩 실패: ${address} (${error.message})`);
-    return null;
+    if (error.response?.status === 401) {
+      throw new Error('Kakao Local API 인증 실패(401): KAKAO_REST_API_KEY를 확인해주세요.');
+    }
+    throw new Error(`주소 지오코딩 실패: ${address} (${error.message})`);
   }
 }
 
@@ -50,13 +56,13 @@ async function syncPetFriendlyStores() {
   const downloadUrl = process.env.PET_EXCEL_URL || 'https://www.foodsafetykorea.go.kr/portal/petKorea/downloadExcel.do';
   const dataDir = path.join(process.cwd(), 'data');
   const outputPath = path.join(dataDir, 'stores.json');
-  const kakaoApiKey = process.env.KAKAO_MAP_API_KEY;
+  const kakaoApiKey = getKakaoApiKey();
 
   console.log('🚀 데이터 동기화 시작...');
 
   try {
     if (!kakaoApiKey) {
-      throw new Error('KAKAO_MAP_API_KEY가 설정되어 있지 않아 카카오 지오코딩을 수행할 수 없습니다.');
+      throw new Error('KAKAO_REST_API_KEY가 설정되어 있지 않습니다.');
     }
 
     // 1. 데이터 저장 디렉토리 확인 및 생성
@@ -112,6 +118,7 @@ async function syncPetFriendlyStores() {
     // 5. 데이터 변환 (사용자 요청 포맷)
     const stores = [];
     const geocodeCache = new Map();
+    let hasFirstGeocodeAttempt = false;
     for (let index = 0; index < jsonData.length; index++) {
       const row = jsonData[index];
       let name = row['업소명'] || 'Unknown';
@@ -143,6 +150,12 @@ async function syncPetFriendlyStores() {
       if (address) {
         if (!geocodeCache.has(address)) {
           const geocoded = await geocodeAddress(address);
+          if (!hasFirstGeocodeAttempt) {
+            hasFirstGeocodeAttempt = true;
+            if (!geocoded) {
+              throw new Error(`첫 번째 지오코딩 시도 실패: ${address}`);
+            }
+          }
           geocodeCache.set(address, geocoded);
           await new Promise(resolve => setTimeout(resolve, 50));
         }

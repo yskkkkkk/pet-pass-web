@@ -15,7 +15,7 @@ jobs:
       contents: write
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
-      KAKAO_MAP_API_KEY: ${{ secrets.KAKAO_MAP_API_KEY }}
+      KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
       PET_EXCEL_URL: ${{ secrets.PET_EXCEL_URL }}
     steps:
       - name: Checkout Repository
@@ -32,8 +32,8 @@ jobs:
 
       - name: Validate required secrets
         run: |
-          if [ -z "$KAKAO_MAP_API_KEY" ]; then
-            echo "KAKAO_MAP_API_KEY secret is not set."
+          if [ -z "$KAKAO_REST_API_KEY" ]; then
+            echo "KAKAO_REST_API_KEY secret 이 필요합니다."
             exit 1
           fi
 
