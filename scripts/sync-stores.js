@@ -62,8 +62,9 @@ async function geocodeAddress(address) {
 async function syncPetFriendlyStores() {
   const downloadUrl = process.env.PET_EXCEL_URL || 'https://www.foodsafetykorea.go.kr/portal/petKorea/downloadExcel.do';
   const kakaoApiKey = getKakaoApiKey();
+  const batchTimestamp = new Date().toISOString();
 
-  console.log('🚀 데이터 동기화 시작 (Supabase 기반)...');
+  console.log(`🚀 데이터 동기화 시작 (배치 시간: ${batchTimestamp})...`);
 
   try {
     if (!kakaoApiKey) {
@@ -208,7 +209,7 @@ async function syncPetFriendlyStores() {
         phone_number: row['전화번호'] || row['연락처'] || null,
         description: row['설명'] || row['개요'] || null,
         naver_smartplace_link: row['네이버링크'] || row['스마트플레이스'] || null,
-        updated_at: new Date().toISOString()
+        updated_at: batchTimestamp
       });
     }
 
@@ -241,6 +242,24 @@ async function syncPetFriendlyStores() {
     }
 
     console.log(`\n✅ DB 동기화 완료: ${successCount} 개의 데이터가 처리되었습니다.`);
+
+    // 7. 삭제 로직 (이번 배치에서 업데이트되지 않은 데이터 제거)
+    // 안전장치: 수집된 데이터가 일정 수 이상일 때만 삭제 진행 (예: 1000개)
+    if (successCount > 1000) {
+      console.log('🧹 오래된 데이터(사라진 매장) 정리 중...');
+      const { error: deleteError, count: deletedCount } = await supabase
+        .from('stores')
+        .delete({ count: 'exact' })
+        .lt('updated_at', batchTimestamp);
+
+      if (deleteError) {
+        console.error('❌ 데이터 정리 실패:', deleteError.message);
+      } else {
+        console.log(`✅ 정리 완료: ${deletedCount || 0}개의 사라진 매장 데이터가 삭제되었습니다.`);
+      }
+    } else {
+      console.warn('⚠️ 수집된 데이터가 너무 적어 자동 삭제를 건너뜁니다. (안전 모드)');
+    }
 
     // 로컬 백업용 (선택 사항)
     const dataDir = path.join(process.cwd(), 'data');

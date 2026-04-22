@@ -32,6 +32,8 @@ async function migrateData() {
   const uniqueStores = Array.from(uniqueStoresMap.values());
   console.log(`중복 제거 후 ${uniqueStores.length}개의 데이터를 마이그레이션합니다.`);
 
+  const batchTimestamp = new Date().toISOString();
+
   for (let i = 0; i < uniqueStores.length; i += CHUNK_SIZE) {
     const chunk = uniqueStores.slice(i, i + CHUNK_SIZE).map(s => ({
       name: s.name,
@@ -41,7 +43,10 @@ async function migrateData() {
       lat: s.lat,
       lng: s.lng,
       verified: s.verified ?? true,
-      updated_at: new Date().toISOString()
+      phone_number: s.phone_number || null,
+      description: s.description || null,
+      naver_smartplace_link: s.naver_smartplace_link || null,
+      updated_at: batchTimestamp
     }));
 
     const { error } = await supabase
