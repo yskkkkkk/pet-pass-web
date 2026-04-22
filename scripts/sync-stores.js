@@ -71,9 +71,9 @@ async function syncPetFriendlyStores() {
       throw new Error('KAKAO_REST_API_KEY가 설정되어 있지 않습니다.');
     }
 
-    // 1. 기존 DB 데이터로부터 지오코딩 캐시 로드 (Pagination 적용하여 전체 로드)
-    console.log('📡 기존 DB에서 좌표 데이터 로드 중...');
-    const existingNameByAddress = new Map();
+    // 1. 기존 DB 데이터 전체 로드 (비교 및 캐싱용)
+    console.log('📡 기존 DB 데이터 로드 및 차분 분석 준비 중...');
+    const dbStoreMap = new Map(); // Key: name|address
     const geocodeCache = new Map();
 
     let from = 0;
@@ -83,19 +83,18 @@ async function syncPetFriendlyStores() {
     while (true) {
       const { data: dbStores, error: dbError } = await supabase
         .from('stores')
-        .select('name, address, lat, lng')
+        .select('*')
         .range(from, to);
 
       if (dbError) {
-        console.warn('⚠️ DB 데이터 로드 실패 (캐시 없이 진행):', dbError.message);
+        console.warn('⚠️ DB 데이터 로드 실패:', dbError.message);
         break;
       }
 
       if (dbStores) {
         dbStores.forEach(s => {
-          if (s.address && s.name) {
-            existingNameByAddress.set(s.address, s.name);
-          }
+          const key = `${s.name}|${s.address}`;
+          dbStoreMap.set(key, s);
           if (s.address && s.lat && s.lng) {
             geocodeCache.set(s.address, { lat: s.lat, lng: s.lng });
           }
@@ -108,7 +107,7 @@ async function syncPetFriendlyStores() {
       from += 1000;
       to += 1000;
     }
-    console.log(`✅ ${totalLoaded}개의 데이터를 불러와 ${geocodeCache.size}개의 좌표 캐시를 확보했습니다.`);
+    console.log(`✅ ${totalLoaded}개의 데이터를 불러왔습니다. (좌표 캐시: ${geocodeCache.size}개)`);
 
     // 2. 엑셀 다운로드 URL 직접 사용
     console.log(`📥 엑셀 다운로드 중: ${downloadUrl}`);
@@ -145,11 +144,13 @@ async function syncPetFriendlyStores() {
       '프?츠': '프릳츠'
     };
 
-    // 5. 데이터 변환 및 지오코딩
-    const stores = [];
+    // 5. 차분 분석 및 데이터 변환
+    const toUpsert = [];
+    const processedKeys = new Set();
     let hasFirstGeocodeAttempt = false;
+    let apiCallCount = 0;
 
-    console.log('🔄 데이터 정규화 및 지오코딩 진행 중...');
+    console.log('🔄 차분 분석(Diff) 및 지오코딩 진행 중...');
     for (let index = 0; index < jsonData.length; index++) {
       const row = jsonData[index];
       let name = row['업소명'] || 'Unknown';
@@ -160,45 +161,59 @@ async function syncPetFriendlyStores() {
       }
 
       const address = pickFirst(row, ['업소주소']);
+      if (!name || !address) continue;
+
+      const key = `${name}|${address}`;
+      if (processedKeys.has(key)) continue; // 엑셀 내 중복 제거
+      processedKeys.add(key);
+
       let type = pickFirst(row, ['업종']) || '기타';
-
-      // 수기 패치맵에 없는 깨진 문자(?, ？, �)는 기존 데이터(동일 주소)의 정상 상호명으로 보정
-      if (hasBrokenKoreanText(name)) {
-        const previousName = existingNameByAddress.get(address);
-        if (previousName && !hasBrokenKoreanText(previousName)) {
-          name = previousName;
-        }
-      }
-
-      // 업종 명칭 정규화 (UI 요구사항 반영)
       if (type === '휴게음식점') type = '카페';
       if (type === '제과점영업') type = '제과점';
 
       const region = pickFirst(row, ['지역']) || (address.split(' ')[0] || '');
-      let lat = 0;
-      let lng = 0;
+      const phone_number = row['전화번호'] || row['연락처'] || null;
+      const description = row['설명'] || row['개요'] || null;
+      const naver_link = row['네이버링크'] || row['스마트플레이스'] || null;
 
-      if (address) {
-        if (!geocodeCache.has(address)) {
-          const geocoded = await geocodeAddress(address);
-          if (!hasFirstGeocodeAttempt && !geocodeCache.size) {
-            hasFirstGeocodeAttempt = true;
-            if (!geocoded) {
-              // 첫 시도 실패는 API 키나 네트워크 문제일 가능성이 큼
-              console.warn(`⚠️ 첫 번째 신규 지오코딩 시도 실패: ${address}`);
-            }
-          }
-          geocodeCache.set(address, geocoded);
-          if (geocoded) {
-            await new Promise(resolve => setTimeout(resolve, 100)); // Rate limit 방지
-          }
-        }
-        const geocoded = geocodeCache.get(address);
-        lat = geocoded?.lat || 0;
-        lng = geocoded?.lng || 0;
+      // 기존 데이터 확인
+      const existing = dbStoreMap.get(key);
+
+      // 변경 여부 체크 (중요 필드 위주)
+      const isChanged = !existing ||
+                        existing.type !== type ||
+                        existing.region !== region ||
+                        existing.phone_number !== phone_number ||
+                        existing.description !== description ||
+                        existing.naver_smartplace_link !== naver_link;
+
+      if (!isChanged && existing.lat && existing.lng) {
+        // 변경사항 없고 좌표도 있으면 스킵 (DB에 updated_at만 갱신하기 위해 넣을 수도 있지만,
+        // 여기서는 완전 최적화를 위해 skip. 대신 아래 삭제 로직에서 key set으로 판별)
+        continue;
       }
 
-      stores.push({
+      // 지오코딩 (필요한 경우에만)
+      let lat = existing?.lat || 0;
+      let lng = existing?.lng || 0;
+
+      if (!lat || !lng) {
+        if (!geocodeCache.has(address)) {
+          const geocoded = await geocodeAddress(address);
+          apiCallCount++;
+          if (!hasFirstGeocodeAttempt && apiCallCount === 1) {
+            hasFirstGeocodeAttempt = true;
+            if (!geocoded) console.warn(`⚠️ 지오코딩 실패: ${address}`);
+          }
+          geocodeCache.set(address, geocoded);
+          if (geocoded) await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        const cached = geocodeCache.get(address);
+        lat = cached?.lat || 0;
+        lng = cached?.lng || 0;
+      }
+
+      toUpsert.push({
         name,
         address,
         type,
@@ -206,59 +221,51 @@ async function syncPetFriendlyStores() {
         lat,
         lng,
         verified: true,
-        phone_number: row['전화번호'] || row['연락처'] || null,
-        description: row['설명'] || row['개요'] || null,
-        naver_smartplace_link: row['네이버링크'] || row['스마트플레이스'] || null,
+        phone_number,
+        description,
+        naver_smartplace_link: naver_link,
         updated_at: batchTimestamp
       });
     }
 
-    // 안전장치: 데이터가 없을 경우 중단
-    if (stores.length === 0) {
-      console.error('❌ 수집된 데이터가 0건입니다.');
-      return { success: false, error: 'No data collected' };
-    }
-
-    // 6. Supabase UPSERT (Chunk 단위)
-    console.log(`📤 DB에 데이터 저장 중... (총 ${stores.length}건)`);
-    const CHUNK_SIZE = 100;
-    let successCount = 0;
-
-    for (let i = 0; i < stores.length; i += CHUNK_SIZE) {
-      const chunk = stores.slice(i, i + CHUNK_SIZE);
-      const { error } = await supabase
-        .from('stores')
-        .upsert(chunk, {
-          onConflict: 'name,address',
-          ignoreDuplicates: false
-        });
-
-      if (error) {
-        console.error(`❌ 청크 저장 실패 (인덱스 ${i}):`, error.message);
-      } else {
-        successCount += chunk.length;
-        process.stdout.write(`\r진행률: ${Math.round((successCount / stores.length) * 100)}% (${successCount}/${stores.length})`);
-      }
-    }
-
-    console.log(`\n✅ DB 동기화 완료: ${successCount} 개의 데이터가 처리되었습니다.`);
-
-    // 7. 삭제 로직 (이번 배치에서 업데이트되지 않은 데이터 제거)
-    // 안전장치: 수집된 데이터가 일정 수 이상일 때만 삭제 진행 (예: 1000개)
-    if (successCount > 1000) {
-      console.log('🧹 오래된 데이터(사라진 매장) 정리 중...');
-      const { error: deleteError, count: deletedCount } = await supabase
-        .from('stores')
-        .delete({ count: 'exact' })
-        .lt('updated_at', batchTimestamp);
-
-      if (deleteError) {
-        console.error('❌ 데이터 정리 실패:', deleteError.message);
-      } else {
-        console.log(`✅ 정리 완료: ${deletedCount || 0}개의 사라진 매장 데이터가 삭제되었습니다.`);
+    // 6. DB 반영 (신규/변경 데이터)
+    if (toUpsert.length > 0) {
+      console.log(`📤 신규/변경 데이터 저장 중... (${toUpsert.length}건)`);
+      const CHUNK_SIZE = 100;
+      for (let i = 0; i < toUpsert.length; i += CHUNK_SIZE) {
+        const chunk = toUpsert.slice(i, i + CHUNK_SIZE);
+        const { error } = await supabase.from('stores').upsert(chunk, { onConflict: 'name,address' });
+        if (error) console.error(`❌ UPSERT 실패:`, error.message);
       }
     } else {
-      console.warn('⚠️ 수집된 데이터가 너무 적어 자동 삭제를 건너뜁니다. (안전 모드)');
+      console.log('✅ 업데이트할 새로운 데이터가 없습니다.');
+    }
+
+    // 7. 삭제 로직 (엑셀에 없는 매장 제거)
+    // 엑셀에서 처리된 processedKeys에 포함되지 않은 DB 데이터들을 삭제
+    const toDeleteIds = [];
+    for (const [key, store] of dbStoreMap.entries()) {
+      if (!processedKeys.has(key)) {
+        toDeleteIds.push(store.id);
+      }
+    }
+
+    if (toDeleteIds.length > 0) {
+      // 안전장치: 전체 데이터의 30% 이상이 한 번에 삭제되려 하면 경고 후 중단
+      const deleteRatio = toDeleteIds.length / totalLoaded;
+      if (deleteRatio > 0.3 && totalLoaded > 100) {
+        console.error(`⚠️ 위함: 대량 삭제 감지 (${toDeleteIds.length}건, ${Math.round(deleteRatio*100)}%). 동기화를 중단합니다.`);
+        return { success: false, error: 'Massive deletion prevention triggered' };
+      }
+
+      console.log(`🧹 사라진 매장 정리 중... (${toDeleteIds.length}건)`);
+      const { error: delError } = await supabase
+        .from('stores')
+        .delete()
+        .in('id', toDeleteIds);
+
+      if (delError) console.error('❌ 삭제 실패:', delError.message);
+      else console.log('✅ 정리 완료.');
     }
 
     // 로컬 백업용 (선택 사항)
