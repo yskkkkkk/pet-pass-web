@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet-Pass 서비스 런칭 회고록 | Pet-Pass Dev Blog</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    body {
+      background-color: var(--bg-secondary);
+      font-family: 'Pretendard', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--text-primary);
+    }
+    
+    .blog-header {
+      background: var(--surface);
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .blog-header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .nav-buttons {
+      max-width: 800px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      background: var(--bg-secondary);
+      transform: translateY(-1px);
+    }
+
+    .blog-content {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 40px;
+      background: var(--bg-primary);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      line-height: 1.8;
+    }
+
+    .post-main-title {
+      font-size: 28px;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .post-date {
+      color: var(--text-tertiary);
+      font-size: 14px;
+      margin-bottom: 30px;
+      display: block;
+    }
+
+    .blog-content h3 {
+      font-size: 22px;
+      color: var(--text-primary);
+      margin-top: 40px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--bg-secondary);
+      padding-bottom: 10px;
+    }
+
+    .blog-content p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="blog-header glass">
+    <h1>🐾 Pet-Pass Dev Blog</h1>
+  </header>
+
+  <div class="nav-buttons">
+    <a href="/blog" class="btn-nav">
+      <span>←</span> 목록으로
+    </a>
+    <a href="/" class="btn-nav">
+      🏠 메인으로
+    </a>
+  </div>
+
+  <main class="blog-content glass">
+    <h1 class="post-main-title">Pet-Pass 서비스 런칭 회고록</h1>
+    <span class="post-date">2026. 04. 22</span>
+    
+    <h3>1. 시작하면서</h3>
+    <p>반려동물과 함께 갈 수 있는 장소를 찾는 것은 생각보다 쉽지 않은 일이었습니다. 리뷰를 하나하나 확인하며 전화를 돌리던 불편함을 겪고 난 후, 조금이라도 더 쉽고 확실하게 공공데이터 기반으로 정보를 모아보자는 생각에 이 프로젝트를 시작하게 되었습니다.</p>
+
+    <h3>2. 기술적 도전</h3>
+    <p>바텀시트(Bottom Sheet) 형태의 모바일 UI를 구현하는 과정은 쉽지 않았습니다. 지도 인터랙션과 스크롤 이벤트가 충돌하는 문제를 해결하기 위해 다양한 방식의 터치 이벤트 처리를 시도했습니다. 결과적으로 네이티브 앱에 가까운 부드러운 전환을 만들 수 있었습니다.</p>
+
+    <h3>3. 앞으로의 계획</h3>
+    <p>더 많은 사람들이 편하게 동물병원, 애견카페 등의 정보를 공유할 수 있도록 지속적인 업데이트를 계획 중입니다. 앞으로도 해당 블로그를 통해 업데이트 내역과 개발기를 기록해 나가겠습니다.</p>
+  </main>
+
+</body>
+</html>
