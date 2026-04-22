@@ -4,61 +4,48 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-/**
- * 식품안전나라 Open API (I1200)를 사용하여 데이터를 가져오는 폴백 함수
- */
-async function fetchFromApiFallback() {
-  const apiKey = process.env.FOOD_SAFETY_API_KEY || 'sample';
-  const baseUrl = `https://openapi.foodsafetykorea.go.kr/api/${apiKey}/I1200/json`;
+function pickFirst(row, keys) {
+  for (const key of keys) {
+    const value = row[key];
+    if (value !== undefined && value !== null && String(value).trim() !== '') {
+      return String(value).trim();
+    }
+  }
+  return '';
+}
 
-  console.log('🔄 API를 통한 데이터 수집 시도 중 (I1200)...');
+function hasBrokenKoreanText(value) {
+  return /[?？�]/.test(String(value || ''));
+}
+
+function getKakaoApiKey() {
+  return process.env.KAKAO_REST_API_KEY;
+}
+
+async function geocodeAddress(address) {
+  const kakaoApiKey = getKakaoApiKey();
+  if (!kakaoApiKey || !address) return null;
 
   try {
-    // 1. 전체 데이터 개수 확인
-    const initRes = await axios.get(`${baseUrl}/1/1`);
-    const totalCount = parseInt(initRes.data?.I1200?.total_count || '0');
-
-    if (totalCount === 0) {
-      throw new Error('API에서 검색된 데이터가 없습니다.');
-    }
-
-    console.log(`📊 총 ${totalCount}개의 데이터를 가져옵니다...`);
-
-    let allItems = [];
-    const batchSize = 1000;
-
-    for (let start = 1; start <= totalCount; start += batchSize) {
-      const end = Math.min(start + batchSize - 1, totalCount);
-      const url = `${baseUrl}/${start}/${end}`;
-      const res = await axios.get(url);
-      const items = res.data?.I1200?.row || [];
-      allItems = allItems.concat(items);
-      console.log(`📥 진행 중: ${allItems.length}/${totalCount}`);
-    }
-
-    return allItems.map((item, index) => {
-      const name = item.BPL_NM || 'Unknown';
-      const address = item.RDN_WH_ADDR || item.SITE_ADDR || '';
-      const type = item.UPTAE_NM || '기타';
-      const lat = parseFloat(item.SITE_Y || '0');
-      const lng = parseFloat(item.SITE_X || '0');
-      const region = address.split(' ')[0] || '';
-
-      return {
-        id: index + 1,
-        name,
-        originalName: name,
-        type,
-        region,
-        address,
-        lat,
-        lng,
-        verified: true
-      };
+    const response = await axios.get('https://dapi.kakao.com/v2/local/search/address.json', {
+      params: { query: address },
+      headers: {
+        Authorization: `KakaoAK ${kakaoApiKey}`,
+      }
     });
+
+    const first = response.data?.documents?.[0];
+    if (!first?.x || !first?.y) return null;
+
+    return {
+      lat: parseFloat(first.y),
+      lng: parseFloat(first.x)
+    };
   } catch (error) {
-    console.error('❌ API 폴백 실패:', error.message);
-    return null;
+    if (error.response?.status === 401) {
+      throw new Error('Kakao Local API 인증 실패(401): KAKAO_REST_API_KEY를 확인해주세요.');
+    }
+    throw new Error(`주소 지오코딩 실패: ${address} (${error.message})`);
   }
 }
 
@@ -69,14 +56,29 @@ async function syncPetFriendlyStores() {
   const downloadUrl = process.env.PET_EXCEL_URL || 'https://www.foodsafetykorea.go.kr/portal/petKorea/downloadExcel.do';
   const dataDir = path.join(process.cwd(), 'data');
   const outputPath = path.join(dataDir, 'stores.json');
+  const kakaoApiKey = getKakaoApiKey();
 
   console.log('🚀 데이터 동기화 시작...');
 
   try {
+    if (!kakaoApiKey) {
+      throw new Error('KAKAO_REST_API_KEY가 설정되어 있지 않습니다.');
+    }
+
     // 1. 데이터 저장 디렉토리 확인 및 생성
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
+
+    let existingStores = [];
+    if (fs.existsSync(outputPath)) {
+      existingStores = JSON.parse(fs.readFileSync(outputPath, 'utf8'));
+    }
+    const existingNameByAddress = new Map(
+      existingStores
+        .filter(store => store?.address && store?.originalName)
+        .map(store => [store.address, store.originalName])
+    );
 
     // 2. 엑셀 다운로드 URL 직접 사용
     console.log(`📥 엑셀 다운로드 중: ${downloadUrl}`);
@@ -114,26 +116,55 @@ async function syncPetFriendlyStores() {
     };
 
     // 5. 데이터 변환 (사용자 요청 포맷)
-    const stores = jsonData.map((row, index) => {
-      let name = row['업소명'] || row['상호명'] || row['사업장명'] || 'Unknown';
+    const stores = [];
+    const geocodeCache = new Map();
+    let hasFirstGeocodeAttempt = false;
+    for (let index = 0; index < jsonData.length; index++) {
+      const row = jsonData[index];
+      let name = row['업소명'] || 'Unknown';
 
       // 이름 깨짐 보정 적용
       if (KOREAN_NAME_PATCH_MAP[name]) {
         name = KOREAN_NAME_PATCH_MAP[name];
       }
 
-      const address = row['소재지(도로명)'] || row['도로명주소'] || row['소재지'] || '';
-      let type = row['업태명'] || row['업종'] || row['업태'] || '기타';
+      const address = pickFirst(row, ['업소주소']);
+      let type = pickFirst(row, ['업종']) || '기타';
+
+      // 수기 패치맵에 없는 깨진 문자(?, ？, �)는 기존 데이터(동일 주소)의 정상 상호명으로 보정
+      if (hasBrokenKoreanText(name)) {
+        const previousName = existingNameByAddress.get(address);
+        if (previousName && !hasBrokenKoreanText(previousName)) {
+          name = previousName;
+        }
+      }
 
       // 업종 명칭 정규화 (UI 요구사항 반영)
       if (type === '휴게음식점') type = '카페';
       if (type === '제과점영업') type = '제과점';
 
-      const lat = parseFloat(row['위도'] || row['Y좌표'] || '0');
-      const lng = parseFloat(row['경도'] || row['X좌표'] || '0');
-      const region = address.split(' ')[0] || '';
+      const region = pickFirst(row, ['지역']) || (address.split(' ')[0] || '');
+      let lat = 0;
+      let lng = 0;
 
-      return {
+      if (address) {
+        if (!geocodeCache.has(address)) {
+          const geocoded = await geocodeAddress(address);
+          if (!hasFirstGeocodeAttempt) {
+            hasFirstGeocodeAttempt = true;
+            if (!geocoded) {
+              throw new Error(`첫 번째 지오코딩 시도 실패: ${address}`);
+            }
+          }
+          geocodeCache.set(address, geocoded);
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        const geocoded = geocodeCache.get(address);
+        lat = geocoded?.lat || 0;
+        lng = geocoded?.lng || 0;
+      }
+
+      stores.push({
         id: index + 1,
         name,
         originalName: name,
@@ -143,8 +174,8 @@ async function syncPetFriendlyStores() {
         lat,
         lng,
         verified: true
-      };
-    });
+      });
+    }
 
     // 안전장치: 데이터가 없을 경우 기존 파일을 덮어쓰지 않음
     if (stores.length === 0) {
@@ -158,16 +189,7 @@ async function syncPetFriendlyStores() {
     console.log(`✅ 저장 완료: ${outputPath} (${stores.length} 개의 데이터)`);
     return { success: true, count: stores.length };
   } catch (error) {
-    console.error(`⚠️ 스크래핑 실패 (${error.message}). API 폴백을 시도합니다...`);
-
-    const fallbackStores = await fetchFromApiFallback();
-
-    if (fallbackStores && fallbackStores.length > 0) {
-      fs.writeFileSync(outputPath, JSON.stringify(fallbackStores, null, 2), 'utf8');
-      console.log(`✅ API 폴백 저장 완료: ${outputPath} (${fallbackStores.length} 개의 데이터)`);
-      return { success: true, count: fallbackStores.length };
-    }
-
+    console.error(`❌ 데이터 동기화 실패: ${error.message}`);
     return { success: false, error: error.message };
   }
 }
