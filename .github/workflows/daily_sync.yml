@@ -52,12 +52,7 @@ jobs:
 
           check_secret "KAKAO_REST_API_KEY" "$KAKAO_REST_API_KEY"
           check_secret "SUPABASE_URL" "$SUPABASE_URL"
-          if [ -z "$SUPABASE_SERVICE_ROLE_KEY" ] && [ -z "$SUPABASE_SECRET_KEY" ]; then
-            echo "::error::SUPABASE_SERVICE_ROLE_KEY 또는 SUPABASE_SECRET_KEY secret 이 필요합니다."
-            missing=1
-          else
-            echo "✅ Supabase service secret is set"
-          fi
+          check_secret "SUPABASE_SECRET_KEY" "$SUPABASE_SECRET_KEY"
 
           if [ "$missing" -ne 0 ]; then
             echo "필수 secret 누락으로 작업을 중단합니다."
