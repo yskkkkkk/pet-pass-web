@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pet-Pass 서비스 런칭 회고록 | Pet-Pass Dev Blog</title>
+  <title>Pet-Pass를 만든다는 것 | Pet-Pass Dev Blog</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
@@ -14,8 +14,10 @@
       margin: 0;
       padding: 0;
       color: var(--text-primary);
+      overflow-y: auto !important; /* style.css의 overflow:hidden 해제 */
+      min-height: 100vh;
     }
-    
+
     .blog-header {
       background: var(--surface);
       padding: 20px 0;
@@ -68,42 +70,299 @@
 
     .blog-content {
       max-width: 800px;
-      margin: 20px auto;
+      margin: 20px auto 60px;
       padding: 40px;
       background: var(--bg-primary);
       border-radius: 16px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
-      line-height: 1.8;
+      line-height: 1.9;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .post-series-tag {
+      display: inline-block;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-weight: 600;
+    }
+
+    .read-time {
+      font-size: 12px;
+      color: var(--text-tertiary);
     }
 
     .post-main-title {
-      font-size: 28px;
+      font-size: 30px;
+      font-weight: 800;
       color: var(--primary);
       margin-top: 0;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      line-height: 1.4;
     }
 
     .post-date {
       color: var(--text-tertiary);
       font-size: 14px;
-      margin-bottom: 30px;
+      margin-bottom: 36px;
       display: block;
     }
 
-    .blog-content h3 {
+    .toc {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      border: 1px solid var(--border);
+    }
+
+    .toc-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 12px 0;
+    }
+
+    .toc ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 2.2;
+    }
+
+    .toc a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      color: var(--primary);
+    }
+
+    .blog-content h2 {
       font-size: 22px;
+      font-weight: 700;
       color: var(--text-primary);
-      margin-top: 40px;
-      margin-bottom: 20px;
-      border-bottom: 2px solid var(--bg-secondary);
-      padding-bottom: 10px;
+      margin-top: 52px;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--primary);
+      padding-left: 14px;
     }
 
     .blog-content p {
       font-size: 16px;
       color: var(--text-secondary);
       margin-bottom: 20px;
+    }
+
+    .blog-content strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    /* ─── 다이어그램: 협업 구조 ─── */
+    .diagram-box {
+      background: var(--bg-secondary);
+      border-radius: 14px;
+      padding: 28px 20px;
+      margin: 28px 0;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .diagram-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+
+    .collab-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .flow-node {
+      background: var(--bg-primary);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .flow-node.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .flow-node.human {
+      border-color: #a78bfa;
+      color: #6d28d9;
+      background: #f5f3ff;
+    }
+
+    .flow-arrow {
+      font-size: 18px;
+      color: var(--text-tertiary);
+      flex-shrink: 0;
+    }
+
+    .ai-cluster {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .ai-cluster .flow-node {
+      font-size: 12px;
+      padding: 7px 14px;
+      min-width: 100px;
+    }
+
+    .ai-cluster-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-weight: 600;
+    }
+
+    /* ─── 스탯 카드 ─── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 28px 0;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      font-weight: 600;
+    }
+
+    /* ─── 하이라이트 박스 ─── */
+    .highlight-box {
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 12px 12px 0;
+      padding: 18px 20px;
+      margin: 28px 0;
+    }
+
+    .highlight-box p {
+      margin: 0;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    /* ─── 시리즈 예고 ─── */
+    .series-preview {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 40px;
+      border: 1px solid var(--border);
+    }
+
+    .series-preview h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 14px 0;
+    }
+
+    .series-preview ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 2.2;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+
+    /* ─── 포스트 푸터 ─── */
+    .post-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-next-post {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      background: var(--primary);
+      color: white;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-next-post:hover {
+      opacity: 0.9;
+      transform: translateX(2px);
+    }
+
+    @media (max-width: 600px) {
+      .blog-content { padding: 24px 20px; }
+      .post-main-title { font-size: 24px; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .stat-number { font-size: 24px; }
+      .collab-flow { gap: 6px; }
     }
   </style>
 </head>
@@ -114,26 +373,111 @@
   </header>
 
   <div class="nav-buttons">
-    <a href="/blog" class="btn-nav">
-      <span>←</span> 목록으로
-    </a>
-    <a href="/" class="btn-nav">
-      🏠 메인으로
-    </a>
+    <a href="/blog" class="btn-nav">← 목록으로</a>
+    <a href="/" class="btn-nav">🏠 메인으로</a>
   </div>
 
   <main class="blog-content glass">
-    <h1 class="post-main-title">Pet-Pass 서비스 런칭 회고록</h1>
-    <span class="post-date">2026. 04. 22</span>
-    
-    <h3>1. 시작하면서</h3>
-    <p>반려동물과 함께 갈 수 있는 장소를 찾는 것은 생각보다 쉽지 않은 일이었습니다. 리뷰를 하나하나 확인하며 전화를 돌리던 불편함을 겪고 난 후, 조금이라도 더 쉽고 확실하게 공공데이터 기반으로 정보를 모아보자는 생각에 이 프로젝트를 시작하게 되었습니다.</p>
+    <div class="post-meta">
+      <span class="post-series-tag">바이브 코딩 개발기 · 시작하며</span>
+      <span class="read-time">📖 약 4분</span>
+    </div>
 
-    <h3>2. 기술적 도전</h3>
-    <p>바텀시트(Bottom Sheet) 형태의 모바일 UI를 구현하는 과정은 쉽지 않았습니다. 지도 인터랙션과 스크롤 이벤트가 충돌하는 문제를 해결하기 위해 다양한 방식의 터치 이벤트 처리를 시도했습니다. 결과적으로 네이티브 앱에 가까운 부드러운 전환을 만들 수 있었습니다.</p>
+    <h1 class="post-main-title">Pet-Pass를 만든다는 것,<br>그리고 AI와 함께한다는 것</h1>
+    <span class="post-date">2026. 04. 08</span>
 
-    <h3>3. 앞으로의 계획</h3>
-    <p>더 많은 사람들이 편하게 동물병원, 애견카페 등의 정보를 공유할 수 있도록 지속적인 업데이트를 계획 중입니다. 앞으로도 해당 블로그를 통해 업데이트 내역과 개발기를 기록해 나가겠습니다.</p>
+    <div class="toc">
+      <p class="toc-title">목차</p>
+      <ol>
+        <li><a href="#pain">시작은 불편함에서</a></li>
+        <li><a href="#collab">이상한 방식의 개발</a></li>
+        <li><a href="#stats">70개 PR이 쌓인 이유</a></li>
+        <li><a href="#service">Pet-Pass가 하려는 일</a></li>
+        <li><a href="#series">이 블로그에서 다룰 것들</a></li>
+      </ol>
+    </div>
+
+    <h2 id="pain">시작은 불편함에서</h2>
+
+    <p>블로그를 시작하려고 한다. 솔직히 말하면, 이 프로젝트가 이렇게 오래 갈 줄 몰랐다.</p>
+
+    <p>처음엔 단순한 아이디어였다. 반려동물과 함께 외출할 때마다 반복되는 그 피로감 — 카페 앞에서 강아지 때문에 들어가지 못하거나, 분명 반려동물 동반 가능이라고 적혀 있었는데 막상 가보면 "오늘은 안 돼요"를 듣는 경험. 그 실망이 쌓여서 언젠간 직접 만들어야겠다 싶었다. 식품안전나라 공공데이터를 보다가 <strong>정부 공식 인증 반려동물 동반가능 업소 목록</strong>이 공개되어 있다는 걸 발견했을 때, 그냥 그게 출발점이었다.</p>
+
+    <h2 id="collab">이상한 방식의 개발</h2>
+
+    <p>이 프로젝트의 개발 방식은 꽤 특이하다. 나 혼자 코드를 짜지 않는다. <strong>Jules, Antigravity, Codex, Claude</strong> — 각기 다른 AI 코딩 도구들이 이 프로젝트의 주요 구현을 담당했고, 나는 방향을 정하고 결과를 검토하며 필요한 시점에 개입하는 역할을 맡았다.</p>
+
+    <div class="diagram-box">
+      <p class="diagram-label">Pet-Pass 협업 구조</p>
+      <div class="collab-flow">
+        <div class="flow-node human">사람<br><small style="font-weight:400">방향 · 검토 · 개입</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="ai-cluster">
+          <span class="ai-cluster-label">AI 도구들</span>
+          <div class="flow-node">Jules</div>
+          <div class="flow-node">Antigravity</div>
+          <div class="flow-node">Codex</div>
+          <div class="flow-node">Claude</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node primary">Pet-Pass<br><small style="font-weight:400;color:rgba(255,255,255,0.8)">코드 · 기능 · 수정</small></div>
+      </div>
+    </div>
+
+    <p>요즘 이런 걸 '바이브 코딩(Vibe Coding)'이라고 부른다. 세부 구현보다는 목표와 방향을 제시하고, AI의 결과물을 검토하면서 서비스를 만들어가는 방식이다. 말로 듣기엔 그럴싸해 보이지만, 실제로 해보면 생각보다 훨씬 많은 판단이 요구된다.</p>
+
+    <div class="highlight-box">
+      <p>"AI가 다 알아서 해주겠지"라고 믿었던 순간마다, 현실은 다른 방식으로 답을 돌려줬다.</p>
+    </div>
+
+    <h2 id="stats">70개 PR이 쌓인 이유</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">70+</div>
+        <div class="stat-label">Pull Requests</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">4</div>
+        <div class="stat-label">AI 협업 도구</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1,700+</div>
+        <div class="stat-label">등록 업소 수</div>
+      </div>
+    </div>
+
+    <p>지금 이 프로젝트의 GitHub에는 70개가 넘는 Pull Request가 쌓여 있다. 짧은 기간 동안 생각보다 많은 시행착오를 거쳤다는 뜻이다. 데이터를 가져오는 방법을 두고 서너 번의 방향 전환이 있었고, 모바일 UI는 구현했다가 되돌리고 다시 구현하는 일을 반복했으며, CI/CD 파이프라인은 고쳐도 고쳐도 계속 다른 이유로 실패했다.</p>
+
+    <p>그 과정이 전부 기록으로 남아 있다. 그리고 이 블로그는 그 기록들을 사람이 읽을 수 있는 언어로 다시 쓰는 곳이다. 코드 수준의 이야기가 아니라, 어떤 판단을 했고 어디서 막혔으며 어떻게 돌아갔는지 — 그 흐름을 남기고 싶었다.</p>
+
+    <h2 id="service">Pet-Pass가 하려는 일</h2>
+
+    <p>서비스 자체는 단순하다. 반려동물을 데리고 갈 수 있는 카페, 식당, 제과점을 지도에서 찾아볼 수 있다. 데이터는 식품안전나라의 공식 허가 데이터를 사용하기 때문에, 블로그나 SNS 리뷰가 아닌 <strong>정부 기관이 인증한 업소</strong>만 표시된다.</p>
+
+    <p>이 차이가 생각보다 크다. 인플루언서의 협찬 리뷰가 아니라, 실제 영업 허가 조건에 반려동물 동반이 명시된 곳만 보여준다는 뜻이다. 물론 그것만으로 완벽하진 않지만, 적어도 출발점은 다르다고 생각한다. 지도 기반 탐색 외에, 동물등록번호로 내 반려동물의 공식 정보를 조회하는 기능도 있다. 이건 나중에 더 많은 서비스와 연결될 수 있는 기반 기능이다.</p>
+
+    <hr class="divider">
+
+    <h2 id="series">이 블로그에서 다룰 것들</h2>
+
+    <p>앞으로 각 글은 개발 과정에서 부딪혔던 하나의 이슈를 중심으로 쓸 것이다. 어떻게 마주쳤고, 어떻게 해결했으며, 그 과정에서 무엇을 배웠는지. 가능하면 코드 얘기보다는 판단의 얘기를 하고 싶다.</p>
+
+    <div class="series-preview">
+      <h3>다음에 다룰 이야기들</h3>
+      <ul>
+        <li>AI가 크롤링에 집착하다 토큰을 다 써버린 날</li>
+        <li>Kakao API는 되는데 왜 정부 API는 인식을 못 하나 — 프록시 도입기</li>
+        <li>지도와 스크롤이 충돌하다 — 모바일 바텀시트를 세 번 만든 이유</li>
+        <li>GitHub Actions가 매일 밤 실패하던 이유</li>
+      </ul>
+    </div>
+
+    <p style="margin-top: 24px; color: var(--text-tertiary); font-size: 14px;">이 시리즈는 완성된 서비스 자랑이 아니라, 만들어가는 과정의 기록이다. 잘된 것도 있고, 바보 같은 실수도 있을 것이다. 어느 쪽이든 숨기지 않을 생각이다.</p>
+
+    <div class="post-footer">
+      <a href="/blog/post2.html" class="btn-next-post">다음 글: 토큰 낭비의 현장 →</a>
+    </div>
   </main>
 
 </body>
