@@ -18,6 +18,10 @@
   <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=__KAKAO_MAP_API_KEY__&libraries=services,clusterer"></script>
   <!-- Korean Chosung Search Support -->
   <script src="https://unpkg.com/hangul-js" type="text/javascript"></script>
+  <!-- 테마 플래시 방지 (렌더링 전 즉시 실행) -->
+  <script>
+  (function(){var t=localStorage.getItem('pet-pass-theme')||'beige';if(t!=='beige')document.documentElement.setAttribute('data-theme',t);})();
+  </script>
 </head>
 <body>
 
@@ -30,7 +34,8 @@
       <input id="search-input" type="text" placeholder="지역명, 상호명 검색...">
       <button id="btn-reset-filters" title="필터 초기화">↺</button>
     </div>
-    <div class="user-menu" style="display: flex; gap: 10px;">
+    <div class="user-menu" style="display: flex; gap: 10px; align-items: center;">
+      <button id="themeToggle" onclick="cycleTheme()" title="테마 변경" style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;color:var(--text-secondary);font-family:inherit;font-weight:600;white-space:nowrap;transition:all 0.2s;">🌸 베이지</button>
       <button id="btn-auth" class="auth-btn">디지털 펫 패스</button>
     </div>
   </header>
@@ -265,5 +270,6 @@
   </div>
 
   <script src="script.js"></script>
+  <script src="theme.js"></script>
 </body>
 </html>
