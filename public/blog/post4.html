@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI가 크롤링에 집착하다 토큰을 다 써버린 날 | Pet-Pass Dev Blog</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    body {
+      background-color: var(--bg-secondary);
+      font-family: 'Pretendard', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--text-primary);
+    }
+
+    .blog-header {
+      background: var(--surface);
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .blog-header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .nav-buttons {
+      max-width: 800px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      background: var(--bg-secondary);
+      transform: translateY(-1px);
+    }
+
+    .blog-content {
+      max-width: 800px;
+      margin: 20px auto 60px;
+      padding: 40px;
+      background: var(--bg-primary);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      line-height: 1.9;
+    }
+
+    .post-series-tag {
+      display: inline-block;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .post-main-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .post-date {
+      color: var(--text-tertiary);
+      font-size: 14px;
+      margin-bottom: 36px;
+      display: block;
+    }
+
+    .blog-content h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 48px;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--primary);
+      padding-left: 14px;
+    }
+
+    .blog-content p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .blog-content strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .timeline {
+      border-left: 2px solid var(--border);
+      padding-left: 24px;
+      margin: 32px 0;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -31px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid var(--bg-primary);
+    }
+
+    .timeline-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-item p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .code-block {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 16px 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: var(--text-primary);
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .highlight-box {
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 12px 12px 0;
+      padding: 18px 20px;
+      margin: 28px 0;
+    }
+
+    .highlight-box p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .lesson-box {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 40px 0;
+      border: 1px solid var(--border);
+    }
+
+    .lesson-box h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0 0 14px 0;
+    }
+
+    .lesson-box p {
+      margin: 0 0 10px 0;
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .lesson-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="blog-header glass">
+    <h1>🐾 Pet-Pass Dev Blog</h1>
+  </header>
+
+  <div class="nav-buttons">
+    <a href="/blog" class="btn-nav">← 목록으로</a>
+    <a href="/" class="btn-nav">🏠 메인으로</a>
+  </div>
+
+  <main class="blog-content glass">
+    <span class="post-series-tag">바이브 코딩 개발기 · 이슈 #1</span>
+    <h1 class="post-main-title">AI가 크롤링에 집착하다 토큰을 다 써버린 날</h1>
+    <span class="post-date">2026. 04. 23</span>
+
+    <p>이 이야기는 아주 단순한 질문에서 시작됐다.</p>
+
+    <p><strong>"반려동물 동반 가능한 업소 리스트 가져와줘."</strong></p>
+
+    <p>들어보면 쉬울 것 같다. 데이터가 어딘가에 있을 테고, AI가 그걸 가져오면 되지 않나. 실제로 데이터는 있었다. 식품안전나라 공식 포털에 정부가 인증한 반려동물 동반가능 업소 목록이 공개되어 있었다. 문제는 AI들이 그 데이터를 가져오는 방법을 두고 꽤 오랫동안, 꽤 많은 토큰을 소비하며 고집을 부렸다는 점이다.</p>
+
+    <h2>AI들이 포털에 도착했다</h2>
+
+    <p>처음 지시를 받은 AI 도구들은 성실하게 움직였다. 식품안전나라 포털에 접근했고, 반려동물 동반가능 업소 관련 페이지를 찾아냈다. 여기까지는 완벽했다. 문제는 그 다음이었다.</p>
+
+    <p>데이터를 어떻게 가져올 것인가. 포털에는 엑셀 다운로드 버튼이 있었다. 그런데 그 버튼은 JavaScript로 구동되는 동적 버튼이었다 — <code>fn_downloadExcel()</code>을 호출하는 방식이었다. 단순한 href 링크가 아니라는 뜻이다.</p>
+
+    <p>AI 입장에서 이건 꽤 흥미로운 문제였던 것 같다. 그들은 이 문제를 '해결해야 할 기술 과제'로 받아들였고, 여러 방법을 차례로 시도했다.</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-label">시도 1</div>
+        <p>식품안전나라 Open API를 통해 데이터를 직접 수집하자. 서비스 ID I1250으로 요청 — 응답은 왔는데, 반려동물 관련 필드가 없는 제품 정보 데이터셋이었다.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-label">시도 2</div>
+        <p>서비스 ID가 잘못됐다. I1200(식품접객업 인허가 정보)으로 다시 시도. API 호출에 성공했지만, 인증키 오류 시 서버가 JSON 대신 JavaScript alert 코드를 응답으로 돌려보냈다. 방어 로직을 추가하고 다시 시도.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-label">시도 3</div>
+        <p>API 접근은 됐는데 이번엔 네트워크 차단(ECONNRESET) 문제가 발생. 일부 서버 환경에서 포털 접속 자체가 막혔다. HTML 스크래핑으로 전환하고, cheerio로 페이지를 파싱해서 엑셀 링크를 추출하는 로직을 작성했다.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-label">시도 4</div>
+        <p>cheerio로 파싱한 페이지에서 href를 추출했지만, 다운로드 버튼은 JS onclick으로만 연결되어 있어서 정적 파싱으로는 링크를 잡을 수 없었다. onclick 속성을 파싱해서 URL을 역산하는 로직을 새로 짰다.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-label">시도 5</div>
+        <p>데이터 0건. 스크래핑 자체는 됐지만 반려동물 동반 여부 필터링 조건이 정확하지 않아 데이터가 없는 것으로 처리됐다. 기존 JSON 파일을 보존하는 안전장치를 추가하면서 또 다시 로직 수정.</p>
+      </div>
+    </div>
+
+    <p>이 과정이 여러 PR에 걸쳐 반복됐다. 각 시도마다 새로운 코드가 작성됐고, 새로운 에러가 나왔으며, 그 에러를 분석하는 데 또 토큰이 소비됐다. AI들은 포기하지 않고 계속 다음 방법을 시도했다. 그게 오히려 문제였다.</p>
+
+    <h2>그래서 결국 어떻게 됐는가</h2>
+
+    <p>결말은 허무하게도 간단했다.</p>
+
+    <p>사람이 직접 식품안전나라 포털에 들어가서, 엑셀 파일을 내려받고, 그 파일을 프로젝트에 올려놓았다. 그리고 AI에게 "이 파일을 읽어서 필요한 데이터를 파싱해줘"라고 말했다.</p>
+
+    <p>그 이후 흐름은 훨씬 빨랐다. 파일 구조를 파악하고, 필요한 컬럼을 추출하고, JSON으로 변환하는 작업은 금방 됐다. 나중에는 엑셀 파일의 직접 다운로드 엔드포인트 URL을 찾아내서 코드에 고정값으로 넣는 방식으로 자동화까지 완성됐다 — 크롤링이 아니라, 그냥 알려진 URL로 파일을 내려받는 방식으로.</p>
+
+    <div class="code-block">
+    // 최종 해결 방식 — 크롤링 없이, 그냥 직접 다운로드
+    const downloadUrl = process.env.PET_EXCEL_URL || 'https://www.foodsafetykorea.go.kr/...';
+    const response = await axios.get(downloadUrl, { responseType: 'arraybuffer' });
+    </div>
+
+    <p>이 한 줄에 도달하기까지 수십 개의 코드 블록이 쓰이고 지워졌다.</p>
+
+    <h2>AI가 나쁜 게 아니었다</h2>
+
+    <p>이 경험을 정리하면서 AI를 탓하고 싶은 마음이 생기기도 했다. 하지만 생각해보면 AI가 틀린 게 아니었다. 그들은 주어진 문제를 성실하게 풀었다. <strong>"데이터를 자동으로 수집하는 파이프라인을 만들어라"</strong>는 맥락에서 보면, 크롤링과 API 연동은 완전히 합리적인 접근이었다.</p>
+
+    <p>문제는 질문이었다. 막연하게 "가져와줘"라고 했을 때, AI는 자신이 할 수 있는 방법 중 가장 그럴싸한 것을 선택한다. 그게 크롤링이었고, 그 방향으로 계속 나아갔다.</p>
+
+    <div class="highlight-box">
+      <p>사람이 10초면 할 수 있는 일 — 포털에 접속해서 버튼 하나 클릭 — 을 AI에게 시키면 AI는 그 버튼을 코드로 누르는 방법을 연구하는 데 몇 시간을 쓴다.</p>
+    </div>
+
+    <p>이게 비효율이기도 하지만, 더 중요한 건 <strong>이 문제를 사람이 미리 알아채야 한다</strong>는 것이다. AI가 어느 방향으로 가고 있는지 보고, "잠깐, 이건 내가 그냥 하면 되는데"라고 판단할 수 있어야 한다. 그 판단을 하지 못하면 AI는 계속 최선을 다해서 비효율적인 길을 간다.</p>
+
+    <h2>바이브 코딩에서 사람의 역할</h2>
+
+    <p>이 사건을 겪고 나서 생각이 바뀌었다. 바이브 코딩에서 사람의 역할은 단순히 "요구사항을 말하는 것"이 아니다. <strong>AI가 잘 하는 일과 사람이 잘 하는 일을 구분하고, 적절한 시점에 개입하는 것</strong>이 핵심이다.</p>
+
+    <p>AI는 코드 작성, 로직 설계, 반복 작업, 에러 분석에 강하다. 반면 "그냥 파일 하나 받아오는 것"처럼 컨텍스트를 이해하고 현실적인 판단이 필요한 일은 사람이 훨씬 빠르다. 크롤링이 막히는 상황에서 "그냥 직접 다운받으면 되겠다"는 생각은 AI보다 사람이 먼저 한다.</p>
+
+    <p>좋은 바이브 코딩은 AI를 믿고 맡기는 게 아니라, AI의 진행 방향을 계속 읽으면서 필요할 때 사람이 개입하는 것이다. 그 개입이 늦어질수록, 소비되는 토큰이 늘어난다. 그리고 이 경우처럼, 결국 사람이 5분 만에 해결할 수 있는 걸 AI가 며칠 동안 돌아가는 방식으로 해결하게 된다.</p>
+
+    <hr class="divider">
+
+    <div class="lesson-box">
+      <h3>이 이슈에서 배운 것</h3>
+      <p>AI에게 임무를 줄 때는 막연하게 주면 안 된다. "데이터 가져와줘"가 아니라 "이 URL에서 파일 받아서 파싱해줘"처럼, 접근 방법까지 명시해주는 것이 효율적이다.</p>
+      <p>AI가 생산적으로 보이지만 사실 제자리를 맴돌고 있다는 신호 — 비슷한 패턴의 코드를 계속 다시 쓰고, 같은 종류의 에러가 반복된다면 — 그때가 사람이 개입할 타이밍이다.</p>
+      <p>바이브 코딩에서 사람의 개입은 프로젝트를 방해하는 게 아니라, 오히려 프로젝트를 앞으로 나아가게 하는 핵심 동력이다.</p>
+    </div>
+
+  </main>
+
+</body>
+</html>
