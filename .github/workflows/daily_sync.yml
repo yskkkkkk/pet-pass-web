@@ -18,8 +18,7 @@ jobs:
       KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
       PET_EXCEL_URL: ${{ secrets.PET_EXCEL_URL }}
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -35,8 +34,26 @@ jobs:
 
       - name: Validate required secrets
         run: |
-          if [ -z "$KAKAO_REST_API_KEY" ]; then
-            echo "KAKAO_REST_API_KEY secret 이 필요합니다."
+          missing=0
+
+          check_secret() {
+            local name="$1"
+            local value="$2"
+
+            if [ -z "$value" ]; then
+              echo "::error::${name} secret 이 비어있거나 설정되지 않았습니다."
+              missing=1
+            else
+              echo "✅ ${name} is set"
+            fi
+          }
+
+          check_secret "KAKAO_REST_API_KEY" "$KAKAO_REST_API_KEY"
+          check_secret "SUPABASE_URL" "$SUPABASE_URL"
+          check_secret "SUPABASE_SECRET_KEY" "$SUPABASE_SECRET_KEY"
+
+          if [ "$missing" -ne 0 ]; then
+            echo "필수 secret 누락으로 작업을 중단합니다."
             exit 1
           fi
 
