@@ -238,20 +238,24 @@ async function syncPetFriendlyStores() {
       });
     }
 
-    // 6. DB 반영 (신규/변경 데이터)
+    // 6-7. 핵심 DB 반영 단계 (업서트 + 삭제)
+    // NOTE: Supabase JS 클라이언트 특성상 클라이언트 코드 레벨에서 다중 쿼리 트랜잭션을 직접 보장하기 어려워,
+    // 실패 시 즉시 throw 하여 이후 단계를 중단한다. (부분 반영 방지를 위한 서버측 RPC 트랜잭션은 추후 권장)
     if (toUpsert.length > 0) {
       console.log(`📤 신규/변경 데이터 저장 중... (${toUpsert.length}건)`);
       const CHUNK_SIZE = 100;
       for (let i = 0; i < toUpsert.length; i += CHUNK_SIZE) {
         const chunk = toUpsert.slice(i, i + CHUNK_SIZE);
         const { error } = await supabase.from('stores').upsert(chunk, { onConflict: 'name,address' });
-        if (error) console.error(`❌ UPSERT 실패:`, error.message);
+        if (error) {
+          throw new Error(`UPSERT 실패: ${error.message}`);
+        }
       }
     } else {
       console.log('✅ 업데이트할 새로운 데이터가 없습니다.');
     }
 
-    // 7. 삭제 로직 (엑셀에 없는 매장 제거)
+    // 삭제 로직 (엑셀에 없는 매장 제거)
     // 엑셀에서 처리된 processedKeys에 포함되지 않은 DB 데이터들을 삭제
     const toDeleteIds = [];
     for (const [key, store] of dbStoreMap.entries()) {
@@ -264,7 +268,7 @@ async function syncPetFriendlyStores() {
       // 안전장치: 전체 데이터의 30% 이상이 한 번에 삭제되려 하면 경고 후 중단
       const deleteRatio = toDeleteIds.length / totalLoaded;
       if (deleteRatio > 0.3 && totalLoaded > 100) {
-        console.error(`⚠️ 위함: 대량 삭제 감지 (${toDeleteIds.length}건, ${Math.round(deleteRatio*100)}%). 동기화를 중단합니다.`);
+        console.error(`⚠️ 위함: 대량 삭제 감지 (${toDeleteIds.length}건, ${Math.round(deleteRatio * 100)}%). 동기화를 중단합니다.`);
         return { success: false, error: 'Massive deletion prevention triggered' };
       }
 
@@ -274,16 +278,24 @@ async function syncPetFriendlyStores() {
         .delete()
         .in('id', toDeleteIds);
 
-      if (delError) console.error('❌ 삭제 실패:', delError.message);
-      else console.log('✅ 정리 완료.');
+      if (delError) {
+        throw new Error(`삭제 실패: ${delError.message}`);
+      }
+      console.log('✅ 정리 완료.');
     }
 
-    // 로컬 백업용 (선택 사항)
-    const dataDir = path.join(process.cwd(), 'data');
-    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-    fs.writeFileSync(path.join(dataDir, 'stores.json'), JSON.stringify(stores, null, 2), 'utf8');
+    // 8. 로컬 백업 (부가 단계): 실패해도 전체 동기화 성공/실패를 바꾸지 않는다.
+    let backupWarning = null;
+    try {
+      const dataDir = path.join(process.cwd(), 'data');
+      if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+      fs.writeFileSync(path.join(dataDir, 'stores.json'), JSON.stringify(toUpsert, null, 2), 'utf8');
+    } catch (backupError) {
+      backupWarning = `로컬 백업 실패: ${backupError.message}`;
+      console.warn(`⚠️ ${backupWarning}`);
+    }
 
-    return { success: true, count: successCount };
+    return { success: true, count: successCount, upserted: toUpsert.length, deleted: toDeleteIds.length, backupWarning };
   } catch (error) {
     console.error(`❌ 데이터 동기화 실패: ${error.message}`);
     return { success: false, error: error.message };
