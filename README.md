@@ -1,4 +1,5 @@
 # 🐾 Pet-Pass
+> 이 프로젝트는 Codex, Claude, Antigravity, Jules가 협업함.
 
 반려동물 동반 가능 매장 실시간 탐색 및 디지털 펫 패스 인증 서비스.
 
@@ -10,6 +11,9 @@
 ## 🤖 AI Development Protocol
 
 이 섹션은 Jules, Codex, Antigravity 등 AI 협업 에이전트들이 프로젝트 컨텍스트를 즉시 파악하고 효율적으로 기여하기 위한 기술 지침입니다.
+
+### 🚨 Critical Rule
+- **모든 AI는 작업 완료 후 반드시 `docs/dev_history.md`에 변경 사항을 기록해야 한다.** (최우선 지침)
 
 ### 🛠 Tech Stack
 - **Frontend:** Vanilla JS, Tailwind CSS, Kakao Maps API

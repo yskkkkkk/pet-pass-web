@@ -4,6 +4,20 @@
 
 ---
 
+## [2026-04-23] - Jules
+### ✅ 작업 요약
+- README 개편 및 스케줄 히스토리 자동화 구조 설계
+
+### 🔧 변경 사항
+- **README 개편**: AI 협업 주체(Codex, Claude, Antigravity, Jules) 명시 및 작업 완료 후 `dev_history.md` 기록을 강제하는 'Critical Rule' 추가.
+- **스케줄 히스토리 자동화**: `scripts/sync-stores.js` 내에 `updateScheduleHistory` 로직을 추가하여 데이터 수집 결과(성공 여부, 수집/삭제 건수)가 `docs/schedule_history.md`에 자동으로 기록되도록 구현.
+- **파일 초기화**: `docs/schedule_history.md`를 기계 가독성이 높은 테이블 구조로 초기화.
+
+### 📌 비고 (Issues & Decisions)
+- **CI/CD 최적화**: 자동화된 데이터 업데이트 커밋이 Vercel 빌드를 유발하지 않도록 GitHub Actions 워크플로우 내 `[skip ci]` 태그 활용 확인.
+
+---
+
 ## [2026-04-19] - Jules
 ### ✅ 작업 요약
 - 정부 동물등록정보 조회 API(v3) 연동 및 조회 로직 정상화

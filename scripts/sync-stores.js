@@ -38,6 +38,33 @@ function getKakaoApiKey() {
   return process.env.KAKAO_REST_API_KEY;
 }
 
+/**
+ * 결과를 docs/schedule_history.md에 기록
+ */
+async function updateScheduleHistory(success, details) {
+  try {
+    const historyPath = path.join(process.cwd(), 'docs', 'schedule_history.md');
+    const now = new Date();
+    // KST 시간 포맷팅 (UTC+9)
+    const kstOffset = 9 * 60 * 60 * 1000;
+    const kstDate = new Date(now.getTime() + kstOffset);
+    const dateStr = kstDate.toISOString().replace('T', ' ').substring(0, 19).replace(/-/g, '. ') + ' (KST)';
+
+    const status = success ? '✅ 성공' : '❌ 실패';
+    const newRow = `| ${dateStr} | ${status} | ${details} |\n`;
+
+    if (fs.existsSync(historyPath)) {
+      fs.appendFileSync(historyPath, newRow, 'utf8');
+    } else {
+      const header = '# 🕒 데이터 수집 스케줄링 이력\n\n| 일시 (KST) | 결과 | 비고 |\n| :--- | :--- | :--- |\n';
+      fs.writeFileSync(historyPath, header + newRow, 'utf8');
+    }
+    console.log('📝 스케줄 히스토리 업데이트 완료.');
+  } catch (err) {
+    console.warn(`⚠️ 스케줄 히스토리 업데이트 실패: ${err.message}`);
+  }
+}
+
 async function geocodeAddress(address) {
   const kakaoApiKey = getKakaoApiKey();
   if (!kakaoApiKey || !address) return null;
@@ -295,9 +322,12 @@ async function syncPetFriendlyStores() {
       console.warn(`⚠️ ${backupWarning}`);
     }
 
-    return { success: true, count: successCount, upserted: toUpsert.length, deleted: toDeleteIds.length, backupWarning };
+    const result = { success: true, upserted: toUpsert.length, deleted: toDeleteIds.length, backupWarning };
+    await updateScheduleHistory(true, `${result.upserted}개 업데이트, ${result.deleted}개 삭제 완료`);
+    return result;
   } catch (error) {
     console.error(`❌ 데이터 동기화 실패: ${error.message}`);
+    await updateScheduleHistory(false, error.message);
     return { success: false, error: error.message };
   }
 }
