@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>[인사이드 Pet-Pass] 고장난 에스컬레이터 위에서 바라본 반려동물 경제 | Pet-Pass Dev Blog</title>
+  <title>AI가 크롤링에 집착하다 토큰을 다 써버린 날 | Pet-Pass Dev Blog</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
@@ -14,6 +14,8 @@
       margin: 0;
       padding: 0;
       color: var(--text-primary);
+      overflow-y: auto !important;
+      min-height: 100vh;
     }
 
     .blog-header {
@@ -61,65 +63,256 @@
       transition: all 0.2s;
     }
 
-    .btn-nav:hover {
-      background: var(--bg-secondary);
-      transform: translateY(-1px);
-    }
+    .btn-nav:hover { background: var(--bg-secondary); transform: translateY(-1px); }
 
     .blog-content {
       max-width: 800px;
-      margin: 20px auto;
+      margin: 20px auto 60px;
       padding: 40px;
       background: var(--bg-primary);
       border-radius: 16px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
-      line-height: 1.8;
+      line-height: 1.9;
     }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .post-series-tag {
+      display: inline-block;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-weight: 600;
+    }
+
+    .read-time { font-size: 12px; color: var(--text-tertiary); }
 
     .post-main-title {
       font-size: 28px;
+      font-weight: 800;
       color: var(--primary);
       margin-top: 0;
-      margin-bottom: 10px;
-      word-break: keep-all;
+      margin-bottom: 8px;
+      line-height: 1.4;
     }
 
     .post-date {
       color: var(--text-tertiary);
       font-size: 14px;
-      margin-bottom: 30px;
+      margin-bottom: 36px;
       display: block;
     }
 
-    .blog-content h3 {
-      font-size: 22px;
-      color: var(--text-primary);
-      margin-top: 40px;
-      margin-bottom: 20px;
-      border-bottom: 2px solid var(--bg-secondary);
-      padding-bottom: 10px;
-    }
-
-    .blog-content p {
-      font-size: 16px;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
-    }
-
-    .tag-container {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .tag {
-      font-size: 12px;
-      padding: 4px 10px;
+    .toc {
       background: var(--bg-secondary);
-      border-radius: 20px;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      border: 1px solid var(--border);
+    }
+
+    .toc-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 12px 0;
+    }
+
+    .toc ol { margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 14px; line-height: 2.2; }
+    .toc a { color: var(--text-secondary); text-decoration: none; }
+    .toc a:hover { color: var(--primary); }
+
+    .blog-content h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 52px;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--primary);
+      padding-left: 14px;
+    }
+
+    .blog-content p { font-size: 16px; color: var(--text-secondary); margin-bottom: 20px; }
+    .blog-content strong { color: var(--text-primary); font-weight: 700; }
+
+    /* ─── 타임라인 ─── */
+    .timeline {
+      border-left: 2px solid var(--border);
+      padding-left: 24px;
+      margin: 32px 0;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -31px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid var(--bg-primary);
+    }
+
+    .timeline-item.fail::before { background: #ef4444; }
+
+    .timeline-label {
+      font-size: 12px;
+      font-weight: 700;
       color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-item.fail .timeline-label { color: #ef4444; }
+
+    .timeline-item p { margin: 0; font-size: 15px; color: var(--text-secondary); }
+
+    /* ─── 비교 다이어그램 ─── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .compare-col {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .compare-col.bad { border-top: 3px solid #ef4444; }
+    .compare-col.good { border-top: 3px solid #22c55e; }
+
+    .compare-header {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .compare-col.bad .compare-header { color: #ef4444; }
+    .compare-col.good .compare-header { color: #22c55e; }
+
+    .compare-step {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .compare-step:last-child { border-bottom: none; }
+    .step-icon { flex-shrink: 0; }
+
+    /* ─── 코드 블록 ─── */
+    .code-block {
+      background: #1e1e2e;
+      border-radius: 10px;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #cdd6f4;
+      margin: 20px 0;
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    .code-comment { color: #6c7086; }
+    .code-keyword { color: #cba6f7; }
+    .code-string { color: #a6e3a1; }
+    .code-var { color: #89b4fa; }
+
+    /* ─── 하이라이트 / 레슨 박스 ─── */
+    .highlight-box {
+      background: var(--bg-secondary);
+      border-left: 4px solid var(--primary);
+      border-radius: 0 12px 12px 0;
+      padding: 18px 20px;
+      margin: 28px 0;
+    }
+
+    .highlight-box p { margin: 0; font-size: 15px; font-style: italic; color: var(--text-secondary); }
+
+    .lesson-box {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 40px 0;
+      border: 1px solid var(--border);
+    }
+
+    .lesson-box h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 14px 0;
+    }
+
+    .lesson-box p { margin: 0 0 10px 0; font-size: 15px; color: var(--text-secondary); }
+    .lesson-box p:last-child { margin-bottom: 0; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    /* ─── 포스트 푸터 ─── */
+    .post-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-post-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 14px;
       font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-prev { background: var(--surface); border: 1px solid var(--border); color: var(--text-primary); }
+    .btn-next { background: var(--primary); color: white; }
+    .btn-next:hover { opacity: 0.9; transform: translateX(2px); }
+    .btn-prev:hover { background: var(--bg-secondary); }
+
+    @media (max-width: 600px) {
+      .blog-content { padding: 24px 20px; }
+      .post-main-title { font-size: 22px; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .post-footer { flex-direction: column; gap: 10px; }
     }
   </style>
 </head>
@@ -130,47 +323,134 @@
   </header>
 
   <div class="nav-buttons">
-    <a href="/blog" class="btn-nav">
-      <span>←</span> 목록으로
-    </a>
-    <a href="/" class="btn-nav">
-      🏠 메인으로
-    </a>
+    <a href="/blog" class="btn-nav">← 목록으로</a>
+    <a href="/" class="btn-nav">🏠 메인으로</a>
   </div>
 
   <main class="blog-content glass">
-    <div class="tag-container">
-      <span class="tag">기획비하인드</span>
-      <span class="tag">반려동물</span>
-      <span class="tag">데이터</span>
-      <span class="tag">철학</span>
+    <div class="post-meta">
+      <span class="post-series-tag">바이브 코딩 개발기 · 이슈 #1</span>
+      <span class="read-time">📖 약 5분</span>
     </div>
-    <h1 class="post-main-title">[인사이드 Pet-Pass] 고장난 에스컬레이터 위에서 바라본 반려동물 경제</h1>
-    <span class="post-date">2026. 04. 23</span>
 
-    <p>반려동물 인구 1,500만 시대. 거리는 온통 강아지와 함께 산책하는 사람들로 가득하고, TV와 SNS는 반려동물 친화적인 세상이 온 것처럼 떠들어댑니다. 하지만 정작 내 강아지와 함께 갈 곳을 찾으려 지도를 펴면, 우리는 곧 '고장난 에스컬레이터' 위에 서 있다는 사실을 깨닫게 됩니다.</p>
+    <h1 class="post-main-title">AI가 크롤링에 집착하다<br>토큰을 다 써버린 날</h1>
+    <span class="post-date">2026. 04. 09</span>
 
-    <h3>1. 고장난 에스컬레이터 (The Broken Escalator)</h3>
-    <p>에스컬레이터가 멈추면 우리는 당황합니다. 분명 움직여야 할 것이 움직이지 않을 때의 그 기묘한 정체성 상실. 반려동물 동반 서비스의 현주소도 이와 닮아 있습니다. 수많은 블로그와 SNS 리뷰들이 "여기 좋아요!"라고 외치지만, 막상 도착해보면 "오늘은 안 돼요", "노키즈존은 들어봤어도 노펫존은 처음이네"라는 차가운 반응을 마주하기 일쑤입니다.</p>
+    <div class="toc">
+      <p class="toc-title">목차</p>
+      <ol>
+        <li><a href="#start">단순한 질문에서 시작</a></li>
+        <li><a href="#attempts">AI들이 포털에 도착했다</a></li>
+        <li><a href="#result">결국 어떻게 됐는가</a></li>
+        <li><a href="#insight">AI가 나쁜 게 아니었다</a></li>
+        <li><a href="#lesson">바이브 코딩에서 사람의 역할</a></li>
+      </ol>
+    </div>
 
-    <p>반려동물 친화 도시라는 화려한 구호 아래, 실제 인프라와 제도는 멈춰버린 에스컬레이터처럼 제 기능을 못 하고 있습니다. Pet-Pass는 이 멈춰버린 계단을 우리가 직접 딛고 올라가기 위해 시작되었습니다. 홍보성 리뷰가 아닌, <strong>공공데이터라는 단단한 디딤돌</strong>을 통해서 말이죠.</p>
+    <h2 id="start">단순한 질문에서 시작</h2>
 
-    <h3>2. 경제적 해석: 신뢰의 가격</h3>
-    <p>반려동물 산업(Pet-conomy)은 급격히 팽창하고 있습니다. 하지만 이 경제가 건강하게 작동하려면 '정보의 비대칭성'이 해결되어야 합니다.</p>
+    <p>이 이야기는 아주 단순한 질문에서 시작됐다.</p>
 
-    <p>사용자가 매장에 방문하기 전 소비하는 '탐색 비용'과, 방문 후 겪게 되는 '실패의 리스크'는 반려동물 경제의 활력을 떨어뜨리는 주범입니다. Pet-Pass가 정부 데이터베이스를 직접 파싱하고, 식품안전나라의 공식 인증 매장만을 엄선하여 보여주는 이유는 단순합니다. <strong>"신뢰할 수 있는 데이터는 곧 경제적 효율성"</strong>이기 때문입니다. 우리는 단순히 지도를 제공하는 것이 아니라, 반려인들의 소중한 주말 시간을 아껴주는 '시간 경제 서비스'를 지향합니다.</p>
+    <p><strong>"반려동물 동반 가능한 업소 리스트 가져와줘."</strong></p>
 
-    <h3>3. 우리가 주목한 '특이 식재료' 이야기</h3>
-    <p>프로젝트를 진행하며 식품 안전 데이터를 분석하다 보니 재미있는 지점을 발견했습니다. 반려동물 동반이 가능한 매장들, 특히 공식 인증을 받은 곳들은 일반 매장보다 훨씬 엄격한 '식재료 관리'와 '공간 분리' 원칙을 지키고 있었습니다.</p>
+    <p>들어보면 쉬울 것 같다. 데이터가 어딘가에 있을 테고, AI가 그걸 가져오면 되지 않나. 실제로 데이터는 있었다. 식품안전나라 공식 포털에 정부가 인증한 반려동물 동반가능 업소 목록이 공개되어 있었다. 문제는 AI들이 그 데이터를 가져오는 방법을 두고 꽤 오랫동안, 꽤 많은 토큰을 소비하며 고집을 부렸다는 점이다.</p>
 
-    <p>어떤 카페는 반려동물을 위해 사람이 먹어도 무해한 '휴먼 그레이드' 수준의 특이 식재료를 사용한 메뉴를 개발하기도 하고, 주방과 동선을 완벽히 분리하여 위생의 정점을 보여주기도 합니다. 이러한 '디테일'이야말로 우리가 Pet-Pass를 통해 세상에 알리고 싶었던 가치입니다. 단순히 "강아지가 들어올 수 있다"를 넘어, "강아지와 사람이 모두 안전하게 머물 수 있는 공간"이라는 가치 말입니다.</p>
+    <h2 id="attempts">AI들이 포털에 도착했다</h2>
 
-    <h3>4. 마치며: 함께 걷는 길</h3>
-    <p>Pet-Pass는 기술적인 도구인 동시에, 반려동물과 인간이 공존하는 방식을 고민하는 기록물입니다. </p>
+    <p>처음 지시를 받은 AI 도구들은 성실하게 움직였다. 식품안전나라 포털에 접근했고, 반려동물 동반가능 업소 관련 페이지를 찾아냈다. 여기까지는 완벽했다. 문제는 그 다음이었다.</p>
 
-    <p>우리는 여전히 고장난 에스컬레이터 위를 걷고 있을지도 모릅니다. 하지만 Pet-Pass라는 지도가 있다면, 멈춘 계단 위에서도 길을 잃지 않고 다음 목적지를 향해 나아갈 수 있을 것입니다. </p>
+    <p>포털에는 엑셀 다운로드 버튼이 있었다. 그런데 그 버튼은 <code>fn_downloadExcel()</code>을 호출하는 JavaScript 동적 버튼이었다. 단순한 href 링크가 아니라는 뜻이다. AI 입장에서 이건 '해결해야 할 기술 과제'였고, 그들은 여러 방법을 차례로 시도했다.</p>
 
-    <p>오늘도 여러분의 반려견과 함께, Pet-Pass가 인증한 안전한 공간에서 행복한 추억을 만드시길 바랍니다. 🐾</p>
+    <div class="timeline">
+      <div class="timeline-item fail">
+        <div class="timeline-label">시도 1 · 실패</div>
+        <p>식품안전나라 Open API 서비스 ID <strong>I1250</strong>으로 요청 → 응답은 왔는데, 반려동물 관련 필드가 없는 제품 정보 데이터셋이었다.</p>
+      </div>
+      <div class="timeline-item fail">
+        <div class="timeline-label">시도 2 · 부분 성공</div>
+        <p>서비스 ID를 <strong>I1200</strong>(식품접객업 인허가 정보)으로 교체. API 호출은 됐지만, 인증키 오류 시 서버가 JSON 대신 JavaScript alert 코드를 응답으로 돌려보냈다. 방어 로직 추가 후 재시도.</p>
+      </div>
+      <div class="timeline-item fail">
+        <div class="timeline-label">시도 3 · 실패</div>
+        <p>일부 서버 환경에서 포털 접속 자체가 <strong>ECONNRESET</strong>으로 차단됨. HTML 스크래핑으로 전환, cheerio로 페이지를 파싱해서 엑셀 링크 추출 시도.</p>
+      </div>
+      <div class="timeline-item fail">
+        <div class="timeline-label">시도 4 · 실패</div>
+        <p>다운로드 버튼이 JS onclick으로만 연결돼 정적 파싱으로 링크를 잡을 수 없었다. <strong>onclick 속성을 파싱해서 URL을 역산</strong>하는 로직을 새로 작성.</p>
+      </div>
+      <div class="timeline-item fail">
+        <div class="timeline-label">시도 5 · 실패</div>
+        <p>스크래핑 자체는 됐지만 반려동물 동반 여부 필터링 조건이 맞지 않아 데이터 <strong>0건</strong>으로 처리. 기존 JSON 파일을 보존하는 안전장치 추가하면서 또 다시 로직 수정.</p>
+      </div>
+    </div>
+
+    <p>이 과정이 여러 PR에 걸쳐 반복됐다. 각 시도마다 새로운 코드가 작성됐고, 새로운 에러가 나왔으며, 그 에러를 분석하는 데 또 토큰이 소비됐다. AI들은 포기하지 않고 계속 다음 방법을 시도했다. 그게 오히려 문제였다.</p>
+
+    <h2 id="result">결국 어떻게 됐는가</h2>
+
+    <p>결말은 허무하게도 간단했다.</p>
+
+    <p>사람이 직접 식품안전나라 포털에 들어가서, 엑셀 파일을 내려받고, 그 파일을 프로젝트에 올려놓았다. 그리고 AI에게 "이 파일을 읽어서 필요한 데이터를 파싱해줘"라고 말했다.</p>
+
+    <div class="compare-grid">
+      <div class="compare-col bad">
+        <div class="compare-header">✗ AI가 시도한 방법</div>
+        <div class="compare-step"><span class="step-icon">1.</span> 포털 접속</div>
+        <div class="compare-step"><span class="step-icon">2.</span> API 서비스 ID 탐색</div>
+        <div class="compare-step"><span class="step-icon">3.</span> I1250 연동 실패</div>
+        <div class="compare-step"><span class="step-icon">4.</span> I1200으로 교체</div>
+        <div class="compare-step"><span class="step-icon">5.</span> 네트워크 차단 대응</div>
+        <div class="compare-step"><span class="step-icon">6.</span> cheerio 스크래핑</div>
+        <div class="compare-step"><span class="step-icon">7.</span> JS onclick 역산</div>
+        <div class="compare-step"><span class="step-icon">8.</span> 필터링 조건 디버깅</div>
+        <div class="compare-step"><span class="step-icon">→</span> <strong>수십 개의 PR, 많은 토큰</strong></div>
+      </div>
+      <div class="compare-col good">
+        <div class="compare-header">✓ 사람이 한 방법</div>
+        <div class="compare-step"><span class="step-icon">1.</span> 포털 접속</div>
+        <div class="compare-step"><span class="step-icon">2.</span> 버튼 클릭 → 엑셀 다운로드</div>
+        <div class="compare-step"><span class="step-icon">3.</span> 파일 프로젝트에 추가</div>
+        <div class="compare-step"><span class="step-icon">→</span> <strong>약 5분 소요</strong></div>
+      </div>
+    </div>
+
+    <p>그 이후 흐름은 훨씬 빨랐다. 나중에는 엑셀 파일의 직접 다운로드 엔드포인트 URL을 찾아내서 코드에 고정값으로 넣는 방식으로 자동화까지 완성됐다 — 크롤링이 아니라, 그냥 알려진 URL로 파일을 내려받는 방식으로.</p>
+
+    <div class="code-block"><span class="code-comment">// 최종 해결 방식 — 크롤링 없이, 직접 다운로드 URL 사용</span>
+<span class="code-keyword">const</span> <span class="code-var">downloadUrl</span> = process.env.<span class="code-var">PET_EXCEL_URL</span> || <span class="code-string">'https://www.foodsafetykorea.go.kr/...'</span>;
+<span class="code-keyword">const</span> <span class="code-var">response</span> = <span class="code-keyword">await</span> axios.get(<span class="code-var">downloadUrl</span>, { responseType: <span class="code-string">'arraybuffer'</span> });</div>
+
+    <p>이 한 줄에 도달하기까지 수십 개의 코드 블록이 쓰이고 지워졌다.</p>
+
+    <h2 id="insight">AI가 나쁜 게 아니었다</h2>
+
+    <p>이 경험을 정리하면서 AI를 탓하고 싶은 마음이 생기기도 했다. 하지만 생각해보면 AI가 틀린 게 아니었다. 그들은 주어진 문제를 성실하게 풀었다. <strong>"데이터를 자동으로 수집하는 파이프라인을 만들어라"</strong>는 맥락에서 보면, 크롤링과 API 연동은 완전히 합리적인 접근이었다.</p>
+
+    <p>문제는 질문이었다. 막연하게 "가져와줘"라고 했을 때, AI는 자신이 할 수 있는 방법 중 가장 그럴싸한 것을 선택한다. 그게 크롤링이었고, 그 방향으로 계속 나아갔다.</p>
+
+    <div class="highlight-box">
+      <p>사람이 10초면 할 수 있는 일을 AI에게 시키면, AI는 그 일을 코드로 해결하는 방법을 연구하는 데 몇 시간을 쓴다.</p>
+    </div>
+
+    <h2 id="lesson">바이브 코딩에서 사람의 역할</h2>
+
+    <p>이 사건을 겪고 나서 생각이 바뀌었다. 바이브 코딩에서 사람의 역할은 단순히 "요구사항을 말하는 것"이 아니다. <strong>AI가 잘 하는 일과 사람이 잘 하는 일을 구분하고, 적절한 시점에 개입하는 것</strong>이 핵심이다.</p>
+
+    <p>좋은 바이브 코딩은 AI를 믿고 맡기는 게 아니라, AI의 진행 방향을 계속 읽으면서 필요할 때 사람이 개입하는 것이다. 그 개입이 늦어질수록 소비되는 토큰이 늘어난다.</p>
+
+    <hr class="divider">
+
+    <div class="lesson-box">
+      <h3>이 이슈에서 배운 것</h3>
+      <p>AI에게 임무를 줄 때는 접근 방법까지 명시하는 게 효율적이다. "데이터 가져와줘"가 아니라 "이 URL에서 파일 받아서 파싱해줘."</p>
+      <p>AI가 비슷한 패턴의 코드를 계속 다시 쓰고, 같은 종류의 에러가 반복된다면 — 그때가 사람이 개입할 타이밍이다.</p>
+      <p>바이브 코딩에서 사람의 개입은 프로젝트를 방해하는 게 아니라, 오히려 앞으로 나아가게 하는 핵심 동력이다.</p>
+    </div>
+
+    <div class="post-footer">
+      <a href="/blog/post1.html" class="btn-post-nav btn-prev">← 이전 글</a>
+      <a href="/blog/post3.html" class="btn-post-nav btn-next">다음 글: API 키의 비밀 →</a>
+    </div>
   </main>
 
 </body>
