@@ -8,7 +8,9 @@ require('dotenv').config();
 // Supabase 초기화 (배치 작업은 서비스 롤 키 사용 권장)
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SECRET_KEY ||
+    process.env.SUPABASE_ANON_KEY
 );
 
 function pickFirst(row, keys) {
