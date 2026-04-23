@@ -1,170 +1,53 @@
-# 🐾 Pet-Pass (디지털 반려견 증명 & 공식 인증 매장 서비스)
+# 🐾 Pet-Pass
 
-반려동물과 함께하는 즐거운 외출의 동반자, **Pet-Pass**에 오신 것을 환영합니다! 🐕✨
+반려동물 동반 가능 매장 실시간 탐색 및 디지털 펫 패스 인증 서비스.
 
-## 🚀 Live Demo
-지금 바로 Pet-Pass 서비스를 경험해 보세요!
-- **URL:** [https://pet-pass-web.vercel.app/](https://pet-pass-web.vercel.app/)
-
----
-
-## 🐕 서비스 개요 (Service Overview)
-**"반려동물과 함께하는 즐거운 외출의 동반자, Pet-Pass."**
-
-Pet-Pass는 반려인들이 안심하고 방문할 수 있는 장소를 찾고, 복잡한 증명서 없이 모바일 하나로 반려견 정보를 인증할 수 있는 스마트한 동반 서비스입니다.
-
-### ✨ 핵심 기능
-- **실시간 지도 탐색**: 내 주변의 반려동물 동반 가능 매장(카페, 식당, 제과점 등)을 지도에서 한눈에 확인하세요.
-- **맞춤형 필터링**: 업종별 필터링을 통해 내가 원하는 최적의 장소를 빠르게 추천받을 수 있습니다.
-- **신뢰할 수 있는 정보**: 2026 공식 인증 매장 정보를 바탕으로 검증된 장소만을 제공합니다.
-- **디지털 펫 패스**: 정부 데이터(국가동물보호정보시스템)와 연동하여 반려견 등록 정보를 안전하게 관리하고 인증하세요.
+- **Service:** [https://pet-pass-web.vercel.app/](https://pet-pass-web.vercel.app/)
+- **Blog:** [https://pet-pass-web.vercel.app/blog](https://pet-pass-web.vercel.app/blog)
 
 ---
 
-## 📱 모바일 최적화 (Mobile First)
-언제 어디서나, 밖에서도 간편하게 사용할 수 있도록 모바일 환경에 최적화되어 있습니다.
+## 🤖 AI Development Protocol
 
-- **한 손으로 편리한 검색**: 이동 중에도 간편하게 조작할 수 있는 직관적인 UI를 제공합니다.
-- **쾌적한 지도 중심 화면**: 복잡한 텍스트보다는 지도 인터랙션에 집중하여 직관적인 경험을 선사합니다.
-- **빠른 상단 이동**: 리스트가 길어져도 '맨 위로' 버튼을 통해 즉시 처음으로 돌아갈 수 있습니다.
-- **모바일 웹앱(PWA) 경험**: 별도의 설치 없이도 앱처럼 부드러운 사용감을 느낄 수 있습니다.
+이 섹션은 Jules, Codex, Antigravity 등 AI 협업 에이전트들이 프로젝트 컨텍스트를 즉시 파악하고 효율적으로 기여하기 위한 기술 지침입니다.
 
----
+### 🛠 Tech Stack
+- **Frontend:** Vanilla JS, Tailwind CSS, Kakao Maps API
+- **Backend:** Vercel Serverless Functions (Node.js)
+- **Database:** Supabase (PostgreSQL)
+- **CI/CD:** GitHub Actions, Vercel
 
-# 🛠️ 개발자 가이드 (Developer Guide)
+### 🔄 Data Flow & Logic
+1. **Sync Pipeline:** GitHub Actions가 정기적으로 공공데이터(Excel/API)를 읽어 Supabase에 `UPSERT` 합니다.
+2. **Geocoding & Caching:** 신규 매장(좌표 없는 데이터)에 대해서만 Kakao API를 호출하여 좌표를 추출합니다. 기존 데이터의 좌표는 DB에서 캐싱되어 재사용됩니다.
+3. **Frontend Rendering:** 클라이언트에서 Supabase API를 통해 전체 매장 데이터를 가져와 지도에 렌더링하며, 필터링 및 검색은 클라이언트 사이드에서 최적화된 루프로 처리합니다.
 
-이 섹션은 프로젝트의 기술적 구조와 개발 지침을 포함하고 있습니다.
-
-## 🚀 중요: 작업 지침 (Working Guidelines)
-
-이 프로젝트는 Antigravity AI와 함께 개발하며, 지속적인 유지보수와 안정적인 버전 관리를 위해 아래 규칙을 반드시 준수합니다.
-
-> [!IMPORTANT]
-> **1. 소통 및 문서화 언어**
-> - 모든 소통(대화) 및 프로젝트 관련 문서(README, 계획서, 작업 로그 등)는 **한국어**를 원칙으로 합니다.
->
-> **2. 브랜치 전략 (Team-up Flow)**
-> - 새로운 작업 시작 시 반드시 `main` 브랜치에서 최신 상태를 받아온 후(pull), 새로운 작업 브랜치를 생성합니다.
-> - **브랜치 생성 즉시 원격 저장소에 푸시**하여 추적을 시작합니다. (명령어: `git push -u origin feature/작업명`)
->
-> **3. 작업 완료 및 통합 (Merge)**
-> - 기능 개발과 테스트가 완료되면, 해당 브랜치를 원격에 최종 푸시합니다.
-> - 이후 **원격 저장소를 기준으로 main 브랜치에 통합**하는 과정을 거칩니다. (로컬 병합 후 push 또는 PR 시뮬레이션)
->
-> **4. 커밋 정책**
-> - AI는 작업을 마칠 때마다 자동으로 커밋하지 않습니다.
-> - 사용자(USER)가 테스트를 마친 후 성공적으로 확인되었을 때, **사용자의 명시적인 커밋 요청이 있을 경우에만** `git commit`을 수행합니다.
->
-> **5. 셸 명령어 정책 (Windows PowerShell)**
-> - 현재 작업 환경은 **Windows PowerShell**입니다.
-> - **`&&` 연산자를 사용하여 명령어를 연결하지 않습니다.** 이는 구문 오류를 발생시킵니다.
-> - 모든 명령어는 **개별적으로 하나씩 실행**하거나, 결합이 꼭 필요한 경우 `;` 연산자를 사용합니다.
->
-> **6. 데이터 활용 및 검색 정책 (Data Policy)**
-> - **외부 실시간 검색(Web Search)을 통한 데이터 수집은 최소화합니다.** 불필요한 토큰 소모를 줄이기 위해 가급적 검색을 자제합니다.
-> - 프로젝트 내 로컬 데이터(`data/*.json`, `data/*.xlsx`, `data/*.csv` 등)를 **최우선**으로 참조하여 추론합니다.
-> - 대량 데이터 처리가 필요한 경우, 외부 검색 대신 사용자에게 **구조화된 파일(Excel/JSON) 직접 제공**을 먼저 요청합니다.
->
-> **7. 효율적인 코드 작성 원칙 (Performance-First Coding)**
-> - Node.js 등 백엔드 로직 구현 시, 가독성보다 **성능과 자원 효율성을 우선** 고려합니다.
->   - 대용량 데이터 처리 시 불필요한 체이닝(`.filter().map()`) 보다 단일 반복문(`for`) 검토
->   - 동기/비동기 처리 선택 시 병목 지점을 고려한 설계 우선
-> - 외부 API 호출 시 **반드시 필요한 필드만 요청**합니다. (불필요한 페이로드 최소화)
-> - 반복 호출이 예상되는 결과값에는 **캐싱 전략을 기본적으로 고려**합니다. (예: 서버 내 메모리 캐시, `Map` 자료구조 활용)
+### 📜 Collaboration Principles
+- **Documentation Only:** 로직 수정이 없는 문서 작업(`README`, `docs` 등) 커밋 시 반드시 `[skip ci]`를 포함하여 불필요한 빌드를 방지합니다.
+- **Commit Convention:** 아래의 접두사를 엄격히 준수합니다.
+  - `feat:` 신규 기능 추가
+  - `fix:` 버그 수정
+  - `docs:` 문서 수정
+  - `chore:` 빌드 업무, 패키지 매니저 설정 등
+- **Performance First:** 대용량 데이터(1,700+) 처리 시 불필요한 고차 함수 체이닝보다는 성능 위주의 루프를 선호합니다.
 
 ---
 
-## 🚀 프로젝트 개요 (Overview)
+## 📂 Project Structure Summary
 
-본 프로젝트는 반려인들이 안심하고 방문할 수 있는 매장 정보를 제공하고, 복잡한 증명서 없이 모바일 하나로 반려견 등록 여부를 인증할 수 있는 서비스입니다. 최근 아키텍처 고도화를 통해 Vercel Serverless 환경으로 전환되었으며, 강력한 검색 및 지도 인터랙션 기능을 제공합니다.
-
----
-
-## 🛠️ 기술 스택 (Tech Stack)
-
-### Frontend
-- **Vanilla JS**: 외부 라이브러리 의존성을 최소화한 고성능 로직 구현.
-- **Kakao Maps API**: 위치 기반 매장 탐색 및 커스텀 마커/클러스터링 (Honey Gold 브랜드 테마 적용).
-- **Hangul.js**: 한국어 초성 검색 및 형태소 매칭 지원.
-- **Honey Beige Design System**: 따뜻하고 편안한 무드의 "허니 베이지" 테마와 Glassmorphism UI를 결합한 현대적인 디자인.
-
-### Backend (Serverless)
-- **Vercel Serverless Functions (Node.js)**: `/api` 구조를 통한 확장성 있는 백엔드 API.
-- **Axios**: 정부 API 및 외부 통신 처리.
-
-### CI/CD & Security
-- **GitHub Actions**: `main` 브랜치 푸시 시 자동 빌드 및 Vercel 배포.
-- **Environment Variables**: API Key 보안을 위한 환경 변수(`Secrets`) 관리 및 빌드 타임 주입.
+| Folder | Role |
+| :--- | :--- |
+| `/api` | Vercel Serverless Functions (Backend API endpoints) |
+| `/public` | Frontend static assets (HTML, CSS, JS, Blog) |
+| `/scripts` | Data sync, build, and utility scripts |
+| `/data` | Raw data files and local storage for development |
+| `/docs` | Development history and manual documents |
+| `.github/workflows` | CI/CD automation (Daily sync, Deployment) |
 
 ---
 
-## 📱 주요 기능 (Key Features)
-
-### 1. 지능형 매장 검색 및 필터링
-- **2단계 지역 필터**: 광역시/도 단위의 Depth 1과 시/군/구 단위의 Depth 2를 결합한 정교한 지역 선택.
-- **가중치 기반 검색 알고리즘**: 상호명 정확도, 전방 일치, 초성 검색, 행정구역 매칭 등을 고려한 스코어링 시스템 적용.
-- **실시간 데이터 처리**: 1,500개 이상의 매장 데이터를 `for` 루프 최적화를 통해 지연 없이 필터링.
-
-### 2. 고도화된 지도 인터랙션 (UX Optimized)
-- **이 지역 탐색 (Search Here)**: 사용자가 지도를 이동하거나 확대/축소할 때 현재 뷰포트 기준으로 매장을 재탐색하는 기능.
-- **이전 위치로 (Back-step)**: 매장 상세 정보를 본 후, 클릭 직전의 지도 위치와 필터링 상태로 즉시 복구하는 기능.
-- **시스템 이동 감지**: 프로그램에 의한 지도 이동과 사용자의 수동 조작을 구분하여 '이 지역 탐색' 버튼의 노출을 정교하게 제어.
-
-### 3. 디지털 펫 패스 (Pet-Pass)
-- **정부 데이터 실시간 인증**: 국가동물보호정보시스템(V3) API와 연동하여 실제 등록번호와 소유자 정보 확인.
-- **보안 중심 저장**: 인증된 정보는 별도의 가입 없이 브라우저 로컬 스토리지에 안전하게 보관(단방향).
-
----
-
-## 📂 프로젝트 구조 (Structure)
-
-```text
-/
-├── api/                    # Vercel Serverless Functions (Backend)
-│   ├── auth-pet.js         # 정부 API 연동 및 인증 로직
-│   └── stores.js           # 매장 데이터 서빙 API
-├── public/                 # 프론트엔드 정적 자원
-│   ├── index.html          # UI 구조 및 카카오맵 플레이스홀더
-│   ├── script.js           # 지도 인터랙션 및 필터링 핵심 로직
-│   └── style.css           # 반응형 디자인 및 스타일시트
-├── scripts/                # 빌드 및 유틸리티 스크립트
-│   └── build.js            # API Key 주입 및 배포용 파일 생성
-├── data/                   # 정적 데이터 리소스 (JSON)
-├── server.js               # 로컬 개발용 Express 서버 (API Key 동적 주입)
-├── .github/workflows/      # GitHub Actions 자동 배포 설정
-└── vercel.json             # Vercel 라우팅 및 환경 설정
-```
-
----
-
-## 🛠️ 실행 및 배포 방법 (Setup & Deployment)
-
-### 1. 환경 변수 설정
-로컬 개발 및 배포를 위해 루트 디렉토리에 `.env` 파일을 생성하고 아래 변수들을 설정해야 합니다:
-- `KAKAO_MAP_API_KEY`: 카카오 개발자 센터에서 발급받은 JavaScript 키.
-- `DATA_GO_KR_API_KEY`: 공공데이터포털에서 발급받은 동물등록정보조회 API 키.
-
-### 2. 로컬 실행
-```bash
-npm install
-node server.js
-```
-`http://localhost:3000`에서 접속 가능합니다.
-> `server.js`는 로컬 개발 전용 Express 서버입니다. Vercel 배포 시에는 `api/` 폴더의 Serverless Functions가 사용됩니다.
-
-### 3. 빌드 및 배포
-- **Build**: `npm run build` 실행 시 `public/index.html`에 Kakao Map API Key가 주입됩니다 (Vercel 빌드 환경에서 in-place 치환).
-- **Deployment**: `main` 브랜치에 `push` 하면 GitHub Actions를 통해 Vercel Production으로 자동 배포됩니다.
-
----
-
-## 🗺️ 향후 계획 (Roadmap)
-
-- [x] **모바일 퀵 스크롤**: 매장 리스트가 길어질 경우 상단으로 즉시 이동하는 '맨 위로' 플로팅 버튼 추가.
-- [ ] **정부 API 연동 고도화**: 대량 트래픽에 대응하기 위한 API 호출 캐싱 전략 강화.
-
----
-
-## 📊 데이터 출처 (Data Sources)
-- **식품안전나라**: 반려동물 동반 가능 업소 현황 공식 데이터.
-- **공공데이터포털**: 농림축산식품부 동물등록정보조회 서비스.
+## 🚀 Setup & Execution
+1. **Environment:** `.env` 파일에 `KAKAO_MAP_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `DATA_GO_KR_API_KEY` 설정 필요.
+2. **Install:** `npm install`
+3. **Local Dev:** `npm start` (Express 서버 실행)
+4. **Build:** `npm run build` (API Key 주입 및 배포 자산 생성)
