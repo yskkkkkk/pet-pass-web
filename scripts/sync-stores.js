@@ -5,11 +5,20 @@ const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
-// Supabase 초기화 (배치 작업은 시크릿 키 사용)
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SECRET_KEY
-);
+function getSupabaseClient() {
+  if (!process.env.SUPABASE_URL) {
+    throw new Error('SUPABASE_URL이 설정되어 있지 않습니다.');
+  }
+
+  if (!process.env.SUPABASE_SECRET_KEY) {
+    throw new Error('SUPABASE_SECRET_KEY가 설정되어 있지 않습니다.');
+  }
+
+  return createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SECRET_KEY
+  );
+}
 
 function pickFirst(row, keys) {
   for (const key of keys) {
@@ -63,6 +72,7 @@ async function syncPetFriendlyStores() {
   const downloadUrl = process.env.PET_EXCEL_URL || 'https://www.foodsafetykorea.go.kr/portal/petKorea/downloadExcel.do';
   const kakaoApiKey = getKakaoApiKey();
   const batchTimestamp = new Date().toISOString();
+  const supabase = getSupabaseClient();
 
   console.log(`🚀 데이터 동기화 시작 (배치 시간: ${batchTimestamp})...`);
 
