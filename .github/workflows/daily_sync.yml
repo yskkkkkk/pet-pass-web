@@ -58,9 +58,49 @@ jobs:
           fi
 
       - name: Run Data Collection Script
+        id: sync
+        continue-on-error: true
         run: node scripts/sync-stores.js
 
+      - name: Update schedule history
+        if: always()
+        run: |
+          FILE=docs/schedule_history.md
+          TS=$(TZ=Asia/Seoul date '+%Y. %-m. %-d. %p %-I:%M:%S')
+
+          if [ "${{ steps.sync.outcome }}" = "success" ]; then
+            RESULT="✅ 성공"
+            NOTE="자동 수집 완료"
+          else
+            RESULT="❌ 실패"
+            NOTE="GitHub Actions 로그 확인 필요"
+          fi
+
+          ENTRY="| ${TS} | ${RESULT} | ${NOTE} |"
+
+          if [ ! -f "$FILE" ]; then
+            cat > "$FILE" <<'EOT'
+# 🕒 데이터 수집 스케줄링 이력
+
+> GitHub Actions(`daily_sync.yml`) 실행 시, 최신 결과가 표 최상단에 자동으로 기록됩니다.
+
+| 일시 (KST) | 결과 | 비고 |
+| :--- | :--- | :--- |
+EOT
+          fi
+
+          awk -v entry="$ENTRY" '
+            NR==1 { print; next }
+            NR==2 { print; next }
+            NR==3 { print; next }
+            NR==4 { print; print entry; next }
+            { print }
+          ' "$FILE" > "$FILE.tmp"
+
+          mv "$FILE.tmp" "$FILE"
+
       - name: Commit and Push if Changed
+        if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -71,3 +111,9 @@ jobs:
             git commit -m "chore: update pet-friendly stores data [skip ci]"
             git push
           fi
+
+      - name: Fail workflow if sync failed
+        if: always() && steps.sync.outcome != 'success'
+        run: |
+          echo "데이터 수집 스크립트가 실패했습니다. 위 로그를 확인하세요."
+          exit 1

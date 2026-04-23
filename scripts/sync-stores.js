@@ -295,7 +295,7 @@ async function syncPetFriendlyStores() {
       console.warn(`⚠️ ${backupWarning}`);
     }
 
-    return { success: true, count: successCount, upserted: toUpsert.length, deleted: toDeleteIds.length, backupWarning };
+    return { success: true, count: processedKeys.size, upserted: toUpsert.length, deleted: toDeleteIds.length, backupWarning };
   } catch (error) {
     console.error(`❌ 데이터 동기화 실패: ${error.message}`);
     return { success: false, error: error.message };
