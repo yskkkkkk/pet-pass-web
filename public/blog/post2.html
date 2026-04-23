@@ -39,6 +39,26 @@
       gap: 10px;
     }
 
+    /* ─── 테마 토글 버튼 ─── */
+    .theme-toggle-btn {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .theme-toggle-btn:hover { background: var(--border); }
+
     .nav-buttons {
       max-width: 800px;
       margin: 20px auto 0;
@@ -109,8 +129,27 @@
     .post-date {
       color: var(--text-tertiary);
       font-size: 14px;
-      margin-bottom: 36px;
+      margin-bottom: 14px;
       display: block;
+    }
+
+    /* ─── 태그 ─── */
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 36px;
+    }
+
+    .tag-chip {
+      display: inline-block;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
     }
 
     .toc {
@@ -241,12 +280,32 @@
       margin: 20px 0;
       overflow-x: auto;
       line-height: 1.7;
+      position: relative;
     }
 
     .code-comment { color: #6c7086; }
     .code-keyword { color: #cba6f7; }
     .code-string { color: #a6e3a1; }
     .code-var { color: #89b4fa; }
+
+    /* ─── 코드 복사 버튼 ─── */
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      color: #8a95b8;
+      font-size: 11px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-family: 'Pretendard', sans-serif;
+      transition: all 0.15s;
+      z-index: 1;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.15); color: #cdd6f4; }
+    .copy-btn.copied { color: #a6e3a1; border-color: rgba(166,227,161,0.4); }
 
     /* ─── 하이라이트 / 레슨 박스 ─── */
     .highlight-box {
@@ -313,13 +372,21 @@
       .post-main-title { font-size: 22px; }
       .compare-grid { grid-template-columns: 1fr; }
       .post-footer { flex-direction: column; gap: 10px; }
+      .theme-toggle-btn { right: 8px; padding: 5px 8px; font-size: 11px; }
     }
   </style>
+  <script>
+  (function(){
+    var t = localStorage.getItem('pet-pass-theme') || 'beige';
+    if (t !== 'beige') document.documentElement.setAttribute('data-theme', t);
+  })();
+  </script>
 </head>
 <body>
 
   <header class="blog-header glass">
     <h1>🐾 Pet-Pass Dev Blog</h1>
+    <button class="theme-toggle-btn" id="themeToggle" onclick="cycleTheme()">🌸 베이지</button>
   </header>
 
   <div class="nav-buttons">
@@ -335,6 +402,12 @@
 
     <h1 class="post-main-title">AI가 크롤링에 집착하다<br>토큰을 다 써버린 날</h1>
     <span class="post-date">2026. 04. 09</span>
+
+    <div class="post-tags">
+      <span class="tag-chip">#바이브코딩</span>
+      <span class="tag-chip">#데이터파이프라인</span>
+      <span class="tag-chip">#토큰</span>
+    </div>
 
     <div class="toc">
       <p class="toc-title">목차</p>
@@ -416,7 +489,7 @@
 
     <p>그 이후 흐름은 훨씬 빨랐다. 나중에는 엑셀 파일의 직접 다운로드 엔드포인트 URL을 찾아내서 코드에 고정값으로 넣는 방식으로 자동화까지 완성됐다 — 크롤링이 아니라, 그냥 알려진 URL로 파일을 내려받는 방식으로.</p>
 
-    <div class="code-block"><span class="code-comment">// 최종 해결 방식 — 크롤링 없이, 직접 다운로드 URL 사용</span>
+    <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">복사</button><span class="code-comment">// 최종 해결 방식 — 크롤링 없이, 직접 다운로드 URL 사용</span>
 <span class="code-keyword">const</span> <span class="code-var">downloadUrl</span> = process.env.<span class="code-var">PET_EXCEL_URL</span> || <span class="code-string">'https://www.foodsafetykorea.go.kr/...'</span>;
 <span class="code-keyword">const</span> <span class="code-var">response</span> = <span class="code-keyword">await</span> axios.get(<span class="code-var">downloadUrl</span>, { responseType: <span class="code-string">'arraybuffer'</span> });</div>
 
@@ -452,6 +525,31 @@
       <a href="/blog/post3.html" class="btn-post-nav btn-next">다음 글: API 키의 비밀 →</a>
     </div>
   </main>
+
+  <script>
+  function copyCode(btn) {
+    var block = btn.parentElement;
+    var text = '';
+    block.childNodes.forEach(function(n) {
+      if (n !== btn && !(n.classList && n.classList.contains('file-label'))) {
+        text += n.textContent;
+      }
+    });
+    text = text.trim();
+    navigator.clipboard.writeText(text).then(function() {
+      btn.textContent = '복사됨!';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = '복사';
+        btn.classList.remove('copied');
+      }, 1500);
+    }).catch(function() {
+      btn.textContent = '실패';
+      setTimeout(function() { btn.textContent = '복사'; }, 1500);
+    });
+  }
+  </script>
+  <script src="/theme.js"></script>
 
 </body>
 </html>

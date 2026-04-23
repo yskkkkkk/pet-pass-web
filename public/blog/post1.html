@@ -14,8 +14,12 @@
       margin: 0;
       padding: 0;
       color: var(--text-primary);
-      overflow-y: auto !important; /* style.css의 overflow:hidden 해제 */
+      overflow-y: auto !important;
       min-height: 100vh;
+    }
+
+    html[data-theme="dark"] .flow-node.human {
+      background: #2a1a5e; color: #c4b5fd; border-color: #a78bfa;
     }
 
     .blog-header {
@@ -38,6 +42,26 @@
       justify-content: center;
       gap: 10px;
     }
+
+    /* ─── 테마 토글 버튼 ─── */
+    .theme-toggle-btn {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .theme-toggle-btn:hover { background: var(--border); }
 
     .nav-buttons {
       max-width: 800px;
@@ -115,8 +139,27 @@
     .post-date {
       color: var(--text-tertiary);
       font-size: 14px;
-      margin-bottom: 36px;
+      margin-bottom: 14px;
       display: block;
+    }
+
+    /* ─── 태그 ─── */
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 36px;
+    }
+
+    .tag-chip {
+      display: inline-block;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
     }
 
     .toc {
@@ -363,13 +406,21 @@
       .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
       .stat-number { font-size: 24px; }
       .collab-flow { gap: 6px; }
+      .theme-toggle-btn { right: 8px; padding: 5px 8px; font-size: 11px; }
     }
   </style>
+  <script>
+  (function(){
+    var t = localStorage.getItem('pet-pass-theme') || 'beige';
+    if (t !== 'beige') document.documentElement.setAttribute('data-theme', t);
+  })();
+  </script>
 </head>
 <body>
 
   <header class="blog-header glass">
     <h1>🐾 Pet-Pass Dev Blog</h1>
+    <button class="theme-toggle-btn" id="themeToggle" onclick="cycleTheme()">🌸 베이지</button>
   </header>
 
   <div class="nav-buttons">
@@ -385,6 +436,11 @@
 
     <h1 class="post-main-title">Pet-Pass를 만든다는 것,<br>그리고 AI와 함께한다는 것</h1>
     <span class="post-date">2026. 04. 08</span>
+
+    <div class="post-tags">
+      <span class="tag-chip">#바이브코딩</span>
+      <span class="tag-chip">#AI협업</span>
+    </div>
 
     <div class="toc">
       <p class="toc-title">목차</p>
@@ -479,6 +535,8 @@
       <a href="/blog/post2.html" class="btn-next-post">다음 글: 토큰 낭비의 현장 →</a>
     </div>
   </main>
+
+  <script src="/theme.js"></script>
 
 </body>
 </html>
