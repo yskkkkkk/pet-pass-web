@@ -51,15 +51,27 @@ async function updateScheduleHistory(success, details) {
     const dateStr = kstDate.toISOString().replace('T', ' ').substring(0, 19).replace(/-/g, '. ') + ' (KST)';
 
     const status = success ? '✅ 성공' : '❌ 실패';
-    const newRow = `| ${dateStr} | ${status} | ${details} |\n`;
+    const newRow = `| ${dateStr} | ${status} | ${details} |`;
 
+    let content = '';
     if (fs.existsSync(historyPath)) {
-      fs.appendFileSync(historyPath, newRow, 'utf8');
+      content = fs.readFileSync(historyPath, 'utf8');
     } else {
-      const header = '# 🕒 데이터 수집 스케줄링 이력\n\n| 일시 (KST) | 결과 | 비고 |\n| :--- | :--- | :--- |\n';
-      fs.writeFileSync(historyPath, header + newRow, 'utf8');
+      content = '# 🕒 데이터 수집 스케줄링 이력\n\n> GitHub Actions(`daily_sync.yml`) 실행 시, 최신 결과가 표 최상단에 자동으로 기록됩니다.\n\n| 일시 (KST) | 결과 | 비고 |\n| :--- | :--- | :--- |';
     }
-    console.log('📝 스케줄 히스토리 업데이트 완료.');
+
+    const lines = content.split('\n');
+    const tableHeaderIndex = lines.findIndex(line => line.includes('| 일시 (KST) | 결과 | 비고 |'));
+
+    if (tableHeaderIndex !== -1) {
+      // 헤더 + 구분선(---) 다음에 삽입
+      lines.splice(tableHeaderIndex + 2, 0, newRow);
+    } else {
+      lines.push(newRow);
+    }
+
+    fs.writeFileSync(historyPath, lines.join('\n'), 'utf8');
+    console.log('📝 스케줄 히스토리 업데이트 완료 (최상단 추가).');
   } catch (err) {
     console.warn(`⚠️ 스케줄 히스토리 업데이트 실패: ${err.message}`);
   }
