@@ -154,6 +154,11 @@ body {
   overflow: hidden;
 }
 
+.auth-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
 .auth-btn:active {
   transform: scale(0.98);
 }
@@ -550,7 +555,10 @@ select.icon-tag:focus {
 
 #btn-github:hover {
   background-color: #333 !important;
-  transform: translateY(-2px);
+}
+
+#btn-blog:hover {
+  background-color: var(--primary-hover) !important;
 }
 
 #btn-unlink:hover {

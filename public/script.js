@@ -558,6 +558,7 @@ function unlinkPetPass() {
 const logo = document.querySelector('.logo');
 const btnCloseInfo = document.getElementById('btn-close-info');
 const btnGithub = document.getElementById('btn-github');
+const btnBlog = document.getElementById('btn-blog');
 
 if (logo) {
   logo.onclick = () => {
@@ -576,6 +577,12 @@ if (btnCloseInfo) {
 if (btnGithub) {
   btnGithub.onclick = () => {
     window.open('https://github.com/yskkkkkk/pet-pass-web', '_blank');
+  };
+}
+
+if (btnBlog) {
+  btnBlog.onclick = () => {
+    window.location.href = '/blog';
   };
 }
 
