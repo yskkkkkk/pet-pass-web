@@ -38,6 +38,45 @@ function getKakaoApiKey() {
   return process.env.KAKAO_REST_API_KEY;
 }
 
+/**
+ * 결과를 docs/schedule_history.md에 기록
+ */
+async function updateScheduleHistory(success, details) {
+  try {
+    const historyPath = path.join(process.cwd(), 'docs', 'schedule_history.md');
+    const now = new Date();
+    // KST 시간 포맷팅 (UTC+9)
+    const kstOffset = 9 * 60 * 60 * 1000;
+    const kstDate = new Date(now.getTime() + kstOffset);
+    const dateStr = kstDate.toISOString().replace('T', ' ').substring(0, 19).replace(/-/g, '. ') + ' (KST)';
+
+    const status = success ? '✅ 성공' : '❌ 실패';
+    const newRow = `| ${dateStr} | ${status} | ${details} |`;
+
+    let content = '';
+    if (fs.existsSync(historyPath)) {
+      content = fs.readFileSync(historyPath, 'utf8');
+    } else {
+      content = '# 🕒 데이터 수집 스케줄링 이력\n\n> GitHub Actions(`daily_sync.yml`) 실행 시, 최신 결과가 표 최상단에 자동으로 기록됩니다.\n\n| 일시 (KST) | 결과 | 비고 |\n| :--- | :--- | :--- |';
+    }
+
+    const lines = content.split('\n');
+    const tableHeaderIndex = lines.findIndex(line => line.includes('| 일시 (KST) | 결과 | 비고 |'));
+
+    if (tableHeaderIndex !== -1) {
+      // 헤더 + 구분선(---) 다음에 삽입
+      lines.splice(tableHeaderIndex + 2, 0, newRow);
+    } else {
+      lines.push(newRow);
+    }
+
+    fs.writeFileSync(historyPath, lines.join('\n'), 'utf8');
+    console.log('📝 스케줄 히스토리 업데이트 완료 (최상단 추가).');
+  } catch (err) {
+    console.warn(`⚠️ 스케줄 히스토리 업데이트 실패: ${err.message}`);
+  }
+}
+
 async function geocodeAddress(address) {
   const kakaoApiKey = getKakaoApiKey();
   if (!kakaoApiKey || !address) return null;
@@ -295,9 +334,12 @@ async function syncPetFriendlyStores() {
       console.warn(`⚠️ ${backupWarning}`);
     }
 
-    return { success: true, count: successCount, upserted: toUpsert.length, deleted: toDeleteIds.length, backupWarning };
+    const result = { success: true, upserted: toUpsert.length, deleted: toDeleteIds.length, backupWarning };
+    await updateScheduleHistory(true, `${result.upserted}개 업데이트, ${result.deleted}개 삭제 완료`);
+    return result;
   } catch (error) {
     console.error(`❌ 데이터 동기화 실패: ${error.message}`);
+    await updateScheduleHistory(false, error.message);
     return { success: false, error: error.message };
   }
 }
