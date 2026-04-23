@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pet-Pass를 만든다는 것 | Pet-Pass Dev Blog</title>
+  <title>Kakao API는 되는데 왜 정부 API는 안 되나 | Pet-Pass Dev Blog</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
@@ -14,6 +14,8 @@
       margin: 0;
       padding: 0;
       color: var(--text-primary);
+      overflow-y: auto !important;
+      min-height: 100vh;
     }
 
     .blog-header {
@@ -61,10 +63,7 @@
       transition: all 0.2s;
     }
 
-    .btn-nav:hover {
-      background: var(--bg-secondary);
-      transform: translateY(-1px);
-    }
+    .btn-nav:hover { background: var(--bg-secondary); transform: translateY(-1px); }
 
     .blog-content {
       max-width: 800px;
@@ -77,13 +76,12 @@
       line-height: 1.9;
     }
 
-    .post-main-title {
-      font-size: 30px;
-      font-weight: 800;
-      color: var(--primary);
-      margin-top: 0;
-      margin-bottom: 8px;
-      line-height: 1.4;
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
     .post-series-tag {
@@ -92,10 +90,20 @@
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 4px 14px;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-tertiary);
       font-weight: 600;
-      margin-bottom: 16px;
+    }
+
+    .read-time { font-size: 12px; color: var(--text-tertiary); }
+
+    .post-main-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 8px;
+      line-height: 1.4;
     }
 
     .post-date {
@@ -105,27 +113,208 @@
       display: block;
     }
 
+    .toc {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      border: 1px solid var(--border);
+    }
+
+    .toc-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 12px 0;
+    }
+
+    .toc ol { margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 14px; line-height: 2.2; }
+    .toc a { color: var(--text-secondary); text-decoration: none; }
+    .toc a:hover { color: var(--primary); }
+
     .blog-content h2 {
       font-size: 22px;
       font-weight: 700;
       color: var(--text-primary);
-      margin-top: 48px;
+      margin-top: 52px;
       margin-bottom: 16px;
       border-left: 4px solid var(--primary);
       padding-left: 14px;
     }
 
-    .blog-content p {
-      font-size: 16px;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
+    .blog-content p { font-size: 16px; color: var(--text-secondary); margin-bottom: 20px; }
+    .blog-content strong { color: var(--text-primary); font-weight: 700; }
+    .blog-content code {
+      background: var(--bg-secondary);
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: var(--primary);
+      border: 1px solid var(--border);
     }
 
-    .blog-content strong {
+    /* ─── 비교 다이어그램 ─── */
+    .timing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .timing-col {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 22px;
+      border: 1px solid var(--border);
+    }
+
+    .timing-col.build { border-top: 3px solid #3b82f6; }
+    .timing-col.runtime { border-top: 3px solid #f59e0b; }
+
+    .timing-header {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .timing-col.build .timing-header { color: #3b82f6; }
+    .timing-col.runtime .timing-header { color: #f59e0b; }
+
+    .timing-badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 700;
+      background: var(--bg-primary);
+      border: 1px solid currentColor;
+    }
+
+    .timing-row {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border);
+      line-height: 1.6;
+    }
+
+    .timing-row:last-child { border-bottom: none; }
+
+    .timing-row strong {
+      display: block;
+      font-size: 12px;
       color: var(--text-primary);
+      margin-bottom: 2px;
       font-weight: 700;
     }
 
+    /* ─── 아키텍처 플로우 ─── */
+    .arch-diagram {
+      background: var(--bg-secondary);
+      border-radius: 14px;
+      padding: 24px 20px;
+      margin: 28px 0;
+      border: 1px solid var(--border);
+    }
+
+    .arch-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 18px;
+    }
+
+    .arch-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .arch-node {
+      background: var(--bg-primary);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-align: center;
+      min-width: 90px;
+      line-height: 1.4;
+    }
+
+    .arch-node small {
+      display: block;
+      font-weight: 400;
+      font-size: 10px;
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+
+    .arch-node.client { border-color: #60a5fa; background: #eff6ff; color: #1e40af; }
+    .arch-node.server { border-color: #f59e0b; background: #fffbeb; color: #92400e; }
+    .arch-node.key { border-color: #ef4444; background: #fef2f2; color: #991b1b; font-size: 11px; }
+    .arch-node.fail { border-color: #ef4444; background: #fef2f2; color: #991b1b; text-decoration: line-through; opacity: 0.6; }
+
+    .arch-arrow {
+      font-size: 16px;
+      color: var(--text-tertiary);
+      flex-shrink: 0;
+    }
+
+    .arch-arrow.broken { color: #ef4444; }
+
+    .arch-subtitle {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-top: 14px;
+      font-style: italic;
+    }
+
+    /* ─── 코드 블록 ─── */
+    .code-block {
+      background: #1e1e2e;
+      border-radius: 10px;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #cdd6f4;
+      margin: 20px 0;
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    .code-block .file-label {
+      display: inline-block;
+      font-size: 10px;
+      color: #6c7086;
+      margin-bottom: 10px;
+      padding: 2px 10px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+    }
+
+    .code-comment { color: #6c7086; }
+    .code-keyword { color: #cba6f7; }
+    .code-string { color: #a6e3a1; }
+    .code-var { color: #89b4fa; }
+    .code-fn { color: #f9e2af; }
+    .code-red { color: #f38ba8; }
+    .code-green { color: #a6e3a1; }
+
+    /* ─── 하이라이트 / 레슨 박스 ─── */
     .highlight-box {
       background: var(--bg-secondary);
       border-left: 4px solid var(--primary);
@@ -134,39 +323,75 @@
       margin: 28px 0;
     }
 
-    .highlight-box p {
-      margin: 0;
-      font-size: 15px;
-      font-style: italic;
-      color: var(--text-secondary);
+    .highlight-box p { margin: 0; font-size: 15px; font-style: italic; color: var(--text-secondary); }
+
+    .warning-box {
+      background: #fef2f2;
+      border-left: 4px solid #ef4444;
+      border-radius: 0 12px 12px 0;
+      padding: 18px 20px;
+      margin: 28px 0;
     }
 
-    .series-preview {
+    .warning-box p { margin: 0; font-size: 14px; color: #991b1b; }
+    .warning-box strong { color: #7f1d1d; }
+
+    .lesson-box {
       background: var(--bg-secondary);
       border-radius: 12px;
-      padding: 20px 24px;
-      margin-top: 40px;
+      padding: 24px 28px;
+      margin: 40px 0;
+      border: 1px solid var(--border);
     }
 
-    .series-preview h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-primary);
+    .lesson-box h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin: 0 0 14px 0;
     }
 
-    .series-preview ul {
-      margin: 0;
-      padding-left: 20px;
-      color: var(--text-secondary);
-      font-size: 15px;
-      line-height: 2;
+    .lesson-box p { margin: 0 0 10px 0; font-size: 15px; color: var(--text-secondary); }
+    .lesson-box p:last-child { margin-bottom: 0; }
+
+    .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    /* ─── 포스트 푸터 ─── */
+    .post-footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 40px 0;
+    .btn-post-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-prev { background: var(--surface); border: 1px solid var(--border); color: var(--text-primary); }
+    .btn-next { background: var(--primary); color: white; }
+    .btn-next:hover { opacity: 0.9; transform: translateX(2px); }
+    .btn-prev:hover { background: var(--bg-secondary); }
+
+    @media (max-width: 600px) {
+      .blog-content { padding: 24px 20px; }
+      .post-main-title { font-size: 22px; }
+      .timing-grid { grid-template-columns: 1fr; }
+      .post-footer { flex-direction: column; gap: 10px; }
+      .arch-flow { flex-direction: column; }
+      .arch-arrow { transform: rotate(90deg); }
     }
   </style>
 </head>
@@ -182,55 +407,199 @@
   </div>
 
   <main class="blog-content glass">
-    <span class="post-series-tag">바이브 코딩 개발기 · 시작하며</span>
-    <h1 class="post-main-title">Pet-Pass를 만든다는 것,<br>그리고 AI와 함께한다는 것</h1>
-    <span class="post-date">2026. 04. 23</span>
-
-    <p>블로그를 시작하려고 한다. 솔직히 말하면, 이 프로젝트가 이렇게 오래 갈 줄 몰랐다.</p>
-
-    <p>처음엔 단순한 아이디어였다. 반려동물과 함께 외출할 때마다 반복되는 그 피로감 — 카페 앞에서 강아지 때문에 들어가지 못하거나, 분명 반려동물 동반 가능이라고 적혀 있었는데 막상 가보면 "오늘은 안 돼요"를 듣는 경험. 그 실망이 쌓여서 언젠간 직접 만들어야겠다 싶었다. 공공데이터를 보다가 식품안전나라에 <strong>정부 공식 인증 반려동물 동반가능 업소 목록</strong>이 있다는 걸 발견했을 때, 그냥 그게 출발점이었다.</p>
-
-    <h2>이상한 방식의 개발</h2>
-
-    <p>이 프로젝트의 개발 방식은 꽤 특이하다. 나 혼자 코드를 짜지 않는다. 아니, 정확히 말하면 코드의 대부분은 내가 직접 짜지 않았다. <strong>Jules, Antigravity, Codex, Claude</strong> — 각기 다른 AI 코딩 도구들이 이 프로젝트의 주요 구현을 담당했고, 나는 방향을 정하고, 결과를 검토하고, 부족한 부분에 개입하는 역할을 했다.</p>
-
-    <p>요즘 이런 걸 '바이브 코딩(Vibe Coding)'이라고 부른다. 세부 구현보다는 목표와 방향을 제시하고, AI의 결과물을 검토하면서 서비스를 만들어가는 방식이다. 말로 듣기엔 그럴싸해 보이지만, 실제로 해보면 생각보다 훨씬 복잡한 판단들이 요구된다.</p>
-
-    <div class="highlight-box">
-      <p>"AI가 다 알아서 해주겠지"라고 믿었던 순간마다, 현실은 다른 방식으로 답을 돌려줬다.</p>
+    <div class="post-meta">
+      <span class="post-series-tag">바이브 코딩 개발기 · 이슈 #2</span>
+      <span class="read-time">📖 약 6분</span>
     </div>
 
-    <h2>70개가 넘는 PR이 생긴 이유</h2>
+    <h1 class="post-main-title">Kakao API는 되는데 왜<br>정부 API는 안 되나?</h1>
+    <span class="post-date">2026. 04. 10</span>
 
-    <p>지금 이 프로젝트의 GitHub에는 70개가 넘는 Pull Request가 쌓여 있다. 짧은 기간 동안 생각보다 많은 시행착오를 거쳤다는 뜻이다. 데이터를 가져오는 방법을 두고 서너 번의 방향 전환이 있었고, 모바일 UI는 구현했다가 되돌리고 다시 구현하는 일을 반복했으며, CI/CD 파이프라인은 고쳐도 고쳐도 계속 다른 이유로 실패했다.</p>
+    <div class="toc">
+      <p class="toc-title">목차</p>
+      <ol>
+        <li><a href="#easy">너무 쉽게 되던 카카오 키</a></li>
+        <li><a href="#trap">같은 방법, 다른 결과</a></li>
+        <li><a href="#why">빌드 타임과 런타임의 간극</a></li>
+        <li><a href="#proxy">프록시 패턴으로 우회하기</a></li>
+        <li><a href="#lesson">배운 것</a></li>
+      </ol>
+    </div>
 
-    <p>그 과정이 전부 기록으로 남아 있다. 그리고 이 블로그는 그 기록들을 좀 더 사람이 읽을 수 있는 언어로 다시 쓰는 곳이다. 코드 수준의 이야기가 아니라, 어떤 판단을 했고 어디서 막혔으며 어떻게 돌아갔는지 — 그 흐름을 남기고 싶었다.</p>
+    <h2 id="easy">너무 쉽게 되던 카카오 키</h2>
 
-    <h2>Pet-Pass가 하려는 일</h2>
+    <p>Pet-Pass의 지도는 카카오맵 SDK로 구현한다. 그러려면 HTML의 <code>&lt;script&gt;</code> 태그에 카카오 JavaScript 키를 넣어야 한다. 이 키가 없으면 브라우저가 SDK를 불러오지 못한다.</p>
 
-    <p>서비스 자체는 단순하다. 반려동물을 데리고 갈 수 있는 카페, 식당, 제과점을 지도에서 찾아볼 수 있다. 데이터는 식품안전나라의 공식 허가 데이터를 사용하기 때문에, 블로그나 SNS 리뷰가 아닌 <strong>정부 기관이 인증한 업소</strong>만 표시된다.</p>
+    <p>처음엔 단순하게 해결했다. 빌드 스크립트에서 HTML 파일 안의 플레이스홀더(<code>{{KAKAO_MAP_API_KEY}}</code>)를 실제 환경 변수 값으로 치환하는 방식으로. 배포 시점에 환경 변수를 읽어서 HTML에 꽂아 넣으면, 사용자의 브라우저에 도착한 HTML에는 이미 실제 키가 박혀 있는 상태가 된다.</p>
 
-    <p>이 차이가 생각보다 크다. 인플루언서의 협찬 리뷰가 아니라, 실제 영업 허가 조건에 반려동물 동반이 명시된 곳만 보여준다는 뜻이다. 물론 그것만으로 완벽하진 않지만, 적어도 출발점은 다르다고 생각한다.</p>
+    <div class="code-block"><span class="file-label">scripts/build.js</span><span class="code-comment">// 빌드 타임에 HTML에 카카오 키 주입</span>
+<span class="code-keyword">const</span> <span class="code-var">html</span> = <span class="code-keyword">await</span> fs.<span class="code-fn">readFile</span>(<span class="code-string">'public/index.html'</span>);
+<span class="code-keyword">const</span> <span class="code-var">replaced</span> = <span class="code-var">html</span>.<span class="code-fn">replace</span>(
+  <span class="code-string">'{{KAKAO_MAP_API_KEY}}'</span>,
+  process.env.<span class="code-var">KAKAO_MAP_API_KEY</span>
+);
+<span class="code-keyword">await</span> fs.<span class="code-fn">writeFile</span>(<span class="code-string">'dist/index.html'</span>, <span class="code-var">replaced</span>);</div>
 
-    <p>지도 기반 탐색 외에, 동물등록번호로 내 반려동물의 공식 정보를 조회하는 기능도 있다. 이건 나중에 더 많은 서비스와 연결될 수 있는 기반 기능이다.</p>
+    <p>한 번에 됐다. Vercel에 환경 변수를 등록하고, 빌드 스크립트에서 치환하고, 배포 — 브라우저에서 지도가 바로 떴다. 너무 쉬워서 이 방식이 '표준 해법'이라고 생각했다.</p>
 
-    <h2>이 블로그에서 다룰 것들</h2>
+    <p>그 생각이 다음 이슈를 만들었다.</p>
 
-    <p>앞으로 각 글은 개발 과정에서 부딪혔던 하나의 이슈를 중심으로 쓸 것이다. 어떻게 마주쳤고, 어떻게 해결했으며, 그 과정에서 무엇을 배웠는지. 가능하면 코드 얘기보다는 판단의 얘기를 하고 싶다.</p>
+    <h2 id="trap">같은 방법, 다른 결과</h2>
+
+    <p>다음 기능은 동물등록번호 조회였다. 정부 공공데이터 포털(data.go.kr)의 API를 호출해서 내 강아지의 공식 정보를 가져오는 기능. 당연히 이것도 API 키가 필요했다 — <code>DATA_GO_KR_API_KEY</code>.</p>
+
+    <p>카카오 때와 똑같이 하면 되겠다 싶었다. GitHub Actions에도 시크릿 등록하고, Vercel 환경 변수에도 등록하고, 빌드 스크립트에서 서버 파일(<code>api/auth-pet.js</code>)의 플레이스홀더를 치환하는 로직을 추가했다.</p>
+
+    <div class="code-block"><span class="file-label">scripts/build.js · 실패한 접근</span><span class="code-comment">// 서버 파일에도 같은 방식으로 주입 시도</span>
+<span class="code-keyword">const</span> <span class="code-var">serverFiles</span> = [
+  <span class="code-string">'server.js'</span>,
+  <span class="code-string">'api/auth-pet.js'</span>
+];
+<span class="code-keyword">for</span> (<span class="code-keyword">const</span> <span class="code-var">file</span> <span class="code-keyword">of</span> <span class="code-var">serverFiles</span>) {
+  <span class="code-keyword">let</span> <span class="code-var">content</span> = <span class="code-keyword">await</span> fs.<span class="code-fn">readFile</span>(<span class="code-var">file</span>);
+  <span class="code-var">content</span> = <span class="code-var">content</span>.<span class="code-fn">replace</span>(<span class="code-string">'YOUR_GOVERNMENT_API_KEY_HERE'</span>, <span class="code-var">GOV_KEY</span>);
+  <span class="code-keyword">await</span> fs.<span class="code-fn">writeFile</span>(<span class="code-var">file</span>, <span class="code-var">content</span>);
+}</div>
+
+    <p>배포했다. 그런데 호출하니까 <strong>"API 키가 세팅되지 않았습니다"</strong>라는 로그와 함께 Mock 응답만 돌아왔다. 빌드 타임에 분명히 치환은 됐는데, 실제 서버리스 함수는 키를 못 찾고 있었다.</p>
+
+    <p>로컬에서는 됐다. GitHub Actions 로그에도 <code>✅ Government API Key injected</code>라고 찍혔다. 그런데 Vercel 프로덕션 환경에서는 안 됐다. 같은 환경 변수, 같은 치환 로직, 같은 빌드 프로세스인데 왜?</p>
+
+    <div class="warning-box">
+      <p><strong>의심스러운 신호:</strong> 같은 패턴의 '환경 변수 주입' 작업에 매달린 PR이 여러 번 올라왔다 — 매번 "이제 진짜 됐다" 했지만 배포하면 또 Mock 응답. 디버깅 로그 추가 → 키 노출 위험 → 다시 복구 → 또 Mock. 뭔가 근본적으로 잘못됐다는 신호였다.</p>
+    </div>
+
+    <h2 id="why">빌드 타임과 런타임의 간극</h2>
+
+    <p>원인을 깨닫는 데 꽤 걸렸다. 두 키의 운명은 처음부터 달랐다.</p>
+
+    <div class="timing-grid">
+      <div class="timing-col build">
+        <div class="timing-header">
+          <span class="timing-badge">Build Time</span>
+          Kakao JS Key
+        </div>
+        <div class="timing-row">
+          <strong>언제 필요한가?</strong>
+          브라우저가 HTML을 받을 때 이미 박혀 있어야 함
+        </div>
+        <div class="timing-row">
+          <strong>어디에 쓰이는가?</strong>
+          클라이언트 사이드 (브라우저의 script 태그)
+        </div>
+        <div class="timing-row">
+          <strong>주입 방식</strong>
+          빌드 시 HTML 문자열 치환 ✓
+        </div>
+        <div class="timing-row">
+          <strong>결과</strong>
+          정적 파일로 배포 → 사용자에게 그대로 전달
+        </div>
+      </div>
+      <div class="timing-col runtime">
+        <div class="timing-header">
+          <span class="timing-badge">Runtime</span>
+          정부 API Key
+        </div>
+        <div class="timing-row">
+          <strong>언제 필요한가?</strong>
+          사용자가 요청할 때마다 (서버리스 함수 실행 시)
+        </div>
+        <div class="timing-row">
+          <strong>어디에 쓰이는가?</strong>
+          서버 사이드 (Vercel Serverless Function)
+        </div>
+        <div class="timing-row">
+          <strong>주입 방식</strong>
+          <code style="font-size:11px">process.env</code>로 런타임에 접근 ✓
+        </div>
+        <div class="timing-row">
+          <strong>결과</strong>
+          절대 클라이언트에 노출되면 안 됨
+        </div>
+      </div>
+    </div>
+
+    <p>Vercel의 서버리스 함수는 배포 직후 '정적인 JS 파일'로 존재하지 않는다. 사용자가 요청을 보낼 때마다 별도의 실행 환경이 스핀업되고, 그때 <code>process.env</code>를 통해 환경 변수를 읽어온다. <strong>빌드 타임에 파일 안에 문자열을 치환해 넣어도, 런타임 환경에서 그 치환된 코드가 어떻게 해석되는지는 별개의 문제</strong>였다.</p>
+
+    <p>게다가 이 접근에는 더 근본적인 문제가 있었다. <strong>서버 파일에 키 문자열을 박아 넣으면, 그 번들이 어딘가에 로그로 남거나 소스맵으로 노출될 위험이 있다.</strong> 카카오 JS 키는 원래 브라우저에 노출되는 걸 전제로 한 '공개 키'지만, 정부 API 키는 서버에만 있어야 하는 '비밀 키'다. 같은 방식으로 다루면 안 되는 키였다.</p>
+
+    <div class="highlight-box">
+      <p>둘 다 '환경 변수에 저장된 API 키'였지만, 하나는 브라우저가 알아야 하고 다른 하나는 절대로 알면 안 되는 키였다. 같은 이름표가 붙어 있다고 같은 방식으로 다뤄서는 안 됐다.</p>
+    </div>
+
+    <h2 id="proxy">프록시 패턴으로 우회하기</h2>
+
+    <p>해결은 구조를 바꾸는 거였다. 클라이언트가 정부 API를 <strong>직접</strong> 호출하려고 하지 말고, <strong>우리 서버의 프록시 엔드포인트</strong>를 호출하게 만든다. 그 프록시 함수 안에서 런타임에 환경 변수를 읽고, 대신 정부 API를 호출한 뒤, 결과만 클라이언트에 돌려준다.</p>
+
+    <div class="arch-diagram">
+      <p class="arch-label">Before · 빌드 타임 주입이 실패하는 구조</p>
+      <div class="arch-flow">
+        <div class="arch-node client">클라이언트<br><small>브라우저</small></div>
+        <div class="arch-arrow broken">✗</div>
+        <div class="arch-node fail">빌드 시 주입된 키<br><small>런타임에 인식 안 됨</small></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">정부 API</div>
+      </div>
+      <p class="arch-subtitle">빌드 타임 치환이 런타임까지 살아남지 못했다</p>
+    </div>
+
+    <div class="arch-diagram">
+      <p class="arch-label">After · 프록시 패턴</p>
+      <div class="arch-flow">
+        <div class="arch-node client">클라이언트<br><small>브라우저</small></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node server">/api/get-pet-data<br><small>Vercel Function</small></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node key">process.env<br><small>런타임 참조</small></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node">정부 API</div>
+      </div>
+      <p class="arch-subtitle">키는 서버에서만 읽고, 클라이언트는 우리 엔드포인트만 안다</p>
+    </div>
+
+    <p>새로 만든 <code>api/get-pet-data.js</code>는 간단하다. 요청이 들어오면 <code>process.env.DATA_GO_KR_API_KEY</code>를 런타임에 참조하고, 정부 API에 쿼리를 날려서 응답을 그대로 돌려주는 역할. 클라이언트 쪽 스크립트는 기존에 정부 API를 때리려던 코드를 프록시 엔드포인트 호출로 바꿨다.</p>
+
+    <div class="code-block"><span class="file-label">api/get-pet-data.js</span><span class="code-keyword">module</span>.<span class="code-var">exports</span> = <span class="code-keyword">async</span> (<span class="code-var">req</span>, <span class="code-var">res</span>) => {
+  <span class="code-keyword">const</span> <span class="code-var">API_KEY</span> = process.env.<span class="code-var">DATA_GO_KR_API_KEY</span>;  <span class="code-comment">// ← 런타임 참조</span>
+
+  <span class="code-keyword">const</span> <span class="code-var">response</span> = <span class="code-keyword">await</span> axios.<span class="code-fn">get</span>(<span class="code-var">GOV_API_URL</span>, {
+    params: {
+      serviceKey: <span class="code-var">API_KEY</span>,
+      dog_reg_no: <span class="code-var">req</span>.query.dogRegNo,
+      owner_birth: <span class="code-var">req</span>.query.ownerBirth,
+      _type: <span class="code-string">'json'</span>
+    }
+  });
+
+  <span class="code-var">res</span>.<span class="code-fn">json</span>({ success: <span class="code-keyword">true</span>, data: <span class="code-var">response</span>.data });
+};</div>
+
+    <p>그리고 <code>scripts/build.js</code>에서 서버 파일에 키를 주입하던 로직은 통째로 지웠다. 애초에 잘못된 접근이었다.</p>
+
+    <p>배포했다. 바로 됐다. 실제 동물등록번호 <code>410100008344399</code>로 조회해보니, 정부 DB에서 '콩이 / 푸들' 정보가 그대로 넘어왔다. 그동안 Mock 응답만 보고 있었던 게 허무할 정도였다.</p>
+
+    <h2 id="lesson">배운 것</h2>
+
+    <p>이 이슈가 나한테 가르쳐준 건 두 가지다.</p>
+
+    <p>하나는 <strong>'환경 변수'라고 다 같은 환경 변수가 아니라는 것</strong>. 공개 키와 비밀 키는 근본적으로 다른 방식으로 다뤄야 한다. 브라우저가 알아야 하는 키는 빌드 타임에 HTML에 박아도 되지만, 서버만 알아야 하는 키는 절대로 클라이언트 번들에 흘러 들어가서는 안 된다.</p>
+
+    <p>다른 하나는 <strong>'한 번 성공한 패턴을 같은 문제처럼 보이는 곳에 재사용할 때 조심해야 한다는 것'</strong>. 카카오 키는 빌드 타임 치환이 '정답'이었지만, 그 성공이 오히려 다음 문제에서 함정이 됐다. 표면적으로 같아 보이는 문제도, 실행 맥락이 다르면 해법이 완전히 달라야 한다.</p>
 
     <hr class="divider">
 
-    <div class="series-preview">
-      <h3>다음에 다룰 이야기들</h3>
-      <ul>
-        <li>AI가 크롤링에 집착하다 토큰을 다 써버린 날 — 그리고 사람이 엑셀을 직접 받은 결말</li>
-        <li>지도와 스크롤이 충돌하다 — 모바일 바텀시트를 세 번 만든 이유</li>
-        <li>GitHub Actions가 매일 밤 실패하던 이유 — CI/CD 삽질의 기록</li>
-        <li>Supabase로 이사가기로 결정했던 그날</li>
-      </ul>
+    <div class="lesson-box">
+      <h3>이 이슈에서 배운 것</h3>
+      <p>클라이언트 사이드 키는 빌드 타임에 주입해도 된다. 서버 사이드 키는 반드시 런타임에 <code style="font-size:13px">process.env</code>로 참조해야 한다.</p>
+      <p>서버리스 함수에서 민감한 API를 다룰 때는 프록시 패턴이 표준이다. 클라이언트는 우리 엔드포인트만 알면 된다.</p>
+      <p>같은 에러가 여러 PR에 걸쳐 반복되면, 해결책이 아니라 문제 정의가 잘못된 경우가 많다. 한 발 물러서서 구조부터 다시 본다.</p>
     </div>
 
-    <p style="margin-top: 32px; color: var(--text-tertiary); font-size: 14px;">이 시리즈는 완성된 서비스 자랑이 아니라, 만들어가는 과정의 기록이다. 잘된 것도 있고, 바보 같은 실수도 있을 것이다. 어느 쪽이든 숨기지 않을 생각이다.</p>
+    <div class="post-footer">
+      <a href="/blog/post2.html" class="btn-post-nav btn-prev">← 이전 글</a>
+      <span></span>
+    </div>
   </main>
 
 </body>
