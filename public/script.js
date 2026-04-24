@@ -22,16 +22,12 @@ function throttle(func, limit) {
 
 /**
  * Mobile Viewport Height Fix
- * To prevent layout jumps when the virtual keyboard appears,
- * we only update --vh if the width changes (orientation)
- * or the height change is significant (not just the keyboard).
  */
 let lastWidth = window.innerWidth;
 function setViewportHeight() {
   const currentWidth = window.innerWidth;
   const currentHeight = window.innerHeight;
 
-  // Update only if width changes or for initial load
   if (currentWidth !== lastWidth) {
     const vh = currentHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -39,7 +35,6 @@ function setViewportHeight() {
   }
 }
 
-// Initial set and throttled resize listener
 const vh = window.innerHeight * 0.01;
 document.documentElement.style.setProperty('--vh', `${vh}px`);
 window.addEventListener('resize', throttle(setViewportHeight, 150));
@@ -47,25 +42,19 @@ window.addEventListener('resize', throttle(setViewportHeight, 150));
 let map;
 let clusterer = null;
 let markers = [];
-let stores = []; // 현재 필터 조건에서 서버가 내려준 매장 데이터(누적)
+let stores = [];
 let totalMatchedStores = 0;
 let currentOffset = 0;
 const PAGE_SIZE = 50;
 let hasMoreStores = false;
 let isLoadingStores = false;
-let selectedStore = null; // 현재 상세 페이지에 표시 중인 매장 정보
-let currentBoundsFilter = null; // Store map bounds for filtering
-let currentFilteredStores = []; // 현재 필터링된 매장 리스트 (Back-step용)
-let lastMapState = null; // 매장 클릭 직전의 지도 상태 저장
-let isSystemMoving = false; // 시스템에 의한 지도 이동 플래그
-let _systemMoveTimer = null;  // 시스템 이동 락 타이머
+let selectedStore = null;
+let currentBoundsFilter = null;
+let currentFilteredStores = [];
+let lastMapState = null;
+let isSystemMoving = false;
+let _systemMoveTimer = null;
 
-/**
- * 시스템 지도 이동 시작 — isSystemMoving 플래그를 true로 설정하고
- * 최대 1500ms 동안 유지하는 안전망 타이머를 추가.
- * setCenter + setLevel 분리 호출 사이에 idle 이벤트가 끼어드는
- * 레이스 컨디션을 방지합니다.
- */
 function beginSystemMove() {
   isSystemMoving = true;
   if (_systemMoveTimer) clearTimeout(_systemMoveTimer);
@@ -85,7 +74,6 @@ const btnBackStep = document.getElementById('btn-back-step');
 const btnResetFilters = document.getElementById('btn-reset-filters');
 const btnViewMap = document.getElementById('btn-view-map');
 
-// [Issue 3] Map Button State Management
 const MapButtonState = {
   NONE: 'NONE',
   SEARCH_HERE: 'SEARCH_HERE',
@@ -95,21 +83,15 @@ const MapButtonState = {
 let currentMapButtonState = MapButtonState.NONE;
 let mapButtonTimeout = null;
 
-/**
- * [State Machine] Map UI Button Management
- * Ensures 'Search Here' and 'Go Back' buttons never overlap.
- */
 function updateMapButtonUI(state) {
   currentMapButtonState = state;
   if (mapButtonTimeout) clearTimeout(mapButtonTimeout);
 
-  // Helper to hide buttons with transition
   const hide = (btn) => {
     btn.style.opacity = '0';
     btn.style.pointerEvents = 'none';
   };
 
-  // Helper to show buttons with transition
   const show = (btn) => {
     btn.style.display = 'block';
     btn.style.pointerEvents = 'auto';
@@ -126,22 +108,17 @@ function updateMapButtonUI(state) {
       btnBackStep.style.display = 'none';
     }, 300);
   } else if (state === MapButtonState.SEARCH_HERE) {
-    // State: SEARCH_HERE (Exclusive)
     hide(btnBackStep);
     btnBackStep.style.display = 'none';
     lastMapState = null;
-
     show(btnSearchHere);
   } else if (state === MapButtonState.GO_BACK) {
-    // State: GO_BACK (Exclusive)
     hide(btnSearchHere);
     btnSearchHere.style.display = 'none';
-
     show(btnBackStep);
   }
 }
 
-// Init Map
 function initMap() {
   const container = document.getElementById('map-mock');
   
@@ -155,15 +132,13 @@ function initMap() {
   }
 
   const options = {
-    // Center at Kakao Pangyo HQ
     center: new kakao.maps.LatLng(37.3957, 127.1105),
-    level: 6 // Zoom level (smaller is closer)
+    level: 6
   };
   
   try {
     map = new kakao.maps.Map(container, options);
     
-    // Clusterer 초기화
     clusterer = new kakao.maps.MarkerClusterer({
       map: map,
       averageCenter: true,
@@ -181,12 +156,9 @@ function initMap() {
       }]
     });
     
-    // Catch panning and zooming to show "Search Here" button
     kakao.maps.event.addListener(map, 'dragend', showSearchHereBtn);
     kakao.maps.event.addListener(map, 'zoom_changed', showSearchHereBtn);
 
-    // 시스템 이동이 완전히 끝났을 때 플래그 해제
-    // 타이머가 살아있으면 함께 클리어 (beginSystemMove와 연동)
     kakao.maps.event.addListener(map, 'idle', () => {
       if (_systemMoveTimer) {
         clearTimeout(_systemMoveTimer);
@@ -209,13 +181,8 @@ btnSearchHere.onclick = () => {
 };
 
 function handleSearchInThisArea() {
-  // 1. 모든 필터 및 검색어 초기화 (지도 리셋 제외)
   resetAllFilters(true);
-
-  // 2. 현재 지도 영역 설정
   currentBoundsFilter = map.getBounds();
-
-  // 3. 버튼 숨김 및 검색 실행
   updateMapButtonUI(MapButtonState.NONE);
   applyFilters();
 
@@ -224,16 +191,13 @@ function handleSearchInThisArea() {
   }
 }
 
-// Add markers for stores
 function updateMapMarkers(data) {
   if (!window.kakao || !window.kakao.maps) return;
 
-  // Clear existing markers
   markers.forEach(m => m.setMap(null));
   markers = [];
 
   if (data.length === 0) {
-    // Re-center to Default Kakao HQ if completely default state
     if (currentRegion1 === '전국' && currentSearch === '') {
       beginSystemMove();
       map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
@@ -244,8 +208,6 @@ function updateMapMarkers(data) {
 
   const bounds = new kakao.maps.LatLngBounds();
 
-  // Custom Marker Image: Honey Gold pin (#D39530) with white outline
-  // Using a data URI SVG for the custom pin
   const pinSvg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42">
       <path d="M16 42L4.686 28.523C1.657 24.945 0 20.55 0 16C0 7.163 7.163 0 16 0C24.837 0 32 7.163 32 16C32 20.55 30.343 24.945 27.314 28.523L16 42Z" fill="#A3E635" stroke="#FFFFFF" stroke-width="2"/>
@@ -285,12 +247,8 @@ function updateMapMarkers(data) {
     markers.forEach(m => m.setMap(map));
   }
 
-  // Automatically adjust bounds only when a specific filter/search is applied
-  // 검색 중일 때는 검색 결과를 한눈에 볼 수 있도록 영역을 조정함 (Issue 3)
   if (currentBoundsFilter !== null && currentSearch.trim() === '') {
-    // Do NOT alter the camera if the user is explicitly searching within their current dragged bounds
   } else if (currentRegion1 === '전국' && currentSearch === '') {
-    // Handled in data.length === 0 block if no markers
     beginSystemMove();
     map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
     map.setLevel(6);
@@ -300,9 +258,6 @@ function updateMapMarkers(data) {
   }
 }
 
-/**
- * Render Skeleton UI
- */
 function renderSkeleton() {
   storeList.innerHTML = '';
   for (let i = 0; i < 5; i++) {
@@ -318,28 +273,24 @@ function renderSkeleton() {
   }
 }
 
-// Render store cards
 function renderStores(data) {
   storeList.innerHTML = '';
   
-  // Update dynamic count
   const countEl = document.getElementById('store-count');
   const totalCountEl = document.getElementById('total-count-display');
 
-  if (countEl) countEl.innerText = data.length;
+  if (countEl) countEl.innerText = totalMatchedStores;
   if (totalCountEl) {
-    totalCountEl.style.display = data.length > 0 ? 'block' : 'none';
+    totalCountEl.style.display = totalMatchedStores > 0 ? 'block' : 'none';
   }
 
   if (data.length === 0) {
-    // 지역 필터가 켜져 있고(전국이 아님) 검색어가 비어있지 않은 경우 (Condition A)
     if (currentRegion1 !== '전국' && currentSearch.trim() !== '') {
       storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-tertiary); line-height:1.6;">
         선택하신 지역 내에 해당 검색어와 일치하는 매장이 없습니다.<br/>
         지역 설정을 변경하거나 검색어를 다시 확인해 주세요.
       </div>`;
     } else {
-      // 그 외 일반 상황 (Condition B)
       storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-tertiary);">해당 조건의 공식 인증 매장이 없습니다.</div>`;
     }
     return;
@@ -348,13 +299,12 @@ function renderStores(data) {
   data.forEach((store, index) => {
     const card = document.createElement('div');
     card.className = 'store-card glass animate-in';
-    card.style.animationDelay = `${Math.min(index, 20) * 0.05}s`; // cap delay for large lists
+    card.style.animationDelay = `${Math.min(index, 20) * 0.05}s`;
     
     const typeEmoji = { '카페': '☕', '일반음식점': '🍽️', '제과점': '🥐', '기타': '🏪' };
     const uiType = UI_CATEGORY_MAP[store.type] || store.type;
     const emoji = typeEmoji[uiType] || '🐾';
 
-    // 이미지 소스가 있는 경우 Lazy Loading 적용 (현재 데이터에는 없으나 확장을 위해 구조화)
     const storeImg = store.imgUrl ? `<img src="${store.imgUrl}" loading="lazy" alt="${escapeHtml(store.name)}">` : '';
 
     card.innerHTML = `
@@ -399,15 +349,14 @@ function renderLoadMoreButton(shownCount, totalCount) {
   storeList.appendChild(loadMoreBtn);
 }
 
-// Show Store Details Bottom Sheet
 function showDetail(store) {
-  selectedStore = store; // 현재 선택된 매장 정보 저장
+  selectedStore = store;
   const detailName = document.getElementById('detail-name');
   const detailImg = document.getElementById('detail-img');
   const complianceList = document.getElementById('compliance-list');
 
   detailName.innerText = store.name;
-  if (detailImg) detailImg.style.display = 'none'; // 이미지 없으므로 숨김
+  if (detailImg) detailImg.style.display = 'none';
 
   const uiType = UI_CATEGORY_MAP[store.type] || store.type;
   
@@ -430,10 +379,9 @@ function showDetail(store) {
 
   overlay.style.display = 'block';
   setTimeout(() => overlay.style.opacity = '1', 10);
-  storeDetail.classList.add('active');
+  storeDetail.classList.remove('active');
 }
 
-// Overlay click wrapper to close any active modal/sheet
 overlay.onclick = () => {
   overlay.style.opacity = '0';
   setTimeout(() => overlay.style.display = 'none', 300);
@@ -442,7 +390,6 @@ overlay.onclick = () => {
   if (infoModal) infoModal.classList.remove('active');
 };
 
-// Buttons & Filters
 const btnAuth = document.getElementById('btn-auth');
 const btnFetchGov = document.getElementById('btn-fetch-gov');
 const btnCloseAuth = document.getElementById('btn-close-auth');
@@ -452,34 +399,29 @@ const filterTags = document.querySelectorAll('.filters .icon-tag');
 const regionDepth1 = document.getElementById('region-depth1');
 const regionDepth2 = document.getElementById('region-depth2');
 const searchInput = document.getElementById('search-input');
-// [지도에서 위치 보기] 버튼 클릭 이벤트
+
 if (btnViewMap) {
   btnViewMap.onclick = () => {
     if (!selectedStore) return;
 
-    // 1. 현재 상태 저장 (Back-step용)
     lastMapState = {
       center: map.getCenter(),
       level: map.getLevel(),
       filteredStores: [...currentFilteredStores]
     };
 
-    // 2. 지도 이동 및 확대
     beginSystemMove();
     const moveLatLon = new kakao.maps.LatLng(selectedStore.lat, selectedStore.lng);
 
     map.setLevel(3);
     map.panTo(moveLatLon);
 
-    // 3. 이전 위치로 버튼 활성화
     updateMapButtonUI(MapButtonState.GO_BACK);
 
-    // 4. 상세 페이지 닫기
     overlay.click();
   };
 }
 
-// Region Data Mapping
 const regionData = {
   "서울특별시": ["강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구"],
   "경기도": ["수원시", "성남시", "고양시", "용인시", "부천시", "안산시", "안양시", "남양주시", "화성시", "평택시", "의정부시", "파주시", "시흥시", "김포시", "광명시", "광주시", "군포시", "이천시", "오산시", "하남시", "양주시", "구리시", "안성시", "포천시", "의왕시", "여주시", "양평군", "동두천시", "가평군", "과천시", "연천군"],
@@ -499,7 +441,7 @@ const regionData = {
   "경상남도": ["창원시", "진주시", "통영시", "사천시", "김해시", "밀양시", "거제시", "양산시", "의령군", "함안군", "창녕군", "고성군", "남해군", "하동군", "산청군", "함양군", "거창군", "합천군"],
   "제주특별자치도": ["제주시", "서귀포시"]
 };
-// Pet Card Elements
+
 const authFormView = document.getElementById('auth-form-view');
 const petCardView = document.getElementById('pet-card-view');
 const btnCloseCard = document.getElementById('btn-close-card');
@@ -513,14 +455,12 @@ function displayPetCard(petData) {
   document.getElementById('card-pet-sex').innerText = petData.sexNm || '-';
   document.getElementById('card-pet-neuter').innerText = petData.neuterYn || '-';
 
-  // 생일 데이터 표시 (birthDt 우선, 없으면 ownerBirth 기반 연도)
   if (petData.birthDt) {
     document.getElementById('card-pet-birth').innerText = petData.birthDt;
   } else {
     document.getElementById('card-pet-birth').innerText = petData.ownerBirth ? `20${petData.ownerBirth.substring(0, 2)}` : '-';
   }
 
-  // 등록번호 마스킹 처리 (보안 및 줄바꿈 방지: 6자리 노출 + 4자리 별표)
   const regNo = petData.dogRegNo || '';
   const maskedRegNo = regNo.length >= 10 ? `${regNo.substring(0, 6)}****` : regNo;
   document.getElementById('card-reg-no').innerText = maskedRegNo || '-';
@@ -543,7 +483,6 @@ function unlinkPetPass() {
     
     overlay.click();
     
-    // Reset view for next open
     setTimeout(() => {
       authFormView.style.display = 'block';
       petCardView.style.display = 'none';
@@ -551,7 +490,6 @@ function unlinkPetPass() {
   }
 }
 
-// Info Modal Logic
 const logo = document.querySelector('.logo');
 const btnCloseInfo = document.getElementById('btn-close-info');
 const btnGithub = document.getElementById('btn-github');
@@ -583,7 +521,6 @@ if (btnBlog) {
   };
 }
 
-// Auth Modal Logic
 btnAuth.onclick = () => {
   const savedData = localStorage.getItem('petPassData');
   
@@ -592,7 +529,7 @@ btnAuth.onclick = () => {
       displayPetCard(JSON.parse(savedData));
     } catch (e) {
       console.error("저장된 펫 데이터 파싱 실패:", e);
-      localStorage.removeItem('petPassData'); // 손상된 데이터 삭제
+      localStorage.removeItem('petPassData');
       showAuthForm();
     }
   } else {
@@ -608,11 +545,6 @@ function showAuthForm() {
   authModal.classList.add('active');
 }
 
-/**
- * 숫자 입력 필드 정규화
- * - 숫자 이외 문자를 즉시 제거
- * - maxlength와 동일한 길이 제한 유지
- */
 function bindNumericInput(inputEl, maxLength) {
   if (!inputEl) return;
   inputEl.addEventListener('input', () => {
@@ -647,7 +579,6 @@ btnFetchGov.onclick = async () => {
     return;
   }
 
-  // 데이터 상세 검증
   if (!/^\d{15}$/.test(dogRegNo)) {
     alert("동물등록번호는 15자리 숫자입니다.");
     return;
@@ -673,7 +604,6 @@ btnFetchGov.onclick = async () => {
       btnAuth.classList.add('active');
       btnAuth.innerText = "연동 완료 🐾";
 
-      // 즉시 카드 표시
       displayPetCard(petData);
       alert(result.message || "정부 데이터베이스 확인이 완료되었습니다! 펫 패스가 기기에 등록되었습니다.");
     } else {
@@ -728,9 +658,10 @@ async function fetchStoresPage({ append = false } = {}) {
     if (!response.ok) throw new Error('데이터 로딩 실패');
 
     const payload = await response.json();
-    const items = Array.isArray(payload) ? payload : (payload.items || []);
-    const total = Array.isArray(payload) ? items.length : (payload.total || 0);
-    const more = Array.isArray(payload) ? false : Boolean(payload.hasMore);
+    const items = payload.items || [];
+    const total = payload.total || 0;
+    const more = Boolean(payload.hasMore);
+    const regionCounts = payload.regionCounts;
 
     if (append) {
       stores = stores.concat(items);
@@ -743,6 +674,10 @@ async function fetchStoresPage({ append = false } = {}) {
     currentOffset = stores.length;
     currentFilteredStores = stores;
 
+    if (regionCounts) {
+      updateRegionUIWithServerData(regionCounts);
+    }
+
     renderStores(stores);
     updateMapMarkers(stores);
   } catch (err) {
@@ -754,11 +689,10 @@ async function fetchStoresPage({ append = false } = {}) {
 }
 
 async function fetchStores() {
-  updateRegionDepth1UI();
   await fetchStoresPage({ append: false });
 }
 
-// Category Mapping for UI and Data
+// Category Mapping
 const CATEGORY_MAP = {
   '카페': ['카페', '휴게음식점'],
   '일반음식점': ['일반음식점'],
@@ -770,87 +704,46 @@ const UI_CATEGORY_MAP = {
   '제과점영업': '제과점'
 };
 
-// Filter State & Logic
+// Filter State
 let currentCategory = '전체';
-
-/**
- * Pre-calculate store counts for each region
- */
-let regionCounts = { depth1: {}, depth2: {} };
-let hasRegionCounts = false;
-
-function calculateRegionCounts() {
-  const counts = {
-    depth1: { "전국": stores.length },
-    depth2: {}
-  };
-
-  for (const r1 in regionData) {
-    counts.depth1[r1] = 0;
-    counts.depth2[r1] = { "전체": 0 };
-    regionData[r1].forEach(r2 => {
-      counts.depth2[r1][r2] = 0;
-    });
-  }
-
-  stores.forEach(store => {
-    for (const r1 in regionData) {
-      if (store.address.includes(r1)) {
-        counts.depth1[r1]++;
-        counts.depth2[r1]["전체"]++;
-        const districts = regionData[r1];
-        for (const r2 of districts) {
-          if (store.address.includes(r2)) {
-            counts.depth2[r1][r2]++;
-          }
-        }
-        break;
-      }
-    }
-  });
-
-  regionCounts = counts;
-  hasRegionCounts = true;
-}
-
-/**
- * Update the labels and disabled status of Depth 1 region options
- */
-function updateRegionDepth1UI() {
-  const options = regionDepth1.querySelectorAll('option');
-  options.forEach(opt => {
-    const regionName = opt.value;
-    if (!hasRegionCounts) {
-      opt.innerText = regionName;
-      opt.disabled = false;
-      return;
-    }
-
-    const count = regionCounts.depth1[regionName] || 0;
-    opt.innerText = `${regionName} (${count})`;
-    if (count === 0 && regionName !== '전국') {
-      opt.disabled = true;
-    } else {
-      opt.disabled = false;
-    }
-  });
-}
-
 let currentRegion1 = '전국';
 let currentRegion2 = '전체';
 let currentSearch = '';
 
-// 가중치 설정 (Issue 4 및 고도화 요구사항 반영)
-const WEIGHTS = {
-  NAME_EXACT: 1000,           // 매장명 정확히 일치
-  ADDR_PART_EXACT: 800,       // 행정구역(시/군/구) 정확히 일치
-  NAME_STARTS_WITH: 600,      // 매장명 전방 일치
-  ADDR_PART_STARTS_WITH: 400,  // 행정구역 전방 일치
-  CHOSUNG_MATCH: 350,         // 초성 검색 일치
-  NAME_CONTAINS: 300,         // 매장명 포함
-  IN_BOUNDS_BONUS: 150,       // 현재 지도 영역 내 보너스
-  ADDR_CONTAINS: 100          // 주소 단순 포함
-};
+/**
+ * 서버에서 온 통계 데이터를 UI에 적용
+ */
+function updateRegionUIWithServerData(counts) {
+  // Depth 1 업데이트
+  const d1Options = regionDepth1.querySelectorAll('option');
+  d1Options.forEach(opt => {
+    const r1 = opt.value;
+    const count = counts.depth1[r1] || 0;
+    opt.innerText = r1 === '전국' ? `전국 (${count})` : `${r1} (${count})`;
+    opt.disabled = (count === 0 && r1 !== '전국');
+  });
+
+  // Depth 2 업데이트 (현재 선택된 region1이 있을 경우에만)
+  if (currentRegion1 !== '전국') {
+    const districts = regionData[currentRegion1] || [];
+    const d2Options = Array.from(regionDepth2.options);
+
+    // "전체" 옵션 처리
+    const totalForRegion = counts.depth2[currentRegion1]?.["전체"] || 0;
+    if (d2Options[0]) {
+      d2Options[0].innerText = `전체 (${totalForRegion})`;
+    }
+
+    // 각 구별 옵션 처리
+    for (let i = 1; i < d2Options.length; i++) {
+      const opt = d2Options[i];
+      const r2 = opt.value;
+      const count = counts.depth2[currentRegion1]?.[r2] || 0;
+      opt.innerText = `${r2} (${count})`;
+      opt.disabled = (count === 0);
+    }
+  }
+}
 
 function updateRegionDepth2(region1) {
   if (region1 === '전국') {
@@ -863,24 +756,11 @@ function updateRegionDepth2(region1) {
   const districts = regionData[region1] || [];
   regionDepth2.style.display = 'block';
 
-  if (!hasRegionCounts) {
-    regionDepth2.innerHTML = '<option value="전체">전체</option>';
-  } else {
-    const totalCountForRegion = regionCounts.depth2[region1]?.["전체"] || 0;
-    regionDepth2.innerHTML = `<option value="전체">전체 (${totalCountForRegion})</option>`;
-  }
-
+  regionDepth2.innerHTML = '<option value="전체">전체</option>';
   districts.forEach(district => {
     const option = document.createElement('option');
     option.value = district;
-    if (!hasRegionCounts) {
-      option.innerText = district;
-      option.disabled = false;
-    } else {
-      const count = regionCounts.depth2[region1]?.[district] || 0;
-      option.innerText = `${district} (${count})`;
-      if (count === 0) option.disabled = true;
-    }
+    option.innerText = district;
     regionDepth2.appendChild(option);
   });
 
@@ -897,7 +777,6 @@ function applyFilters() {
   fetchStoresPage({ append: false });
 }
 
-// Event Listeners for Filters
 filterTags.forEach(tag => {
   tag.addEventListener('click', () => {
     filterTags.forEach(t => t.classList.remove('active'));
@@ -910,7 +789,6 @@ filterTags.forEach(tag => {
 regionDepth1.addEventListener('change', (e) => {
   currentRegion1 = e.target.value;
   updateRegionDepth2(currentRegion1);
-  // Clear map bounds filter when user actively changes region via dropdown
   currentBoundsFilter = null;
   updateMapButtonUI(MapButtonState.NONE);
   applyFilters();
@@ -923,12 +801,10 @@ regionDepth2.addEventListener('change', (e) => {
   applyFilters();
 });
 
-// Event Listener for Search Bar (Live Search) - 300ms 디바운싱 및 최소 글자 수 제한
 let searchTimer;
 if (searchInput) {
   searchInput.addEventListener('input', (e) => {
     const val = e.target.value;
-    // 2글자 미만(빈 문자열 제외)인 경우 필터링을 수행하지 않음 (성능 최적화)
     if (val.length === 1) return;
 
     clearTimeout(searchTimer);
@@ -939,30 +815,24 @@ if (searchInput) {
   });
 }
 
-// Back-step: 이전 위치로 복구
 if (btnBackStep) {
   btnBackStep.onclick = () => {
     if (!lastMapState) return;
 
-    // 1. 지도 복구
     beginSystemMove();
     map.setCenter(lastMapState.center);
     map.setLevel(lastMapState.level);
 
-    // 2. 검색 결과 및 마커 복구
-    // filteredStores가 없는 경우 현재 필터링된 결과를 유지 (방어 코드)
     const restoredStores = lastMapState.filteredStores ?? currentFilteredStores;
     currentFilteredStores = restoredStores;
     renderStores(currentFilteredStores);
     updateMapMarkers(currentFilteredStores);
 
-    // 3. 버튼 숨김 및 상태 초기화
     updateMapButtonUI(MapButtonState.NONE);
     lastMapState = null;
   };
 }
 
-// 모든 필터 및 검색어 초기화 함수
 function resetAllFilters(skipMapReset = false) {
   currentCategory = '전체';
   currentRegion1 = '전국';
@@ -970,10 +840,9 @@ function resetAllFilters(skipMapReset = false) {
   currentSearch = '';
   currentBoundsFilter = null;
 
-  // UI 동기화
   if (searchInput) searchInput.value = '';
   if (mobileSearchInput) mobileSearchInput.value = '';
-  currentSearch = ''; // Ensure internal state is also cleared
+  currentSearch = '';
   if (regionDepth1) {
     regionDepth1.value = '전국';
     updateRegionDepth2('전국');
@@ -989,7 +858,6 @@ function resetAllFilters(skipMapReset = false) {
     updateMapButtonUI(MapButtonState.NONE);
     beginSystemMove();
 
-    // 지도를 초기 전국 단위 설정값으로 리셋
     if (map) {
       map.setLevel(6);
       map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
@@ -1002,14 +870,12 @@ function resetAllFilters(skipMapReset = false) {
   }
 }
 
-// 필터 초기화 버튼 클릭
 if (btnResetFilters) {
   btnResetFilters.onclick = () => {
     resetAllFilters();
   };
 }
 
-// 모바일 검색창 동기화
 const mobileSearchInput = document.getElementById('mobile-search-input');
 const btnResetMobile = document.getElementById('btn-reset-mobile');
 
@@ -1022,7 +888,7 @@ if (btnResetMobile) {
 if (mobileSearchInput && searchInput) {
   mobileSearchInput.addEventListener('input', (e) => {
     const val = e.target.value;
-    searchInput.value = val; // 데스크톱 검색창에 동기화
+    searchInput.value = val;
     if (val.length === 1) return;
     clearTimeout(searchTimer);
     searchTimer = setTimeout(() => {
@@ -1031,13 +897,11 @@ if (mobileSearchInput && searchInput) {
     }, 300);
   });
 
-  // 데스크톱 → 모바일 동기화
   searchInput.addEventListener('input', () => {
     mobileSearchInput.value = searchInput.value;
   });
 }
 
-// 맨 위로 플로팅 버튼
 const btnScrollTop = document.getElementById('btn-scroll-top');
 const sidePanelBody = document.getElementById('side-panel-body');
 if (btnScrollTop && sidePanelBody) {
@@ -1054,7 +918,6 @@ if (btnScrollTop && sidePanelBody) {
   };
 }
 
-// GPS '내 위치' 기능
 const btnMyLocation = document.getElementById('btn-my-location');
 if (btnMyLocation) {
   btnMyLocation.onclick = () => {
@@ -1078,7 +941,6 @@ if (btnMyLocation) {
           window.minimizeBottomSheet();
         }
 
-        // 내 위치 마커 표시 (선택 사항, 여기서는 이동만 수행)
         btnMyLocation.style.animation = 'none';
       },
       (error) => {
@@ -1118,10 +980,8 @@ if (btnMyLocation) {
     currentHeight = newHeight;
     document.documentElement.style.setProperty('--sheet-height', `${newHeight}px`);
 
-    // 상태 기반 가시성 제어 (Mode 1: 지도 최소화 시 숨김)
     const btnMyLocation = document.getElementById('btn-my-location');
     if (btnMyLocation) {
-      // 85vh(max) 상태에 근접할 때 버튼 숨김 (약간의 임계값 여유 부여)
       const isNearMax = newHeight >= snapPoints.max - 20;
       if (isNearMax) {
         btnMyLocation.classList.add('hidden');
@@ -1152,7 +1012,6 @@ if (btnMyLocation) {
      );
      setSheetHeight(nearest);
      
-     // Full 상태에 안착하면 내부 스크롤 복구
      if (nearest === snapPoints.max) {
        sidePanelBody.style.overflowY = 'auto';
      }
@@ -1160,13 +1019,8 @@ if (btnMyLocation) {
      if (nearest === snapPoints.min && sidePanelBody.scrollTop > 0) {
         sidePanelBody.scrollTo({top:0, behavior:'smooth'});
      }
-
-     // 🧪 Debug: Snap 결과
-     const stateLabel = nearest === snapPoints.min ? 'Min' : nearest === snapPoints.mid ? 'Half' : 'Full';
-     console.log(`[BottomSheet] Snapped → ${stateLabel} (${Math.round(nearest)}px)`);
   }
 
-  // 현재 시트 상태를 라벨로 반환하는 헬퍼
   function getSheetState() {
     const h = currentHeight;
     if (Math.abs(h - snapPoints.max) < 30) return 'Full';
@@ -1194,11 +1048,9 @@ if (btnMyLocation) {
     isDragging = true;
     sidePanel.classList.add('dragging');
 
-    // 드래그 핸들 강제 노출 (모바일)
     const handle = sidePanel.querySelector('.drag-handle');
     if (handle) handle.style.display = 'block';
 
-    // [내 위치] 버튼: 드래그 시작 시 즉시 숨김
     const btnMyLocation = document.getElementById('btn-my-location');
     if (btnMyLocation) btnMyLocation.classList.add('is-dragging');
     
@@ -1207,7 +1059,6 @@ if (btnMyLocation) {
     const computedHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sheet-height'), 10);
     startHeight = isNaN(computedHeight) ? snapPoints.mid : computedHeight;
 
-    // 드래그 중에는 윈도우 레벨에서 이벤트 추적
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('touchend', handleTouchEnd);
     window.addEventListener('touchcancel', handleTouchEnd);
@@ -1217,7 +1068,7 @@ if (btnMyLocation) {
     if (!isDragging) return;
     
     const currentY = e.touches[0].clientY;
-    const deltaY = startY - currentY;  // 양수 = 위로 드래그(시트 확장), 음수 = 아래로 드래그(시트 축소)
+    const deltaY = startY - currentY;
     
     if (e.cancelable) {
       e.preventDefault();
@@ -1232,7 +1083,6 @@ if (btnMyLocation) {
     isDragging = false;
     sidePanel.classList.remove('dragging');
 
-    // [내 위치] 버튼: Snap 안착 후 노출
     const btnMyLocation = document.getElementById('btn-my-location');
     if (btnMyLocation) {
       setTimeout(() => btnMyLocation.classList.remove('is-dragging'), 50);
@@ -1240,19 +1090,15 @@ if (btnMyLocation) {
     
     snapToNearest();
     
-    // 🔒 CSS Overflow 복구: snapToNearest에서 Full이면 auto 복구됨
-    // Full이 아닌 경우에는 overflowY를 기본값으로 복구
     if (getSheetState() !== 'Full') {
       sidePanelBody.style.overflowY = '';
     }
 
-    // 윈도우 리스너 제거
     window.removeEventListener('touchmove', handleTouchMove);
     window.removeEventListener('touchend', handleTouchEnd);
     window.removeEventListener('touchcancel', handleTouchEnd);
   }
   
-  // 오직 핸들 영역에서만 바텀 시트 높이 조절 드래그 시작 가능
   const handleArea = sidePanel.querySelector('.handle-area');
   if (handleArea) {
     handleArea.addEventListener('touchstart', handleTouchStart, {passive: false});
@@ -1262,9 +1108,8 @@ if (btnMyLocation) {
 // Initialization on load
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
-  fetchStores(); // Fetch data from API instead of direct call to applyFilters
+  fetchStores();
 
-  // Restore Button State (Data 위주로 판단)
   if (localStorage.getItem('petPassData')) {
     btnAuth.classList.add('active');
     btnAuth.innerText = "연동 완료 🐾";
