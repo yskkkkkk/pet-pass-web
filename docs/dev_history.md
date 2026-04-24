@@ -22,6 +22,20 @@
 
 ## [2026-04-24] - Jules
 ### ✅ 작업 요약
+- API 응답 속도 개선을 위한 CDN 캐싱 헤더 추가
+
+### 🔧 변경 사항
+- **캐싱 전략 도입**: `/api/stores` 엔드포인트에 `Cache-Control: s-maxage=3600, stale-while-revalidate=600` 헤더를 적용하여 Vercel Edge Network의 CDN 캐싱 활용.
+- **적용 범위**: Vercel Serverless Function(`api/stores.js`) 및 로컬 개발 서버(`server.js`)의 매장 조회 API에 일관되게 적용.
+
+### 📌 비고 (Issues & Decisions)
+- **효과**: Supabase 읽기 대역폭 절약 및 클라이언트 응답 속도 향상 기대.
+- **주의**: 데이터 동기화 직후에는 캐시로 인해 일시적으로 이전 데이터가 보일 수 있음을 인지함.
+
+---
+
+## [2026-04-24] - Jules
+### ✅ 작업 요약
 - UI/UX 통일성 강화 및 정보 모달/인증 모달 디자인 표준화
 
 ### 🔧 변경 사항

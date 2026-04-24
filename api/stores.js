@@ -10,6 +10,20 @@ const supabase = createClient(
 const rateLimiter = createRateLimiter({ max: 30, windowMs: 60_000 });
 
 module.exports = async (req, res) => {
+  // CORS 헤더 설정
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  // CDN 캐싱 헤더 추가: 1시간 캐싱, 10분 stale-while-revalidate
+  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
   if (handlePreflight(req, res)) {
     return;
   }
