@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
@@ -7,6 +6,7 @@ const cron = require('node-cron');
 const { createClient } = require('@supabase/supabase-js');
 const { syncPetFriendlyStores } = require('./scripts/sync-stores');
 const getPetData = require('./api/get-pet-data');
+const { getAllowedOrigins, applyCors, handlePreflight } = require('./api/_cors');
 require('dotenv').config();
 
 const app = express();
@@ -18,7 +18,27 @@ const supabase = createClient(
 );
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+const allowedOrigins = getAllowedOrigins();
+
+app.use((req, res, next) => {
+  if (handlePreflight(req, res)) {
+    return;
+  }
+
+  const hasOrigin = Boolean(req.headers.origin);
+  if (!hasOrigin) {
+    return next();
+  }
+
+  if (!applyCors(req, res)) {
+    return res.status(403).json({ error: '허용되지 않은 Origin 입니다.' });
+  }
+
+  next();
+});
+
+console.log('[CORS] 허용 Origin:', allowedOrigins.join(', '));
+
 app.use(express.json());
 
 // CSS, JS 등 정적 자원 서빙 (index.html 제외)

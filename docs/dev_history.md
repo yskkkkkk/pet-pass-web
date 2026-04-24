@@ -4,6 +4,37 @@
 
 ---
 
+## [2026-04-24] - Codex
+### ✅ 작업 요약
+- CORS 화이트리스트 미설정 시 프로덕션 403 전면 차단 이슈 보완
+
+### 🔧 변경 사항
+- **프로덕션 Origin 자동 추론 추가**: `api/_cors.js`에서 `CORS_ALLOWED_ORIGINS`가 비어있을 때 `FRONTEND_URL`, `APP_URL`, `VERCEL_PROJECT_PRODUCTION_URL`, `VERCEL_URL` 값을 기반으로 허용 Origin을 자동 구성하도록 개선.
+- **Origin 정규화/검증 강화**: 프로토콜 누락 값도 안전하게 정규화하고 유효 URL만 허용하도록 처리해 오탐/미탐을 줄임.
+- **Express CORS 로직 공통화**: `server.js`가 `api/_cors.js`의 `applyCors`, `handlePreflight`를 재사용하도록 정리해 서버/서버리스 간 동작 일관성 확보.
+- **환경변수 가이드 보강**: `.env.example`에 `FRONTEND_URL` 예시와 자동 추론 동작 설명을 추가.
+
+### 📌 비고 (Issues & Decisions)
+- **안전성 유지**: 여전히 화이트리스트 기반 차단 정책은 유지하면서, 환경변수 누락으로 인한 운영 장애 가능성만 완화하는 방향으로 조정함.
+
+---
+
+## [2026-04-24] - Codex
+### ✅ 작업 요약
+- CORS 와일드카드(`*`) 제거 및 도메인 화이트리스트 기반 접근 제어 적용
+
+### 🔧 변경 사항
+- **공통 CORS 유틸 추가**: `api/_cors.js`를 신설해 허용 Origin 파싱(`CORS_ALLOWED_ORIGINS`)과 사전 요청(OPTIONS) 처리 로직을 공통화.
+- **Vercel API 보안 강화**: `api/stores.js`, `api/get-pet-data.js`의 `Access-Control-Allow-Origin: *`를 제거하고, 허용된 Origin에만 응답 헤더를 설정하도록 변경. 비허용 Origin은 `403` 반환.
+- **로컬 Express 서버 적용**: `server.js`의 `app.use(cors())`를 제거하고 동일 화이트리스트 정책을 미들웨어로 적용.
+- **환경 변수 문서화**: `.env.example`에 `CORS_ALLOWED_ORIGINS` 예시를 추가해 배포 환경에서 화이트리스트를 명시적으로 설정할 수 있도록 정리.
+
+### 📌 비고 (Issues & Decisions)
+- **기본값 정책**: 환경변수 미설정 시 로컬 개발 편의를 위해 `http://localhost:3000`, `http://127.0.0.1:3000`만 기본 허용.
+- **프록시 도용 방지**: 브라우저 Origin 기준으로 화이트리스트 검증 후 차단하여 공개 프록시처럼 악용되는 리스크를 축소함.
+
+---
+
 ## [2026-04-24] - Jules
 ### ✅ 작업 요약
 - UI/UX 통일성 강화 및 정보 모달/인증 모달 디자인 표준화
