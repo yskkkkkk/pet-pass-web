@@ -26,6 +26,11 @@
 2. **Geocoding & Caching:** 신규 매장(좌표 없는 데이터)에 대해서만 Kakao API를 호출하여 좌표를 추출합니다. 기존 데이터의 좌표는 DB에서 캐싱되어 재사용됩니다.
 3. **Frontend Rendering:** 클라이언트에서 Supabase API를 통해 전체 매장 데이터를 가져와 지도에 렌더링하며, 필터링 및 검색은 클라이언트 사이드에서 최적화된 루프로 처리합니다.
 
+### 🌐 Language Policy (언어 원칙)
+- **기술 문서, 커밋 상세 설명(Description), PR 코멘트, 이슈 로그는 한국어로만 작성한다.**
+- 커밋 타입(`feat:`, `fix:` 등)과 커밋 title은 영문 관례를 따른다.
+- 코드 내 변수·함수명은 영문 관례를 따른다.
+
 ### 📜 Collaboration Principles
 - **Documentation Only:** 로직 수정이 없는 문서 작업(`README`, `docs` 등) 커밋 시 반드시 `[skip ci]`를 포함하여 불필요한 빌드를 방지합니다.
 - **Commit Convention:** 아래의 접두사를 엄격히 준수합니다.
