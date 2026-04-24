@@ -70,11 +70,8 @@ app.get('/', (req, res) => {
  * [Stores API]
  * Supabase DB에서 매장 데이터를 조회하여 반환합니다.
  */
-app.get('/api/stores', async (req, res) => {
-  // CDN 캐싱 헤더 추가: 1시간 캐싱, 10분 stale-while-revalidate
-  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
-
 app.get('/api/stores', storesLimiter, async (req, res) => {
+  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
   try {
     const allStores = [];
     let from = 0;
