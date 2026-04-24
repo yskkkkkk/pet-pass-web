@@ -1,4 +1,8 @@
+const { handlePreflight, applyCors } = require('./_cors');
 const axios = require('axios');
+const { createRateLimiter } = require('../lib/rate-limiter');
+
+const rateLimiter = createRateLimiter({ max: 10, windowMs: 60_000 });
 
 const ERROR_MESSAGES = {
   'Unauthorized': 'API 인증키가 존재하지 않거나 유효하지 않습니다.\n공공데이터포털에서 발급받은 인증키 정보를 확인해 주세요.',
@@ -12,21 +16,31 @@ const ERROR_MESSAGES = {
 };
 
 module.exports = async (req, res) => {
-  // CORS 헤더 설정
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
+  if (handlePreflight(req, res)) {
     return;
   }
 
+  if (!applyCors(req, res)) {
+    return res.status(403).json({ error: '허용되지 않은 Origin 입니다.' });
+  }
+  // Rate limiting: IP당 분당 10회 초과 시 429 반환
+  let proceed = false;
+  rateLimiter(req, res, () => { proceed = true; });
+  if (!proceed) return;
+
   const { dogRegNo, ownerBirth, pageNo, numOfRows, ...otherParams } = req.query;
+
+  // 입력값 검증 (auth-pet.js와 동일 규칙)
+  if (!dogRegNo || !ownerBirth) {
+    return res.status(400).json({ error: '동물등록번호와 생년월일이 필요합니다.' });
+  }
+  if (!/^\d{15}$/.test(dogRegNo)) {
+    return res.status(400).json({ error: '유효하지 않은 등록번호 형식입니다. (숫자 15자리 필수)' });
+  }
+  if (!/^\d{6}$/.test(ownerBirth)) {
+    return res.status(400).json({ error: '생년월일은 숫자 6자리(예: 900101)로 입력해주세요.' });
+  }
+
   const API_KEY = process.env.DATA_GO_KR_API_KEY;
 
   if (!API_KEY || API_KEY === 'YOUR_GOVERNMENT_API_KEY_HERE') {

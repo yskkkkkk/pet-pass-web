@@ -1,6 +1,14 @@
 const axios = require('axios');
+const { createRateLimiter } = require('../lib/rate-limiter');
+
+const rateLimiter = createRateLimiter({ max: 10, windowMs: 60_000 });
 
 module.exports = async (req, res) => {
+  // Rate limiting: IP당 분당 10회 초과 시 429 반환
+  let proceed = false;
+  rateLimiter(req, res, () => { proceed = true; });
+  if (!proceed) return;
+
   const { dogRegNo, ownerBirth } = req.query;
 
   if (!dogRegNo || !ownerBirth) {
