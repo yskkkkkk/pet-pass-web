@@ -1,9 +1,12 @@
 const { createClient } = require('@supabase/supabase-js');
+const { createRateLimiter } = require('../lib/rate-limiter');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_ANON_KEY
 );
+
+const rateLimiter = createRateLimiter({ max: 30, windowMs: 60_000 });
 
 module.exports = async (req, res) => {
   // CORS 헤더 설정
@@ -19,6 +22,11 @@ module.exports = async (req, res) => {
     res.status(200).end();
     return;
   }
+
+  // Rate limiting: IP당 분당 30회 초과 시 429 반환
+  let proceed = false;
+  rateLimiter(req, res, () => { proceed = true; });
+  if (!proceed) return;
 
   try {
     const allStores = [];
