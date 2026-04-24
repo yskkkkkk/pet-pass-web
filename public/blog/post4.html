@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PC로 시작한 지도 앱, 모바일이 주가 되기까지 | Pet-Pass Dev Blog</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    body {
+      background-color: var(--bg-secondary);
+      font-family: 'Pretendard', sans-serif;
+      margin: 0; padding: 0;
+      color: var(--text-primary);
+      overflow-y: auto !important;
+      min-height: 100vh;
+    }
+
+    .blog-header {
+      background: var(--surface);
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .blog-header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .blog-header .theme-dots {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    }
+
+    .nav-buttons {
+      max-width: 800px;
+      margin: 20px auto 0;
+      padding: 0 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover { background: var(--bg-secondary); transform: translateY(-1px); }
+
+    .blog-content {
+      max-width: 800px;
+      margin: 20px auto 60px;
+      padding: 40px;
+      background: var(--bg-primary);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      line-height: 1.9;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .post-series-tag {
+      display: inline-block;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-weight: 600;
+    }
+
+    .read-time { font-size: 12px; color: var(--text-tertiary); }
+
+    .post-main-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .post-date {
+      color: var(--text-tertiary);
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 36px;
+    }
+
+    .tag-chip {
+      display: inline-block;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+
+    .toc {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 40px;
+      border: 1px solid var(--border);
+    }
+
+    .toc-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 12px 0;
+    }
+
+    .toc ol { margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 14px; line-height: 2.2; }
+    .toc a { color: var(--text-secondary); text-decoration: none; }
+    .toc a:hover { color: var(--primary); }
+
+    .blog-content h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 52px;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--primary);
+      padding-left: 14px;
+    }
+
+    .blog-content p { font-size: 16px; color: var(--text-secondary); margin-bottom: 20px; }
+    .blog-content strong { color: var(--text-primary); font-weight: 700; }
+    .blog-content code {
+      background: var(--bg-secondary);
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: var(--primary);
+      border: 1px solid var(--border);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+
+    .lesson-box {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      margin-top: 32px;
+    }
+
+    .lesson-box h3 {
+      margin: 0 0 14px 0;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .lesson-box p { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
+    .lesson-box p:last-child { margin-bottom: 0; }
+
+    .post-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-post-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-post-nav:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* ─── 컬러 팔레트 ─── */
+    .color-palette-section {
+      background: var(--bg-secondary);
+      border-radius: 14px;
+      padding: 28px;
+      margin: 28px 0;
+      border: 1px solid var(--border);
+    }
+
+    .palette-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 20px 0;
+      text-align: center;
+    }
+
+    .theme-previews {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    @media (min-width: 560px) {
+      .theme-previews { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    .theme-preview-card {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+    }
+
+    .tp-header {
+      padding: 10px 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .tp-body {
+      padding: 10px 12px;
+    }
+
+    .tp-line {
+      height: 6px;
+      border-radius: 3px;
+      margin-bottom: 6px;
+    }
+
+    .tp-line:last-child { margin-bottom: 0; width: 70%; }
+
+    /* beige theme preview */
+    .tp-beige .tp-header { background: #c8b89a; color: #6b4f2a; }
+    .tp-beige .tp-body { background: #fdf6ec; }
+    .tp-beige .tp-line { background: #d4a96a; }
+    .tp-beige .tp-line:last-child { background: #e8d5b5; }
+
+    /* white theme preview */
+    .tp-white .tp-header { background: #f0f0f0; color: #1a1a1a; }
+    .tp-white .tp-body { background: #ffffff; }
+    .tp-white .tp-line { background: #D39530; }
+    .tp-white .tp-line:last-child { background: #e0e0e0; }
+
+    /* dark theme preview */
+    .tp-dark .tp-header { background: #24273a; color: #cdd6f4; }
+    .tp-dark .tp-body { background: #1e1e2e; }
+    .tp-dark .tp-line { background: #e8b357; }
+    .tp-dark .tp-line:last-child { background: #313244; }
+
+    /* forest theme preview (future) */
+    .tp-forest .tp-header { background: #2d4a3e; color: #a8d5b5; }
+    .tp-forest .tp-body { background: #1a2e26; }
+    .tp-forest .tp-line { background: #5a9e72; }
+    .tp-forest .tp-line:last-child { background: #243b30; }
+
+    .tp-label {
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    /* ─── 경고/인사이트 박스 ─── */
+    .insight-box {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px 22px;
+      border: 1px solid var(--border);
+      border-left: 4px solid #f59e0b;
+      margin: 24px 0;
+    }
+
+    .insight-box p { font-size: 14px; color: var(--text-secondary); margin: 0; }
+    .insight-box p + p { margin-top: 10px; }
+
+    /* ─── 전후 비교 ─── */
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .ba-col {
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .ba-col.before { border-top: 3px solid #ef4444; }
+    .ba-col.after  { border-top: 3px solid #22c55e; }
+
+    .ba-header {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .ba-col.before .ba-header { color: #ef4444; }
+    .ba-col.after  .ba-header { color: #22c55e; }
+
+    .ba-item {
+      color: var(--text-secondary);
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--border);
+      line-height: 1.5;
+    }
+
+    .ba-item:last-child { border-bottom: none; }
+  </style>
+  <script>
+  (function(){
+    var t = localStorage.getItem('pet-pass-theme') || 'beige';
+    if (t !== 'beige') document.documentElement.setAttribute('data-theme', t);
+  })();
+  </script>
+</head>
+<body>
+  <header class="blog-header glass">
+    <h1>🐾 Pet-Pass Dev Blog</h1>
+    <div class="theme-dots">
+      <button class="theme-dot" data-t="beige" onclick="applyTheme('beige')" title="베이지" style="background:#c8b89a;"></button>
+      <button class="theme-dot" data-t="white" onclick="applyTheme('white')" title="화이트" style="background:#f0f0f0;"></button>
+      <button class="theme-dot" data-t="dark"  onclick="applyTheme('dark')"  title="다크"  style="background:#24273a;"></button>
+    </div>
+  </header>
+
+  <div class="nav-buttons">
+    <a href="/blog/" class="btn-nav">← 블로그 목록</a>
+    <a href="/" class="btn-nav">Pet-Pass 메인</a>
+  </div>
+
+  <main class="blog-content">
+
+    <div class="post-meta">
+      <span class="post-series-tag">바이브 코딩 개발기 · 기획 &amp; 디자인</span>
+      <span class="read-time">⏱ 약 6분</span>
+    </div>
+
+    <h1 class="post-main-title">PC로 시작한 지도 앱, 모바일이 주가 되기까지</h1>
+    <span class="post-date">2026. 04. 19</span>
+
+    <div class="post-tags">
+      <span class="tag-chip">#바이브코딩</span>
+      <span class="tag-chip">#모바일퍼스트</span>
+      <span class="tag-chip">#디자인</span>
+      <span class="tag-chip">#UX</span>
+    </div>
+
+    <div class="toc">
+      <p class="toc-title">목차</p>
+      <ol>
+        <li><a href="#pc-first">PC 먼저 개발의 대가</a></li>
+        <li><a href="#color-journey">검은 화면에서 베이지로</a></li>
+        <li><a href="#filter-war">필터명 전쟁</a></li>
+      </ol>
+    </div>
+
+    <h2 id="pc-first">PC 먼저 개발의 대가</h2>
+
+    <p>Pet-Pass는 지도 기반 서비스다. 반려동물 동반 가능한 장소를 지도 위에 핀으로 찍고, 필터로 걸러서 찾아가는 앱. 처음 만들 때 나는 당연하다는 듯이 PC 웹 브라우저를 기준으로 레이아웃을 잡았다. 넓은 화면에서 지도가 크게 펼쳐지고, 왼쪽 사이드바에 필터 패널이 붙어 있는 구조. 보기엔 그럴듯했다.</p>
+
+    <p>문제는 실제 서비스를 쓸 사람들이 어디서 쓰느냐를 생각하지 않았다는 거다. 반려동물 동반 장소를 검색하는 사람은 외출 중에, 산책하다가, 카페 앞에서 스마트폰으로 찾는다. PC 앞에 앉아서 검색하는 사람은 거의 없다.</p>
+
+    <p>모바일로 처음 열었을 때 화면이 깨졌다. 사이드바는 화면 절반을 잡아먹고, 지도는 좁아터진 오른쪽에 쪼그라들어 있었다. 핀을 탭하면 팝업이 화면 밖으로 튀어나갔다. 필터 버튼들은 한 줄에 다 들어오지 않아서 가로 스크롤이 생겼다.</p>
+
+    <div class="before-after">
+      <div class="ba-col before">
+        <div class="ba-header">Before · PC 기준 설계</div>
+        <div class="ba-item">사이드바 + 지도 2단 구조</div>
+        <div class="ba-item">모바일에서 레이아웃 붕괴</div>
+        <div class="ba-item">핀 팝업이 화면 밖으로 이탈</div>
+        <div class="ba-item">가로 스크롤 발생</div>
+      </div>
+      <div class="ba-col after">
+        <div class="ba-header">After · 모바일 퍼스트 재설계</div>
+        <div class="ba-item">지도 전체화면 + 하단 시트</div>
+        <div class="ba-item">필터는 수평 스크롤 칩</div>
+        <div class="ba-item">팝업 → 바텀시트로 교체</div>
+        <div class="ba-item">PC는 넓은 화면 활용 확장</div>
+      </div>
+    </div>
+
+    <p>구조를 뒤집어야 했다. 지도를 전체 화면으로 펼치고, 필터와 상세 정보는 아래에서 올라오는 바텀시트 형태로 바꿨다. AI에게 레이아웃 재설계를 지시할 때 <strong>"모바일 퍼스트로 작성하고, PC는 미디어 쿼리로 확장"</strong>이라는 가이드라인을 명시적으로 넣기 시작했다. 이 한 줄을 처음부터 넣었더라면 리팩토링 시간이 없었을 것이다.</p>
+
+    <div class="insight-box">
+      <p><strong>교훈:</strong> 지도 기반 서비스는 처음부터 모바일 퍼스트여야 한다. PC 레이아웃을 모바일로 축소하는 것보다, 모바일 레이아웃을 PC로 확장하는 게 훨씬 쉽다.</p>
+      <p>AI와 작업할 때 "모바일 퍼스트" 같은 설계 원칙은 매 지시마다 명시해야 한다. 한 번 말한 것을 기억하지 못한다.</p>
+    </div>
+
+    <h2 id="color-journey">검은 화면에서 베이지로</h2>
+
+    <p>개발 초기 Pet-Pass의 화면은 검은색이었다. 정확히는 어두운 회색과 남색이 섞인 다크 테마. 딱히 의도한 게 아니라 AI가 생성한 초기 CSS가 그랬고, 나도 특별한 의견이 없어서 그냥 두었다. 지도 앱이니까 어두운 톤도 나쁘지 않다고 생각했다.</p>
+
+    <p>한참 개발하다가 Claude에게 UI 리뷰를 부탁했다. 질문은 간단했다: <em>"지금 디자인이 서비스 컨셉에 맞나?"</em></p>
+
+    <p>돌아온 피드백이 날카로웠다. 반려동물 동반 장소를 찾는 서비스는 <strong>따뜻하고, 친근하고, 산책하는 기분</strong>이어야 하는데, 지금 화면은 사이버펑크 게임 같다고. 강아지랑 카페 가려고 앱 켰더니 헬스케어 앱 같은 분위기가 나온다면 뭔가 어긋난다고.</p>
+
+    <p>그 말이 맞았다. 서비스의 페르소나를 생각했다 — 강아지 목줄 잡고 동네 산책하는 사람, 반려묘와 동반 입장 가능한 카페를 찾는 사람. 이들이 편하게 느낄 색은 검은색이 아니었다.</p>
+
+    <p>베이지로 방향을 틀었다. 흙길 느낌, 가을 햇살, 따뜻한 나무. <code>#c8b89a</code>를 프라이머리로 잡고, 배경은 크림색 계열로 채웠다. 폰트는 Pretendard — 한국어에서 가장 자연스럽게 읽히는 선택이었다.</p>
+
+    <div class="color-palette-section">
+      <p class="palette-title">Pet-Pass Theme System</p>
+      <div class="theme-previews">
+        <div>
+          <div class="theme-preview-card tp-beige">
+            <div class="tp-header">🐾 베이지</div>
+            <div class="tp-body">
+              <div class="tp-line"></div>
+              <div class="tp-line"></div>
+            </div>
+          </div>
+          <div class="tp-label">기본 테마</div>
+        </div>
+        <div>
+          <div class="theme-preview-card tp-white">
+            <div class="tp-header">☀️ 화이트</div>
+            <div class="tp-body">
+              <div class="tp-line"></div>
+              <div class="tp-line"></div>
+            </div>
+          </div>
+          <div class="tp-label">밝은 테마</div>
+        </div>
+        <div>
+          <div class="theme-preview-card tp-dark">
+            <div class="tp-header">🌙 다크</div>
+            <div class="tp-body">
+              <div class="tp-line"></div>
+              <div class="tp-line"></div>
+            </div>
+          </div>
+          <div class="tp-label">다크 테마</div>
+        </div>
+        <div>
+          <div class="theme-preview-card tp-forest">
+            <div class="tp-header">🌿 포레스트</div>
+            <div class="tp-body">
+              <div class="tp-line"></div>
+              <div class="tp-line"></div>
+            </div>
+          </div>
+          <div class="tp-label">추후 추가 예정</div>
+        </div>
+      </div>
+    </div>
+
+    <p>베이지가 기본이 되고 나서, 화이트와 다크는 자연스럽게 따라왔다. 사람마다 선호하는 화면 밝기가 다르고, 밤에 쓰는 사람도 있으니까. 테마 시스템을 <code>localStorage</code>로 연결해서 새로고침해도 유지되게 했고, 모든 페이지에서 공유되게 <code>theme.js</code> 하나로 통합했다.</p>
+
+    <p>결과적으로 이 색 전환이 서비스의 정체성을 만들었다. Pet-Pass는 <em>따뜻한 베이지</em>가 기본인 서비스가 됐다. AI가 UI 컨셉을 제안하고, 사람이 "맞다, 그게 맞다"고 결정하는 — 바이브 코딩에서 협업이 가장 잘 작동한 순간 중 하나였다.</p>
+
+    <h2 id="filter-war">필터명 전쟁</h2>
+
+    <p>지도에 표시되는 장소 데이터는 공공데이터포털에서 온다. 업종 분류가 정부 기준으로 되어 있어서 실제 서비스에서 보여주기엔 이름이 낯설다. 대표적인 게 <strong>휴게음식점</strong>이다.</p>
+
+    <p>카페를 찾으려는 사람이 "휴게음식점"이라는 필터를 보면 뭔지 알까? 법적 정의로는 주류를 팔지 않는 음식점이 휴게음식점이고, 카페 대부분이 여기 속한다. 하지만 사용자 입장에서 "카페 찾기" 버튼이 "휴게음식점 필터"일 거라고 생각하는 사람은 없다.</p>
+
+    <p>해결책은 간단했다: 데이터를 화면에 표시할 때 변환 테이블을 적용한다. <code>휴게음식점 → 카페·음료</code>, <code>일반음식점 → 식당·레스토랑</code>, <code>문화시설 → 문화·공원</code>.</p>
+
+    <p>문제는 이 변환 규칙이 자꾸 사라진다는 것이었다. 데이터를 새로 내려받거나, AI가 관련 코드를 수정하거나, 다른 기능을 추가할 때마다 변환 로직이 덮어써지거나 빠졌다. 화면을 열면 "카페·음료"가 다시 "휴게음식점"으로 돌아와 있었다.</p>
+
+    <div class="insight-box">
+      <p><strong>AI 협업에서 반복적으로 발생한 패턴:</strong> AI는 기존 코드를 수정할 때 "핵심 기능"만 보존하려 한다. 데이터 변환 테이블처럼 비즈니스 로직처럼 보이지 않는 코드는 정리 대상이 된다.</p>
+      <p>해결책은 <strong>변환 규칙을 별도 파일로 분리하고, 수정 지시마다 "이 파일은 건드리지 말 것"을 명시</strong>하는 것이었다. 규칙이 코드에 인라인으로 박혀 있으면 언제든 사라진다.</p>
+    </div>
+
+    <p>지금은 <code>data/category-map.js</code>라는 파일 하나에 모든 변환 규칙이 들어 있고, AI에게 작업을 지시할 때 이 파일을 언급하면서 "변환 테이블은 유지해야 한다"고 매번 강조한다. 귀찮지만 이 한 줄이 없으면 다음 작업에서 또 원복된다.</p>
+
+    <p>이 경험이 가르쳐준 건, <strong>AI와 협업할 때 "이건 당연히 유지되겠지"라는 가정을 하면 안 된다는 것</strong>이다. 사람이 보기에 자명한 규칙도, AI에게는 그냥 코드 한 덩어리다. 중요한 제약 조건은 항상 명시적으로 지시에 포함시켜야 한다.</p>
+
+    <hr class="divider">
+
+    <div class="lesson-box">
+      <h3>이 글에서 배운 것</h3>
+      <p>지도 기반 모바일 서비스는 처음부터 모바일 퍼스트로 설계해야 한다. PC 레이아웃을 모바일로 줄이는 건 반대 방향보다 훨씬 고통스럽다.</p>
+      <p>서비스 컬러는 기능이 아닌 컨셉에서 결정해야 한다. AI가 초안을 만들어도, 그게 서비스의 페르소나에 맞는지 판단하는 건 사람이 해야 한다.</p>
+      <p>AI와 장기 협업할 때는 커스텀 변환 규칙, 네이밍 컨벤션, 비즈니스 로직을 별도 파일로 분리하고, 매 작업 지시에 "유지 대상"으로 명시해야 한다. 그렇지 않으면 다음 작업에서 사라진다.</p>
+    </div>
+
+    <div class="post-footer">
+      <a href="/blog/post3.html" class="btn-post-nav btn-prev">← 이전 글: Kakao API와 정부 API</a>
+      <span></span>
+    </div>
+
+  </main>
+  <script src="/theme.js"></script>
+</body>
+</html>
