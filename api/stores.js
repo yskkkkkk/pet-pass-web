@@ -1,3 +1,4 @@
+const { handlePreflight, applyCors } = require('./_cors');
 const { createClient } = require('@supabase/supabase-js');
 const { createRateLimiter } = require('../lib/rate-limiter');
 
@@ -9,20 +10,13 @@ const supabase = createClient(
 const rateLimiter = createRateLimiter({ max: 30, windowMs: 60_000 });
 
 module.exports = async (req, res) => {
-  // CORS 헤더 설정
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
+  if (handlePreflight(req, res)) {
     return;
   }
 
+  if (!applyCors(req, res)) {
+    return res.status(403).json({ error: '허용되지 않은 Origin 입니다.' });
+  }
   // Rate limiting: IP당 분당 30회 초과 시 429 반환
   let proceed = false;
   rateLimiter(req, res, () => { proceed = true; });
