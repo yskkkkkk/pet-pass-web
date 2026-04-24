@@ -6,199 +6,14 @@
   <title>Pet-Pass를 만든다는 것 | Pet-Pass Dev Blog</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/blog/blog_post.css">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <style>
-    body {
-      background-color: var(--bg-secondary);
-      font-family: 'Pretendard', sans-serif;
-      margin: 0;
-      padding: 0;
-      color: var(--text-primary);
-      overflow-y: auto !important;
-      min-height: 100vh;
-    }
+    .post-main-title { font-size: 30px; margin-bottom: 8px; }
+    .post-footer { justify-content: flex-end; }
 
     html[data-theme="dark"] .flow-node.human {
       background: #2a1a5e; color: #c4b5fd; border-color: #a78bfa;
-    }
-
-    .blog-header {
-      background: var(--surface);
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .blog-header h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .blog-header .theme-dots {
-      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-    }
-
-    .nav-buttons {
-      max-width: 800px;
-      margin: 20px auto 0;
-      padding: 0 20px;
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn-nav {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 30px;
-      color: var(--text-primary);
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.2s;
-    }
-
-    .btn-nav:hover {
-      background: var(--bg-secondary);
-      transform: translateY(-1px);
-    }
-
-    .blog-content {
-      max-width: 800px;
-      margin: 20px auto 60px;
-      padding: 40px;
-      background: var(--bg-primary);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
-      line-height: 1.9;
-    }
-
-    .post-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .post-series-tag {
-      display: inline-block;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 4px 14px;
-      font-size: 12px;
-      color: var(--text-tertiary);
-      font-weight: 600;
-    }
-
-    .read-time {
-      font-size: 12px;
-      color: var(--text-tertiary);
-    }
-
-    .post-main-title {
-      font-size: 30px;
-      font-weight: 800;
-      color: var(--primary);
-      margin-top: 0;
-      margin-bottom: 8px;
-      line-height: 1.4;
-    }
-
-    .post-date {
-      color: var(--text-tertiary);
-      font-size: 14px;
-      margin-bottom: 14px;
-      display: block;
-    }
-
-    /* ─── 태그 ─── */
-    .post-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 36px;
-    }
-
-    .tag-chip {
-      display: inline-block;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 3px 10px;
-      font-size: 12px;
-      color: var(--text-secondary);
-      font-weight: 500;
-    }
-
-    .toc {
-      background: var(--bg-secondary);
-      border-radius: 12px;
-      padding: 20px 24px;
-      margin-bottom: 40px;
-      border: 1px solid var(--border);
-    }
-
-    .toc-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin: 0 0 12px 0;
-    }
-
-    .toc ol {
-      margin: 0;
-      padding-left: 20px;
-      color: var(--text-secondary);
-      font-size: 14px;
-      line-height: 2.2;
-    }
-
-    .toc a {
-      color: var(--text-secondary);
-      text-decoration: none;
-    }
-
-    .toc a:hover {
-      color: var(--primary);
-    }
-
-    .blog-content h2 {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-top: 52px;
-      margin-bottom: 16px;
-      border-left: 4px solid var(--primary);
-      padding-left: 14px;
-    }
-
-    .blog-content p {
-      font-size: 16px;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
-    }
-
-    .blog-content strong {
-      color: var(--text-primary);
-      font-weight: 700;
     }
 
     /* ─── 다이어그램: 협업 구조 ─── */
@@ -308,22 +123,6 @@
       font-weight: 600;
     }
 
-    /* ─── 하이라이트 박스 ─── */
-    .highlight-box {
-      background: var(--bg-secondary);
-      border-left: 4px solid var(--primary);
-      border-radius: 0 12px 12px 0;
-      padding: 18px 20px;
-      margin: 28px 0;
-    }
-
-    .highlight-box p {
-      margin: 0;
-      font-size: 15px;
-      font-style: italic;
-      color: var(--text-secondary);
-    }
-
     /* ─── 시리즈 예고 ─── */
     .series-preview {
       background: var(--bg-secondary);
@@ -348,12 +147,6 @@
       color: var(--text-secondary);
       font-size: 15px;
       line-height: 2.2;
-    }
-
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 40px 0;
     }
 
     /* ─── 포스트 푸터 ─── */
@@ -385,12 +178,9 @@
     }
 
     @media (max-width: 600px) {
-      .blog-content { padding: 24px 20px; }
-      .post-main-title { font-size: 24px; }
-      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .stats-grid { gap: 8px; }
       .stat-number { font-size: 24px; }
       .collab-flow { gap: 6px; }
-      .theme-toggle-btn { right: 8px; padding: 5px 8px; font-size: 11px; }
     }
   </style>
   <script>
