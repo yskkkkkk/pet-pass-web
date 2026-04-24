@@ -199,6 +199,16 @@ async function syncPetFriendlyStores() {
     let hasFirstGeocodeAttempt = false;
     let apiCallCount = 0;
 
+    // 데이터 품질 지표 초기화
+    const stats = {
+      total: jsonData.length,
+      invalid: 0,
+      duplicates: 0,
+      missingCoords: 0,
+      upserted: 0,
+      deleted: 0
+    };
+
     console.log('🔄 차분 분석(Diff) 및 지오코딩 진행 중...');
     for (let index = 0; index < jsonData.length; index++) {
       const row = jsonData[index];
@@ -210,10 +220,16 @@ async function syncPetFriendlyStores() {
       }
 
       const address = pickFirst(row, ['업소주소']);
-      if (!name || !address) continue;
+      if (!name || !address) {
+        stats.invalid++;
+        continue;
+      }
 
       const key = `${name}|${address}`;
-      if (processedKeys.has(key)) continue; // 엑셀 내 중복 제거
+      if (processedKeys.has(key)) {
+        stats.duplicates++;
+        continue; // 엑셀 내 중복 제거
+      }
       processedKeys.add(key);
 
       let type = pickFirst(row, ['업종']) || '기타';
@@ -262,6 +278,10 @@ async function syncPetFriendlyStores() {
         lng = cached?.lng || 0;
       }
 
+      if (!lat || !lng) {
+        stats.missingCoords++;
+      }
+
       toUpsert.push({
         name,
         address,
@@ -276,6 +296,8 @@ async function syncPetFriendlyStores() {
         updated_at: batchTimestamp
       });
     }
+
+    stats.upserted = toUpsert.length;
 
     // 6-7. 핵심 DB 반영 단계 (업서트 + 삭제)
     // NOTE: Supabase JS 클라이언트 특성상 클라이언트 코드 레벨에서 다중 쿼리 트랜잭션을 직접 보장하기 어려워,
@@ -304,6 +326,7 @@ async function syncPetFriendlyStores() {
     }
 
     if (toDeleteIds.length > 0) {
+      stats.deleted = toDeleteIds.length;
       // 안전장치: 전체 데이터의 30% 이상이 한 번에 삭제되려 하면 경고 후 중단
       const deleteRatio = toDeleteIds.length / totalLoaded;
       if (deleteRatio > 0.3 && totalLoaded > 100) {
@@ -334,8 +357,20 @@ async function syncPetFriendlyStores() {
       console.warn(`⚠️ ${backupWarning}`);
     }
 
-    const result = { success: true, upserted: toUpsert.length, deleted: toDeleteIds.length, backupWarning };
-    await updateScheduleHistory(true, `${result.upserted}개 업데이트, ${result.deleted}개 삭제 완료`);
+    const result = { success: true, ...stats, backupWarning };
+
+    // 리포트 생성 (건수 및 비율)
+    const getRate = (count) => stats.total > 0 ? ((count / stats.total) * 100).toFixed(1) : '0.0';
+
+    const report = [
+      `${stats.upserted}개 업데이트`,
+      `${stats.deleted}개 삭제`,
+      `[품질지표: 누락 ${stats.invalid}건(${getRate(stats.invalid)}%), ` +
+      `중복 ${stats.duplicates}건(${getRate(stats.duplicates)}%), ` +
+      `좌표미보유 ${stats.missingCoords}건(${getRate(stats.missingCoords)}%)]`
+    ].join(' | ');
+
+    await updateScheduleHistory(true, report);
     return result;
   } catch (error) {
     console.error(`❌ 데이터 동기화 실패: ${error.message}`);
