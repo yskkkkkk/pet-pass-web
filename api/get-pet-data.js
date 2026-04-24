@@ -35,6 +35,18 @@ module.exports = async (req, res) => {
   if (!proceed) return;
 
   const { dogRegNo, ownerBirth, pageNo, numOfRows, ...otherParams } = req.query;
+
+  // 입력값 검증 (auth-pet.js와 동일 규칙)
+  if (!dogRegNo || !ownerBirth) {
+    return res.status(400).json({ error: '동물등록번호와 생년월일이 필요합니다.' });
+  }
+  if (!/^\d{15}$/.test(dogRegNo)) {
+    return res.status(400).json({ error: '유효하지 않은 등록번호 형식입니다. (숫자 15자리 필수)' });
+  }
+  if (!/^\d{6}$/.test(ownerBirth)) {
+    return res.status(400).json({ error: '생년월일은 숫자 6자리(예: 900101)로 입력해주세요.' });
+  }
+
   const API_KEY = process.env.DATA_GO_KR_API_KEY;
 
   if (!API_KEY || API_KEY === 'YOUR_GOVERNMENT_API_KEY_HERE') {
