@@ -411,14 +411,9 @@
       border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--text-secondary); font-weight: 500;
     }
 
-    /* ─── 테마 토글 버튼 ─── */
-    .theme-toggle-btn {
+    .blog-header .theme-dots {
       position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-      background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 20px;
-      padding: 6px 12px; font-size: 12px; cursor: pointer; color: var(--text-secondary);
-      font-family: 'Pretendard', sans-serif; font-weight: 600; transition: all 0.2s; white-space: nowrap;
     }
-    .theme-toggle-btn:hover { background: var(--border); }
 
     html[data-theme="dark"] .warning-box {
       background: rgba(239,68,68,0.1); border-left-color: #ef4444;
@@ -438,7 +433,11 @@
 
   <header class="blog-header glass">
     <h1>🐾 Pet-Pass Dev Blog</h1>
-    <button class="theme-toggle-btn" id="themeToggle" onclick="cycleTheme()">🌸 베이지</button>
+    <div class="theme-dots">
+      <button class="theme-dot" data-t="beige" onclick="applyTheme('beige')" title="베이지" style="background:#c8b89a;"></button>
+      <button class="theme-dot" data-t="white" onclick="applyTheme('white')" title="화이트" style="background:#f0f0f0;"></button>
+      <button class="theme-dot" data-t="dark"  onclick="applyTheme('dark')"  title="다크"  style="background:#24273a;"></button>
+    </div>
   </header>
 
   <div class="nav-buttons">

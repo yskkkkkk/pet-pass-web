@@ -1,6 +1,5 @@
 (function () {
   var THEMES = ['beige', 'white', 'dark'];
-  var ICONS  = { beige: '🌸 베이지', white: '☀️ 화이트', dark: '🌙 다크' };
 
   function applyTheme(t) {
     if (t === 'beige') {
@@ -8,8 +7,9 @@
     } else {
       document.documentElement.setAttribute('data-theme', t);
     }
-    var btn = document.getElementById('themeToggle');
-    if (btn) btn.textContent = ICONS[t];
+    document.querySelectorAll('.theme-dot').forEach(function (dot) {
+      dot.classList.toggle('active', dot.dataset.t === t);
+    });
     localStorage.setItem('pet-pass-theme', t);
   }
 
@@ -19,13 +19,11 @@
     applyTheme(next);
   }
 
-  /* DOMContentLoaded 후 버튼 텍스트 초기화 */
   document.addEventListener('DOMContentLoaded', function () {
     var t = localStorage.getItem('pet-pass-theme') || 'beige';
     applyTheme(t);
   });
 
-  /* 전역 노출 */
   window.cycleTheme = cycleTheme;
   window.applyTheme = applyTheme;
 })();
