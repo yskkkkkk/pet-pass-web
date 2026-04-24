@@ -1,4 +1,7 @@
 const axios = require('axios');
+const { createRateLimiter } = require('../lib/rate-limiter');
+
+const rateLimiter = createRateLimiter({ max: 10, windowMs: 60_000 });
 
 const ERROR_MESSAGES = {
   'Unauthorized': 'API 인증키가 존재하지 않거나 유효하지 않습니다.\n공공데이터포털에서 발급받은 인증키 정보를 확인해 주세요.',
@@ -25,6 +28,11 @@ module.exports = async (req, res) => {
     res.status(200).end();
     return;
   }
+
+  // Rate limiting: IP당 분당 10회 초과 시 429 반환
+  let proceed = false;
+  rateLimiter(req, res, () => { proceed = true; });
+  if (!proceed) return;
 
   const { dogRegNo, ownerBirth, pageNo, numOfRows, ...otherParams } = req.query;
   const API_KEY = process.env.DATA_GO_KR_API_KEY;
