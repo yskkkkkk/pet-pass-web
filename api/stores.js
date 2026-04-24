@@ -15,6 +15,9 @@ module.exports = async (req, res) => {
     'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
   );
 
+  // CDN 캐싱 헤더 추가: 1시간 캐싱, 10분 stale-while-revalidate
+  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
+
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
