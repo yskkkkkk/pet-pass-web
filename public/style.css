@@ -34,115 +34,60 @@
   --z-panel: 500;
   --z-modal: 2000;
 }
-html[data-theme="white"] {
-  --bg-primary:    #ffffff;
-  --bg-secondary:  #f5f5f5;
-  --surface:       #ffffff;
-  --primary:       #D39530;
-  --primary-hover: #B87E22;
-  --primary-soft:  #fef3e2;
-  --on-primary:    #ffffff;
-  --accent-green:  #5A7738;
-  --accent-green-bg: #e8f0d8;
-  --text-primary:   #1a1a1a;
-  --text-secondary: #444444;
-  --text-tertiary:  #888888;
-  --text-on-dark:   #ffffff;
-  --border:        rgba(0, 0, 0, 0.10);
-  --border-strong: rgba(0, 0, 0, 0.18);
-  --error:   #C44A2E;
-  --shadow-premium: 0 1px 2px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* ── 다크 테마 ── */
-html[data-theme="dark"] {
-  --bg-primary:    #1e1e2e;
-  --bg-secondary:  #181825;
-  --surface:       #24273a;
-  --primary:       #e8b357;
-  --primary-hover: #d4a044;
-  --primary-soft:  rgba(232, 179, 87, 0.15);
-  --on-primary:    #1e1e2e;
-  --accent-green:  #a6e3a1;
-  --accent-green-bg: rgba(166, 227, 161, 0.12);
-  --text-primary:   #cdd6f4;
-  --text-secondary: #a5adcb;
-  --text-tertiary:  #6c7086;
-  --text-on-dark:   #cdd6f4;
-  --border:        rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.15);
-  --error:   #f38ba8;
-  --warning: #e8b357;
-  --success: #a6e3a1;
-  --shadow-premium: 0 1px 2px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.4);
-}
-
-/* ── 테마 도트 버튼 (전역) ── */
-.theme-dots { display: flex; gap: 5px; align-items: center; }
-.theme-dot {
-  width: 14px; height: 14px; border-radius: 50%;
-  cursor: pointer; padding: 0; border: none;
-  box-shadow: 0 0 0 1.5px rgba(128,128,128,0.3);
-  transition: transform 0.15s, box-shadow 0.15s;
-  flex-shrink: 0;
-}
-.theme-dot:hover { transform: scale(1.2); }
-.theme-dot.active { box-shadow: 0 0 0 2.5px var(--primary); }
-
 /* ── 화이트 테마 ── */
 html[data-theme="white"] {
-  --bg-primary:    #ffffff;
-  --bg-secondary:  #f0f4f8;
-  --surface:       #ffffff;
-  --primary:       #2563EB;
-  --primary-hover: #1D4ED8;
-  --primary-soft:  rgba(37, 99, 235, 0.10);
-  --on-primary:    #ffffff;
-  --accent-green:  #059669;
-  --accent-green-bg: rgba(5, 150, 105, 0.10);
-  --text-primary:   #111827;
-  --text-secondary: #374151;
-  --text-tertiary:  #6B7280;
-  --text-on-dark:   #ffffff;
-  --border:        rgba(0, 0, 0, 0.10);
-  --border-strong: rgba(0, 0, 0, 0.18);
-  --error:   #DC2626;
-  --warning: #D97706;
-  --success: #059669;
-  --shadow-premium: 0 1px 2px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.08);
+  --bg-primary:      #FEFCF7;                    /* 아이보리 크림 */
+  --bg-secondary:    #EEEEF8;                    /* 페리윙클 틴트 */
+  --surface:         #FFFFFF;
+  --primary:         #5B6BAE;                    /* Slate Periwinkle */
+  --primary-hover:   #4C5C9E;
+  --primary-soft:    rgba(91, 107, 174, 0.10);
+  --on-primary:      #FFFFFF;
+  --accent-green:    #4A6B2E;                    /* 인증 녹색 — 메인 테마와 동일 계열 */
+  --accent-green-bg: rgba(74, 107, 46, 0.10);
+  --text-primary:    #111820;
+  --text-secondary:  #383848;
+  --text-tertiary:   #787888;
+  --text-on-dark:    #FFFFFF;
+  --border:          rgba(0, 0, 0, 0.08);
+  --border-strong:   rgba(0, 0, 0, 0.13);
+  --error:           #C44A2E;
+  --warning:         #B87E22;
+  --success:         #4A6B2E;
+  --shadow-premium:  0 1px 2px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.08);
 }
 
 /* ── 다크 테마 ── */
 html[data-theme="dark"] {
-  --bg-primary:    #1e1e2e;
-  --bg-secondary:  #181825;
-  --surface:       #24273a;
-  --primary:       #e8b357;
-  --primary-hover: #d4a044;
-  --primary-soft:  rgba(232, 179, 87, 0.15);
-  --on-primary:    #1e1e2e;
-  --accent-green:  #6aab85;
-  --accent-green-bg: rgba(106, 171, 133, 0.14);
-  --text-primary:   #cdd6f4;
-  --text-secondary: #a5adcb;
-  --text-tertiary:  #6c7086;
-  --text-on-dark:   #cdd6f4;
-  --border:        rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.15);
-  --error:   #f38ba8;
-  --warning: #e8b357;
-  --success: #6aab85;
-  --shadow-premium: 0 1px 2px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.4);
+  --bg-primary:      #1C1812;                    /* 에스프레소 브라운 */
+  --bg-secondary:    #141210;
+  --surface:         #252018;
+  --primary:         #D46855;                    /* Muted Coral */
+  --primary-hover:   #C05845;
+  --primary-soft:    rgba(212, 104, 85, 0.15);
+  --on-primary:      #FFFFFF;
+  --accent-green:    #8ABD68;                    /* 올리브 — 어두운 배경용 밝기 조정 */
+  --accent-green-bg: rgba(138, 189, 104, 0.12);
+  --text-primary:    #F0E8D4;
+  --text-secondary:  #C4B090;
+  --text-tertiary:   #7A6A50;
+  --text-on-dark:    #F0E8D4;
+  --border:          rgba(255, 255, 255, 0.07);
+  --border-strong:   rgba(255, 255, 255, 0.13);
+  --error:           #FF6B6B;
+  --warning:         #FFB347;
+  --success:         #8ABD68;
+  --shadow-premium:  0 1px 2px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.5);
 }
 
 /* ── GitHub 버튼 다크 모드 오버라이드 ── */
 html[data-theme="dark"] #btn-github {
-  background: #3d4256 !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  color: #cdd6f4 !important;
+  background: #2A241B !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  color: #F0E8D4 !important;
 }
 html[data-theme="dark"] #btn-github svg {
-  fill: #cdd6f4 !important;
+  fill: #F0E8D4 !important;
 }
 
 /* ── 테마 도트 버튼 (전역) ── */
@@ -177,7 +122,7 @@ body {
 :where(button, [role="button"], input, select, textarea, a, .icon-tag, .map-fab-style):focus-visible {
   outline: 3px solid var(--primary);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(211, 149, 48, 0.25);
+  box-shadow: 0 0 0 4px var(--primary-soft);
 }
 
 /* Glassmorphism - Adjusted for bright theme */
