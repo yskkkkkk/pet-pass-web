@@ -47,12 +47,7 @@ window.addEventListener('resize', throttle(setViewportHeight, 150));
 let map;
 let clusterer = null;
 let markers = [];
-let stores = []; // 현재 필터 조건에서 서버가 내려준 매장 데이터(누적)
-let totalMatchedStores = 0;
-let currentOffset = 0;
-const PAGE_SIZE = 50;
-let hasMoreStores = false;
-let isLoadingStores = false;
+let stores = []; // Global store data, fetched from API
 let selectedStore = null; // 현재 상세 페이지에 표시 중인 매장 정보
 let currentBoundsFilter = null; // Store map bounds for filtering
 let currentFilteredStores = []; // 현재 필터링된 매장 리스트 (Back-step용)
@@ -345,7 +340,14 @@ function renderStores(data) {
     return;
   }
 
-  data.forEach((store, index) => {
+  const PAGE_SIZE = 50;
+  let renderData = data;
+  let page = 0;
+
+  function renderPage() {
+    const slice = renderData.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+    slice.forEach((store, idx) => {
+      const index = page * PAGE_SIZE + idx;
     const card = document.createElement('div');
     card.className = 'store-card glass animate-in';
     card.style.animationDelay = `${Math.min(index, 20) * 0.05}s`; // cap delay for large lists
@@ -378,25 +380,26 @@ function renderStores(data) {
       showDetail(store);
     };
     storeList.appendChild(card);
-  });
+    });
 
-  renderLoadMoreButton(data.length, totalMatchedStores);
-}
+    // '더 보기' 버튼 추가
+    const total = renderData.length;
+    const shown = (page + 1) * PAGE_SIZE;
+    if (shown < total) {
+      const loadMoreBtn = document.createElement('button');
+      loadMoreBtn.className = 'auth-btn glass';
+      loadMoreBtn.style.cssText = 'width:100%; margin: 10px 0 20px; padding: 14px; font-size: 14px;';
+      loadMoreBtn.innerText = `더 보기 (${shown}/${total})`;
+      loadMoreBtn.onclick = () => {
+        page++;
+        loadMoreBtn.remove();
+        renderPage();
+      };
+      storeList.appendChild(loadMoreBtn);
+    }
+  }
 
-function renderLoadMoreButton(shownCount, totalCount) {
-  const existingBtn = document.getElementById('btn-load-more');
-  if (existingBtn) existingBtn.remove();
-  if (!hasMoreStores) return;
-
-  const loadMoreBtn = document.createElement('button');
-  loadMoreBtn.id = 'btn-load-more';
-  loadMoreBtn.className = 'auth-btn glass';
-  loadMoreBtn.style.cssText = 'width:100%; margin: 10px 0 20px; padding: 14px; font-size: 14px;';
-  loadMoreBtn.innerText = `더 보기 (${shownCount}/${totalCount})`;
-  loadMoreBtn.onclick = () => {
-    fetchStoresPage({ append: true });
-  };
-  storeList.appendChild(loadMoreBtn);
+  renderPage();
 }
 
 // Show Store Details Bottom Sheet
@@ -688,74 +691,24 @@ btnFetchGov.onclick = async () => {
   }
 };
 
-function buildStoresQuery(offset) {
-  const params = new URLSearchParams();
-  params.set('limit', String(PAGE_SIZE));
-  params.set('offset', String(offset));
-
-  if (currentCategory !== '전체') params.set('category', currentCategory);
-  if (currentRegion1 !== '전국') params.set('region1', currentRegion1);
-  if (currentRegion2 !== '전체') params.set('region2', currentRegion2);
-
-  const keyword = currentSearch.trim();
-  if (keyword) params.set('search', keyword);
-
-  if (currentBoundsFilter && window.kakao && keyword === '') {
-    const sw = currentBoundsFilter.getSouthWest();
-    const ne = currentBoundsFilter.getNorthEast();
-    params.set('minLat', String(sw.getLat()));
-    params.set('maxLat', String(ne.getLat()));
-    params.set('minLng', String(sw.getLng()));
-    params.set('maxLng', String(ne.getLng()));
-  }
-
-  return params.toString();
-}
-
-async function fetchStoresPage({ append = false } = {}) {
-  if (isLoadingStores) return;
-  isLoadingStores = true;
-
-  if (!append) {
-    renderSkeleton();
-  }
-
-  const nextOffset = append ? currentOffset : 0;
-
+async function fetchStores() {
+  renderSkeleton();
   try {
-    const query = buildStoresQuery(nextOffset);
-    const response = await fetch(`/api/stores?${query}`);
+    const response = await fetch('/api/stores');
     if (!response.ok) throw new Error('데이터 로딩 실패');
+    stores = await response.json();
 
-    const payload = await response.json();
-    const items = Array.isArray(payload) ? payload : (payload.items || []);
-    const total = Array.isArray(payload) ? items.length : (payload.total || 0);
-    const more = Array.isArray(payload) ? false : Boolean(payload.hasMore);
+    calculateRegionCounts();
+    updateRegionDepth1UI();
 
-    if (append) {
-      stores = stores.concat(items);
-    } else {
-      stores = items;
-    }
-
-    totalMatchedStores = total;
-    hasMoreStores = more;
-    currentOffset = stores.length;
-    currentFilteredStores = stores;
-
-    renderStores(stores);
-    updateMapMarkers(stores);
+    // Slight delay for smooth transition from skeleton
+    setTimeout(() => {
+      applyFilters();
+    }, 400);
   } catch (err) {
     console.error('매장 정보를 가져오는데 실패했습니다:', err);
     storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">매장 정보를 불러올 수 없습니다. 서버 상태를 확인해주세요.</div>`;
-  } finally {
-    isLoadingStores = false;
   }
-}
-
-async function fetchStores() {
-  updateRegionDepth1UI();
-  await fetchStoresPage({ append: false });
 }
 
 // Category Mapping for UI and Data
@@ -777,7 +730,6 @@ let currentCategory = '전체';
  * Pre-calculate store counts for each region
  */
 let regionCounts = { depth1: {}, depth2: {} };
-let hasRegionCounts = false;
 
 function calculateRegionCounts() {
   const counts = {
@@ -810,7 +762,6 @@ function calculateRegionCounts() {
   });
 
   regionCounts = counts;
-  hasRegionCounts = true;
 }
 
 /**
@@ -820,12 +771,6 @@ function updateRegionDepth1UI() {
   const options = regionDepth1.querySelectorAll('option');
   options.forEach(opt => {
     const regionName = opt.value;
-    if (!hasRegionCounts) {
-      opt.innerText = regionName;
-      opt.disabled = false;
-      return;
-    }
-
     const count = regionCounts.depth1[regionName] || 0;
     opt.innerText = `${regionName} (${count})`;
     if (count === 0 && regionName !== '전국') {
@@ -863,23 +808,16 @@ function updateRegionDepth2(region1) {
   const districts = regionData[region1] || [];
   regionDepth2.style.display = 'block';
 
-  if (!hasRegionCounts) {
-    regionDepth2.innerHTML = '<option value="전체">전체</option>';
-  } else {
-    const totalCountForRegion = regionCounts.depth2[region1]?.["전체"] || 0;
-    regionDepth2.innerHTML = `<option value="전체">전체 (${totalCountForRegion})</option>`;
-  }
+  const totalCountForRegion = regionCounts.depth2[region1]?.["전체"] || 0;
+  regionDepth2.innerHTML = `<option value="전체">전체 (${totalCountForRegion})</option>`;
 
   districts.forEach(district => {
+    const count = regionCounts.depth2[region1]?.[district] || 0;
     const option = document.createElement('option');
     option.value = district;
-    if (!hasRegionCounts) {
-      option.innerText = district;
-      option.disabled = false;
-    } else {
-      const count = regionCounts.depth2[region1]?.[district] || 0;
-      option.innerText = `${district} (${count})`;
-      if (count === 0) option.disabled = true;
+    option.innerText = `${district} (${count})`;
+    if (count === 0) {
+      option.disabled = true;
     }
     regionDepth2.appendChild(option);
   });
@@ -894,7 +832,112 @@ function applyFilters() {
 
   if (lastFilterKey === currentFilterKey) return;
   lastFilterKey = currentFilterKey;
-  fetchStoresPage({ append: false });
+
+  const keyword = currentSearch.trim().toLowerCase();
+  const resultsWithScore = [];
+  const mapBounds = (window.kakao && map) ? map.getBounds() : null;
+
+  // 성능 최적화: 1,572개 데이터를 위해 고속 for 루프 사용 (Issue 5)
+  for (let i = 0; i < stores.length; i++) {
+    const store = stores[i];
+    let score = 0;
+
+    // 1. 하드 필터 (카테고리 및 지역 선택)
+    const targetTypes = CATEGORY_MAP[currentCategory] || [currentCategory];
+    const matchCategory = (currentCategory === '전체') || targetTypes.includes(store.type);
+    if (!matchCategory) continue;
+
+    let matchRegion = true;
+    if (currentRegion1 !== '전국') {
+      const matchRegion1 = store.address.includes(currentRegion1);
+      let matchRegion2 = true;
+      if (currentRegion2 !== '전체') {
+        matchRegion2 = store.address.includes(currentRegion2);
+      }
+      matchRegion = matchRegion1 && matchRegion2;
+    }
+    if (!matchRegion) continue;
+
+    // 2. 현재 지도 영역 내 보너스 점수 (UI 상의 매장 우선순위 반영)
+    if (mapBounds && store.lat && store.lng) {
+      const pos = new kakao.maps.LatLng(store.lat, store.lng);
+      if (mapBounds.contain(pos)) {
+        score += WEIGHTS.IN_BOUNDS_BONUS;
+      }
+    }
+
+    // 3. 텍스트 검색 가중치 로직 (Issue 4 고도화)
+    if (keyword !== '') {
+      let hasMatch = false;
+      const lowerName = store.name.toLowerCase();
+      const lowerAddr = store.address.toLowerCase();
+
+      // [매장명 매칭]
+      if (lowerName === keyword) {
+        score += WEIGHTS.NAME_EXACT;
+        hasMatch = true;
+      } else if (lowerName.startsWith(keyword)) {
+        score += WEIGHTS.NAME_STARTS_WITH;
+        hasMatch = true;
+      } else if (lowerName.includes(keyword)) {
+        score += WEIGHTS.NAME_CONTAINS;
+        hasMatch = true;
+      }
+
+      // [초성 매칭]
+      if (!hasMatch && typeof Hangul !== 'undefined') {
+        if (Hangul.search(store.name, keyword) !== -1) {
+          score += WEIGHTS.CHOSUNG_MATCH;
+          hasMatch = true;
+        }
+      }
+
+      // [주소/행정구역 매칭]
+      const addressParts = lowerAddr.split(' ');
+      let addrPartMatch = false;
+      for (const part of addressParts) {
+        if (part === keyword) {
+          score += WEIGHTS.ADDR_PART_EXACT;
+          addrPartMatch = true;
+        } else if (part.startsWith(keyword)) {
+          score += WEIGHTS.ADDR_PART_STARTS_WITH;
+          addrPartMatch = true;
+        }
+      }
+
+      if (addrPartMatch) {
+        hasMatch = true;
+      } else if (lowerAddr.includes(keyword)) {
+        score += WEIGHTS.ADDR_CONTAINS;
+        hasMatch = true;
+      }
+
+      // 검색어가 있는데 매칭되는 것이 없으면 제외
+      if (!hasMatch) continue;
+    }
+
+    // 4. 지도 영역 필터 (검색어가 없을 때만 적용 - Issue 3)
+    if (currentBoundsFilter && window.kakao && keyword === '') {
+      const pos = new kakao.maps.LatLng(store.lat, store.lng);
+      if (!currentBoundsFilter.contain(pos)) continue;
+    }
+
+    resultsWithScore.push({ store, score });
+  }
+
+  // 5. 최종 정렬: 가중치 점수 내림차순 -> 이름 오름차순
+  resultsWithScore.sort((a, b) => {
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+    return a.store.name.localeCompare(b.store.name);
+  });
+
+  const finalResults = resultsWithScore.map(r => r.store);
+  currentFilteredStores = finalResults; // 상태 업데이트
+
+  renderStores(finalResults);
+  updateMapMarkers(finalResults);
 }
 
 // Event Listeners for Filters

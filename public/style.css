@@ -59,25 +59,44 @@ html[data-theme="white"] {
 
 /* ── 다크 테마 ── */
 html[data-theme="dark"] {
-  --bg-primary:      #1C1812;                    /* 에스프레소 브라운 */
-  --bg-secondary:    #141210;
-  --surface:         #252018;
-  --primary:         #D46855;                    /* Muted Coral */
+  --bg-primary:      #2C2419;                    /* 따뜻한 커피 브라운 — 카드/콘텐츠 배경 */
+  --bg-secondary:    #221C13;                    /* 페이지 전체 배경 */
+  --surface:         #382E22;                    /* 모달, 바텀시트 최상단 surface */
+  --primary:         #D46855;                    /* Muted Coral — CTA, 활성 탭 */
   --primary-hover:   #C05845;
   --primary-soft:    rgba(212, 104, 85, 0.15);
   --on-primary:      #FFFFFF;
-  --accent-green:    #8ABD68;                    /* 올리브 — 어두운 배경용 밝기 조정 */
-  --accent-green-bg: rgba(138, 189, 104, 0.12);
+  --accent-green:    #8ABD68;                    /* 올리브 그린 — 인증 뱃지 */
+  --accent-green-bg: rgba(138, 189, 104, 0.15);
+  --gold:            #C89040;                    /* 골드 — 드롭다운 포인트, 보조 강조 */
   --text-primary:    #F0E8D4;
   --text-secondary:  #C4B090;
-  --text-tertiary:   #7A6A50;
+  --text-tertiary:   #9A8A70;
   --text-on-dark:    #F0E8D4;
-  --border:          rgba(255, 255, 255, 0.07);
-  --border-strong:   rgba(255, 255, 255, 0.13);
+  --border:          rgba(255, 255, 255, 0.09);
+  --border-strong:   rgba(255, 255, 255, 0.16);
   --error:           #FF6B6B;
   --warning:         #FFB347;
   --success:         #8ABD68;
   --shadow-premium:  0 1px 2px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-sm:       0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md:       0 4px 16px rgba(0,0,0,0.5);
+}
+
+/* ── 블로그 다크 모드 오버라이드 ── */
+html[data-theme="dark"] body {
+  background-color: #221C13;   /* body는 항상 가장 어두운 배경 */
+}
+
+/* 다크 — 비활성 칩 반투명 처리 */
+html[data-theme="dark"] .icon-tag {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
+}
+
+/* 다크 — 드롭다운/셀렉트 골드 포인트 */
+html[data-theme="dark"] select.icon-tag {
+  border-color: rgba(200, 144, 64, 0.25);
 }
 
 /* ── GitHub 버튼 다크 모드 오버라이드 ── */
