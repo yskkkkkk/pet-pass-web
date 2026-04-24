@@ -7,6 +7,7 @@ const { createClient } = require('@supabase/supabase-js');
 const { syncPetFriendlyStores } = require('./scripts/sync-stores');
 const getPetData = require('./api/get-pet-data');
 const { getAllowedOrigins, isAllowedOrigin } = require('./api/_cors');
+const { createRateLimiter } = require('./lib/rate-limiter');
 require('dotenv').config();
 
 const app = express();
@@ -46,6 +47,10 @@ console.log('[CORS] 허용 Origin:', allowedOrigins.join(', '));
 
 app.use(express.json());
 
+// Rate limiters
+const authLimiter   = createRateLimiter({ max: 10, windowMs: 60_000 }); // 인증 API: 분당 10회
+const storesLimiter = createRateLimiter({ max: 30, windowMs: 60_000 }); // 매장 목록: 분당 30회
+
 // CSS, JS 등 정적 자원 서빙 (index.html 제외)
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
@@ -65,7 +70,7 @@ app.get('/', (req, res) => {
  * [Stores API]
  * Supabase DB에서 매장 데이터를 조회하여 반환합니다.
  */
-app.get('/api/stores', async (req, res) => {
+app.get('/api/stores', storesLimiter, async (req, res) => {
   try {
     const allStores = [];
     let from = 0;
@@ -99,7 +104,7 @@ app.get('/api/stores', async (req, res) => {
  * 클라이언트(브라우저)에서 CORS 우회를 위해 이 서버로 요청을 보내면,
  * 서버가 안전하게 환경변수(.env)에 숨겨둔 API KEY를 조합하여 진짜 정부 API를 호출합니다.
  */
-app.get('/api/auth-pet', async (req, res) => {
+app.get('/api/auth-pet', authLimiter, async (req, res) => {
   const { dogRegNo, ownerBirth } = req.query; // 클라이언트로부터 받은 동물등록번호 및 생년월일
   
   if (!dogRegNo || !ownerBirth) {
@@ -228,7 +233,7 @@ app.get('/api/auth-pet', async (req, res) => {
  * [New Proxy Endpoint]
  * Vercel Serverless Function과 동일한 로직을 로컬 express 서버에서도 제공합니다.
  */
-app.get('/api/get-pet-data', getPetData);
+app.get('/api/get-pet-data', authLimiter, getPetData);
 
 app.listen(PORT, () => {
   console.log(`🚀 Pet-Pass 백엔드 서버가 시작되었습니다!`);
