@@ -34,6 +34,31 @@ function hasBrokenKoreanText(value) {
   return /[?？�]/.test(String(value || ''));
 }
 
+/**
+ * 깨진 한글 텍스트를 보정 (패턴 매칭 기반)
+ */
+function repairKoreanText(text) {
+  if (!text) return text;
+  let repaired = String(text);
+
+  // 보정 패턴 정의 (자주 발생하는 깨짐 현상 대응)
+  const patterns = [
+    { search: /[?？]커피/g, replace: '뫀커피' },
+    { search: /우[?？]/g, replace: '우딬' },
+    { search: /잇[?？]/g, replace: '잇컾' },
+    { search: /율[?？]당/g, replace: '율뭌당' },
+    { search: /조[?？]/g, replace: '죠즈' },
+    { search: /프[?？]츠/g, replace: '프릳츠' },
+    { search: /뫀[?？]/g, replace: '뫀' }, // 혹시나 뫀? 로 나오는 경우 대비
+  ];
+
+  for (const p of patterns) {
+    repaired = repaired.replace(p.search, p.replace);
+  }
+
+  return repaired;
+}
+
 function getKakaoApiKey() {
   return process.env.KAKAO_REST_API_KEY;
 }
@@ -177,25 +202,10 @@ async function syncPetFriendlyStores() {
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-    // 한글 디코딩 깨짐 보정 맵 (복잡한 한글이 '?'나 '？'로 깨지는 경우 대응)
-    const KOREAN_NAME_PATCH_MAP = {
-      '？커피,MOCC': '뫀커피,MOCC',
-      '?커피,MOCC': '뫀커피,MOCC',
-      '우？(WooDic)': '우딬(WooDic)',
-      '우?(WooDic)': '우딬(WooDic)',
-      '잇？(IT COF.)': '잇컾(IT COF.)',
-      '잇?(IT COF.)': '잇컾(IT COF.)',
-      '율？당': '율뭌당',
-      '율?당': '율뭌당',
-      '카페 드 조？': '카페 드 죠즈',
-      '카페 드 조?': '카페 드 죠즈',
-      '프？츠': '프릳츠',
-      '프?츠': '프릳츠'
-    };
-
     // 5. 차분 분석 및 데이터 변환
     const toUpsert = [];
     const processedKeys = new Set();
+    const unresolvedBroken = new Set();
     let hasFirstGeocodeAttempt = false;
     let apiCallCount = 0;
 
@@ -213,13 +223,16 @@ async function syncPetFriendlyStores() {
     for (let index = 0; index < jsonData.length; index++) {
       const row = jsonData[index];
       let name = row['업소명'] || 'Unknown';
+      let address = pickFirst(row, ['업소주소']);
 
-      // 이름 깨짐 보정 적용
-      if (KOREAN_NAME_PATCH_MAP[name]) {
-        name = KOREAN_NAME_PATCH_MAP[name];
-      }
+      // 한글 보정 로직 적용
+      name = repairKoreanText(name);
+      address = repairKoreanText(address);
 
-      const address = pickFirst(row, ['업소주소']);
+      // 보정 후에도 깨짐이 남아있는 경우 기록
+      if (hasBrokenKoreanText(name)) unresolvedBroken.add(`[이름] ${name}`);
+      if (hasBrokenKoreanText(address)) unresolvedBroken.add(`[주소] ${address}`);
+
       if (!name || !address) {
         stats.invalid++;
         continue;
@@ -362,12 +375,18 @@ async function syncPetFriendlyStores() {
     // 리포트 생성 (건수 및 비율)
     const getRate = (count) => stats.total > 0 ? ((count / stats.total) * 100).toFixed(1) : '0.0';
 
+    const brokenList = Array.from(unresolvedBroken);
+    const brokenSummary = brokenList.length > 0
+      ? ` | ⚠️ 보정실패(${brokenList.length}건): ${brokenList.slice(0, 3).join(', ')}${brokenList.length > 3 ? '...' : ''}`
+      : '';
+
     const report = [
       `${stats.upserted}개 업데이트`,
       `${stats.deleted}개 삭제`,
       `[품질지표: 누락 ${stats.invalid}건(${getRate(stats.invalid)}%), ` +
       `중복 ${stats.duplicates}건(${getRate(stats.duplicates)}%), ` +
-      `좌표미보유 ${stats.missingCoords}건(${getRate(stats.missingCoords)}%)]`
+      `좌표미보유 ${stats.missingCoords}건(${getRate(stats.missingCoords)}%)]` +
+      brokenSummary
     ].join(' | ');
 
     await updateScheduleHistory(true, report);
