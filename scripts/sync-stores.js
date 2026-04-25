@@ -172,26 +172,10 @@ async function syncPetFriendlyStores() {
 
     // 4. 엑셀 파싱
     console.log('📊 데이터 파싱 중...');
-    const workbook = XLSX.read(buffer, { type: 'buffer' });
+    const workbook = XLSX.read(buffer, { type: 'buffer', codepage: 949 });
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-    // 한글 디코딩 깨짐 보정 맵 (복잡한 한글이 '?'나 '？'로 깨지는 경우 대응)
-    const KOREAN_NAME_PATCH_MAP = {
-      '？커피,MOCC': '뫀커피,MOCC',
-      '?커피,MOCC': '뫀커피,MOCC',
-      '우？(WooDic)': '우딬(WooDic)',
-      '우?(WooDic)': '우딬(WooDic)',
-      '잇？(IT COF.)': '잇컾(IT COF.)',
-      '잇?(IT COF.)': '잇컾(IT COF.)',
-      '율？당': '율뭌당',
-      '율?당': '율뭌당',
-      '카페 드 조？': '카페 드 죠즈',
-      '카페 드 조?': '카페 드 죠즈',
-      '프？츠': '프릳츠',
-      '프?츠': '프릳츠'
-    };
 
     // 5. 차분 분석 및 데이터 변환
     const toUpsert = [];
@@ -213,11 +197,6 @@ async function syncPetFriendlyStores() {
     for (let index = 0; index < jsonData.length; index++) {
       const row = jsonData[index];
       let name = row['업소명'] || 'Unknown';
-
-      // 이름 깨짐 보정 적용
-      if (KOREAN_NAME_PATCH_MAP[name]) {
-        name = KOREAN_NAME_PATCH_MAP[name];
-      }
 
       const address = pickFirst(row, ['업소주소']);
       if (!name || !address) {
