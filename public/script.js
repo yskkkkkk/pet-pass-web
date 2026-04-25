@@ -379,7 +379,7 @@ function showDetail(store) {
 
   overlay.style.display = 'block';
   setTimeout(() => overlay.style.opacity = '1', 10);
-  storeDetail.classList.remove('active');
+  storeDetail.classList.add('active');
 }
 
 overlay.onclick = () => {
