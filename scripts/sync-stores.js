@@ -136,11 +136,14 @@ async function parseExcelWithKoreanEncoding(buffer) {
         const rawBytes = await ssFile.async('uint8array');
         const asUtf8 = Buffer.from(rawBytes).toString('utf8');
 
-        // UTF-8 디코딩 결과에 깨진 문자(U+FFFD) 또는 '?'가 있으면 EUC-KR로 재시도
-        if (asUtf8.includes('�') || asUtf8.includes('?')) {
+        // UTF-8 디코딩 결과에 깨진 문자(U+FFFD �)가 있으면 바이트가 EUC-KR로 인코딩된 것
+        // '?'는 XML 선언(<? ... ?>)에도 포함되므로 검사하지 않음
+        if (asUtf8.includes('�')) {
           console.log('⚠️  sharedStrings.xml 인코딩 오류 감지 → EUC-KR 재디코딩');
           const reencoded = iconv.decode(Buffer.from(rawBytes), 'euc-kr');
-          zip.file('xl/sharedStrings.xml', reencoded);
+          // XML 선언의 encoding 속성을 UTF-8로 교체해야 SheetJS가 올바르게 파싱함
+          const fixedXml = reencoded.replace(/encoding="[^"]*"/i, 'encoding="UTF-8"');
+          zip.file('xl/sharedStrings.xml', Buffer.from(fixedXml, 'utf8'));
           const fixedBuf = await zip.generateAsync({ type: 'nodebuffer' });
           return XLSX.read(fixedBuf, { type: 'buffer' });
         }
@@ -228,6 +231,7 @@ async function syncPetFriendlyStores() {
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
+    console.log(`📋 파싱 결과: ${jsonData.length}행, 컬럼: ${jsonData.length > 0 ? Object.keys(jsonData[0]).join(', ') : '없음'}`);
 
     // 5. 차분 분석 및 데이터 변환
     const toUpsert = [];
