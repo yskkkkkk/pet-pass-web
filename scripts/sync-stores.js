@@ -159,6 +159,26 @@ async function parseExcelWithKoreanEncoding(buffer) {
   return XLSX.read(buf, { type: 'buffer', codepage: 949 });
 }
 
+// 식품안전나라 Excel 내 깨진 업소명 보정 맵
+// 정부 시스템이 일부 희귀 한글 음절을 '?'로 출력하는 문제를 sync 단계에서 교정
+// KEY: '?' 앞뒤 공백을 제거한 정규화 형태
+const NAME_CORRECTIONS = new Map([
+  ['?잔',          '컾잔'],
+  ['?커피,MOCC',   '뫀커피,MOCC'],
+  ['우?(WooDic)',  '우딬(WooDic)'],
+  ['잇?(IT COF.)', '잇컾(IT COF.)'],
+  ['율?당',        '율뭌당'],
+  ['카페 드 조?',  '카페 드 죠즈'],
+  ['프?츠',        '프릳츠'],
+]);
+
+function correctBrokenName(name) {
+  if (!name.includes('?')) return name;
+  // '?' 앞뒤 공백만 제거해서 매핑 키로 사용 (나머지 공백은 유지)
+  const normalized = name.replace(/\s*\?\s*/g, '?');
+  return NAME_CORRECTIONS.get(normalized) ?? name;
+}
+
 /**
  * 반려동물 동반 가능 업소 데이터를 식품안전나라에서 가져와 Supabase DB로 저장하는 스크립트
  */
@@ -252,7 +272,7 @@ async function syncPetFriendlyStores() {
     console.log('🔄 차분 분석(Diff) 및 지오코딩 진행 중...');
     for (let index = 0; index < jsonData.length; index++) {
       const row = jsonData[index];
-      let name = row['업소명'] || 'Unknown';
+      let name = correctBrokenName(row['업소명'] || 'Unknown');
 
       const address = pickFirst(row, ['업소주소']);
       if (!name || !address) {
