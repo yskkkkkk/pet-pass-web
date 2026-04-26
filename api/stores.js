@@ -85,7 +85,8 @@ module.exports = async (req, res) => {
     const { category, region1, region2, search, minLat, maxLat, minLng, maxLng } = req.query;
 
     // 1. Supabase Query 빌드 (서버 사이드 필터링)
-    let query = supabase.from('stores').select('*');
+    // verified: false 매장(이름에 ? 포함)은 사용자에게 노출하지 않음
+    let query = supabase.from('stores').select('*').eq('verified', true);
 
     // 카테고리 필터
     const targetTypes = normalizeCategory(category);

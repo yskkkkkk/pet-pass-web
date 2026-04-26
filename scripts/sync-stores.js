@@ -265,6 +265,7 @@ async function syncPetFriendlyStores() {
       invalid: 0,
       duplicates: 0,
       missingCoords: 0,
+      unverified: 0,
       upserted: 0,
       deleted: 0
     };
@@ -287,6 +288,13 @@ async function syncPetFriendlyStores() {
       }
       processedKeys.add(key);
 
+      // 보정 후에도 '?'가 남아있으면 미검증 상태로 격리
+      const isNameBroken = name.includes('?');
+      if (isNameBroken) {
+        stats.unverified++;
+        console.warn(`⚠️ 미검증 매장 (이름에 ? 포함): "${name}" — verified: false로 저장, 지오코딩 건너뜀`);
+      }
+
       let type = pickFirst(row, ['업종']) || '기타';
       if (type === '휴게음식점') type = '카페';
       if (type === '제과점영업') type = '제과점';
@@ -305,7 +313,8 @@ async function syncPetFriendlyStores() {
                         existing.region !== region ||
                         existing.phone_number !== phone_number ||
                         existing.description !== description ||
-                        existing.naver_smartplace_link !== naver_link;
+                        existing.naver_smartplace_link !== naver_link ||
+                        existing.verified !== !isNameBroken;
 
       if (!isChanged && existing.lat && existing.lng) {
         // 변경사항 없고 좌표도 있으면 스킵 (DB에 updated_at만 갱신하기 위해 넣을 수도 있지만,
@@ -313,11 +322,11 @@ async function syncPetFriendlyStores() {
         continue;
       }
 
-      // 지오코딩 (필요한 경우에만)
+      // 지오코딩 (필요한 경우에만, 미검증 매장은 건너뜀)
       let lat = existing?.lat || 0;
       let lng = existing?.lng || 0;
 
-      if (!lat || !lng) {
+      if (!isNameBroken && (!lat || !lng)) {
         if (!geocodeCache.has(address)) {
           const geocoded = await geocodeAddress(address);
           apiCallCount++;
@@ -333,7 +342,7 @@ async function syncPetFriendlyStores() {
         lng = cached?.lng || 0;
       }
 
-      if (!lat || !lng) {
+      if (!isNameBroken && !lat || !lng) {
         stats.missingCoords++;
       }
 
@@ -342,9 +351,9 @@ async function syncPetFriendlyStores() {
         address,
         type,
         region,
-        lat,
-        lng,
-        verified: true,
+        lat: isNameBroken ? 0 : lat,
+        lng: isNameBroken ? 0 : lng,
+        verified: !isNameBroken,
         phone_number,
         description,
         naver_smartplace_link: naver_link,
@@ -422,7 +431,8 @@ async function syncPetFriendlyStores() {
       `${stats.deleted}개 삭제`,
       `[품질지표: 누락 ${stats.invalid}건(${getRate(stats.invalid)}%), ` +
       `중복 ${stats.duplicates}건(${getRate(stats.duplicates)}%), ` +
-      `좌표미보유 ${stats.missingCoords}건(${getRate(stats.missingCoords)}%)]`
+      `좌표미보유 ${stats.missingCoords}건(${getRate(stats.missingCoords)}%), ` +
+      `미검증(? 포함) ${stats.unverified}건]`
     ].join(' | ');
 
     await updateScheduleHistory(true, report);
