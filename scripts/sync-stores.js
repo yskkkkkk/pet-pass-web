@@ -1,5 +1,7 @@
 const axios = require('axios');
 const XLSX = require('xlsx');
+const JSZip = require('jszip');
+const iconv = require('iconv-lite');
 const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
@@ -105,6 +107,56 @@ async function geocodeAddress(address) {
 }
 
 /**
+ * 엑셀 버퍼를 한글 인코딩 보정과 함께 파싱한다.
+ *
+ * 식품안전나라 엑셀은 .xls(BIFF) 또는 .xlsx(OOXML) 형식으로 제공되며,
+ * 일부 한글 음절이 CP949 인코딩된 채로 저장돼 SheetJS 기본 파싱 시 '?'로 깨진다.
+ *
+ * - .xls  → codepage: 949 옵션으로 처리
+ * - .xlsx → sharedStrings.xml 내 바이트를 EUC-KR로 재디코딩 후 파싱
+ */
+async function parseExcelWithKoreanEncoding(buffer) {
+  const buf = Buffer.from(buffer);
+  const magic = buf.slice(0, 4).toString('hex');
+
+  // OLE2 (.xls BIFF)
+  if (magic.startsWith('d0cf11e0')) {
+    console.log('📄 파일 형식: xls (BIFF) → codepage 949 적용');
+    return XLSX.read(buf, { type: 'buffer', codepage: 949 });
+  }
+
+  // ZIP (.xlsx OOXML)
+  if (magic.startsWith('504b')) {
+    console.log('📄 파일 형식: xlsx (OOXML) → sharedStrings.xml 인코딩 보정 시도');
+    try {
+      const zip = await JSZip.loadAsync(buf);
+      const ssFile = zip.file('xl/sharedStrings.xml');
+
+      if (ssFile) {
+        const rawBytes = await ssFile.async('uint8array');
+        const asUtf8 = Buffer.from(rawBytes).toString('utf8');
+
+        // UTF-8 디코딩 결과에 깨진 문자(U+FFFD) 또는 '?'가 있으면 EUC-KR로 재시도
+        if (asUtf8.includes('�') || asUtf8.includes('?')) {
+          console.log('⚠️  sharedStrings.xml 인코딩 오류 감지 → EUC-KR 재디코딩');
+          const reencoded = iconv.decode(Buffer.from(rawBytes), 'euc-kr');
+          zip.file('xl/sharedStrings.xml', reencoded);
+          const fixedBuf = await zip.generateAsync({ type: 'nodebuffer' });
+          return XLSX.read(fixedBuf, { type: 'buffer' });
+        }
+      }
+    } catch (e) {
+      console.warn('⚠️  ZIP 처리 실패, 기본 파싱 fallback:', e.message);
+    }
+    return XLSX.read(buf, { type: 'buffer' });
+  }
+
+  // 알 수 없는 형식 — 그냥 시도
+  console.warn(`⚠️  알 수 없는 파일 형식 (magic: ${magic}), 기본 파싱 시도`);
+  return XLSX.read(buf, { type: 'buffer', codepage: 949 });
+}
+
+/**
  * 반려동물 동반 가능 업소 데이터를 식품안전나라에서 가져와 Supabase DB로 저장하는 스크립트
  */
 async function syncPetFriendlyStores() {
@@ -170,9 +222,9 @@ async function syncPetFriendlyStores() {
     });
     const buffer = response.data;
 
-    // 4. 엑셀 파싱
+    // 4. 엑셀 파싱 (한글 인코딩 보정 포함)
     console.log('📊 데이터 파싱 중...');
-    const workbook = XLSX.read(buffer, { type: 'buffer', codepage: 949 });
+    const workbook = await parseExcelWithKoreanEncoding(buffer);
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
