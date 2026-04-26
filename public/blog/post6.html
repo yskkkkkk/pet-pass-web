@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>엑셀의 ? 하나, 수십 번의 시도, 그리고 원점 | Pet-Pass Dev Blog</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/blog/blog_post.css">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    /* ─── 시도 목록 — 이 포스트 고유 ─── */
+    .attempt-list {
+      list-style: none;
+      padding: 0;
+      margin: 28px 0;
+    }
+
+    .attempt-item {
+      position: relative;
+      padding: 18px 20px 18px 54px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+
+    .attempt-badge {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .attempt-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .attempt-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin: 0 0 6px 0;
+      line-height: 1.7;
+    }
+
+    .attempt-result {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      font-style: italic;
+      margin: 0;
+      line-height: 1.6;
+    }
+  </style>
+  <script>
+  (function(){
+    var t = localStorage.getItem('pet-pass-theme') || 'beige';
+    if (t !== 'beige') document.documentElement.setAttribute('data-theme', t);
+  })();
+  </script>
+</head>
+<body>
+
+  <header class="blog-header glass">
+    <h1>🐾 Pet-Pass Dev Blog</h1>
+    <div class="theme-dots">
+      <button class="theme-dot" data-t="beige" onclick="applyTheme('beige')" title="베이지" style="background:#c8b89a;"></button>
+      <button class="theme-dot" data-t="white" onclick="applyTheme('white')" title="화이트" style="background:#f0f0f0;"></button>
+      <button class="theme-dot" data-t="dark"  onclick="applyTheme('dark')"  title="다크"  style="background:#24273a;"></button>
+    </div>
+  </header>
+
+  <div class="nav-buttons">
+    <a href="/blog" class="btn-nav">← 목록으로</a>
+    <a href="/" class="btn-nav">🏠 메인으로</a>
+  </div>
+
+  <main class="blog-content glass">
+
+    <div class="post-meta">
+      <span class="post-series-tag">바이브 코딩 개발기 · 이슈 #3</span>
+      <span class="read-time">📖 약 10분</span>
+    </div>
+
+    <h1 class="post-main-title">엑셀의 ? 하나, 수십 번의 시도, 그리고 원점</h1>
+
+    <div class="post-tags">
+      <span class="tag-chip">#인코딩</span>
+      <span class="tag-chip">#엑셀</span>
+      <span class="tag-chip">#SheetJS</span>
+      <span class="tag-chip">#데이터파이프라인</span>
+      <span class="tag-chip">#바이브코딩</span>
+    </div>
+
+    <div class="toc">
+      <p class="toc-title">목차</p>
+      <ol>
+        <li><a href="#problem">? 가 나타났다</a></li>
+        <li><a href="#patch">일단 틀어막기</a></li>
+        <li><a href="#theory">근본을 고쳐보기로 했다</a></li>
+        <li><a href="#attempts">수많은 시도들</a></li>
+        <li><a href="#truth">실체</a></li>
+        <li><a href="#epilogue">같지만 다른 원점</a></li>
+      </ol>
+    </div>
+
+    <h2 id="problem">? 가 나타났다</h2>
+
+    <p>어느 날 DB를 열어봤는데 업소명이 이상했다. <code>？커피,MOCC</code>. <code>우？(WooDic)</code>. <code>프？츠</code>. 앱에서도 그대로 노출됐다. 분명히 정상적인 가게 이름인데, 특정 글자 자리에 물음표가 박혀 있었다.</p>
+
+    <p>처음엔 DB 입력 오류인 줄 알았다. 데이터를 따라가보니 sync 스크립트가 문제였다. 정부 사이트에서 엑셀 파일을 받아 SheetJS로 파싱하는 과정 어딘가에서 글자가 깨졌고, 그 상태로 DB에 저장되고 있었다. sync가 돌 때마다 반복됐다.</p>
+
+    <p>당시엔 정확한 원인을 몰랐다. 그냥 깨진다는 것만 알았다.</p>
+
+    <h2 id="patch">일단 틀어막기</h2>
+
+    <p>가장 빠른 방법은 수동 패치였다. 깨진 이름과 올바른 이름 쌍을 맵으로 만들어서 파싱 결과에 적용했다. <code>KOREAN_NAME_PATCH_MAP</code>이라는 이름의 객체에 <code>'？커피,MOCC': '뫀커피,MOCC'</code> 같은 항목들을 넣었다. 작동은 했다.</p>
+
+    <p>불안한 건 처음부터였다. 어떤 글자가 앞으로 또 깨질지 알 수 없고, 새 가게가 추가될 때마다 누군가 이 맵을 직접 업데이트해야 한다. 데이터 양이 늘어날수록 유지가 안 될 방식이었다.</p>
+
+    <p>임시방편이라는 걸 알면서 썼다. 언젠가 고쳐야 할 것으로 쌓아뒀다.</p>
+
+    <h2 id="theory">근본을 고쳐보기로 했다</h2>
+
+    <p>결국 그 "언젠가"가 왔다. 데이터가 점점 늘어나면서 맵에 없는 새 글자들이 생겼고, 근본 원인을 파악하기로 했다.</p>
+
+    <p>가설은 명확해 보였다. 정부 엑셀이 한국어 레거시 인코딩(EUC-KR / CP949)으로 저장되어 있는데, SheetJS가 이를 UTF-8로 잘못 읽으면서 특정 음절이 ?로 치환되는 것이다. 정부 시스템이라면 충분히 가능한 이야기였다.</p>
+
+    <p>여기서 수십 번의 시도가 시작됐다. "수십 번"이라고 썼지만 과장이 아니다. 코드 변경 5회 이상에, 배포-확인-재분석 사이클이 각각 반복됐고, 그 사이에 GitHub Actions cron 타이밍 문제, 안전장치 발동, XML 파싱 내부 구조 분석까지 껴들었다.</p>
+
+    <h2 id="attempts">수많은 시도들</h2>
+
+    <ul class="attempt-list">
+      <li class="attempt-item">
+        <span class="attempt-badge">✗</span>
+        <div class="attempt-num">시도 1 — codepage 949</div>
+        <p class="attempt-desc">SheetJS의 <code>XLSX.read(buffer, { codepage: 949 })</code> 옵션을 추가했다. PR을 머지하고 다음 날 GitHub Actions cron이 돌기를 기다렸다.</p>
+        <p class="attempt-result">결과: 동일하게 깨짐. 나중에 알게 된 것 — codepage 옵션은 .xls(BIFF 이진 형식)에만 적용된다. 정부 엑셀은 .xlsx(OOXML, 실제로는 ZIP)였고, 이 형식에서 codepage는 완전히 무시된다. 옵션 자체가 틀린 도구였다.</p>
+      </li>
+      <li class="attempt-item">
+        <span class="attempt-badge">✗</span>
+        <div class="attempt-num">시도 2 — JSZip + iconv-lite 재인코딩</div>
+        <p class="attempt-desc">.xlsx가 실제로는 ZIP 파일이라는 걸 파악했다. 내부의 <code>xl/sharedStrings.xml</code>을 꺼내서 iconv-lite로 EUC-KR 재디코딩 후 다시 패킹해 SheetJS에 넘기는 방식을 구현했다. 파일 형식은 magic bytes(파일 앞 4바이트)로 감지했다.</p>
+        <p class="attempt-result">결과: 실제 sync에서 "대량 삭제 감지 (1796건, 100%)" — 안전장치가 발동해서 중단됐다. DB는 무사했지만 업데이트는 0건이었다. 뭔가 크게 잘못됐다.</p>
+      </li>
+      <li class="attempt-item">
+        <span class="attempt-badge">✗</span>
+        <div class="attempt-num">시도 3 — 감지 조건 수정</div>
+        <p class="attempt-desc">원인을 분석했다. EUC-KR 재인코딩을 트리거하는 조건이 <code>asUtf8.includes('?')</code>였는데, XML 선언 <code>&lt;?xml...?&gt;</code>에 물음표가 항상 포함되어 있어서 모든 xlsx 파일에서 false positive가 발생했다. 실제 깨진 문자인 U+FFFD만 검사하도록 수정했다.</p>
+        <p class="attempt-result">결과: 이번엔 로그에 "1800행, 컬럼: 연번, 업소명..." — 파싱 자체는 성공했다. 그런데 toUpsert(업데이트 대상) = 0이고 대량 삭제도 여전히 감지됐다.</p>
+      </li>
+      <li class="attempt-item">
+        <span class="attempt-badge">✗</span>
+        <div class="attempt-num">시도 4 — XML encoding 선언 교체</div>
+        <p class="attempt-desc">iconv로 재인코딩한 뒤 ZIP에 다시 넣을 때, XML 선언의 <code>encoding="EUC-KR"</code>이 그대로 남아있으면 SheetJS가 UTF-8 바이트를 EUC-KR로 재해석한다는 걸 알았다. 재인코딩 후 선언을 <code>encoding="UTF-8"</code>로 교체하고, string 대신 Buffer를 명시 전달했다.</p>
+        <p class="attempt-result">결과: 1800행 파싱 성공, 컬럼명 정상, 대량 삭제 없음. 그런데 toUpsert = 0. DB와 엑셀이 완전히 일치한다는 의미다.</p>
+      </li>
+    </ul>
+
+    <p>마지막 결과를 보고 잠깐 성공이라고 생각했다. 그런데 이상했다. DB에는 분명히 <code>？커피,MOCC</code>가 있다. 엑셀 파싱 결과가 DB와 일치한다면 — 엑셀에도 <code>？커피,MOCC</code>가 있다는 뜻이다.</p>
+
+    <h2 id="truth">실체</h2>
+
+    <p>엑셀 파일을 직접 열고 물음표를 검색했다. 일반 검색으로는 안 걸린다. Excel에서 <code>?</code>는 와일드카드 문자라 리터럴 물음표를 찾으려면 <code>~?</code>로 검색해야 한다.</p>
+
+    <p>결과: 7개 매장. <code>? 잔</code>, <code>? 커피,MOCC</code>, <code>우 ? (WooDic)</code>, <code>잇 ? (IT COF.)</code>, <code>율 ? 당</code>, <code>카페 드 조 ?</code>, <code>프 ? 츠</code>.</p>
+
+    <p>엑셀 파일 자체에 물음표가 들어 있었다. 인코딩 문제가 아니었다. SheetJS가 잘못 읽은 것도 아니었다. <strong>정부 시스템이 특정 희귀 한글 음절을 처리하지 못하고 ?로 출력한 채로 엑셀을 내보내고 있었다.</strong> 원본이 이미 깨져 있었다.</p>
+
+    <div class="highlight-box">
+      <p>"인코딩 문제라고 확신하고 파고들었는데, 원본 데이터가 이미 깨져 있었다. 가설이 틀렸던 것이다."</p>
+    </div>
+
+    <p>그러면 그동안 한 작업들은 뭐였나. JSZip 재인코딩 로직은 이 파일에 대해서는 동작조차 하지 않는다 — U+FFFD가 감지되지 않으니 트리거 자체가 안 된다. 오히려 <code>includes('?')</code> false positive 버그 때문에 한동안 sync가 매번 파일을 망가뜨리고 있었다는 걸 나중에야 알았다.</p>
+
+    <p>다행이었던 건 안전장치였다. 전체 데이터의 30% 이상을 한 번에 삭제하려 하면 동기화를 중단하는 로직이 있었다. 그게 없었다면 DB가 통째로 비워질 뻔했다. 방어 코드가 실제로 작동했다.</p>
+
+    <h2 id="epilogue">같지만 다른 원점</h2>
+
+    <p>결말은 다시 보정 맵이다. 처음에 만들었던 <code>KOREAN_NAME_PATCH_MAP</code>과 본질적으로 같다. 7개 매장의 깨진 이름을 올바른 이름으로 매핑한다.</p>
+
+    <p>달라진 건 두 가지다. 첫째, 적용 위치. 이전엔 파싱 후 저장 직전에 치환했는데, 지금은 엑셀을 읽은 직후 DB 비교 전에 바꾼다. 올바른 이름으로 diff가 계산되니까 다음 sync에서 덮어씌워지지 않는다. 둘째, 이유. 이전엔 그냥 막았다. 지금은 왜 이렇게 해야 하는지 안다.</p>
+
+    <p>이 과정에서 알게 된 것들은 생각보다 많다. .xlsx가 내부적으로 ZIP이라는 것. SheetJS가 문자열을 sharedStrings.xml에서 어떻게 읽는지. magic bytes로 파일 형식을 구분하는 법. U+FFFD와 ASCII 물음표의 차이. GitHub Actions cron이 PR 머지보다 43초 먼저 실행되어 구 코드로 돌 수 있다는 것. 이 중 어느 하나도 처음에 알았다면 시도 횟수가 절반은 줄었을 것이다.</p>
+
+    <p>처음에 아무것도 모르고 만든 임시방편으로 돌아온 건 맞다. 하지만 지금은 그게 왜 임시방편일 수밖에 없는지, 그 한계 안에서 뭐가 최선인지를 알고 선택했다. 결과물은 비슷해 보여도, 이 차이가 적지 않다고 생각한다.</p>
+
+    <hr class="divider">
+
+    <div class="lesson-box">
+      <h3>이 경험에서 가져간 것</h3>
+      <p>가설을 세우기 전에 원본 데이터를 먼저 직접 확인했으면 시도 횟수가 절반이었을 것이다. 코드에서 원인을 찾기 전에 데이터를 의심하는 습관이 필요하다.</p>
+      <p>안전장치는 디버깅 중에도 작동한다. 대량 삭제 방지 로직이 없었다면 DB 전체가 날아갈 뻔했다. 방어 코드는 정상 흐름만이 아니라 내가 실수하는 순간에도 필요하다.</p>
+      <p>수동 보정 맵이 나쁜 선택이 아니다. 원본 데이터에 문제가 있는 이상, 애플리케이션 레벨에서 보정하는 것이 현실적인 답이다. 단, 왜 이게 최선인지 이해하고 쓰는 것과 그냥 막는 것은 다르다.</p>
+    </div>
+
+    <div class="post-footer">
+      <a href="/blog/post5.html" class="btn-post-nav btn-prev">← 이전 글: 지도와 스크롤이 충돌하다</a>
+    </div>
+
+  </main>
+
+  <script src="/theme.js"></script>
+
+</body>
+</html>
