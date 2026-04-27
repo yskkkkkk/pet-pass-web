@@ -1,7 +1,14 @@
 // HTML 이스케이프 (XSS 방지)
 function escapeHtml(str) {
   if (!str) return '';
-  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+  return String(str).replace(/[&<>"']/g, function(m) { return map[m]; });
 }
 
 /**
@@ -51,6 +58,7 @@ let isLoadingStores = false;
 let selectedStore = null;
 let currentBoundsFilter = null;
 let currentFilteredStores = [];
+let globalRegionCounts = null; // 초기 로드 시의 전역 카운트 고정값
 let lastMapState = null;
 let isSystemMoving = false;
 let _systemMoveTimer = null;
@@ -194,7 +202,9 @@ function handleSearchInThisArea() {
 function updateMapMarkers(data) {
   if (!window.kakao || !window.kakao.maps) return;
 
-  markers.forEach(m => m.setMap(null));
+  for (let i = 0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
   markers = [];
 
   if (data.length === 0) {
@@ -244,7 +254,9 @@ function updateMapMarkers(data) {
     clusterer.clear();
     clusterer.addMarkers(markers);
   } else {
-    markers.forEach(m => m.setMap(map));
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
   }
 
   if (currentBoundsFilter !== null && currentSearch.trim() === '') {
@@ -296,10 +308,11 @@ function renderStores(data) {
     return;
   }
 
-  data.forEach((store, index) => {
+  for (let i = 0; i < data.length; i++) {
+    const store = data[i];
     const card = document.createElement('div');
     card.className = 'store-card glass animate-in';
-    card.style.animationDelay = `${Math.min(index, 20) * 0.05}s`;
+    card.style.animationDelay = `${Math.min(i, 20) * 0.05}s`;
     
     const typeEmoji = { '카페': '☕', '일반음식점': '🍽️', '제과점': '🥐', '기타': '🏪' };
     const uiType = UI_CATEGORY_MAP[store.type] || store.type;
@@ -328,7 +341,7 @@ function renderStores(data) {
       showDetail(store);
     };
     storeList.appendChild(card);
-  });
+  }
 
   renderLoadMoreButton(data.length, totalMatchedStores);
 }
@@ -663,6 +676,11 @@ async function fetchStoresPage({ append = false } = {}) {
     const more = Boolean(payload.hasMore);
     const regionCounts = payload.regionCounts;
 
+    // 필터링이 수행되더라도 드롭다운은 항상 '전체 데이터 기준'을 보여주어야 함
+    if (regionCounts && globalRegionCounts === null) {
+      globalRegionCounts = regionCounts;
+    }
+
     if (append) {
       stores = stores.concat(items);
     } else {
@@ -675,7 +693,7 @@ async function fetchStoresPage({ append = false } = {}) {
     currentFilteredStores = stores;
 
     if (regionCounts) {
-      updateRegionUIWithServerData(regionCounts);
+      updateRegionUIWithServerData();
     }
 
     renderStores(stores);
@@ -711,25 +729,30 @@ let currentRegion2 = '전체';
 let currentSearch = '';
 
 /**
- * 서버에서 온 통계 데이터를 UI에 적용
+ * 전역 통계 데이터를 UI에 적용 (상태 독립적 UI)
  */
-function updateRegionUIWithServerData(counts) {
-  // Depth 1 업데이트
+function updateRegionUIWithServerData() {
+  const counts = globalRegionCounts;
+  if (!counts) return;
+
+  // Depth 1 업데이트 (성능 위주의 for 루프)
   const d1Options = regionDepth1.querySelectorAll('option');
-  d1Options.forEach(opt => {
+  for (let i = 0; i < d1Options.length; i++) {
+    const opt = d1Options[i];
     const r1 = opt.value;
     const count = counts.depth1[r1] || 0;
     opt.innerText = r1 === '전국' ? `전국 (${count})` : `${r1} (${count})`;
-    opt.disabled = (count === 0 && r1 !== '전국');
-  });
+    // 사용자가 다른 지역으로 이동하는 경로를 차단하지 않도록 disabled 처리 제거 (또는 전역 기준 유지)
+    opt.disabled = false;
+  }
 
   // Depth 2 업데이트 (현재 선택된 region1이 있을 경우에만)
   if (currentRegion1 !== '전국') {
-    const districts = regionData[currentRegion1] || [];
     const d2Options = Array.from(regionDepth2.options);
+    const region2Counts = counts.depth2[currentRegion1] || {};
 
     // "전체" 옵션 처리
-    const totalForRegion = counts.depth2[currentRegion1]?.["전체"] || 0;
+    const totalForRegion = region2Counts["전체"] || 0;
     if (d2Options[0]) {
       d2Options[0].innerText = `전체 (${totalForRegion})`;
     }
@@ -738,33 +761,36 @@ function updateRegionUIWithServerData(counts) {
     for (let i = 1; i < d2Options.length; i++) {
       const opt = d2Options[i];
       const r2 = opt.value;
-      const count = counts.depth2[currentRegion1]?.[r2] || 0;
+      const count = region2Counts[r2] || 0;
       opt.innerText = `${r2} (${count})`;
-      opt.disabled = (count === 0);
+      opt.disabled = false;
     }
   }
 }
 
 function updateRegionDepth2(region1) {
+  const wrapper = document.getElementById('region-depth2-wrapper');
   if (region1 === '전국') {
-    regionDepth2.style.display = 'none';
+    if (wrapper) wrapper.style.display = 'none';
     regionDepth2.innerHTML = '<option value="전체">전체</option>';
     currentRegion2 = '전체';
     return;
   }
 
   const districts = regionData[region1] || [];
-  regionDepth2.style.display = 'block';
+  if (wrapper) wrapper.style.display = 'block';
 
-  regionDepth2.innerHTML = '<option value="전체">전체</option>';
-  districts.forEach(district => {
-    const option = document.createElement('option');
-    option.value = district;
-    option.innerText = district;
-    regionDepth2.appendChild(option);
-  });
+  let optionsHtml = '<option value="전체">전체</option>';
+  for (let i = 0; i < districts.length; i++) {
+    const district = districts[i];
+    optionsHtml += `<option value="${escapeHtml(district)}">${escapeHtml(district)}</option>`;
+  }
+  regionDepth2.innerHTML = optionsHtml;
 
   currentRegion2 = '전체';
+
+  // Depth 2 목록이 갱신되었으므로 카운트 UI 다시 적용
+  updateRegionUIWithServerData();
 }
 
 let lastFilterKey = '';
@@ -777,14 +803,17 @@ function applyFilters() {
   fetchStoresPage({ append: false });
 }
 
-filterTags.forEach(tag => {
+for (let i = 0; i < filterTags.length; i++) {
+  const tag = filterTags[i];
   tag.addEventListener('click', () => {
-    filterTags.forEach(t => t.classList.remove('active'));
+    for (let j = 0; j < filterTags.length; j++) {
+      filterTags[j].classList.remove('active');
+    }
     tag.classList.add('active');
     currentCategory = tag.innerText;
     applyFilters();
   });
-});
+}
 
 regionDepth1.addEventListener('change', (e) => {
   currentRegion1 = e.target.value;
@@ -845,13 +874,18 @@ function resetAllFilters(skipMapReset = false) {
   currentSearch = '';
   if (regionDepth1) {
     regionDepth1.value = '전국';
-    updateRegionDepth2('전국');
+    const wrapper = document.getElementById('region-depth2-wrapper');
+    if (wrapper) wrapper.style.display = 'none';
+    regionDepth2.innerHTML = '<option value="전체">전체</option>';
+    currentRegion2 = '전체';
+    updateRegionUIWithServerData();
   }
   if (filterTags) {
-    filterTags.forEach(t => {
+    for (let i = 0; i < filterTags.length; i++) {
+      const t = filterTags[i];
       t.classList.remove('active');
       if (t.innerText === '전체') t.classList.add('active');
-    });
+    }
   }
 
   if (!skipMapReset) {
