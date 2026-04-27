@@ -208,6 +208,7 @@ function updateMapMarkers(data) {
   markers = [];
 
   if (data.length === 0) {
+    if (clusterer) clusterer.clear();
     if (currentRegion1 === '전국' && currentSearch === '') {
       beginSystemMove();
       map.setCenter(new kakao.maps.LatLng(37.3957, 127.1105));
@@ -742,8 +743,8 @@ function updateRegionUIWithServerData() {
     const r1 = opt.value;
     const count = counts.depth1[r1] || 0;
     opt.innerText = r1 === '전국' ? `전국 (${count})` : `${r1} (${count})`;
-    // 사용자가 다른 지역으로 이동하는 경로를 차단하지 않도록 disabled 처리 제거 (또는 전역 기준 유지)
-    opt.disabled = false;
+    // 데이터가 (0)인 지역은 선택 불가능하도록 비활성화 처리 (전국 제외)
+    opt.disabled = (count === 0 && r1 !== '전국');
   }
 
   // Depth 2 업데이트 (현재 선택된 region1이 있을 경우에만)
@@ -755,6 +756,7 @@ function updateRegionUIWithServerData() {
     const totalForRegion = region2Counts["전체"] || 0;
     if (d2Options[0]) {
       d2Options[0].innerText = `전체 (${totalForRegion})`;
+      d2Options[0].disabled = (totalForRegion === 0);
     }
 
     // 각 구별 옵션 처리
@@ -763,7 +765,7 @@ function updateRegionUIWithServerData() {
       const r2 = opt.value;
       const count = region2Counts[r2] || 0;
       opt.innerText = `${r2} (${count})`;
-      opt.disabled = false;
+      opt.disabled = (count === 0);
     }
   }
 }

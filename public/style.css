@@ -471,6 +471,11 @@ body {
   background: var(--primary-soft);
 }
 
+/* 셀렉트 박스는 클릭 시 크기 변화(축소) 제외 */
+select.icon-tag:active {
+  transform: none;
+}
+
 /* Select Box UI Fix */
 .select-wrapper {
   position: relative;
