@@ -95,6 +95,31 @@
       <p>"파일 하나 때문에 DB가 생겼고, DB 때문에 API가 생겼고, API 때문에 서버 코드가 생겼다. 자동화를 붙이는 일이 서비스를 다시 설계하는 일이 됐다."</p>
     </div>
 
+    <div class="arch-compare">
+      <div class="arch-col">
+        <div class="arch-col-label before">Before</div>
+        <div class="arch-node arch-dim">GitHub Actions<small>엑셀 전체 파싱 · 전체 upsert</small></div>
+        <div class="arch-arrow">↓ commit</div>
+        <div class="arch-node arch-accent">stores.json<small>레포 안</small></div>
+        <div class="arch-arrow">↓ 파일 변경 감지</div>
+        <div class="arch-node">Vercel 재배포</div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-node">브라우저</div>
+        <div class="arch-result bad">sync마다 재배포 발생</div>
+      </div>
+      <div class="arch-col">
+        <div class="arch-col-label after">After</div>
+        <div class="arch-node arch-dim">GitHub Actions<small>엑셀 diff · 변경분만</small></div>
+        <div class="arch-arrow">↓ upsert</div>
+        <div class="arch-node arch-accent">Supabase DB<small>레포 밖</small></div>
+        <div class="arch-arrow">↓ 쿼리</div>
+        <div class="arch-node">/api/stores<small>Vercel 서버리스</small></div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-node">브라우저</div>
+        <div class="arch-result good">재배포 없음</div>
+      </div>
+    </div>
+
     <h2 id="diff">sync 파이프라인 고도화</h2>
 
     <p>DB가 생기고 나니, sync 스크립트가 해야 할 일도 달라졌다.</p>
@@ -113,7 +138,7 @@
 
     <p>30%라는 기준은 뭐랄까 12시간 사이에 그만한 수의 매장이 폐업 처리되는 일은 없지 않겠어? 라는 느낌으로 가볍게 넣었다.</p>
 
-    <p>이 안전장치는 <a href="/blog/post6.html#safety-worked">post6</a>에서 실제로 작동했다. "?" 인코딩 버그로 파싱이 엉망이 됐을 때, 엑셀에서 정상 처리된 키 집합이 거의 비어있었다. DB에 있는 1700여 개 레코드 대부분이 삭제 대상으로 잡혔다. 삭제 직전에 안전장치가 발동해서 동기화가 중단됐고, DB는 무사했다.</p>
+    <p>이 안전장치는 <a href="/blog/post6.html#truth">post6</a>에서 실제로 작동했다. "?" 인코딩 버그로 파싱이 엉망이 됐을 때, 엑셀에서 정상 처리된 키 집합이 거의 비어있었다. DB에 있는 1700여 개 레코드 대부분이 삭제 대상으로 잡혔다. 삭제 직전에 안전장치가 발동해서 동기화가 중단됐고, DB는 무사했다.</p>
 
     <p>나중에 생각해보면 당연한 장치인데, 처음에 넣었을 때는 그냥 방어적으로 추가한 코드였다. 그게 실제로 DB를 구한 날이 있었다.</p>
 
@@ -138,7 +163,7 @@
     <hr class="divider">
 
     <div class="lesson-box">
-      <h3>이 경험에서 가져간 것</h3>
+      <h3>이 문제에서 배운 것</h3>
       <p>데이터와 코드는 다른 곳에 있어야 한다. sync될 때마다 재배포가 일어나는 구조는 서비스가 커질수록 감당하기 어렵다. 처음에 이 분리를 고려했으면 중간에 DB를 끼워 넣는 큰 작업이 없었을 것이다.</p>
       <p>하나를 고치면 다음 것이 보인다. DB가 생기니 API가 필요했고, API가 생기니 서버사이드 필터링이 필요했다. 처음부터 모든 걸 설계할 수는 없지만, 각 단계에서 가장 다음에 해야 할 것이 드러났다.</p>
       <p>방어 코드는 내가 실수할 때 가장 필요하다. 30% 안전장치를 넣은 건 이론적인 이유였는데, 실제로 버그가 터졌을 때 DB를 구했다. 정상 흐름을 위한 코드만큼, 뭔가 잘못됐을 때를 위한 코드가 중요하다.</p>

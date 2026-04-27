@@ -206,14 +206,13 @@ body {
   padding: 24px 28px;
   margin: 40px 0;
   border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
 }
 
 .lesson-box h3 {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--text-primary);
   margin: 0 0 14px 0;
 }
 
@@ -289,6 +288,88 @@ body {
 .btn-next { background: var(--primary); color: white; border: none; }
 .btn-prev:hover { background: var(--bg-secondary); }
 .btn-next:hover { opacity: 0.9; transform: translateX(2px); }
+
+/* ─── 아키텍처 비교 다이어그램 ─── */
+.arch-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 32px 0;
+}
+
+.arch-col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.arch-col-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 0;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+}
+
+.arch-col-label.before { background: #fef2f2; color: #ef4444; }
+.arch-col-label.after  { background: #f0fdf4; color: #16a34a; }
+
+.arch-node {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  padding: 10px 14px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.arch-node small {
+  display: block;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.arch-node.arch-accent {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.arch-node.arch-accent small { color: rgba(255,255,255,0.75); }
+
+.arch-node.arch-dim {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.arch-arrow {
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 11px;
+  padding: 5px 0;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+.arch-result {
+  padding: 8px 14px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 0 0 8px 8px;
+  border: 1px solid;
+  border-top: none;
+}
+
+.arch-result.bad  { background: #fef2f2; color: #ef4444; border-color: #fecaca; }
+.arch-result.good { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
 
 /* ─── 반응형 ─── */
 @media (max-width: 600px) {
