@@ -95,6 +95,31 @@
       <p>"파일 하나 때문에 DB가 생겼고, DB 때문에 API가 생겼고, API 때문에 서버 코드가 생겼다. 자동화를 붙이는 일이 서비스를 다시 설계하는 일이 됐다."</p>
     </div>
 
+    <div class="arch-compare">
+      <div class="arch-col">
+        <div class="arch-col-label before">Before</div>
+        <div class="arch-node arch-dim">GitHub Actions<small>엑셀 전체 파싱 · 전체 upsert</small></div>
+        <div class="arch-arrow">↓ commit</div>
+        <div class="arch-node arch-accent">stores.json<small>레포 안</small></div>
+        <div class="arch-arrow">↓ 파일 변경 감지</div>
+        <div class="arch-node">Vercel 재배포</div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-node">브라우저</div>
+        <div class="arch-result bad">sync마다 재배포 발생</div>
+      </div>
+      <div class="arch-col">
+        <div class="arch-col-label after">After</div>
+        <div class="arch-node arch-dim">GitHub Actions<small>엑셀 diff · 변경분만</small></div>
+        <div class="arch-arrow">↓ upsert</div>
+        <div class="arch-node arch-accent">Supabase DB<small>레포 밖</small></div>
+        <div class="arch-arrow">↓ 쿼리</div>
+        <div class="arch-node">/api/stores<small>Vercel 서버리스</small></div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-node">브라우저</div>
+        <div class="arch-result good">재배포 없음</div>
+      </div>
+    </div>
+
     <h2 id="diff">sync 파이프라인 고도화</h2>
 
     <p>DB가 생기고 나니, sync 스크립트가 해야 할 일도 달라졌다.</p>
