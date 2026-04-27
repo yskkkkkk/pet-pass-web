@@ -206,14 +206,13 @@ body {
   padding: 24px 28px;
   margin: 40px 0;
   border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
 }
 
 .lesson-box h3 {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--text-primary);
   margin: 0 0 14px 0;
 }
 
