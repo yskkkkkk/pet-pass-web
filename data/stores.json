@@ -1,1 +1,54 @@
-[]
+[
+  {
+    "name": "채돈이",
+    "address": "경기도 화성시 동탄구 동탄반송2길 45(1층 전부호 반송동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.2109928410483,
+    "lng": 127.066132842822,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-04T04:13:23.115Z"
+  },
+  {
+    "name": "채돈이 남광장점",
+    "address": "경기도 화성시 동탄구 동탄문화센터로 65(에이스타운 106호 반송동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.1999911944075,
+    "lng": 127.072588019652,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-04T04:13:23.115Z"
+  },
+  {
+    "name": "프렙하우스(Prep House)",
+    "address": "경기도 안성시 아양1길 21-1(1층 석정동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.0095625636535,
+    "lng": 127.256263984881,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-04T04:13:23.115Z"
+  },
+  {
+    "name": "dalpado(달파도)",
+    "address": "강원특별자치도 양양군 손양면 선사유적로 327",
+    "type": "일반음식점",
+    "region": "강원",
+    "lat": 38.0594786747682,
+    "lng": 128.681219916704,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-04T04:13:23.115Z"
+  }
+]
