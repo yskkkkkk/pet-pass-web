@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "name": "소림커피 로그원점",
+    "address": "서울특별시 마포구 잔다리로7안길 4(1층 서교동)",
+    "type": "카페",
+    "region": "서울",
+    "lat": 37.5529631676677,
+    "lng": 126.917034579851,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-05T14:22:05.897Z"
+  }
+]
