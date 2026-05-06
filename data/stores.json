@@ -1,15 +1,80 @@
 [
   {
-    "name": "소림커피 로그원점",
-    "address": "서울특별시 마포구 잔다리로7안길 4(1층 서교동)",
-    "type": "카페",
+    "name": "디프(Diff)",
+    "address": "서울특별시 송파구 백제고분로45길 15(3층 송파동)",
+    "type": "일반음식점",
     "region": "서울",
-    "lat": 37.5529631676677,
-    "lng": 126.917034579851,
+    "lat": 37.5095775719368,
+    "lng": 127.109658562422,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-05T14:22:05.897Z"
+    "updated_at": "2026-05-06T04:09:51.566Z"
+  },
+  {
+    "name": "카페 앤드하리",
+    "address": "인천광역시 강화군 길상면 동검길63번길 66(1, 2층)",
+    "type": "카페",
+    "region": "인천",
+    "lat": 37.5910182428217,
+    "lng": 126.519163583951,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-06T04:09:51.566Z"
+  },
+  {
+    "name": "sammie sammie 새미새미",
+    "address": "경기도 김포시 김포한강1로97번길 32-5(1층 103호 장기동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.6478441090484,
+    "lng": 126.670471356562,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-06T04:09:51.566Z"
+  },
+  {
+    "name": "오리덕후",
+    "address": "경기도 포천시 신북면 깊이울로 111(1층)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.9261329379595,
+    "lng": 127.177045693805,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-06T04:09:51.566Z"
+  },
+  {
+    "name": "한우장어뷔페",
+    "address": "충청북도 청주시 흥덕구 2순환로1167번길 5(1층 복대동)",
+    "type": "일반음식점",
+    "region": "충북",
+    "lat": 36.6316089022505,
+    "lng": 127.426943527183,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-06T04:09:51.566Z"
+  },
+  {
+    "name": "세레니티파스타&와인",
+    "address": "경상남도 창원시 마산합포구 제2부두로 17(신포동1가)",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 35.1961932910415,
+    "lng": 128.573419031417,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-06T04:09:51.566Z"
   }
 ]
