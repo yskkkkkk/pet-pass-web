@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "name": "닛츠",
+    "address": "제주특별자치도 제주시 계명길 55(1층 외도일동)",
+    "type": "카페",
+    "region": "제주",
+    "lat": 33.4871016064527,
+    "lng": 126.421149367679,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-10T04:28:39.224Z"
+  }
+]
