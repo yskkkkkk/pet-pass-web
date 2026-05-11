@@ -1,15 +1,28 @@
 [
   {
-    "name": "마이밤타코(MY BOMB TACO)",
-    "address": "경기도 평택시 고덕국제대로 77(301동 2층 2119호 고덕동, 힐스테이트 고덕 센트럴)",
+    "name": "(주)커피 리브레",
+    "address": "서울특별시 마포구 성미산로29길 17-8(1,2,지1층 연남동)",
     "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.0443559204264,
-    "lng": 127.041883008056,
+    "region": "서울",
+    "lat": 37.564732150347,
+    "lng": 126.921894132965,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-10T13:53:31.091Z"
+    "updated_at": "2026-05-11T04:40:12.415Z"
+  },
+  {
+    "name": "위틸리(wittily)",
+    "address": "인천광역시 부평구 길주로565번길 7-9(1층 갈산동)",
+    "type": "일반음식점",
+    "region": "인천",
+    "lat": 37.5077115819228,
+    "lng": 126.724681627037,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-11T04:40:12.415Z"
   }
 ]
