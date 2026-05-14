@@ -1,28 +1,54 @@
 [
   {
-    "name": "모모하루",
-    "address": "인천광역시 미추홀구 소성로 16(인하아리스타 205,206호 용현동)",
+    "name": "헬로우미스장",
+    "address": "부산광역시 수영구 민락로34번길 12-2(1~2층 민락동)",
     "type": "일반음식점",
-    "region": "인천",
-    "lat": 37.4476090505759,
-    "lng": 126.651464006251,
+    "region": "부산",
+    "lat": 35.1581227947293,
+    "lng": 129.121809348803,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-14T04:16:39.836Z"
+    "updated_at": "2026-05-14T14:38:19.185Z"
   },
   {
-    "name": "술담",
-    "address": "제주특별자치도 제주시 조천읍 함덕12길 9-1(1층)",
-    "type": "일반음식점",
-    "region": "제주",
-    "lat": 33.5411871374732,
-    "lng": 126.664639872547,
+    "name": "마메(mame)",
+    "address": "부산광역시 부산진구 서전로47번길 27(체리빌딩 1층 일부호 전포동)",
+    "type": "제과점",
+    "region": "부산",
+    "lat": 35.159119388319,
+    "lng": 129.064568150081,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-14T04:16:39.836Z"
+    "updated_at": "2026-05-14T14:38:19.185Z"
+  },
+  {
+    "name": "제주돼지 168",
+    "address": "인천광역시 미추홀구 경인로 372(201동 지하1층 B1063,B1065호 주안동, 포레나 미추홀)",
+    "type": "일반음식점",
+    "region": "인천",
+    "lat": 37.4580182017435,
+    "lng": 126.681163207516,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-14T14:38:19.185Z"
+  },
+  {
+    "name": "리얼식단 향동점",
+    "address": "경기도 고양시 덕양구 꽃내음1길 88(지1층 일부호 향동동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.5982708005182,
+    "lng": 126.889890599225,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-14T14:38:19.185Z"
   }
 ]
