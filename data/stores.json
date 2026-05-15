@@ -1,28 +1,41 @@
 [
   {
-    "name": "리오카페리움",
-    "address": "강원특별자치도 홍천군 홍천읍 갈마로1길 11",
+    "name": "Always on(올웨이즈온)",
+    "address": "서울특별시 서초구 방배천로8길 16-12(1층 101호,102호 방배동)",
     "type": "일반음식점",
-    "region": "강원",
-    "lat": 37.6932684217174,
-    "lng": 127.897480020266,
+    "region": "서울",
+    "lat": 37.4800688754104,
+    "lng": 126.983412238061,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-15T04:32:07.489Z"
+    "updated_at": "2026-05-15T14:32:31.906Z"
   },
   {
-    "name": "사계절 시골밥상",
-    "address": "강원특별자치도 평창군 대관령면 솔봉로 325(외 23필지 알펜시아콘도빌리지 203동1층)",
-    "type": "일반음식점",
-    "region": "강원",
-    "lat": 37.6592541743687,
-    "lng": 128.684010667163,
+    "name": "when we love(웬위럽)",
+    "address": "대전광역시 서구 월평새뜸로20번길 14(1층 월평동)",
+    "type": "카페",
+    "region": "대전",
+    "lat": 36.3533091609345,
+    "lng": 127.353368103464,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-15T04:32:07.489Z"
+    "updated_at": "2026-05-15T14:32:31.906Z"
+  },
+  {
+    "name": "라이커블",
+    "address": "대전광역시 서구 둔산남로200번길 24(1층 탄방동)",
+    "type": "카페",
+    "region": "대전",
+    "lat": 36.3478126207563,
+    "lng": 127.399673478981,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-15T14:32:31.906Z"
   }
 ]
