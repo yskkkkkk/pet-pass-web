@@ -1,15 +1,1 @@
-[
-  {
-    "name": "오프투커피",
-    "address": "서울특별시 구로구 개봉로16길 9(1층 개봉동)",
-    "type": "카페",
-    "region": "서울",
-    "lat": 37.4901223626424,
-    "lng": 126.856701453786,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-16T13:57:03.739Z"
-  }
-]
+[]
