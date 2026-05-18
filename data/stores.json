@@ -1,54 +1,54 @@
 [
   {
-    "name": "뭇로스터리",
-    "address": "서울특별시 광진구 자양로7길 24(1층 자양동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5329128071721,
-    "lng": 127.083437623213,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-18T04:47:20.103Z"
-  },
-  {
-    "name": "8넘버",
-    "address": "경기도 양주시 백석읍 부흥로 1052(1층 일부)",
+    "name": "리라 꼬꼬뜨",
+    "address": "경기도 의왕시 봇들3길 12(101호 포일동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.8037457598176,
-    "lng": 127.003251197427,
+    "lat": 37.3982958429826,
+    "lng": 126.983219763657,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-18T04:47:20.103Z"
+    "updated_at": "2026-05-18T15:55:18.527Z"
   },
   {
-    "name": "고막리정미소 Our old Mill(아워올드밀)",
-    "address": "경기도 김포시 월곶면 용강로 28(1층 전체호)",
+    "name": "이자와",
+    "address": "경기도 광명시 소하로 94(205호 소하동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.4464508092697,
+    "lng": 126.883471727117,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-18T15:55:18.527Z"
+  },
+  {
+    "name": "티티씨(ttc)",
+    "address": "경기도 시흥시 서울대학로278번길 61(서영베니스스퀘어 T-1호 배곧동)",
     "type": "카페",
     "region": "경기",
-    "lat": 37.7220761678663,
-    "lng": 126.558042423788,
+    "lat": 37.3681855990292,
+    "lng": 126.73067100839,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-18T04:47:20.103Z"
+    "updated_at": "2026-05-18T15:55:18.527Z"
   },
   {
-    "name": "새길14",
-    "address": "전라남도 순천시 풍덕새길 14(1층 풍덕동)",
+    "name": "루밀",
+    "address": "경기도 부천시 원미구 신흥로238번길 18(1층 일부 중동)",
     "type": "일반음식점",
-    "region": "전남",
-    "lat": 34.9372793009733,
-    "lng": 127.496544865052,
+    "region": "경기도",
+    "lat": 37.5046543836905,
+    "lng": 126.776578071625,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-18T04:47:20.103Z"
+    "updated_at": "2026-05-18T15:55:18.527Z"
   }
 ]
