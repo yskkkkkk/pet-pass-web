@@ -1,1 +1,54 @@
-[]
+[
+  {
+    "name": "뭇로스터리",
+    "address": "서울특별시 광진구 자양로7길 24(1층 자양동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5329128071721,
+    "lng": 127.083437623213,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-18T04:47:20.103Z"
+  },
+  {
+    "name": "8넘버",
+    "address": "경기도 양주시 백석읍 부흥로 1052(1층 일부)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.8037457598176,
+    "lng": 127.003251197427,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-18T04:47:20.103Z"
+  },
+  {
+    "name": "고막리정미소 Our old Mill(아워올드밀)",
+    "address": "경기도 김포시 월곶면 용강로 28(1층 전체호)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.7220761678663,
+    "lng": 126.558042423788,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-18T04:47:20.103Z"
+  },
+  {
+    "name": "새길14",
+    "address": "전라남도 순천시 풍덕새길 14(1층 풍덕동)",
+    "type": "일반음식점",
+    "region": "전남",
+    "lat": 34.9372793009733,
+    "lng": 127.496544865052,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-18T04:47:20.103Z"
+  }
+]
