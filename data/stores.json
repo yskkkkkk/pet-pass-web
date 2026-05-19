@@ -1,5 +1,57 @@
 [
   {
+    "name": "고램지",
+    "address": "서울특별시 성북구 아리랑로4길 5(1층 동선동5가)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5945960503276,
+    "lng": 127.016428807666,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-19T15:50:40.515Z"
+  },
+  {
+    "name": "두부랑콩비지 강화직영점",
+    "address": "인천광역시 강화군 길상면 해안동로 24-1",
+    "type": "일반음식점",
+    "region": "인천",
+    "lat": 37.6295828398955,
+    "lng": 126.532297213788,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-19T15:50:40.515Z"
+  },
+  {
+    "name": "라운지-R",
+    "address": "경기도 고양시 일산동구 고봉로 32-26(삼호빌딩 103호 장항동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.6638833006569,
+    "lng": 126.766271466328,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-19T15:50:40.515Z"
+  },
+  {
+    "name": "루밀",
+    "address": "경기도 부천시 원미구 신흥로238번길 18(1층 일부 중동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.5046543836905,
+    "lng": 126.776578071625,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-19T15:50:40.515Z"
+  },
+  {
     "name": "셔터",
     "address": "11(1층 일부호 송동)",
     "type": "일반음식점",
@@ -10,32 +62,71 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-19T04:37:04.865Z"
+    "updated_at": "2026-05-19T15:50:40.515Z"
   },
   {
-    "name": "카페스트리트36",
-    "address": "경기도 용인시 처인구 포곡읍 석성로820번길 57(1층 일부)",
-    "type": "카페",
+    "name": "청춘조개별관",
+    "address": "경기도 시흥시 오이도로 197(1층,2층,3층 정왕동)",
+    "type": "일반음식점",
     "region": "경기",
-    "lat": 37.2801316025426,
-    "lng": 127.186148348531,
+    "lat": 37.3434003321997,
+    "lng": 126.687219812164,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-19T04:37:04.865Z"
+    "updated_at": "2026-05-19T15:50:40.515Z"
   },
   {
-    "name": "멍멍숲",
-    "address": "제주특별자치도 제주시 1100로 3198-20(1층 노형동)",
+    "name": "새재황토방",
+    "address": "충청북도 괴산군 연풍면 새재로 1833",
+    "type": "일반음식점",
+    "region": "충북",
+    "lat": 36.8138348998905,
+    "lng": 128.039579794844,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-19T15:50:40.515Z"
+  },
+  {
+    "name": "오마이살롱(oh my salon)",
+    "address": "제주특별자치도 서귀포시 안덕면 덕수회관로74번길 32(제2동)",
     "type": "일반음식점",
     "region": "제주",
-    "lat": 33.4729479404268,
-    "lng": 126.485812287793,
+    "lat": 33.2565562751143,
+    "lng": 126.306726412755,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-19T04:37:04.865Z"
+    "updated_at": "2026-05-19T15:50:40.515Z"
+  },
+  {
+    "name": "오버더센스",
+    "address": "제주특별자치도 서귀포시 칠십리로 655(하효동)",
+    "type": "카페",
+    "region": "제주",
+    "lat": 33.2508988248671,
+    "lng": 126.615250210134,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-19T15:50:40.515Z"
+  },
+  {
+    "name": "댕하우스 & 빙수킹",
+    "address": "대구광역시 중구 중앙대로81길 95-2(1층 남성로)",
+    "type": "일반음식점",
+    "region": "대구광역시",
+    "lat": 35.8691588972949,
+    "lng": 128.588578814189,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-19T15:50:40.515Z"
   }
 ]
