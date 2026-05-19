@@ -1,54 +1,41 @@
 [
   {
-    "name": "리라 꼬꼬뜨",
-    "address": "경기도 의왕시 봇들3길 12(101호 포일동)",
+    "name": "셔터",
+    "address": "11(1층 일부호 송동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.3982958429826,
-    "lng": 126.983219763657,
+    "lat": 0,
+    "lng": 0,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-18T15:55:18.527Z"
+    "updated_at": "2026-05-19T04:37:04.865Z"
   },
   {
-    "name": "이자와",
-    "address": "경기도 광명시 소하로 94(205호 소하동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.4464508092697,
-    "lng": 126.883471727117,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-18T15:55:18.527Z"
-  },
-  {
-    "name": "티티씨(ttc)",
-    "address": "경기도 시흥시 서울대학로278번길 61(서영베니스스퀘어 T-1호 배곧동)",
+    "name": "카페스트리트36",
+    "address": "경기도 용인시 처인구 포곡읍 석성로820번길 57(1층 일부)",
     "type": "카페",
     "region": "경기",
-    "lat": 37.3681855990292,
-    "lng": 126.73067100839,
+    "lat": 37.2801316025426,
+    "lng": 127.186148348531,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-18T15:55:18.527Z"
+    "updated_at": "2026-05-19T04:37:04.865Z"
   },
   {
-    "name": "루밀",
-    "address": "경기도 부천시 원미구 신흥로238번길 18(1층 일부 중동)",
+    "name": "멍멍숲",
+    "address": "제주특별자치도 제주시 1100로 3198-20(1층 노형동)",
     "type": "일반음식점",
-    "region": "경기도",
-    "lat": 37.5046543836905,
-    "lng": 126.776578071625,
+    "region": "제주",
+    "lat": 33.4729479404268,
+    "lng": 126.485812287793,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-18T15:55:18.527Z"
+    "updated_at": "2026-05-19T04:37:04.865Z"
   }
 ]
