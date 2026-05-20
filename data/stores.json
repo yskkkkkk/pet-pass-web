@@ -1,5 +1,83 @@
 [
   {
+    "name": "칩멍크",
+    "address": "서울특별시 강북구 삼양로98길 7(1층 수유동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.6387398012631,
+    "lng": 127.017602109724,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-20T15:53:46.575Z"
+  },
+  {
+    "name": "루아앤티그리 금정산",
+    "address": "부산광역시 금정구 산성로 436(1~2층 금성동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.2509028973465,
+    "lng": 129.054397394038,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-20T15:53:46.575Z"
+  },
+  {
+    "name": "댕하우스 & 빙수킹",
+    "address": "대구광역시 중구 중앙대로81길 95-2(1층 남성로)",
+    "type": "일반음식점",
+    "region": "대구",
+    "lat": 35.8691588972949,
+    "lng": 128.588578814189,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-20T15:53:46.575Z"
+  },
+  {
+    "name": "베리앤린",
+    "address": "대구광역시 서구 당산로45길 6-4(1층 내당동)",
+    "type": "카페",
+    "region": "대구",
+    "lat": 35.8567060987915,
+    "lng": 128.547206698912,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-20T15:53:46.575Z"
+  },
+  {
+    "name": "꼼꼼화당",
+    "address": "광주광역시 북구 우치로100번길 84(1층 문흥동)",
+    "type": "카페",
+    "region": "광주",
+    "lat": 35.1764994415874,
+    "lng": 126.917029895584,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-20T15:53:46.575Z"
+  },
+  {
+    "name": "배곧아띠",
+    "address": "경기도 시흥시 배곧4로 32-33(3층 301호 정왕동, 파크뷰2)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.3780789585407,
+    "lng": 126.724855413977,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-20T15:53:46.575Z"
+  },
+  {
     "name": "셔터",
     "address": "11(1층 일부호 송동)",
     "type": "일반음식점",
@@ -10,45 +88,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-20T04:41:15.110Z"
+    "updated_at": "2026-05-20T15:53:46.575Z"
   },
   {
-    "name": "플랑리브르(PLAN LIBRE)",
-    "address": "경기도 성남시 수정구 위례서일로1길 8-20(1층 일부호 창곡동)",
-    "type": "카페",
-    "region": "경기",
-    "lat": 37.4666470084905,
-    "lng": 127.138404568107,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-20T04:41:15.110Z"
-  },
-  {
-    "name": "토리",
-    "address": "충청남도 천안시 서북구 불당31길 3-1(1층 불당동)",
+    "name": "루이토스트",
+    "address": "경상북도 칠곡군 지천면 신동로 80-2(1층)",
     "type": "일반음식점",
-    "region": "충남",
-    "lat": 36.8101786872037,
-    "lng": 127.104843456138,
+    "region": "경북",
+    "lat": 35.9562342813039,
+    "lng": 128.481156884758,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-20T04:41:15.110Z"
+    "updated_at": "2026-05-20T15:53:46.575Z"
   },
   {
-    "name": "꼼꼼화당",
-    "address": "광주광역시 북구 우치로100번길 84(1층 문흥동)",
-    "type": "카페",
-    "region": "광주광역시",
-    "lat": 35.1764994415874,
-    "lng": 126.917029895584,
+    "name": "푸르던",
+    "address": "전북특별자치도 군산시 개정면 아동남로 33(1,2동)",
+    "type": "일반음식점",
+    "region": "전북",
+    "lat": 35.9655479571968,
+    "lng": 126.767865392819,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-20T04:41:15.110Z"
+    "updated_at": "2026-05-20T15:53:46.575Z"
   }
 ]
