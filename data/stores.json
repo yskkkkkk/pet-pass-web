@@ -1,29 +1,68 @@
 [
   {
-    "name": "꾸덕스",
-    "address": "경기도 부천시 원미구 소향로 123(디아뜨 2 비동 108호, 109호 중동)",
+    "name": "숙이네닭한마리칼국수",
+    "address": "서울특별시 영등포구 도림로108길 10-1(1층 도림동)",
     "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.5025098732629,
-    "lng": 126.761626872852,
+    "region": "서울",
+    "lat": 37.5075464052274,
+    "lng": 126.902206889494,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-21T04:49:33.671Z"
+    "updated_at": "2026-05-21T15:49:51.637Z"
   },
   {
-    "name": "배시시홈",
-    "address": "경기도 과천시 과천대로7마길 19(101호 갈현동)",
+    "name": "피벗(Pivot)",
+    "address": "대구광역시 중구 동성로12길 72(1층 공평동)",
     "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.4157913795117,
-    "lng": 126.981250532969,
+    "region": "대구",
+    "lat": 35.8709528316376,
+    "lng": 128.599765254392,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-21T04:49:33.671Z"
+    "updated_at": "2026-05-21T15:49:51.637Z"
+  },
+  {
+    "name": "러스틱 플러피 하우스",
+    "address": "인천광역시 연수구 용담로85번길 31(금강프라자 지상2층 일부201-2호 청학동)",
+    "type": "일반음식점",
+    "region": "인천",
+    "lat": 37.4179084148006,
+    "lng": 126.676099516287,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-21T15:49:51.637Z"
+  },
+  {
+    "name": "바삭통치킨",
+    "address": "광주광역시 북구 첨단연신로108번길 59-17(1층 신용동)",
+    "type": "일반음식점",
+    "region": "광주",
+    "lat": 35.2089868848596,
+    "lng": 126.865222182507,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-21T15:49:51.637Z"
+  },
+  {
+    "name": "고궁덕소흑염소",
+    "address": "경기도 남양주시 와부읍 석실로 347(2층)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.5992078377333,
+    "lng": 127.214580211202,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-21T15:49:51.637Z"
   },
   {
     "name": "셔터",
@@ -36,6 +75,71 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-21T04:49:33.671Z"
+    "updated_at": "2026-05-21T15:49:51.637Z"
+  },
+  {
+    "name": "카페오은",
+    "address": "경기도 안산시 단원구 광덕서로 96(세종빌딩 2층 209호 고잔동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.3132281011188,
+    "lng": 126.827657892038,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-21T15:49:51.637Z"
+  },
+  {
+    "name": "조개회관 삽교직영점",
+    "address": "충청남도 당진시 신평면 삽교천3길 72",
+    "type": "일반음식점",
+    "region": "충남",
+    "lat": 36.8907453919947,
+    "lng": 126.823351317096,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-21T15:49:51.637Z"
+  },
+  {
+    "name": "청춘조개 삽교호본점",
+    "address": "충청남도 당진시 신평면 삽교천3길 84(202호)",
+    "type": "일반음식점",
+    "region": "충남",
+    "lat": 36.8901431953437,
+    "lng": 126.824572587808,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-21T15:49:51.637Z"
+  },
+  {
+    "name": "사이",
+    "address": "경상북도 구미시 신시로 52-6(2층 형곡동)",
+    "type": "카페",
+    "region": "경북",
+    "lat": 36.1125224981548,
+    "lng": 128.33988646493,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-21T15:49:51.637Z"
+  },
+  {
+    "name": "함덕고등어쌈밥",
+    "address": "제주특별자치도 제주시 조천읍 조함해안로 530(3층)",
+    "type": "일반음식점",
+    "region": "제주",
+    "lat": 33.5424902916666,
+    "lng": 126.669499514471,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-21T15:49:51.637Z"
   }
 ]
