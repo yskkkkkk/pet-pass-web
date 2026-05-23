@@ -10,6 +10,19 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-23T04:11:47.345Z"
+    "updated_at": "2026-05-23T14:00:52.796Z"
+  },
+  {
+    "name": "워크오프(work off)",
+    "address": "경상남도 양산시 물금읍 화합3길 16(101호)",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 35.3303450569232,
+    "lng": 129.007953929162,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-23T14:00:52.796Z"
   }
 ]
