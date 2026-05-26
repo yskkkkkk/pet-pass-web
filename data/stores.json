@@ -1,5 +1,44 @@
 [
   {
+    "name": "밍기적",
+    "address": "서울특별시 서대문구 불광천길 274(1층 북가좌동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5862660459135,
+    "lng": 126.913304283219,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-26T04:38:48.633Z"
+  },
+  {
+    "name": "술인",
+    "address": "서울특별시 서대문구 통일로 421(2층 홍제동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.586831973973,
+    "lng": 126.945978707314,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-26T04:38:48.633Z"
+  },
+  {
+    "name": "옘(Hjem)",
+    "address": "대전광역시 서구 도솔로 457(1층 일부호 탄방동)",
+    "type": "일반음식점",
+    "region": "대전",
+    "lat": 36.3438908531157,
+    "lng": 127.3949947081,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-26T04:38:48.633Z"
+  },
+  {
     "name": "셔터",
     "address": "11(1층 일부호 송동)",
     "type": "일반음식점",
@@ -10,6 +49,71 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-25T15:27:30.882Z"
+    "updated_at": "2026-05-26T04:38:48.633Z"
+  },
+  {
+    "name": "위자네",
+    "address": "경기도 안양시 만안구 석천로 181(1층 석수동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.4127446431041,
+    "lng": 126.908865469819,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-26T04:38:48.633Z"
+  },
+  {
+    "name": "주식회사 더홈카페 1",
+    "address": "경기도 안양시 만안구 삼막로 43(1층 석수동)",
+    "type": "제과점",
+    "region": "경기",
+    "lat": 37.423707141542,
+    "lng": 126.912305144998,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-26T04:38:48.633Z"
+  },
+  {
+    "name": "주식회사 더홈카페 2",
+    "address": "경기도 안양시 만안구 삼막로39번길 16(1층 석수동)",
+    "type": "제과점",
+    "region": "경기",
+    "lat": 37.423825284761,
+    "lng": 126.912453456259,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-26T04:38:48.633Z"
+  },
+  {
+    "name": "토프 고덕",
+    "address": "경기도 평택시 함박산11길 44(1층 고덕동)",
+    "type": "일반음식점",
+    "region": "경기도",
+    "lat": 37.0435578721954,
+    "lng": 127.026826512911,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-26T04:38:48.633Z"
+  },
+  {
+    "name": "밀밀밀",
+    "address": "강원특별자치도 태백시 장수1길 27(1층 황지동)",
+    "type": "카페",
+    "region": "강원특별자치도",
+    "lat": 37.1787296006102,
+    "lng": 128.98500639987,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-05-26T04:38:48.633Z"
   }
 ]
