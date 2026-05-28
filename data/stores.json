@@ -1,83 +1,5 @@
 [
   {
-    "name": "유메노조미케이터링",
-    "address": "서울특별시 강남구 선릉로 410(2층 201호 대치동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5015687241818,
-    "lng": 127.050719379661,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-27T16:11:03.508Z"
-  },
-  {
-    "name": "피자익스프레스",
-    "address": "서울특별시 강남구 압구정로10길 28(지하1층 신사동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5217611553103,
-    "lng": 127.021927430879,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-27T16:11:03.508Z"
-  },
-  {
-    "name": "하이커피",
-    "address": "서울특별시 강남구 도곡로21길 15(상가동 1층 3호 역삼동, 역삼동월드메르디앙아파트)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.4927234910716,
-    "lng": 127.038718694165,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-27T16:11:03.508Z"
-  },
-  {
-    "name": "순둥이네 대구고성점",
-    "address": "대구광역시 북구 옥산로 100(고성동3가)",
-    "type": "일반음식점",
-    "region": "대구",
-    "lat": 35.8840200180047,
-    "lng": 128.586335154943,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-27T16:11:03.508Z"
-  },
-  {
-    "name": "8코기네쉬자파크(양평점)",
-    "address": "경기도 양평군 양평읍 쉬자파크길 193-1(카페 1,2층)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.5118115931866,
-    "lng": 127.533242790689,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-27T16:11:03.508Z"
-  },
-  {
-    "name": "몽글브라운",
-    "address": "경기도 남양주시 별내면 용암비루개길 204(1층 일부호)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.7387834516963,
-    "lng": 127.129303464278,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-27T16:11:03.508Z"
-  },
-  {
     "name": "셔터",
     "address": "11(1층 일부호 송동)",
     "type": "일반음식점",
@@ -88,32 +10,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-27T16:11:03.508Z"
+    "updated_at": "2026-05-28T04:46:24.260Z"
   },
   {
-    "name": "단골커피",
-    "address": "경기도 파주시 교하로 476(1층 일부 동패동)",
+    "name": "올웨이즈선데이",
+    "address": "경기도 안양시 동안구 벌말로 126(평촌 오비즈타워 1층 122,123,124호 관양동)",
     "type": "카페",
     "region": "경기",
-    "lat": 37.7049115432054,
-    "lng": 126.726228062308,
+    "lat": 37.3996441086743,
+    "lng": 126.970274096871,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-27T16:11:03.508Z"
+    "updated_at": "2026-05-28T04:46:24.260Z"
   },
   {
-    "name": "단천푸드",
-    "address": "강원특별자치도 춘천시 청운길29번길 1(1층 효자동)",
+    "name": "텐퍼센트(TENPERCENT) 대구북구보건소점",
+    "address": "대구광역시 북구 침산로 173(시그니처타워 104호 침산동)",
     "type": "일반음식점",
-    "region": "강원",
-    "lat": 37.8681938173312,
-    "lng": 127.73388222809,
+    "region": "대구광역시",
+    "lat": 35.8914839440803,
+    "lng": 128.589684579851,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-05-27T16:11:03.508Z"
+    "updated_at": "2026-05-28T04:46:24.260Z"
   }
 ]
