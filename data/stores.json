@@ -1,5 +1,31 @@
 [
   {
+    "name": "마시타",
+    "address": "경기도 안양시 만안구 안양로 501(1층 2호 석수동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.4138372197715,
+    "lng": 126.908284096948,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-01T18:15:25.699Z"
+  },
+  {
+    "name": "매일 그술과",
+    "address": "경기도 양주시 화합로1402번길 86(2층 덕정동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.8379082854633,
+    "lng": 127.065485388079,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-01T18:15:25.699Z"
+  },
+  {
     "name": "셔터",
     "address": "11(1층 일부호 송동)",
     "type": "일반음식점",
@@ -10,6 +36,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-01T05:21:02.920Z"
+    "updated_at": "2026-06-01T18:15:25.699Z"
   }
 ]
