@@ -1,29 +1,29 @@
 [
   {
-    "name": "마시타",
-    "address": "경기도 안양시 만안구 안양로 501(1층 2호 석수동)",
+    "name": "샐리와모리",
+    "address": "부산광역시 북구 만덕대로28번길 20-1(1층 덕천동)",
     "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.4138372197715,
-    "lng": 126.908284096948,
+    "region": "부산",
+    "lat": 35.2098816054859,
+    "lng": 129.008279120315,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-01T18:15:25.699Z"
+    "updated_at": "2026-06-02T05:03:20.498Z"
   },
   {
-    "name": "매일 그술과",
-    "address": "경기도 양주시 화합로1402번길 86(2층 덕정동)",
+    "name": "유수로스터스",
+    "address": "부산광역시 부산진구 전포대로246번길 34(1층 일부호 전포동)",
     "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.8379082854633,
-    "lng": 127.065485388079,
+    "region": "부산",
+    "lat": 35.1584988026617,
+    "lng": 129.067428623969,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-01T18:15:25.699Z"
+    "updated_at": "2026-06-02T05:03:20.498Z"
   },
   {
     "name": "셔터",
@@ -36,6 +36,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-01T18:15:25.699Z"
+    "updated_at": "2026-06-02T05:03:20.498Z"
+  },
+  {
+    "name": "떰즈-업",
+    "address": "충청북도 청주시 상당구 교동로 20(1층 수동)",
+    "type": "카페",
+    "region": "충북",
+    "lat": 36.6371768140095,
+    "lng": 127.492623027342,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-02T05:03:20.498Z"
+  },
+  {
+    "name": "테일즈",
+    "address": "인천광역시 연수구 컨벤시아대로 50(1단지 지상2층 209호 송도동, 푸르지오월드마크)",
+    "type": "일반음식점",
+    "region": "인천광역시",
+    "lat": 37.3981602068193,
+    "lng": 126.651691323716,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-02T05:03:20.498Z"
   }
 ]
