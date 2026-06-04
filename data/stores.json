@@ -1,5 +1,18 @@
 [
   {
+    "name": "사랑은 초록",
+    "address": "서울특별시 서초구 강남대로2길 70(GP빌딩 1층 양재동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.4680837496006,
+    "lng": 127.045611236789,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-04T15:38:44.320Z"
+  },
+  {
     "name": "셔터",
     "address": "11(1층 일부호 송동)",
     "type": "일반음식점",
@@ -10,6 +23,45 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-04T05:14:15.623Z"
+    "updated_at": "2026-06-04T15:38:44.320Z"
+  },
+  {
+    "name": "라운지365(LOUNGE365)",
+    "address": "경기도 용인시 수지구 용구대로2801번길 10-6(1층 103호 죽전동)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.3355291052315,
+    "lng": 127.107886182633,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-04T15:38:44.320Z"
+  },
+  {
+    "name": "디앤디케이크(DND CAKE)",
+    "address": "충청북도 충주시 천변로 309-1(1층 교현동)",
+    "type": "일반음식점",
+    "region": "충북",
+    "lat": 36.9703273092688,
+    "lng": 127.940260052963,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-04T15:38:44.320Z"
+  },
+  {
+    "name": "산예",
+    "address": "서울특별시 마포구 동교로46길 28(1층 연남동)",
+    "type": "카페",
+    "region": "서울특별시",
+    "lat": 37.5621791562597,
+    "lng": 126.926202751912,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-04T15:38:44.320Z"
   }
 ]
