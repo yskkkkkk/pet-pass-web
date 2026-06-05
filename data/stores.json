@@ -1,55 +1,16 @@
 [
   {
-    "name": "꾸며주는언니＆화창한오후cafe",
-    "address": "서울특별시 은평구 진관4로 48-8(제714동 제1층 제상가102호 진관동, 은평뉴타운상림마을)",
-    "type": "일반음식점",
+    "name": "산예",
+    "address": "서울특별시 마포구 동교로46길 28(1층 연남동)",
+    "type": "카페",
     "region": "서울",
-    "lat": 37.6439570568606,
-    "lng": 126.928212674738,
+    "lat": 37.5621791562597,
+    "lng": 126.926202751912,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-05T04:51:44.173Z"
-  },
-  {
-    "name": "메리네(Merine cafe)",
-    "address": "부산광역시 수영구 수영로522번길 53(1층 광안동)",
-    "type": "일반음식점",
-    "region": "부산",
-    "lat": 35.151819507695,
-    "lng": 129.114622286997,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-06-05T04:51:44.173Z"
-  },
-  {
-    "name": "지이익 로스터리",
-    "address": "부산광역시 수영구 수영로536번길 41(1층 광안동)",
-    "type": "일반음식점",
-    "region": "부산",
-    "lat": 35.1530172699139,
-    "lng": 129.114237990967,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-06-05T04:51:44.173Z"
-  },
-  {
-    "name": "콩월",
-    "address": "대전광역시 유성구 덕명서로2번길 19(지상1층 덕명동)",
-    "type": "일반음식점",
-    "region": "대전",
-    "lat": 36.3587202715415,
-    "lng": 127.30225524727,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-06-05T04:51:44.173Z"
+    "updated_at": "2026-06-05T15:27:06.705Z"
   },
   {
     "name": "셔터",
@@ -62,19 +23,97 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-05T04:51:44.173Z"
+    "updated_at": "2026-06-05T15:27:06.705Z"
+  },
+  {
+    "name": "숲266",
+    "address": "경기도 남양주시 진접읍 광릉수목원로 150-49(1층)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.7503983166618,
+    "lng": 127.193054269408,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-05T15:27:06.705Z"
+  },
+  {
+    "name": "애프터눈탭(afternoon tap)",
+    "address": "경기도 화성시 동탄구 동탄감배산로 143(203동 지1층 B125호 여울동, 동탄역 유림노르웨이숲)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.1992969424465,
+    "lng": 127.08848123206,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-05T15:27:06.705Z"
+  },
+  {
+    "name": "카페오누이",
+    "address": "경기도 양평군 서종면 황순원로 455-1(1-2층)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.5797033038554,
+    "lng": 127.389616070536,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-05T15:27:06.705Z"
+  },
+  {
+    "name": "메이플인 남해",
+    "address": "경상남도 남해군 창선면 흥선로 50",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 34.8572575805184,
+    "lng": 128.021413785343,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-05T15:27:06.705Z"
+  },
+  {
+    "name": "함박눈 내서점",
+    "address": "경상남도 창원시 마산회원구 내서읍 호계본동로 1(3층)",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 35.2605027676911,
+    "lng": 128.522626994237,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-05T15:27:06.705Z"
   },
   {
     "name": "구피스탠스(Goofy Stance)",
     "address": "강원특별자치도 양양군 현남면 매바위길 194(1층)",
     "type": "카페",
-    "region": "강원특별자치도",
+    "region": "강원",
     "lat": 37.9454147511101,
     "lng": 128.781927566185,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-05T04:51:44.173Z"
+    "updated_at": "2026-06-05T15:27:06.705Z"
+  },
+  {
+    "name": "베리하운드(BERRY HOUND)",
+    "address": "서울특별시 강남구 언주로75길 20(1층 역삼동)",
+    "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.4985777782228,
+    "lng": 127.042654785728,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-05T15:27:06.705Z"
   }
 ]
