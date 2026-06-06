@@ -1,5 +1,18 @@
 [
   {
+    "name": "베리하운드(BERRY HOUND)",
+    "address": "서울특별시 강남구 언주로75길 20(1층 역삼동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.4985777782228,
+    "lng": 127.042654785728,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-06T14:06:15.666Z"
+  },
+  {
     "name": "셔터",
     "address": "11(1층 일부호 송동)",
     "type": "일반음식점",
@@ -10,6 +23,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-06T04:31:42.283Z"
+    "updated_at": "2026-06-06T14:06:15.666Z"
   }
 ]
