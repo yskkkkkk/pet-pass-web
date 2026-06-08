@@ -1,5 +1,18 @@
 [
   {
+    "name": "포레스트",
+    "address": "부산광역시 수영구 호암로30번길 6(1층 광안동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.1568758035454,
+    "lng": 129.109981448847,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-08T05:07:46.677Z"
+  },
+  {
     "name": "셔터",
     "address": "11(1층 일부호 송동)",
     "type": "일반음식점",
@@ -10,6 +23,45 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-07T14:18:13.497Z"
+    "updated_at": "2026-06-08T05:07:46.677Z"
+  },
+  {
+    "name": "노라포식당",
+    "address": "충청남도 서산시 부석면 봉락노라포1길 62(1동)",
+    "type": "일반음식점",
+    "region": "충남",
+    "lat": 36.6898589467134,
+    "lng": 126.384365512842,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-08T05:07:46.677Z"
+  },
+  {
+    "name": "TAMBU(템부)",
+    "address": "충청남도 서산시 부석면 봉락노라포1길 62(2동)",
+    "type": "카페",
+    "region": "충남",
+    "lat": 36.6898589467134,
+    "lng": 126.384365512842,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-08T05:07:46.677Z"
+  },
+  {
+    "name": "렉커",
+    "address": "경상남도 창원시 마산회원구 석전동13길 22(석전동)",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 35.2333922055119,
+    "lng": 128.577723717819,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-08T05:07:46.677Z"
   }
 ]
