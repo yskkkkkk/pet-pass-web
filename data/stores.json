@@ -1,16 +1,16 @@
 [
   {
-    "name": "포레스트",
-    "address": "부산광역시 수영구 호암로30번길 6(1층 광안동)",
+    "name": "푸쉬커피",
+    "address": "서울특별시 광진구 자양로45길 24-3(1층 구의동)",
     "type": "일반음식점",
-    "region": "부산",
-    "lat": 35.1568758035454,
-    "lng": 129.109981448847,
+    "region": "서울",
+    "lat": 37.5523251088786,
+    "lng": 127.091233376869,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-08T05:07:46.677Z"
+    "updated_at": "2026-06-08T16:16:14.559Z"
   },
   {
     "name": "셔터",
@@ -23,45 +23,45 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-08T05:07:46.677Z"
+    "updated_at": "2026-06-08T16:16:14.559Z"
   },
   {
-    "name": "노라포식당",
-    "address": "충청남도 서산시 부석면 봉락노라포1길 62(1동)",
-    "type": "일반음식점",
-    "region": "충남",
-    "lat": 36.6898589467134,
-    "lng": 126.384365512842,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-06-08T05:07:46.677Z"
-  },
-  {
-    "name": "TAMBU(템부)",
-    "address": "충청남도 서산시 부석면 봉락노라포1길 62(2동)",
+    "name": "해피댕댕데이",
+    "address": "경상북도 칠곡군 석적읍 석적로 1017-16(3층)",
     "type": "카페",
-    "region": "충남",
-    "lat": 36.6898589467134,
-    "lng": 126.384365512842,
+    "region": "경북",
+    "lat": 36.0785819613216,
+    "lng": 128.400611839922,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-08T05:07:46.677Z"
+    "updated_at": "2026-06-08T16:16:14.559Z"
   },
   {
-    "name": "렉커",
-    "address": "경상남도 창원시 마산회원구 석전동13길 22(석전동)",
+    "name": "다이닝수산 양양본점",
+    "address": "강원특별자치도 양양군 강현면 해맞이길 40-1(1층)",
     "type": "일반음식점",
-    "region": "경남",
-    "lat": 35.2333922055119,
-    "lng": 128.577723717819,
+    "region": "강원",
+    "lat": 38.1180113654677,
+    "lng": 128.632484402871,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-08T05:07:46.677Z"
+    "updated_at": "2026-06-08T16:16:14.559Z"
+  },
+  {
+    "name": "구복만두 마포직영점",
+    "address": "서울특별시 마포구 백범로 152(201동 1층 3호 공덕동, 공덕파크자이)",
+    "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.5447477438441,
+    "lng": 126.948258201287,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-08T16:16:14.559Z"
   }
 ]
