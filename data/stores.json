@@ -1,54 +1,80 @@
 [
   {
-    "name": "장수순대",
-    "address": "대전광역시 유성구 대정남로 16(지상1층 대정동)",
+    "name": "키와노",
+    "address": "울산광역시 중구 계변고개 11(1층 복산동)",
     "type": "일반음식점",
-    "region": "대전",
-    "lat": 36.3115391654949,
-    "lng": 127.31902016014,
+    "region": "울산",
+    "lat": 35.5603464528196,
+    "lng": 129.328563005297,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-10T04:52:54.704Z"
+    "updated_at": "2026-06-10T16:05:13.578Z"
   },
   {
-    "name": "다이너물왕점",
-    "address": "경기도 시흥시 목감전원로 32(레이크문 2층 201호 산현동)",
+    "name": "대왕골",
+    "address": "경기도 용인시 수지구 이종무로 264(고기동, 가동 1층)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.3769668111256,
-    "lng": 126.843220337569,
+    "lat": 37.3619717605192,
+    "lng": 127.029289309475,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-10T04:52:54.704Z"
+    "updated_at": "2026-06-10T16:05:13.578Z"
   },
   {
-    "name": "이빠이",
-    "address": "경기도 시흥시 목감남서로 9-7(더 드림 1층 104호 조남동)",
+    "name": "어울더울",
+    "address": "경기도 수원시 장안구 광교산로260번길 24-39(1층 하광교동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.3775914490777,
-    "lng": 126.851567154523,
+    "lat": 37.3118039746496,
+    "lng": 127.029292284801,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-10T04:52:54.704Z"
+    "updated_at": "2026-06-10T16:05:13.578Z"
   },
   {
-    "name": "스낵에비뉴",
-    "address": "경기도 시흥시 수도권제1순환고속도로 105(시흥하늘휴게소 1층 일부호 조남동)",
-    "type": "카페",
+    "name": "탐라흑돈루",
+    "address": "경기도 하남시 미사강변중앙로 173(미사 리버에비뉴 1층 116,117,118호 망월동)",
+    "type": "일반음식점",
     "region": "경기",
-    "lat": 37.3839075388746,
-    "lng": 126.855573348211,
+    "lat": 37.5620173617791,
+    "lng": 127.190330072193,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-10T04:52:54.704Z"
+    "updated_at": "2026-06-10T16:05:13.578Z"
+  },
+  {
+    "name": "바비큐 팩토리 앤 가든(BBQ Factory&Garden)",
+    "address": "강원특별자치도 고성군 토성면 미시령옛길 1153",
+    "type": "일반음식점",
+    "region": "강원",
+    "lat": 38.2131162786595,
+    "lng": 128.493440366843,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-10T16:05:13.578Z"
+  },
+  {
+    "name": "카페 그레고르",
+    "address": "강원특별자치도 홍천군 홍천읍 연봉로 23",
+    "type": "일반음식점",
+    "region": "강원",
+    "lat": 37.6827158325597,
+    "lng": 127.877323547162,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-06-10T16:05:13.578Z"
   }
 ]
