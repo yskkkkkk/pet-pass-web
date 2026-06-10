@@ -1,80 +1,54 @@
 [
   {
-    "name": "구복만두 마포직영점",
-    "address": "서울특별시 마포구 백범로 152(201동 1층 3호 공덕동, 공덕파크자이)",
+    "name": "장수순대",
+    "address": "대전광역시 유성구 대정남로 16(지상1층 대정동)",
     "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5447477438441,
-    "lng": 126.948258201287,
+    "region": "대전",
+    "lat": 36.3115391654949,
+    "lng": 127.31902016014,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-09T15:25:45.488Z"
+    "updated_at": "2026-06-10T04:52:54.704Z"
   },
   {
-    "name": "빌라드블루",
-    "address": "서울특별시 성동구 서울숲2길 46-10(1층 성수동1가)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5461597919796,
-    "lng": 127.043466642471,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-06-09T15:25:45.488Z"
-  },
-  {
-    "name": "고모카세",
-    "address": "경기도 시흥시 승지로60번길 12(광장프라자 1층 108호 능곡동)",
+    "name": "다이너물왕점",
+    "address": "경기도 시흥시 목감전원로 32(레이크문 2층 201호 산현동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.3687835185145,
-    "lng": 126.811657458365,
+    "lat": 37.3769668111256,
+    "lng": 126.843220337569,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-09T15:25:45.488Z"
+    "updated_at": "2026-06-10T04:52:54.704Z"
   },
   {
-    "name": "베란다",
-    "address": "경기도 고양시 일산동구 강송로87번길 7-7(1층 백석동)",
+    "name": "이빠이",
+    "address": "경기도 시흥시 목감남서로 9-7(더 드림 1층 104호 조남동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.6471859945807,
-    "lng": 126.789038928217,
+    "lat": 37.3775914490777,
+    "lng": 126.851567154523,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-09T15:25:45.488Z"
+    "updated_at": "2026-06-10T04:52:54.704Z"
   },
   {
-    "name": "셔터",
-    "address": "경기도 화성시 동탄구 동탄순환대로3가길 11(1층 일부호 송동)",
-    "type": "일반음식점",
+    "name": "스낵에비뉴",
+    "address": "경기도 시흥시 수도권제1순환고속도로 105(시흥하늘휴게소 1층 일부호 조남동)",
+    "type": "카페",
     "region": "경기",
-    "lat": 37.1663828381186,
-    "lng": 127.095266174127,
+    "lat": 37.3839075388746,
+    "lng": 126.855573348211,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-09T15:25:45.488Z"
-  },
-  {
-    "name": "sanilio(산일리오)",
-    "address": "강원특별자치도 횡성군 둔내면 경강로 5339",
-    "type": "일반음식점",
-    "region": "강원",
-    "lat": 37.5649250652283,
-    "lng": 128.225126430844,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-06-09T15:25:45.488Z"
+    "updated_at": "2026-06-10T04:52:54.704Z"
   }
 ]
