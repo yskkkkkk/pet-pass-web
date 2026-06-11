@@ -1,80 +1,67 @@
 [
   {
-    "name": "청춘닭강정",
-    "address": "서울특별시 노원구 공릉로 114(북측점포 1층 공릉동)",
+    "name": "스트럿",
+    "address": "부산광역시 부산진구 동성로39번길 28(1층 전포동)",
     "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.6203788280996,
-    "lng": 127.078127571843,
+    "region": "부산",
+    "lat": 35.1540996887899,
+    "lng": 129.066832410219,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-11T05:02:27.475Z"
+    "updated_at": "2026-06-11T16:19:05.853Z"
   },
   {
-    "name": "탑 브릭스 배재대점",
-    "address": "대전광역시 서구 도솔6길 48(1층 도마동)",
-    "type": "카페",
-    "region": "대전",
-    "lat": 36.3153076160948,
-    "lng": 127.371422773227,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-06-11T05:02:27.475Z"
-  },
-  {
-    "name": "백운해물칼국수",
-    "address": "경기도 의왕시 바라산로 16(브릭스백운 116,117호 학의동)",
+    "name": "NARE",
+    "address": "경기도 광주시 곤지암읍 광여로313번길 22",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.3740831964107,
-    "lng": 127.0092521806,
+    "lat": 37.359697420541,
+    "lng": 127.373110216769,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-11T05:02:27.475Z"
+    "updated_at": "2026-06-11T16:19:05.853Z"
   },
   {
-    "name": "소이연남 스타필드고양점",
-    "address": "경기도 고양시 덕양구 고양대로 1955(1일부층 동산동, 스타필드 고양 쇼핑몰동)",
+    "name": "더온전히 정조효공원점",
+    "address": "경기도 화성시 병점구 장조1로 54(1동 1층, 지하1층 전부호 안녕동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.6469771187284,
-    "lng": 126.89477806511,
+    "lat": 37.2051028525088,
+    "lng": 126.995655725651,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-11T05:02:27.475Z"
+    "updated_at": "2026-06-11T16:19:05.853Z"
   },
   {
-    "name": "터프이너프 로스터스(Tuff enuff Roasters)",
-    "address": "경기도 평택시 평택3로 80(1층 비전동)",
+    "name": "블루(blue)",
+    "address": "경기도 광주시 곤지암읍 경충대로 778(금진빌딩 1층)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 36.9960996242959,
-    "lng": 127.094885955699,
+    "lat": 37.3567956500871,
+    "lng": 127.324406247328,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-11T05:02:27.475Z"
+    "updated_at": "2026-06-11T16:19:05.853Z"
   },
   {
-    "name": "하롱베이",
-    "address": "전북특별자치도 군산시 백릉로 27(경암동)",
+    "name": "폴콘 블랙",
+    "address": "경기도 하남시 미사대로 410(미사강변 오벨리스크 1층 110~112,113호일부,114호일부,126~127호 망월동)",
     "type": "일반음식점",
-    "region": "전북",
-    "lat": 35.9746021984408,
-    "lng": 126.729392383688,
+    "region": "경기",
+    "lat": 37.5669148058169,
+    "lng": 127.196654716027,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-06-11T05:02:27.475Z"
+    "updated_at": "2026-06-11T16:19:05.853Z"
   }
 ]
