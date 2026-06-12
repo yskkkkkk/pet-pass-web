@@ -114,7 +114,7 @@ app.get('/api/stores', storesLimiter, async (req, res) => {
   try {
     const { category, region1, region2, search, minLat, maxLat, minLng, maxLng } = req.query;
 
-    let query = supabase.from('stores').select('*');
+    let query = supabase.from('stores').select('*').eq('verified', true);
 
     const targetTypes = normalizeCategory(category);
     if (targetTypes) {

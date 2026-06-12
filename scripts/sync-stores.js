@@ -173,9 +173,9 @@ const NAME_CORRECTIONS = new Map([
 ]);
 
 function correctBrokenName(name) {
-  if (!name.includes('?')) return name;
-  // '?' 앞뒤 공백만 제거해서 매핑 키로 사용 (나머지 공백은 유지)
-  const normalized = name.replace(/\s*\?\s*/g, '?');
+  if (!hasBrokenKoreanText(name)) return name;
+  // '? ' 앞뒤 공백만 제거해서 매핑 키로 사용 (나머지 공백은 유지)
+  const normalized = name.replace(/\s*[?？]\s*/g, '?');
   return NAME_CORRECTIONS.get(normalized) ?? name;
 }
 
@@ -288,8 +288,8 @@ async function syncPetFriendlyStores() {
       }
       processedKeys.add(key);
 
-      // 보정 후에도 '?'가 남아있으면 미검증 상태로 격리
-      const isNameBroken = name.includes('?');
+      // 보정 후에도 깨짐 문자가 남아있으면 미검증 상태로 격리
+      const isNameBroken = hasBrokenKoreanText(name);
       if (isNameBroken) {
         stats.unverified++;
         console.warn(`⚠️ 미검증 매장 (이름에 ? 포함): "${name}" — verified: false로 저장, 지오코딩 건너뜀`);
@@ -451,4 +451,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { syncPetFriendlyStores };
+module.exports = { syncPetFriendlyStores, correctBrokenName, hasBrokenKoreanText };
