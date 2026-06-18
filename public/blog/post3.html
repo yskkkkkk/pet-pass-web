@@ -254,9 +254,9 @@
 
     <h2 id="easy">너무 쉽게 되던 카카오 키</h2>
 
-    <p>Pet-Pass의 지도는 카카오맵 SDK로 구현한다. 그러려면 HTML의 <code>&lt;script&gt;</code> 태그에 카카오 JavaScript 키를 넣어야 한다. 이 키가 없으면 브라우저가 SDK를 불러오지 못한다.</p>
+    <p>Pet-Pass의 지도는 카카오맵 SDK로 구현했습니다. 그러려면 HTML의 <code>&lt;script&gt;</code> 태그에 카카오 JavaScript 키를 넣어야 하는데, 이 키가 없으면 브라우저가 SDK를 불러오지 못해요.</p>
 
-    <p>처음엔 단순하게 해결했다. 빌드 스크립트에서 HTML 파일 안의 플레이스홀더(<code>{{KAKAO_MAP_API_KEY}}</code>)를 실제 환경 변수 값으로 치환하는 방식으로. 배포 시점에 환경 변수를 읽어서 HTML에 꽂아 넣으면, 사용자의 브라우저에 도착한 HTML에는 이미 실제 키가 박혀 있는 상태가 된다.</p>
+    <p>처음엔 단순하게 해결했습니다. 빌드 스크립트에서 HTML 파일 안의 플레이스홀더(<code>{{KAKAO_MAP_API_KEY}}</code>)를 실제 환경 변수 값으로 치환하는 방식이었어요. 배포 시점에 환경 변수를 읽어서 HTML에 꽂아 넣으면, 사용자의 브라우저에 도착한 HTML에는 이미 실제 키가 박혀 있는 상태가 됩니다.</p>
 
     <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">복사</button><span class="file-label">scripts/build.js</span><span class="code-comment">// 빌드 타임에 HTML에 카카오 키 주입</span>
 <span class="code-keyword">const</span> <span class="code-var">html</span> = <span class="code-keyword">await</span> fs.<span class="code-fn">readFile</span>(<span class="code-string">'public/index.html'</span>);
@@ -266,15 +266,15 @@
 );
 <span class="code-keyword">await</span> fs.<span class="code-fn">writeFile</span>(<span class="code-string">'dist/index.html'</span>, <span class="code-var">replaced</span>);</div>
 
-    <p>한 번에 됐다. Vercel에 환경 변수를 등록하고, 빌드 스크립트에서 치환하고, 배포 — 브라우저에서 지도가 바로 떴다. 너무 쉬워서 이 방식이 '표준 해법'이라고 생각했다.</p>
+    <p>한 번에 됐습니다. Vercel에 환경 변수를 등록하고, 빌드 스크립트에서 치환하고, 배포 — 브라우저에서 지도가 바로 떴어요. 너무 쉬워서 이 방식이 '표준 해법'이라고 생각했습니다.</p>
 
-    <p>그 생각이 다음 이슈를 만들었다.</p>
+    <p>그 생각이 다음 이슈를 만들 줄은 몰랐죠...</p>
 
     <h2 id="trap">같은 방법, 다른 결과</h2>
 
-    <p>다음 기능은 동물등록번호 조회였다. 정부 공공데이터 포털(data.go.kr)의 API를 호출해서 내 강아지의 공식 정보를 가져오는 기능. 당연히 이것도 API 키가 필요했다 — <code>DATA_GO_KR_API_KEY</code>.</p>
+    <p>다음 기능은 동물등록번호 조회였습니다. 정부 공공데이터 포털(data.go.kr)의 API를 호출해서 제 강아지의 공식 정보를 가져오는 기능이었어요. 당연히 이것도 API 키가 필요했습니다 — <code>DATA_GO_KR_API_KEY</code>.</p>
 
-    <p>카카오 때와 똑같이 하면 되겠다 싶었다. GitHub Actions에도 시크릿 등록하고, Vercel 환경 변수에도 등록하고, 빌드 스크립트에서 서버 파일(<code>api/auth-pet.js</code>)의 플레이스홀더를 치환하는 로직을 추가했다.</p>
+    <p>카카오 때와 똑같이 하면 되겠다 싶었습니다. GitHub Actions에도 시크릿 등록하고, Vercel 환경 변수에도 등록하고, 빌드 스크립트에서 서버 파일(<code>api/auth-pet.js</code>)의 플레이스홀더를 치환하는 로직을 추가했어요.</p>
 
     <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">복사</button><span class="file-label">scripts/build.js · 실패한 접근</span><span class="code-comment">// 서버 파일에도 같은 방식으로 주입 시도</span>
 <span class="code-keyword">const</span> <span class="code-var">serverFiles</span> = [
@@ -287,17 +287,17 @@
   <span class="code-keyword">await</span> fs.<span class="code-fn">writeFile</span>(<span class="code-var">file</span>, <span class="code-var">content</span>);
 }</div>
 
-    <p>배포했다. 그런데 호출하니까 <strong>"API 키가 세팅되지 않았습니다"</strong>라는 로그와 함께 Mock 응답만 돌아왔다. 빌드 타임에 분명히 치환은 됐는데, 실제 서버리스 함수는 키를 못 찾고 있었다.</p>
+    <p>배포했습니다. 그런데 호출하니까 <strong>"API 키가 세팅되지 않았습니다"</strong>라는 로그와 함께 Mock 응답만 돌아왔어요. 빌드 타임에 분명히 치환은 됐는데, 실제 서버리스 함수는 키를 못 찾고 있었습니다.</p>
 
-    <p>로컬에서는 됐다. GitHub Actions 로그에도 <code>✅ Government API Key injected</code>라고 찍혔다. 그런데 Vercel 프로덕션 환경에서는 안 됐다. 같은 환경 변수, 같은 치환 로직, 같은 빌드 프로세스인데 왜?</p>
+    <p>로컬에서는 됐습니다. GitHub Actions 로그에도 <code>✅ Government API Key injected</code>라고 찍혔어요. 그런데 Vercel 프로덕션 환경에서는 안 됐습니다. 같은 환경 변수, 같은 치환 로직, 같은 빌드 프로세스인데 왜...</p>
 
     <div class="warning-box">
-      <p><strong>의심스러운 신호:</strong> 같은 패턴의 '환경 변수 주입' 작업에 매달린 PR이 여러 번 올라왔다 — 매번 "이제 진짜 됐다" 했지만 배포하면 또 Mock 응답. 디버깅 로그 추가 → 키 노출 위험 → 다시 복구 → 또 Mock. 뭔가 근본적으로 잘못됐다는 신호였다.</p>
+      <p><strong>의심스러운 신호:</strong> 같은 패턴의 '환경 변수 주입' 작업에 매달린 PR이 여러 번 올라왔어요 — 매번 "이제 진짜 됐다" 했지만 배포하면 또 Mock 응답. 디버깅 로그 추가 → 키 노출 위험 → 다시 복구 → 또 Mock. 뭔가 근본적으로 잘못됐다는 신호였습니다.</p>
     </div>
 
     <h2 id="why">빌드 타임과 런타임의 간극</h2>
 
-    <p>원인을 깨닫는 데 꽤 걸렸다. 두 키의 운명은 처음부터 달랐다.</p>
+    <p>원인을 깨닫는 데 꽤 걸렸습니다. 두 키의 운명은 처음부터 달랐던 거예요.</p>
 
     <div class="timing-grid">
       <div class="timing-col build">
@@ -346,17 +346,17 @@
       </div>
     </div>
 
-    <p>Vercel의 서버리스 함수는 배포 직후 '정적인 JS 파일'로 존재하지 않는다. 사용자가 요청을 보낼 때마다 별도의 실행 환경이 스핀업되고, 그때 <code>process.env</code>를 통해 환경 변수를 읽어온다. <strong>빌드 타임에 파일 안에 문자열을 치환해 넣어도, 런타임 환경에서 그 치환된 코드가 어떻게 해석되는지는 별개의 문제</strong>였다.</p>
+    <p>Vercel의 서버리스 함수는 배포 직후 '정적인 JS 파일'로 존재하는 게 아니더라고요. 사용자가 요청을 보낼 때마다 별도의 실행 환경이 스핀업되고, 그때 <code>process.env</code>를 통해 환경 변수를 읽어옵니다. 빌드 타임에 파일 안에 문자열을 치환해 넣어도, 런타임 환경에서 그 치환된 코드가 어떻게 해석되는지는 별개의 문제였어요.</p>
 
-    <p>게다가 이 접근에는 더 근본적인 문제가 있었다. <strong>서버 파일에 키 문자열을 박아 넣으면, 그 번들이 어딘가에 로그로 남거나 소스맵으로 노출될 위험이 있다.</strong> 카카오 JS 키는 원래 브라우저에 노출되는 걸 전제로 한 '공개 키'지만, 정부 API 키는 서버에만 있어야 하는 '비밀 키'다. 같은 방식으로 다루면 안 되는 키였다.</p>
+    <p>게다가 이 접근에는 더 근본적인 문제가 있었습니다. 서버 파일에 키 문자열을 박아 넣으면, 그 번들이 어딘가에 로그로 남거나 소스맵으로 노출될 위험이 있거든요. 카카오 JS 키는 원래 브라우저에 노출되는 걸 전제로 한 '공개 키'지만, 정부 API 키는 서버에만 있어야 하는 '비밀 키'입니다. 같은 방식으로 다루면 안 되는 키였던 거죠.</p>
 
     <div class="highlight-box">
-      <p>둘 다 '환경 변수에 저장된 API 키'였지만, 하나는 브라우저가 알아야 하고 다른 하나는 절대로 알면 안 되는 키였다. 같은 이름표가 붙어 있다고 같은 방식으로 다뤄서는 안 됐다.</p>
+      <p>둘 다 '환경 변수에 저장된 API 키'였지만, 하나는 브라우저가 알아야 하고 다른 하나는 절대로 알면 안 되는 키였습니다. 같은 이름표가 붙어 있다고 같은 방식으로 다뤄서는 안 됐던 거예요.</p>
     </div>
 
     <h2 id="proxy">프록시 패턴으로 우회하기</h2>
 
-    <p>해결은 구조를 바꾸는 거였다. 클라이언트가 정부 API를 <strong>직접</strong> 호출하려고 하지 말고, <strong>우리 서버의 프록시 엔드포인트</strong>를 호출하게 만든다. 그 프록시 함수 안에서 런타임에 환경 변수를 읽고, 대신 정부 API를 호출한 뒤, 결과만 클라이언트에 돌려준다.</p>
+    <p>해결은 구조를 바꾸는 거였습니다. 클라이언트가 정부 API를 직접 호출하려고 하지 말고, 우리 서버의 프록시 엔드포인트를 호출하게 만드는 거예요. 그 프록시 함수 안에서 런타임에 환경 변수를 읽고, 대신 정부 API를 호출한 뒤, 결과만 클라이언트에 돌려줍니다.</p>
 
     <div class="arch-diagram">
       <p class="arch-label">Before · 빌드 타임 주입이 실패하는 구조</p>
@@ -384,7 +384,7 @@
       <p class="arch-subtitle">키는 서버에서만 읽고, 클라이언트는 우리 엔드포인트만 안다</p>
     </div>
 
-    <p>새로 만든 <code>api/get-pet-data.js</code>는 간단하다. 요청이 들어오면 <code>process.env.DATA_GO_KR_API_KEY</code>를 런타임에 참조하고, 정부 API에 쿼리를 날려서 응답을 그대로 돌려주는 역할. 클라이언트 쪽 스크립트는 기존에 정부 API를 때리려던 코드를 프록시 엔드포인트 호출로 바꿨다.</p>
+    <p>새로 만든 <code>api/get-pet-data.js</code>는 간단합니다. 요청이 들어오면 <code>process.env.DATA_GO_KR_API_KEY</code>를 런타임에 참조하고, 정부 API에 쿼리를 날려서 응답을 그대로 돌려주는 역할이에요. 클라이언트 쪽 스크립트는 기존에 정부 API를 때리려던 코드를 프록시 엔드포인트 호출로 바꿨습니다.</p>
 
     <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">복사</button><span class="file-label">api/get-pet-data.js</span><span class="code-keyword">module</span>.<span class="code-var">exports</span> = <span class="code-keyword">async</span> (<span class="code-var">req</span>, <span class="code-var">res</span>) => {
   <span class="code-keyword">const</span> <span class="code-var">API_KEY</span> = process.env.<span class="code-var">DATA_GO_KR_API_KEY</span>;  <span class="code-comment">// ← 런타임 참조</span>
@@ -401,25 +401,25 @@
   <span class="code-var">res</span>.<span class="code-fn">json</span>({ success: <span class="code-keyword">true</span>, data: <span class="code-var">response</span>.data });
 };</div>
 
-    <p>그리고 <code>scripts/build.js</code>에서 서버 파일에 키를 주입하던 로직은 통째로 지웠다. 애초에 잘못된 접근이었다.</p>
+    <p>그리고 <code>scripts/build.js</code>에서 서버 파일에 키를 주입하던 로직은 통째로 지웠습니다. 애초에 잘못된 접근이었으니까요.</p>
 
-    <p>배포했다. 바로 됐다. 실제 동물등록번호 <code>410100008344399</code>로 조회해보니, 정부 DB에서 '콩이 / 푸들' 정보가 그대로 넘어왔다. 그동안 Mock 응답만 보고 있었던 게 허무할 정도였다.</p>
+    <p>배포했습니다. 바로 됐어요. 실제 동물등록번호 <code>410100008344399</code>로 조회해보니, 정부 DB에서 '콩이 / 푸들' 정보가 그대로 넘어왔습니다. 그동안 Mock 응답만 보고 있었던 게 허무할 정도였네요.</p>
 
     <h2 id="lesson">배운 것</h2>
 
-    <p>이 이슈가 나한테 가르쳐준 건 두 가지다.</p>
+    <p>이 이슈를 거치면서 제가 머릿속에 새긴 게 몇 개 있어요.</p>
 
-    <p>하나는 '환경 변수'라고 다 같은 환경 변수가 아니라는 것. 공개 키와 비밀 키는 근본적으로 다른 방식으로 다뤄야 한다. 브라우저가 알아야 하는 키는 빌드 타임에 HTML에 박아도 되지만, 서버만 알아야 하는 키는 절대로 클라이언트 번들에 흘러 들어가서는 안 된다.</p>
+    <p>일단 '환경 변수'라고 다 같은 환경 변수가 아니라는 것. 공개 키와 비밀 키는 근본적으로 다른 방식으로 다뤄야 하더라고요. 브라우저가 알아야 하는 키는 빌드 타임에 HTML에 박아도 되지만, 서버만 알아야 하는 키는 절대로 클라이언트 번들에 흘러 들어가서는 안 됩니다.</p>
 
-    <p>다른 하나는 '한 번 성공한 패턴을 같은 문제처럼 보이는 곳에 재사용할 때 조심해야 한다는 것'. 카카오 키는 빌드 타임 치환이 '정답'이었지만, 그 성공이 오히려 다음 문제에서 함정이 됐다. 표면적으로 같아 보이는 문제도, 실행 맥락이 다르면 해법이 완전히 달라야 한다.</p>
+    <p>그리고 한 번 성공한 패턴을 같은 문제처럼 보이는 곳에 재사용할 때는 조심해야 한다는 것. 카카오 키는 빌드 타임 치환이 '정답'이었지만, 그 성공이 오히려 다음 문제에서 함정이 됐어요. 표면적으로 같아 보이는 문제도, 실행 맥락이 다르면 해법이 완전히 달라야 했던 거죠...</p>
 
     <hr class="divider">
 
     <div class="lesson-box">
       <h3>이 문제에서 배운 것</h3>
-      <p>클라이언트 사이드 키는 빌드 타임에 주입해도 된다. 서버 사이드 키는 반드시 런타임에 <code style="font-size:13px">process.env</code>로 참조해야 한다.</p>
-      <p>서버리스 함수에서 민감한 API를 다룰 때는 프록시 패턴이 표준이다. 클라이언트는 우리 엔드포인트만 알면 된다.</p>
-      <p>같은 에러가 여러 PR에 걸쳐 반복되면, 해결책이 아니라 문제 정의가 잘못된 경우가 많다. 한 발 물러서서 구조부터 다시 본다.</p>
+      <p>클라이언트 사이드 키는 빌드 타임에 주입해도 됩니다. 서버 사이드 키는 반드시 런타임에 <code style="font-size:13px">process.env</code>로 참조해야 하고요.</p>
+      <p>서버리스 함수에서 민감한 API를 다룰 때는 프록시 패턴이 표준이더라고요. 클라이언트는 우리 엔드포인트만 알면 됩니다.</p>
+      <p>같은 에러가 여러 PR에 걸쳐 반복되면, 해결책이 아니라 문제 정의가 잘못된 경우가 많아요. 한 발 물러서서 구조부터 다시 보기.</p>
     </div>
 
     <div class="post-footer">
