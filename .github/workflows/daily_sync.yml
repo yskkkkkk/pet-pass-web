@@ -2,8 +2,7 @@ name: Daily Store Data Sync
 
 on:
   schedule:
-    - cron: '27 0 * * *'
-    - cron: '10 12 * * *'
+    - cron: '27 0 * * *' # 매일 1회 (09:27 KST)
   workflow_dispatch: # Allow manual trigger
 
 
@@ -61,6 +60,7 @@ jobs:
         run: node scripts/sync-stores.js
 
       - name: Commit and Push if Changed
+        if: always() # 동기화 실패 시에도 스케줄 히스토리(실패 기록)를 커밋하기 위함
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
