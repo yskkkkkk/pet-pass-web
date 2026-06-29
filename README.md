@@ -16,7 +16,7 @@
 - **모든 AI는 작업 완료 후 반드시 `docs/dev_history.md`에 변경 사항을 기록해야 한다.** (최우선 지침)
 
 ### 🛠 Tech Stack
-- **Frontend:** Vanilla JS, Tailwind CSS, Kakao Maps API
+- **Frontend:** Vanilla JS, Vanilla CSS (Pretendard 폰트), Kakao Maps API
 - **Backend:** Vercel Serverless Functions (Node.js)
 - **Database:** Supabase (PostgreSQL)
 - **CI/CD:** GitHub Actions, Vercel
@@ -51,7 +51,9 @@
 ---
 
 ## 🚀 Setup & Execution
-1. **Environment:** `.env` 파일에 `KAKAO_MAP_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `DATA_GO_KR_API_KEY` 설정 필요.
+1. **Environment:** `.env.example`을 복사해 `.env`를 만들고 키를 채웁니다.
+   - 런타임 필수: `KAKAO_MAP_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `DATA_GO_KR_API_KEY`
+   - 데이터 동기화 배치(`npm run sync-stores`) 실행 시 추가 필요: `SUPABASE_SECRET_KEY`, `KAKAO_REST_API_KEY`, `PET_EXCEL_URL`
 2. **Install:** `npm install`
 3. **Local Dev:** `npm start` (Express 서버 실행)
 4. **Build:** `npm run build` (API Key 주입 및 배포 자산 생성)
