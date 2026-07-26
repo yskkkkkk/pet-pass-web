@@ -1,18 +1,5 @@
 [
   {
-    "name": "에드 로스트웍스 Ed roastworks",
-    "address": "서울특별시 마포구 토정로 39(1층 합정동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5456618087969,
-    "lng": 126.915343823171,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-07-25T03:43:57.017Z"
-  },
-  {
     "name": "카페 ？잔",
     "address": "서울특별시 은평구 통일로69길 25(1층 대조동)",
     "type": "일반음식점",
@@ -23,71 +10,19 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-07-25T03:43:57.017Z"
-  },
-  {
-    "name": "헤머스미스 커피",
-    "address": "서울특별시 강남구 봉은사로26길 25(1층 역삼동)",
-    "type": "카페",
-    "region": "서울",
-    "lat": 37.505455372767,
-    "lng": 127.033922003118,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-07-25T03:43:57.017Z"
-  },
-  {
-    "name": "레이디벅스 목포",
-    "address": "전남광주통합특별시 목포시 남악2로9번길 3-6(1,2층 옥암동)",
-    "type": "일반음식점",
-    "region": "전남광주",
-    "lat": 34.8059506104833,
-    "lng": 126.452351550121,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-07-25T03:43:57.017Z"
-  },
-  {
-    "name": "주식회사 오리덕",
-    "address": "경기도 남양주시 화도읍 북한강로1570번길 94(2~3층)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.6539874335332,
-    "lng": 127.370837141714,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-07-25T03:43:57.017Z"
-  },
-  {
-    "name": "화우정",
-    "address": "경기도 용인시 기흥구 석성로521번길 23(1층 동백동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.2896032821006,
-    "lng": 127.155583245502,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-07-25T03:43:57.017Z"
+    "updated_at": "2026-07-26T04:01:54.337Z"
   },
   {
     "name": "하루당",
     "address": "인천광역시 서해구 승학로 199-1(1층 일부호 심곡동)",
     "type": "카페",
-    "region": "인천광역시",
+    "region": "인천",
     "lat": 37.5403781227616,
     "lng": 126.672437347222,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-07-25T03:43:57.017Z"
+    "updated_at": "2026-07-26T04:01:54.337Z"
   }
 ]
