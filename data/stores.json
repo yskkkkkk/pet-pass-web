@@ -1,5 +1,31 @@
 [
   {
+    "name": "닐",
+    "address": "서울특별시 서대문구 연희맛로 17-7(1층 101호 연희동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5668519966824,
+    "lng": 126.929151737436,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-07-27T04:09:13.617Z"
+  },
+  {
+    "name": "마우디(Maudie)",
+    "address": "서울특별시 서대문구 연희로11길 18(1층 연희동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5674892239125,
+    "lng": 126.930131146368,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-07-27T04:09:13.617Z"
+  },
+  {
     "name": "카페 ？잔",
     "address": "서울특별시 은평구 통일로69길 25(1층 대조동)",
     "type": "일반음식점",
@@ -10,19 +36,58 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-07-26T04:01:54.337Z"
+    "updated_at": "2026-07-27T04:09:13.617Z"
   },
   {
-    "name": "하루당",
-    "address": "인천광역시 서해구 승학로 199-1(1층 일부호 심곡동)",
-    "type": "카페",
-    "region": "인천",
-    "lat": 37.5403781227616,
-    "lng": 126.672437347222,
+    "name": "커피엣마켓 독립문영천시장",
+    "address": "서울특별시 서대문구 통일로 173-2(1층 천연동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5692673418686,
+    "lng": 126.962977325695,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-07-26T04:01:54.337Z"
+    "updated_at": "2026-07-27T04:09:13.617Z"
+  },
+  {
+    "name": "카페 소소",
+    "address": "전남광주통합특별시 서구 상무오월로 5(1층 쌍촌동)",
+    "type": "카페",
+    "region": "전남광주",
+    "lat": 35.1556494332038,
+    "lng": 126.860043788169,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-07-27T04:09:13.617Z"
+  },
+  {
+    "name": "넌테이블(nontable) 대구시청점",
+    "address": "대구광역시 중구 동덕로 181(201동 103호 동인동1가, 힐스테이트 동인 센트럴)",
+    "type": "카페",
+    "region": "대구",
+    "lat": 35.8711470878971,
+    "lng": 128.603011585362,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-07-27T04:09:13.617Z"
+  },
+  {
+    "name": "카페마일로 파주 운정호수공원점",
+    "address": "경기도 파주시 가온로 170(센트럴파크프라자 106,107호 와동동)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.7196821289484,
+    "lng": 126.751092170719,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-07-27T04:09:13.617Z"
   }
 ]
