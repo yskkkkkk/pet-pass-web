@@ -107,6 +107,30 @@ async function geocodeAddress(address) {
 }
 
 /**
+ * 엑셀 다운로드를 시도하고, 실패 시 딱 한 번만 재시도한다.
+ * 정부 서버가 GitHub Actions 러너의 IP 대역을 간헐적으로 막는 것으로 보여
+ * (연결이 거부되는 게 아니라 응답 없이 몇 분간 멈췄다가 ETIMEDOUT),
+ * 재시도로 해결될 수도 있는 일시적 문제인지 확인하는 차원의 대응이다.
+ * 재시도까지 실패하면 그대로 에러를 던져 배치를 실패 처리한다.
+ */
+async function downloadExcelWithRetry(url, axiosOptions, maxAttempts = 2) {
+  let lastError;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await axios.get(url, axiosOptions);
+    } catch (error) {
+      lastError = error;
+      const remaining = maxAttempts - attempt;
+      console.warn(`⚠️ 엑셀 다운로드 실패 (시도 ${attempt}/${maxAttempts}): ${error.message}`);
+      if (remaining > 0) {
+        console.log(`🔄 재시도합니다... (${remaining}회 남음)`);
+      }
+    }
+  }
+  throw lastError;
+}
+
+/**
  * 엑셀 버퍼를 한글 인코딩 보정과 함께 파싱한다.
  *
  * 식품안전나라 엑셀은 .xls(BIFF) 또는 .xlsx(OOXML) 형식으로 제공되며,
@@ -237,7 +261,9 @@ async function syncPetFriendlyStores() {
     console.log(`📥 엑셀 다운로드 중: ${downloadUrl}`);
 
     // 3. 엑셀 파일 다운로드 (바이너리)
-    const response = await axios.get(downloadUrl, {
+    // 정부 서버가 특정 IP 대역을 간헐적으로 차단하는 것으로 보여(ETIMEDOUT),
+    // 실패 시 딱 한 번만 재시도한다. 그래도 실패하면 진짜 실패로 처리.
+    const response = await downloadExcelWithRetry(downloadUrl, {
       responseType: 'arraybuffer',
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
