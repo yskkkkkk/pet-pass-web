@@ -10,6 +10,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-08-17T01:58:01.506Z"
+    "updated_at": "2026-08-18T01:54:03.561Z"
+  },
+  {
+    "name": "아루스",
+    "address": "경기도 화성시 효행구 매송면 화성로 2298-8(2층)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.2512898880469,
+    "lng": 126.916050088076,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-08-18T01:54:03.561Z"
+  },
+  {
+    "name": "레인바우(rainbau) 평택점",
+    "address": "경기도 평택시 안중읍 학현4길 29(1층)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 36.9917213924899,
+    "lng": 126.921724376549,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-08-18T01:54:03.561Z"
   }
 ]
