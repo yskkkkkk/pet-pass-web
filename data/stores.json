@@ -10,7 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
+    "updated_at": "2026-08-24T02:00:39.867Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,72 +23,46 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
+    "updated_at": "2026-08-24T02:00:39.867Z"
   },
   {
-    "name": "카페본작",
-    "address": "서울특별시 성동구 광나루로9길 3(1층 송정동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5485324960597,
-    "lng": 127.063690228744,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
-  },
-  {
-    "name": "베이커리앤카페",
-    "address": "전남광주통합특별시 진도군 의신면 송군길 30-40(웰컴센타 1층)",
-    "type": "일반음식점",
-    "region": "전남광주",
-    "lat": 34.4005258250569,
-    "lng": 126.326054153381,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
-  },
-  {
-    "name": "솔로투 화순점",
-    "address": "전남광주통합특별시 화순군 도곡면 덕리길 10-5(1층)",
-    "type": "일반음식점",
-    "region": "전남광주",
-    "lat": 35.016264512775,
-    "lng": 126.913994191237,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
-  },
-  {
-    "name": "릴리이브",
-    "address": "대구광역시 동구 신암로16길 25(상가동 110호 신천동, 신천자이아파트)",
-    "type": "일반음식점",
-    "region": "대구",
-    "lat": 35.8757051832018,
-    "lng": 128.612533963642,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
-  },
-  {
-    "name": "장가코다리",
-    "address": "경기도 부천시 원미구 소향로 123(디아뜨 2 비동 108호, 109호 중동)",
+    "name": "1번지멍닭",
+    "address": "경기도 동두천시 중앙로 253(가동 1층 생연동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.5025098732629,
-    "lng": 126.761626872852,
+    "lat": 37.9041896283753,
+    "lng": 127.053446628887,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
+    "updated_at": "2026-08-24T02:00:39.867Z"
+  },
+  {
+    "name": "경자회관",
+    "address": "경기도 동두천시 천보산로 653(1층 탑동동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.8877139505131,
+    "lng": 127.091148280169,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-08-24T02:00:39.867Z"
+  },
+  {
+    "name": "사랑하개",
+    "address": "경기도 동두천시 천보산로 529(1층 탑동동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.87925692893,
+    "lng": 127.098650903019,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-08-24T02:00:39.867Z"
   },
   {
     "name": "？파크",
@@ -101,58 +75,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
+    "updated_at": "2026-08-24T02:00:39.867Z"
   },
   {
-    "name": "양콩커피",
-    "address": "경기도 안양시 만안구 박달로525번길 22(102호 박달동, 대동연립)",
+    "name": "멜팅",
+    "address": "경기도 동두천시 천보산로 628(1,2층 탑동동)",
     "type": "카페",
     "region": "경기",
-    "lat": 37.4037309020665,
-    "lng": 126.910717612853,
+    "lat": 37.8856402532954,
+    "lng": 127.093204637939,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
+    "updated_at": "2026-08-24T02:00:39.867Z"
   },
   {
-    "name": "그린브라우니",
-    "address": "충청남도 보령시 주공로 118(명천동)",
+    "name": "올트",
+    "address": "경기도 동두천시 강변로430번길 10(1층 생연동)",
     "type": "카페",
-    "region": "충남",
-    "lat": 36.3379967223313,
-    "lng": 126.610140647805,
+    "region": "경기",
+    "lat": 37.9073793270461,
+    "lng": 127.05122453621,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
-  },
-  {
-    "name": "도도한이서",
-    "address": "경상북도 구미시 산호대로24길 9-15(1층 101호 옥계동)",
-    "type": "일반음식점",
-    "region": "경북",
-    "lat": 36.1367185211946,
-    "lng": 128.415018886694,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
-  },
-  {
-    "name": "오버더문(over the moon)",
-    "address": "강원특별자치도 강릉시 난설헌로 131(아르떼뮤지엄 초당동)",
-    "type": "카페",
-    "region": "강원",
-    "lat": 37.7899348141594,
-    "lng": 128.907951936811,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-08-23T02:03:52.353Z"
+    "updated_at": "2026-08-24T02:00:39.867Z"
   }
 ]
