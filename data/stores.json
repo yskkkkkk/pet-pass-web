@@ -1,5 +1,18 @@
 [
   {
+    "name": "레코드피자 천호점",
+    "address": "서울특별시 강동구 천호대로157길 45(1,2층 천호동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5398084548722,
+    "lng": 127.127581936537,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-04T04:50:28.504Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,7 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,72 +36,85 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
   },
   {
-    "name": "로파이 루모스",
-    "address": "전남광주통합특별시 동구 서석로85번길 24(1층 궁동)",
+    "name": "눅(KNOOK)",
+    "address": "부산광역시 부산진구 동성로15번길 24-1(1-2층 전포동)",
     "type": "일반음식점",
-    "region": "전남광주",
-    "lat": 35.1508550269911,
-    "lng": 126.918839291193,
+    "region": "부산",
+    "lat": 35.1519574851542,
+    "lng": 129.06708368072,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
   },
   {
-    "name": "단네",
-    "address": "인천광역시 계양구 효서로 97-1(1층 효성동)",
+    "name": "스팅프리 로스팅하우스",
+    "address": "부산광역시 기장군 정관읍 모전로 88",
     "type": "일반음식점",
-    "region": "인천",
-    "lat": 37.5279637479266,
-    "lng": 126.706612520424,
+    "region": "부산",
+    "lat": 35.3350384487814,
+    "lng": 129.169163704742,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
   },
   {
-    "name": "여도",
-    "address": "경기도 파주시 가람로21번길 52-23(1층 일부 와동동)",
+    "name": "로투스",
+    "address": "대구광역시 수성구 만촌로32길 48(1층 만촌동)",
     "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.7361192349874,
-    "lng": 126.753237806512,
+    "region": "대구",
+    "lat": 35.8741159040367,
+    "lng": 128.642025121936,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
   },
   {
-    "name": "집아페 옥정본점",
-    "address": "경기도 양주시 독바위로 433(상가동 106호 옥정동, 대성베르힐옥정더센트로)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.81330048788,
-    "lng": 127.08405368519,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
-  },
-  {
-    "name": "쪽갈비대통령 포천시청점",
-    "address": "경기도 포천시 중앙로119번길 29-1(1층 신읍동)",
+    "name": "레오스토랑(Leostaurant)",
+    "address": "경기도 부천시 소사구 양지로92번길 33(ANPALACE Ⅱ 1층 101호 범박동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.897805598992,
-    "lng": 127.199792388673,
+    "lat": 37.4716623639844,
+    "lng": 126.813075883882,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
+  },
+  {
+    "name": "멀멀 판교",
+    "address": "경기도 성남시 분당구 판교역로2번길 6(1층 백현동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.383963508704,
+    "lng": 127.112758040069,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-04T04:50:28.504Z"
+  },
+  {
+    "name": "한우한돈고기마을",
+    "address": "경기도 안양시 만안구 경수대로1201번길 39(1,2층 석수동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.4160308421257,
+    "lng": 126.91232448841,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-04T04:50:28.504Z"
   },
   {
     "name": "？파크",
@@ -101,45 +127,97 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
   },
   {
-    "name": "24시참새방앗간",
-    "address": "충청남도 보령시 해수욕장4길 102(신흑동)",
-    "type": "일반음식점",
-    "region": "충남",
-    "lat": 36.3094562499896,
-    "lng": 126.514696840195,
+    "name": "라이프워크",
+    "address": "경기도 남양주시 와부읍 다산로 49(팔당가든 1층)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.5405521711916,
+    "lng": 127.254950351713,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
   },
   {
-    "name": "플래닛커피 산청점",
-    "address": "경상남도 산청군 금서면 경호로 27",
+    "name": "달려라해피",
+    "address": "충청북도 충주시 고든골길 62-1(직동)",
     "type": "일반음식점",
-    "region": "경남",
-    "lat": 35.4641983640999,
-    "lng": 127.796103955193,
+    "region": "충북",
+    "lat": 36.9441997100195,
+    "lng": 127.956884958522,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
   },
   {
-    "name": "스팅프리 로스팅하우스",
-    "address": "부산광역시 기장군 정관읍 모전로 88",
+    "name": "탈안주 성신여대점",
+    "address": "서울특별시 성북구 보문로34길 94(2층 동선동2가)",
     "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.5912266879892,
+    "lng": 127.020539358041,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-04T04:50:28.504Z"
+  },
+  {
+    "name": "도란도란",
+    "address": "경상남도 진주시 대신로255번길 19(1층 상대동)",
+    "type": "카페",
+    "region": "경상남도",
+    "lat": 35.1830554918485,
+    "lng": 128.11517400238,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-04T04:50:28.504Z"
+  },
+  {
+    "name": "소담",
+    "address": "서울특별시 중랑구 용마공원로 19(1층 망우동)",
+    "type": "카페",
+    "region": "서울특별시",
+    "lat": 37.5940005144641,
+    "lng": 127.101404878264,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-04T04:50:28.504Z"
+  },
+  {
+    "name": "제로 팩토리 ZERO FACTORY",
+    "address": "부산광역시 동래구 온천천로 285(1층 일부호 수안동)",
+    "type": "카페",
     "region": "부산광역시",
-    "lat": 35.3350384487814,
-    "lng": 129.169163704742,
+    "lat": 35.195648658621,
+    "lng": 129.085041362051,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-03T04:41:54.892Z"
+    "updated_at": "2026-09-04T04:50:28.504Z"
+  },
+  {
+    "name": "커스텀커피(동작구청점)",
+    "address": "서울특별시 동작구 상도로 195(상가동 지하1층 128호, 129호 노량진동, 힐스테이트 장승배기역)",
+    "type": "카페",
+    "region": "서울특별시",
+    "lat": 37.505422071137,
+    "lng": 126.940976070604,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-04T04:50:28.504Z"
   }
 ]
