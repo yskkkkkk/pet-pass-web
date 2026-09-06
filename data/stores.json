@@ -10,7 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
+    "updated_at": "2026-09-06T04:49:53.794Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,137 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "탈안주 성신여대점",
-    "address": "서울특별시 성북구 보문로34길 94(2층 동선동2가)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5912266879892,
-    "lng": 127.020539358041,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "소담",
-    "address": "서울특별시 중랑구 용마공원로 19(1층 망우동)",
-    "type": "카페",
-    "region": "서울",
-    "lat": 37.5940005144641,
-    "lng": 127.101404878264,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "시고리",
-    "address": "서울특별시 마포구 동교로30길 17-1(빌딩 이카토 1층 102호 동교동)",
-    "type": "카페",
-    "region": "서울",
-    "lat": 37.5602626166874,
-    "lng": 126.925153533842,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "커스텀커피(동작구청점)",
-    "address": "서울특별시 동작구 상도로 195(상가동 지하1층 128호, 129호 노량진동, 힐스테이트 장승배기역)",
-    "type": "카페",
-    "region": "서울",
-    "lat": 37.505422071137,
-    "lng": 126.940976070604,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "싱싱채운",
-    "address": "부산광역시 기장군 기장읍 연화1길 153(1~3층)",
-    "type": "일반음식점",
-    "region": "부산",
-    "lat": 35.2176610908005,
-    "lng": 129.226517577085,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "제로 팩토리 ZERO FACTORY",
-    "address": "부산광역시 동래구 온천천로 285(1층 일부호 수안동)",
-    "type": "카페",
-    "region": "부산",
-    "lat": 35.195648658621,
-    "lng": 129.085041362051,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "카페 연화점빵 기장연화리본점",
-    "address": "부산광역시 기장군 기장읍 연화2길 6(1층)",
-    "type": "카페",
-    "region": "부산",
-    "lat": 35.2169683411176,
-    "lng": 129.225550805383,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "멍냥짹까까커피",
-    "address": "인천광역시 미추홀구 학익로80번길 11(361동 A123호 학익동, 시티오씨엘 3단지)",
-    "type": "카페",
-    "region": "인천",
-    "lat": 37.4402247196098,
-    "lng": 126.646394429792,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "봉구비어 김포통진점",
-    "address": "경기도 김포시 통진읍 율마로450번길 24(엘림빌딩 1층 102호)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.6893489726539,
-    "lng": 126.604774405136,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "채돈이 본점",
-    "address": "경기도 화성시 동탄구 동탄문화센터로 65(반송동, 에이스타운 124호 전부)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.1999911944075,
-    "lng": 127.072588019652,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
+    "updated_at": "2026-09-06T04:49:53.794Z"
   },
   {
     "name": "？파크",
@@ -166,19 +36,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
-  },
-  {
-    "name": "도란도란",
-    "address": "경상남도 진주시 대신로255번길 19(1층 상대동)",
-    "type": "카페",
-    "region": "경남",
-    "lat": 35.1830554918485,
-    "lng": 128.11517400238,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-05T04:40:03.642Z"
+    "updated_at": "2026-09-06T04:49:53.794Z"
   }
 ]
