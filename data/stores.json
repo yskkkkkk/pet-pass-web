@@ -1,5 +1,18 @@
 [
   {
+    "name": "버우드 Burwood",
+    "address": "서울특별시 동대문구 이문로 120(D104호 이문동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5984702182265,
+    "lng": 127.062682937358,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-07T04:54:45.746Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,7 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-06T04:49:53.794Z"
+    "updated_at": "2026-09-07T04:54:45.746Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,7 +36,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-06T04:49:53.794Z"
+    "updated_at": "2026-09-07T04:54:45.746Z"
+  },
+  {
+    "name": "수키(SUKI)",
+    "address": "경기도 안양시 동안구 관양로 143(1층 관양동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.4022484345571,
+    "lng": 126.963270517122,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-07T04:54:45.746Z"
   },
   {
     "name": "？파크",
@@ -36,6 +62,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-06T04:49:53.794Z"
+    "updated_at": "2026-09-07T04:54:45.746Z"
   }
 ]
