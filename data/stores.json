@@ -10,20 +10,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-08T04:50:41.802Z"
+    "updated_at": "2026-09-09T04:53:16.510Z"
   },
   {
-    "name": "오늘통닭 오금점",
-    "address": "서울특별시 송파구 중대로 312(D.S 타워 1층 오금동)",
+    "name": "유앤미블루",
+    "address": "서울특별시 마포구 망원로3길 8(1층 망원동)",
     "type": "일반음식점",
     "region": "서울",
-    "lat": 37.5080350526825,
-    "lng": 127.133551636157,
+    "lat": 37.5571469828355,
+    "lng": 126.901701738091,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-08T04:50:41.802Z"
+    "updated_at": "2026-09-09T04:53:16.510Z"
   },
   {
     "name": "카페 ？잔",
@@ -36,20 +36,59 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-08T04:50:41.802Z"
+    "updated_at": "2026-09-09T04:53:16.510Z"
   },
   {
-    "name": "신토불이순대국",
-    "address": "인천광역시 부평구 부평문화로 160-1(부개동, 1층 일부)",
-    "type": "일반음식점",
-    "region": "인천",
-    "lat": 37.4936279653508,
-    "lng": 126.734067269432,
+    "name": "넌슬립",
+    "address": "부산광역시 부산진구 동성로39번길 31-1(1층 전포동)",
+    "type": "카페",
+    "region": "부산",
+    "lat": 35.1538090552684,
+    "lng": 129.066674514744,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-08T04:50:41.802Z"
+    "updated_at": "2026-09-09T04:53:16.510Z"
+  },
+  {
+    "name": "넛츠 부천신중동점",
+    "address": "경기도 부천시 원미구 조마루로291번길 26(신영프라자 201호 일부 중동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.4987998647835,
+    "lng": 126.77597296858,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-09T04:53:16.510Z"
+  },
+  {
+    "name": "산동",
+    "address": "경기도 고양시 덕양구 행주산성로 108(1층 행주외동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.6003154490821,
+    "lng": 126.819982891754,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-09T04:53:16.510Z"
+  },
+  {
+    "name": "산촌숯불정",
+    "address": "경기도 부천시 원미구 중동로254번길 43(중동,1층일부)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.5022958880396,
+    "lng": 126.771336799527,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-09T04:53:16.510Z"
   },
   {
     "name": "？파크",
@@ -62,45 +101,58 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-08T04:50:41.802Z"
+    "updated_at": "2026-09-09T04:53:16.510Z"
   },
   {
-    "name": "평화주택커피",
-    "address": "강원특별자치도 삼척시 삼척로 4246-62(지하1층 오분동)",
-    "type": "일반음식점",
-    "region": "강원",
-    "lat": 37.4206811261047,
-    "lng": 129.195282141666,
+    "name": "센테(SENTE)",
+    "address": "경기도 고양시 덕양구 대덕산2길 70(1층 일부호 덕은동)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.583211150745,
+    "lng": 126.864416130117,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-08T04:50:41.802Z"
+    "updated_at": "2026-09-09T04:53:16.510Z"
   },
   {
-    "name": "보사노바커피로스터스",
-    "address": "강원특별자치도 삼척시 새천년도로 517(교동)",
+    "name": "어바웃유(ABOUT U)",
+    "address": "강원특별자치도 강릉시 임영로 215-1(1층 교동)",
     "type": "카페",
     "region": "강원",
-    "lat": 37.4657432042163,
-    "lng": 129.171440094572,
+    "lat": 37.7605312628169,
+    "lng": 128.891713727292,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-08T04:50:41.802Z"
+    "updated_at": "2026-09-09T04:53:16.510Z"
   },
   {
-    "name": "산동",
-    "address": "경기도 고양시 덕양구 행주산성로 108(1층 행주외동)",
-    "type": "일반음식점",
-    "region": "경기도",
-    "lat": 37.6003154490821,
-    "lng": 126.819982891754,
+    "name": "호두마루애견카페",
+    "address": "전북특별자치도 김제시 만경읍 대동길 609",
+    "type": "카페",
+    "region": "전북",
+    "lat": 35.8444673604982,
+    "lng": 126.86161533041,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-08T04:50:41.802Z"
+    "updated_at": "2026-09-09T04:53:16.510Z"
+  },
+  {
+    "name": "티르 (tiir)",
+    "address": "서울특별시 마포구 와우산로21길 21-12(1층 101호 서교동, 서교동H씨빌딩)",
+    "type": "카페",
+    "region": "서울특별시",
+    "lat": 37.5519476298461,
+    "lng": 126.922297793011,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-09T04:53:16.510Z"
   }
 ]
