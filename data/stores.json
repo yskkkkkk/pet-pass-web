@@ -1,18 +1,5 @@
 [
   {
-    "name": "미츠바",
-    "address": "서울특별시 영등포구 경인로77길 14(영문빌딩 1층 107호 문래동2가)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5130059086545,
-    "lng": 126.892912822975,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -23,20 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "쏘뇨 하우스",
-    "address": "서울특별시 노원구 공릉로29길 10-9(1층 공릉동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.6221209197311,
-    "lng": 127.078756255067,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
+    "updated_at": "2026-09-12T04:44:05.192Z"
   },
   {
     "name": "카페 ？잔",
@@ -49,137 +23,33 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
+    "updated_at": "2026-09-12T04:44:05.192Z"
   },
   {
-    "name": "티르 (tiir)",
-    "address": "서울특별시 마포구 와우산로21길 21-12(1층 101호 서교동, 서교동H씨빌딩)",
-    "type": "카페",
+    "name": "스팀비(steam B)",
+    "address": "서울특별시 강동구 천호대로170길 51(금강빌딩 1층 102,103호 성내동)",
+    "type": "제과점",
     "region": "서울",
-    "lat": 37.5519476298461,
-    "lng": 126.922297793011,
+    "lat": 37.5331160326724,
+    "lng": 127.13254924045,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
+    "updated_at": "2026-09-12T04:44:05.192Z"
   },
   {
-    "name": "링컵(Lincup)",
-    "address": "대구광역시 중구 남성로 26-1(1층 남성로)",
-    "type": "일반음식점",
-    "region": "대구",
-    "lat": 35.8678858843865,
-    "lng": 128.589570728545,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "산도맨션",
-    "address": "대구광역시 중구 달구벌대로415길 37(2층 장관동)",
-    "type": "일반음식점",
-    "region": "대구",
-    "lat": 35.8679745264085,
-    "lng": 128.590185731107,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "스펠",
-    "address": "대구광역시 중구 달구벌대로443길 36(1층 삼덕동3가)",
-    "type": "일반음식점",
-    "region": "대구",
-    "lat": 35.8644318396998,
-    "lng": 128.605604342919,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "자이언트 트리(giant tree)",
-    "address": "대구광역시 중구 국채보상로149길 34-10(동인동3가)",
-    "type": "일반음식점",
-    "region": "대구",
-    "lat": 35.8699475025125,
-    "lng": 128.611844435272,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "핑퐁커피 경대병원점",
-    "address": "대구광역시 중구 달구벌대로443길 44-2(1층 삼덕동3가)",
-    "type": "카페",
-    "region": "대구",
-    "lat": 35.8646954594615,
-    "lng": 128.605655604782,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "구래옥",
-    "address": "경기도 김포시 김포한강9로75번길 38(2층 203~205,207호 구래동)",
+    "name": "퍼피푸페포",
+    "address": "경기도 용인시 기흥구 구성로279번길 27(1층 일부103호 청덕동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.6436066755883,
-    "lng": 126.623431880202,
+    "lat": 37.2913710297315,
+    "lng": 127.142260763379,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "배곧바애견동반바크",
-    "address": "경기도 시흥시 서울대학로264번길 25(시흥배곧 아브뉴프랑 센트럴 블루 224,225호 배곧동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.368371329452,
-    "lng": 126.727341176579,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "카페 파이브(Five) 부천점",
-    "address": "경기도 부천시 원미구 상이로51번길 19(1층 상동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.4932376226746,
-    "lng": 126.742928515266,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "키노(KINO)",
-    "address": "경기도 오산시 오산대역로132번길 31-4(1층 일부호 수청동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.1695682522116,
-    "lng": 127.059178082466,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
+    "updated_at": "2026-09-12T04:44:05.192Z"
   },
   {
     "name": "？파크",
@@ -192,45 +62,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
+    "updated_at": "2026-09-12T04:44:05.192Z"
   },
   {
-    "name": "개꿀",
-    "address": "경기도 김포시 대곶면 율생중앙로52번길 37(1층 일부호)",
-    "type": "카페",
-    "region": "경기",
-    "lat": 37.6540953527738,
-    "lng": 126.583860742729,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "워킹스톤",
-    "address": "충청북도 청주시 청원구 충청대로 324(1층 주성동)",
-    "type": "카페",
-    "region": "충북",
-    "lat": 36.6824747763565,
-    "lng": 127.504170236218,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
-  },
-  {
-    "name": "청담피자정선점",
-    "address": "강원특별자치도 정선군 고한읍 강원남로 6071(4호)",
+    "name": "후포점빵",
+    "address": "경상북도 울진군 후포면 후포삼율로 119",
     "type": "일반음식점",
-    "region": "강원",
-    "lat": 37.2135206384115,
-    "lng": 128.83449358184,
+    "region": "경북",
+    "lat": 36.6807024605154,
+    "lng": 129.442320460277,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-11T04:50:57.508Z"
+    "updated_at": "2026-09-12T04:44:05.192Z"
+  },
+  {
+    "name": "미열 미아사거리 혼술바",
+    "address": "서울특별시 강북구 도봉로8길 15(지하1층 미아동)",
+    "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.6127490431783,
+    "lng": 127.031090474132,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-12T04:44:05.192Z"
   }
 ]
