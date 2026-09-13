@@ -1,5 +1,18 @@
 [
   {
+    "name": "미열 미아사거리 혼술바",
+    "address": "서울특별시 강북구 도봉로8길 15(지하1층 미아동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.6127490431783,
+    "lng": 127.031090474132,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-13T04:58:20.710Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,7 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-12T04:44:05.192Z"
+    "updated_at": "2026-09-13T04:58:20.710Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,33 +36,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-12T04:44:05.192Z"
-  },
-  {
-    "name": "스팀비(steam B)",
-    "address": "서울특별시 강동구 천호대로170길 51(금강빌딩 1층 102,103호 성내동)",
-    "type": "제과점",
-    "region": "서울",
-    "lat": 37.5331160326724,
-    "lng": 127.13254924045,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-12T04:44:05.192Z"
-  },
-  {
-    "name": "퍼피푸페포",
-    "address": "경기도 용인시 기흥구 구성로279번길 27(1층 일부103호 청덕동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.2913710297315,
-    "lng": 127.142260763379,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-12T04:44:05.192Z"
+    "updated_at": "2026-09-13T04:58:20.710Z"
   },
   {
     "name": "？파크",
@@ -62,32 +49,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-12T04:44:05.192Z"
-  },
-  {
-    "name": "후포점빵",
-    "address": "경상북도 울진군 후포면 후포삼율로 119",
-    "type": "일반음식점",
-    "region": "경북",
-    "lat": 36.6807024605154,
-    "lng": 129.442320460277,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-12T04:44:05.192Z"
-  },
-  {
-    "name": "미열 미아사거리 혼술바",
-    "address": "서울특별시 강북구 도봉로8길 15(지하1층 미아동)",
-    "type": "일반음식점",
-    "region": "서울특별시",
-    "lat": 37.6127490431783,
-    "lng": 127.031090474132,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-12T04:44:05.192Z"
+    "updated_at": "2026-09-13T04:58:20.710Z"
   }
 ]
