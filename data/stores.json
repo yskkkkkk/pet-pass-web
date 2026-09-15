@@ -1,5 +1,18 @@
 [
   {
+    "name": "로우앵글클럽(LOW ANGLE CLUB)",
+    "address": "서울특별시 강동구 천중로 32(201호 천호동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5453754001178,
+    "lng": 127.125279377719,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-15T05:02:16.351Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,7 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-14T05:07:22.666Z"
+    "updated_at": "2026-09-15T05:02:16.351Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,20 +36,46 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-14T05:07:22.666Z"
+    "updated_at": "2026-09-15T05:02:16.351Z"
   },
   {
-    "name": "누커리",
-    "address": "서울특별시 중랑구 겸재로50나길 76(103호 면목동, 센텀하우스)",
+    "name": "치키커피",
+    "address": "전남광주통합특별시 북구 비엔날레로 132(1층 용봉동)",
     "type": "카페",
-    "region": "서울",
-    "lat": 37.5855976985886,
-    "lng": 127.093756294535,
+    "region": "전남광주",
+    "lat": 35.1829165219502,
+    "lng": 126.891850073781,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-14T05:07:22.666Z"
+    "updated_at": "2026-09-15T05:02:16.351Z"
+  },
+  {
+    "name": "대명장횟집",
+    "address": "부산광역시 기장군 기장읍 연화1길 147",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.2174033502776,
+    "lng": 129.226283565133,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-15T05:02:16.351Z"
+  },
+  {
+    "name": "콜프로스터스 동래점",
+    "address": "부산광역시 동래구 중앙대로1367번길 76(온천동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.2106423201432,
+    "lng": 129.073952235705,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-15T05:02:16.351Z"
   },
   {
     "name": "？파크",
@@ -49,45 +88,123 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-14T05:07:22.666Z"
+    "updated_at": "2026-09-15T05:02:16.351Z"
   },
   {
-    "name": "soupsok",
-    "address": "경상남도 하동군 화개면 정금대비길 33(2층)",
+    "name": "무이",
+    "address": "경기도 안양시 동안구 경수대로721번길 33(1층 101호 호계동)",
     "type": "카페",
-    "region": "경남",
-    "lat": 35.2101739408724,
-    "lng": 127.643302954347,
+    "region": "경기",
+    "lat": 37.3851457346793,
+    "lng": 126.949075497433,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-14T05:07:22.666Z"
+    "updated_at": "2026-09-15T05:02:16.351Z"
   },
   {
-    "name": "카페너머(cafe 너머)",
-    "address": "강원특별자치도 횡성군 둔내면 경강로궁종1길 120-20",
-    "type": "카페",
+    "name": "프로젝트음",
+    "address": "충청남도 공주시 대통1길 1(1층 봉황동)",
+    "type": "일반음식점",
+    "region": "충남",
+    "lat": 36.4488762768777,
+    "lng": 127.121884019262,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-15T05:02:16.351Z"
+  },
+  {
+    "name": "HAPPY HAUS",
+    "address": "경상북도 울릉군 북면 울릉순환로 3138",
+    "type": "일반음식점",
+    "region": "경북",
+    "lat": 37.5421016667486,
+    "lng": 130.874325365094,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-15T05:02:16.351Z"
+  },
+  {
+    "name": "우드리프",
+    "address": "경상북도 포항시 북구 양학천로 73-10(2층 201호 죽도동)",
+    "type": "일반음식점",
+    "region": "경북",
+    "lat": 36.0211214837271,
+    "lng": 129.359828110848,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-15T05:02:16.351Z"
+  },
+  {
+    "name": "쉴, 바위길",
+    "address": "강원특별자치도 평창군 봉평면 팔석정길 33",
+    "type": "일반음식점",
     "region": "강원",
-    "lat": 37.5097941180509,
-    "lng": 128.148841306756,
+    "lat": 37.6018746038568,
+    "lng": 128.374143300901,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-14T05:07:22.666Z"
+    "updated_at": "2026-09-15T05:02:16.351Z"
   },
   {
-    "name": "치키커피",
-    "address": "전남광주통합특별시 북구 비엔날레로 132(1층 용봉동)",
-    "type": "카페",
-    "region": "전남광주통합특별시",
-    "lat": 35.1829165219502,
-    "lng": 126.891850073781,
+    "name": "풀내음",
+    "address": "강원특별자치도 평창군 봉평면 메밀꽃길 13",
+    "type": "일반음식점",
+    "region": "강원",
+    "lat": 37.6147904522691,
+    "lng": 128.371228309639,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-14T05:07:22.666Z"
+    "updated_at": "2026-09-15T05:02:16.351Z"
+  },
+  {
+    "name": "테라다식당 신사점",
+    "address": "서울특별시 강남구 압구정로2길 53(국제빌딩 1층 2호 신사동)",
+    "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.5184690850088,
+    "lng": 127.021356129165,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-15T05:02:16.351Z"
+  },
+  {
+    "name": "소나무",
+    "address": "충청남도 공주시 공주대학로 71(1층 신관동)",
+    "type": "카페",
+    "region": "충청남도",
+    "lat": 36.4714263482039,
+    "lng": 127.137491804939,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-15T05:02:16.351Z"
+  },
+  {
+    "name": "카페인중독 개봉점",
+    "address": "서울특별시 구로구 고척로21나길 5(1층 개봉동)",
+    "type": "카페",
+    "region": "서울특별시",
+    "lat": 37.5029156628972,
+    "lng": 126.845416358283,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-15T05:02:16.351Z"
   }
 ]
