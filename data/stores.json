@@ -1,18 +1,5 @@
 [
   {
-    "name": "멍지트",
-    "address": "서울특별시 관악구 신림로64길 23(9층 신림동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.4852226853822,
-    "lng": 126.931021236392,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -23,46 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "오르노 성수점",
-    "address": "서울특별시 성동구 뚝섬로17가길 49(베이스성수 1층 성수동2가)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5408362501593,
-    "lng": 127.058829605954,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "이인",
-    "address": "서울특별시 관악구 봉천로 465(3층 봉천동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.4825080879505,
-    "lng": 126.951624871336,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "차르도르 애견카페&펫살롱",
-    "address": "서울특별시 관악구 보라매로 17(지하1층 봉천동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.4910282099961,
-    "lng": 126.926926728097,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
+    "updated_at": "2026-09-19T04:45:25.911Z"
   },
   {
     "name": "카페 ？잔",
@@ -75,111 +23,33 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
+    "updated_at": "2026-09-19T04:45:25.911Z"
   },
   {
-    "name": "UNSIDE COFFEE ROASTERS(언사이드 커피 로스터스)",
-    "address": "서울특별시 관악구 난곡로75길 11(1층 신림동)",
-    "type": "카페",
+    "name": "타비",
+    "address": "서울특별시 성북구 종암로 180-1(아이앤티강북 5층 하월곡동)",
+    "type": "일반음식점",
     "region": "서울",
-    "lat": 37.4855722828927,
-    "lng": 126.913011921278,
+    "lat": 37.60593877705,
+    "lng": 127.031610060767,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
+    "updated_at": "2026-09-19T04:45:25.911Z"
   },
   {
-    "name": "디셈버20 펫 카페(PET CAFE)",
-    "address": "전남광주통합특별시 동구 지호로 149(2층 지산동)",
+    "name": "영화소리사",
+    "address": "전남광주통합특별시 목포시 해안로127번길 10-4(1층 금화동)",
     "type": "일반음식점",
     "region": "전남광주",
-    "lat": 35.149386420542,
-    "lng": 126.944745478496,
+    "lat": 34.7815313163056,
+    "lng": 126.377498411595,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "쓸모",
-    "address": "전남광주통합특별시 북구 효죽로 16(1층 중흥동)",
-    "type": "카페",
-    "region": "전남광주",
-    "lat": 35.1693265235245,
-    "lng": 126.916365720617,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "상록회관 연탄구이 대구 상인점",
-    "address": "대구광역시 달서구 월곡로51길 8-8(1층 상인동)",
-    "type": "일반음식점",
-    "region": "대구",
-    "lat": 35.8174933942525,
-    "lng": 128.538458509191,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "달서 반려견놀이터",
-    "address": "대구광역시 달서구 성서공단로 287(달서반려견놀이터 근린생활시설제1동 1층 장동)",
-    "type": "카페",
-    "region": "대구",
-    "lat": 35.8376529365828,
-    "lng": 128.513164307372,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "카페마리스텔라",
-    "address": "울산광역시 울주군 범서읍 구영앞길 62(1,2층)",
-    "type": "카페",
-    "region": "울산",
-    "lat": 35.5681138995332,
-    "lng": 129.239918575176,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "삼밖자,밥짓고",
-    "address": "경기도 고양시 일산서구 웅비로12번길 6-8(겔러리2028 1층 대화동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.6833828683152,
-    "lng": 126.756508670328,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "써먼 하우스(summon house)",
-    "address": "경기도 화성시 동탄구 동탄대로14길 6-14(1층 전체 여울동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.1844050763252,
-    "lng": 127.102650373773,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
+    "updated_at": "2026-09-19T04:45:25.911Z"
   },
   {
     "name": "？파크",
@@ -192,45 +62,19 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
+    "updated_at": "2026-09-19T04:45:25.911Z"
   },
   {
-    "name": "워킹버즈",
-    "address": "경기도 연천군 미산면 숭의전로 337",
+    "name": "애플즈금관",
+    "address": "충청북도 청주시 상당구 미원면 운암계원로 614-2(1층)",
     "type": "카페",
-    "region": "경기",
-    "lat": 38.0235164599666,
-    "lng": 126.96842493331,
+    "region": "충청북도",
+    "lat": 36.6204453033669,
+    "lng": 127.724149852084,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "카페인중독 연천전곡점",
-    "address": "경기도 연천군 전곡읍 은전로 18(2동)",
-    "type": "카페",
-    "region": "경기",
-    "lat": 38.0252341269601,
-    "lng": 127.063024046102,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
-  },
-  {
-    "name": "더치앤빈 강릉안목점",
-    "address": "강원특별자치도 강릉시 월대산로103번길 62-41(1층 101호 두산동)",
-    "type": "일반음식점",
-    "region": "강원",
-    "lat": 37.7659933725115,
-    "lng": 128.927362969829,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-18T04:53:43.165Z"
+    "updated_at": "2026-09-19T04:45:25.911Z"
   }
 ]
