@@ -10,7 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-24T05:02:57.302Z"
+    "updated_at": "2026-09-25T05:05:53.766Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,7 +23,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-24T05:02:57.302Z"
+    "updated_at": "2026-09-25T05:05:53.766Z"
+  },
+  {
+    "name": "멍멍아 뛰놀자",
+    "address": "전남광주통합특별시 광양시 용장길 207(1동 2층중 1,2층전부 성황동)",
+    "type": "카페",
+    "region": "전남광주",
+    "lat": 34.9435364830089,
+    "lng": 127.658521855238,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-25T05:05:53.766Z"
   },
   {
     "name": "？파크",
@@ -36,32 +49,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-24T05:02:57.302Z"
-  },
-  {
-    "name": "연심이네",
-    "address": "충청남도 홍성군 서부면 남당항로213번길 1(A동 202호)",
-    "type": "일반음식점",
-    "region": "충남",
-    "lat": 36.5389275932974,
-    "lng": 126.47031595503,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-24T05:02:57.302Z"
-  },
-  {
-    "name": "멍멍아 뛰놀자",
-    "address": "전남광주통합특별시 광양시 용장길 207(1동 2층중 1,2층전부 성황동)",
-    "type": "카페",
-    "region": "전남광주통합특별시",
-    "lat": 34.9435364830089,
-    "lng": 127.658521855238,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-24T05:02:57.302Z"
+    "updated_at": "2026-09-25T05:05:53.766Z"
   }
 ]
