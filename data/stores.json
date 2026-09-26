@@ -1,5 +1,31 @@
 [
   {
+    "name": "꼼삐(compi)",
+    "address": "서울특별시 금천구 가산디지털1로 137(IT캐슬2차 1층 101호 가산동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.4776586934814,
+    "lng": 126.881930383681,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-26T05:09:18.497Z"
+  },
+  {
+    "name": "순서",
+    "address": "서울특별시 금천구 가산디지털2로 101(한라원앤원타워 1층 130호 가산동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.477043450667,
+    "lng": 126.879222554896,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-26T05:09:18.497Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,7 +36,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-25T05:05:53.766Z"
+    "updated_at": "2026-09-26T05:09:18.497Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,20 +49,46 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-25T05:05:53.766Z"
+    "updated_at": "2026-09-26T05:09:18.497Z"
   },
   {
-    "name": "멍멍아 뛰놀자",
-    "address": "전남광주통합특별시 광양시 용장길 207(1동 2층중 1,2층전부 성황동)",
-    "type": "카페",
-    "region": "전남광주",
-    "lat": 34.9435364830089,
-    "lng": 127.658521855238,
+    "name": "피크니크 시흥은행나무점",
+    "address": "서울특별시 금천구 금하로21길 23(1층 시흥동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.4525543224394,
+    "lng": 126.908043470197,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-25T05:05:53.766Z"
+    "updated_at": "2026-09-26T05:09:18.497Z"
+  },
+  {
+    "name": "플레이스 디",
+    "address": "서울특별시 금천구 시흥대로 482(1층 일부호 독산동)",
+    "type": "카페",
+    "region": "서울",
+    "lat": 37.4765606301702,
+    "lng": 126.899141114221,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-26T05:09:18.497Z"
+  },
+  {
+    "name": "온초점",
+    "address": "서울특별시 금천구 남부순환로124길 17(로하스타워 제1층 101호 독산동)",
+    "type": "제과점",
+    "region": "서울",
+    "lat": 37.478816831984,
+    "lng": 126.902996852496,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-26T05:09:18.497Z"
   },
   {
     "name": "？파크",
@@ -49,6 +101,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-25T05:05:53.766Z"
+    "updated_at": "2026-09-26T05:09:18.497Z"
   }
 ]
