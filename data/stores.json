@@ -1,5 +1,18 @@
 [
   {
+    "name": "사루",
+    "address": "서울특별시 중구 장충단로7길 24(1층 쌍림동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5625665598164,
+    "lng": 127.005170816849,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-28T05:34:37.035Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,7 +23,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-27T05:26:37.189Z"
+    "updated_at": "2026-09-28T05:34:37.035Z"
+  },
+  {
+    "name": "카나에",
+    "address": "서울특별시 중구 동호로11길 53(주언빌딩 1층 신당동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5529553237979,
+    "lng": 127.008707155115,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-28T05:34:37.035Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,7 +49,33 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-27T05:26:37.189Z"
+    "updated_at": "2026-09-28T05:34:37.035Z"
+  },
+  {
+    "name": "퀸즈베리도넛하우스(Queensberry Donut House)",
+    "address": "서울특별시 중구 다산로19길 29(1층 신당동)",
+    "type": "제과점",
+    "region": "서울",
+    "lat": 37.5573399053453,
+    "lng": 127.01024821999,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-28T05:34:37.035Z"
+  },
+  {
+    "name": "고브런 동탄직영점",
+    "address": "경기도 화성시 동탄구 동탄순환대로3길 28(1층 전체호 송동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.1669161078517,
+    "lng": 127.096128617782,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-28T05:34:37.035Z"
   },
   {
     "name": "？파크",
@@ -36,6 +88,45 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-27T05:26:37.189Z"
+    "updated_at": "2026-09-28T05:34:37.035Z"
+  },
+  {
+    "name": "다랭이 밥상",
+    "address": "경상남도 남해군 남면 남면로679번길 36(1동)",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 34.7271056504187,
+    "lng": 127.893152102043,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-28T05:34:37.035Z"
+  },
+  {
+    "name": "오아시스",
+    "address": "경상남도 남해군 미조면 미송로483번길 30",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 34.7205591656584,
+    "lng": 128.025438436248,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-28T05:34:37.035Z"
+  },
+  {
+    "name": "도그라미(DogRami)",
+    "address": "경기도 부천시 원미구 부일로 429(심곡동, 다온하브)",
+    "type": "카페",
+    "region": "경기도",
+    "lat": 37.4868954851607,
+    "lng": 126.777916006865,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-09-28T05:34:37.035Z"
   }
 ]
