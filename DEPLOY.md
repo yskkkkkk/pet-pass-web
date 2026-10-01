@@ -44,7 +44,21 @@
 
 ---
 
-## 4. 관리자 운영 팁
+## 4. 소수결 게임 (`/game`) 활성화
+
+같은 프로젝트의 하위 경로로 배포됩니다. (`https://<도메인>/game`)
+
+1. **DB 테이블 생성**: Supabase SQL Editor에서 `supabase_game_schema.sql`을 실행합니다.
+2. **환경 변수 추가**: Vercel Dashboard → Environment Variables에 `SUPABASE_SECRET_KEY`(Supabase secret / service_role 키)를 추가합니다.
+   - 게임 테이블은 RLS 정책이 없어 서버에서 secret 키로만 접근합니다. 키는 브라우저에 노출되지 않습니다.
+   - 키가 없으면 `/api/game`이 503을 반환합니다.
+3. **사용법**: PC에서 `/game` → "새 방 만들기" → 참가자는 휴대폰으로 QR을 찍거나 `/game`에서 4자리 코드 입력.
+4. **로컬 테스트**: `SUPABASE_SECRET_KEY` 없이 `npm start` 하면 메모리 저장소로 동작합니다. (`GAME_STORE=memory`로 강제 가능)
+5. 12시간 넘게 갱신이 없는 방은 새 방을 만들 때 자동 정리됩니다.
+
+---
+
+## 5. 관리자 운영 팁
 - `api/stores.js`는 **Supabase `stores` 테이블**(`verified=true` 행)을 조회합니다. `data/stores.json`은 동기화 결과의 로컬 백업일 뿐, 런타임에서 참조하지 않습니다.
 - 매장 데이터는 GitHub Actions 일일 동기화(`.github/workflows/daily_sync.yml`)가 식품안전나라 데이터를 받아 Supabase에 `UPSERT`하는 방식으로 자동 갱신됩니다.
 - 매장을 수동으로 추가/수정하려면 Supabase `stores` 테이블에서 직접 편집하세요. (`verified=false` 행은 사용자에게 노출되지 않습니다.)

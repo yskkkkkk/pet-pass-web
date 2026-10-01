@@ -450,3 +450,24 @@
 - **점진적 전환**: 기존 화면 구조는 유지하고 데이터 획득 경로만 서버사이드 필터/페이지네이션으로 전환해 리스크를 최소화.
 
 ---
+## [2026-10-01] - Claude
+### ✅ 작업 요약
+- 기존 인프라(Vercel + Supabase)를 재사용해 하위 경로 `/game`에 **소수결 게임** 초기 버전 추가 (펫패스 기능과 독립)
+
+### 🔧 변경 사항
+- **화면**: `/game`(랜딩) · `/game/host`(PC 진행자: QR/방 코드, 문제, 투표 현황, 결과) · `/game/play`(모바일 참가자: 닉네임 참가, A/B 투표, 생존/탈락 결과) (`public/game/`)
+- **API**: 단일 서버리스 함수 `api/game.js` (action 기반: create/join/vote/start/reroll/reveal/kick/restart/state). 서버리스 함수 개수 제한을 고려해 하나로 묶음
+- **규칙 엔진**: `lib/game/engine.js` — 소수파만 생존, 동점·만장일치는 전원 생존, 미투표자 탈락, 생존자 2명 이하 시 종료
+- **문제 30개**: `lib/game/questions.js` — 방마다 중복 없이 랜덤 출제, 다 쓰면 다시 섞음
+- **저장소**: `lib/game/store.js` — 운영은 Supabase(`SUPABASE_SECRET_KEY`), 로컬은 키가 없으면 메모리 저장소로 자동 전환
+- **DB 스키마**: `supabase_game_schema.sql` (game_rooms / game_players / game_votes, RLS on + 정책 없음 → 서버만 접근)
+- **로컬 서버**: `server.js`에 `/game` 정적 경로와 `/api/game` 라우트 연결
+- **QR 코드**: `qrcode-generator`(MIT)를 `public/game/vendor/qrcode.js`로 포함 (외부 CDN 의존 제거)
+
+### 📌 비고 (Issues & Decisions)
+- **실시간 방식**: Supabase Realtime 대신 짧은 주기 폴링(진행자 1.5초, 참가자 2초)을 사용. anon 키를 클라이언트에 노출하거나 RLS 정책을 열지 않아도 되고, 화면이 꺼져 있을 땐 폴링을 멈춤
+- **동시성**: 라운드 시작/결과 공개는 `status`·`round` 조건부 업데이트로 중복 클릭에도 한 번만 처리됨
+- **CORS**: 같은 도메인 요청이면 허용(프리뷰 배포 포함), 그 외는 기존 `_cors.js` 화이트리스트를 따름
+- **배포 전 필요 작업**: Supabase SQL Editor에서 `supabase_game_schema.sql` 실행, Vercel 환경변수에 `SUPABASE_SECRET_KEY` 추가
+
+---

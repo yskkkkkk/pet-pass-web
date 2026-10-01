@@ -6,6 +6,7 @@ const cron = require('node-cron');
 const { createClient } = require('@supabase/supabase-js');
 const { syncPetFriendlyStores } = require('./scripts/sync-stores');
 const getPetData = require('./api/get-pet-data');
+const gameHandler = require('./api/game');
 const { getAllowedOrigins, applyCors, handlePreflight } = require('./api/_cors');
 const { createRateLimiter } = require('./lib/rate-limiter');
 const { regionData } = require('./api/_regions');
@@ -96,6 +97,8 @@ app.use(express.json());
 const authLimiter   = createRateLimiter({ max: 10, windowMs: 60_000 });
 const storesLimiter = createRateLimiter({ max: 30, windowMs: 60_000 });
 
+// 소수결 게임 (/game, /game/host, /game/play)
+app.use('/game', express.static(path.join(__dirname, 'public', 'game'), { extensions: ['html'] }));
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
 app.get('/', (req, res) => {
@@ -295,6 +298,7 @@ app.get('/api/auth-pet', authLimiter, async (req, res) => {
 });
 
 app.get('/api/get-pet-data', authLimiter, getPetData);
+app.all('/api/game', gameHandler);
 
 app.listen(PORT, () => {
   console.log(`🚀 Pet-Pass 백엔드 서버가 시작되었습니다!`);

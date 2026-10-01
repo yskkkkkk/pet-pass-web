@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>소수결 게임</title>
+  <meta name="description" content="적은 쪽을 고른 사람만 살아남는 소수결 게임. PC로 문제를 띄우고 휴대폰으로 투표하세요.">
+  <meta name="theme-color" content="#12142A">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="/game/game.css">
+</head>
+<body>
+  <main class="landing">
+    <span class="brand"><span class="brand-mark" aria-hidden="true"><span></span><span></span></span>소수결 게임</span>
+    <h1>적은 쪽이 <em>살아남는다</em></h1>
+    <p class="lead">PC 화면에 문제를 띄우고, 모두 휴대폰으로 투표하세요.<br>남들과 다른 선택을 한 사람만 다음 라운드로!</p>
+
+    <div class="landing-grid">
+      <section class="card landing-card only-pc">
+        <span class="pill tag">🖥️ 진행자 · PC</span>
+        <h2>방 만들기</h2>
+        <p>큰 화면에 QR 코드와 문제, 실시간 투표 현황을 띄워요. 진행자는 투표하지 않아요.</p>
+        <button class="btn btn-primary btn-lg btn-block" id="btn-create">새 방 만들기</button>
+        <p class="error-text" id="create-error"></p>
+      </section>
+
+      <section class="card landing-card">
+        <span class="pill tag">📱 참가자 · 모바일</span>
+        <h2>코드로 참가</h2>
+        <form id="join-form" class="field" autocomplete="off">
+          <label for="join-code">진행자 화면의 4자리 코드</label>
+          <input class="input input-code" id="join-code" inputmode="numeric" pattern="\d{4}" maxlength="4" placeholder="0000" required>
+          <button class="btn btn-block" type="submit">참가하기</button>
+        </form>
+      </section>
+    </div>
+
+    <section class="card rules">
+      <h3>게임 방법</h3>
+      <ol>
+        <li>모두에게 같은 질문과 두 개의 선택지가 주어져요.</li>
+        <li>휴대폰으로 A 또는 B를 골라요. 결과 공개 전까지는 바꿀 수 있어요.</li>
+        <li><b>더 적은 사람이 고른 쪽만 생존</b>, 다수파는 탈락해요. 투표하지 않으면 탈락!</li>
+        <li>동점이거나 모두 같은 선택이면 투표한 사람은 전원 생존해요.</li>
+        <li>생존자가 <b>2명 이하</b>가 되면 게임 종료, 남은 사람이 우승이에요.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script src="/game/common.js"></script>
+  <script>
+    (function () {
+      var createBtn = document.getElementById('btn-create');
+      var createError = document.getElementById('create-error');
+
+      createBtn.addEventListener('click', function () {
+        createBtn.disabled = true;
+        createError.textContent = '';
+        MG.post({ action: 'create' })
+          .then(function (data) {
+            MG.storageSet(MG.hostKey(data.code), data.hostToken);
+            location.href = '/game/host?room=' + data.code + '#' + data.hostToken;
+          })
+          .catch(function (err) {
+            createError.textContent = err.message;
+            createBtn.disabled = false;
+          });
+      });
+
+      var codeInput = document.getElementById('join-code');
+      codeInput.addEventListener('input', function () {
+        codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 4);
+      });
+      document.getElementById('join-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!/^\d{4}$/.test(codeInput.value)) return codeInput.focus();
+        location.href = '/game/play?room=' + codeInput.value;
+      });
+    })();
+  </script>
+</body>
+</html>
