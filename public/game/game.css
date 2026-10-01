@@ -1,0 +1,462 @@
+/* ───────── 소수결 게임 ─────────
+ * 종이 위에 인쇄한 투표용지/점수판 같은 톤.
+ * 그라데이션·그림자·발광 효과 없이 잉크색, 얇은 선, 두 가지 안료색(A/B)만 쓴다.
+ */
+:root {
+  --paper:    #F5F2EA;
+  --paper-2:  #ECE7DB;
+  --surface:  #FFFDF8;
+  --ink:      #1D1C1A;
+  --ink-2:    #55514A;
+  --ink-3:    #8E897F;
+  --rule:     #D8D2C4;
+
+  --a:        #B4472E;  /* 선택지 A — 벽돌색 */
+  --a-tint:   #F3E4DC;
+  --a-ink:    #7A2E1D;
+  --b:        #2D5285;  /* 선택지 B — 짙은 청색 */
+  --b-tint:   #E0E6EF;
+  --b-ink:    #1E3A60;
+  --live:     #2E6A46;  /* 생존 */
+
+  --radius:   8px;
+  --radius-sm: 6px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  word-break: keep-all;
+}
+
+button { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+
+.wordmark {
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* ───────── 공통 ───────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .12s ease, color .12s ease;
+}
+.btn:hover { background: var(--paper-2); }
+.btn:disabled { opacity: .35; cursor: not-allowed; background: transparent; }
+.btn-primary { background: var(--ink); color: var(--paper); }
+.btn-primary:hover { background: #3A3834; }
+.btn-primary:disabled { background: var(--ink); }
+.btn-quiet { border-color: var(--rule); color: var(--ink-2); }
+.btn-block { width: 100%; }
+.btn-lg { min-height: 58px; font-size: 18px; padding: 0 32px; }
+
+.link-btn {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--ink-3);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.link-btn:hover { color: var(--a); }
+
+.field { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+.field label { font-size: 14px; font-weight: 600; color: var(--ink-2); }
+.input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 600;
+  outline: none;
+}
+.input:focus { border-color: var(--ink); }
+.input::placeholder { color: var(--ink-3); font-weight: 400; }
+.input-code { font-size: 26px; letter-spacing: .3em; font-variant-numeric: tabular-nums; }
+
+.error-text { color: var(--a); font-size: 14px; font-weight: 600; min-height: 20px; margin: 0; }
+.muted { color: var(--ink-3); }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: 12px 18px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease;
+  z-index: 100;
+}
+.toast.show { opacity: 1; }
+
+.eyebrow {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ───────── 랜딩 (/game) ───────── */
+.landing {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 16px 64px;
+}
+.landing h1 {
+  margin: 0 0 12px;
+  font-size: clamp(34px, 6vw, 52px);
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+.landing .lead { margin: 0 0 40px; color: var(--ink-2); font-size: 17px; line-height: 1.65; }
+.landing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+}
+.landing-col { padding: 24px 0 28px; display: flex; flex-direction: column; gap: 14px; }
+.landing-col + .landing-col { padding-left: 28px; margin-left: 28px; border-left: 1px solid var(--rule); }
+.landing-col h2 { margin: 0; font-size: 20px; }
+.landing-col p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.6; }
+.landing-col .grow { flex: 1; }
+.rules { margin-top: 36px; }
+.rules h3 { margin: 0 0 10px; font-size: 16px; }
+.rules ol { margin: 0; padding-left: 20px; color: var(--ink-2); line-height: 1.85; font-size: 15px; }
+.rules b { color: var(--ink); }
+
+@media (max-width: 640px) {
+  .landing { padding-top: 32px; }
+  .landing-grid { grid-template-columns: 1fr; }
+  .landing-col + .landing-col { padding-left: 0; margin-left: 0; border-left: 0; border-top: 1px solid var(--rule); }
+  .landing-col.pc-only { order: 2; }
+}
+
+/* ───────── 진행자 화면 (/game/host) ───────── */
+.host {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px clamp(16px, 3vw, 48px) 20px;
+}
+.host-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--ink);
+}
+.host-header .meta {
+  display: flex;
+  gap: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.host-header .meta b { color: var(--ink); }
+.host-main { flex: 1; display: flex; flex-direction: column; padding-top: 28px; }
+.host-footer {
+  margin-top: 24px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.stage { flex: 1; display: flex; flex-direction: column; gap: 28px; }
+
+/* 대기실 */
+.lobby {
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) 1fr;
+  flex: 1;
+}
+.join-panel { padding-right: 40px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; gap: 18px; }
+.join-panel h2, .players-panel h2 { margin: 0; font-size: 18px; }
+.qr-box {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1;
+  padding: 14px;
+  background: #FFFFFF;
+  border: 1px solid var(--rule);
+}
+.qr-box svg { width: 100%; height: 100%; display: block; }
+.join-steps { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 15px; line-height: 1.75; }
+.join-steps b { color: var(--ink); }
+.code-block .eyebrow { margin-bottom: 4px; }
+.big-code {
+  margin: 0;
+  font-size: clamp(64px, 7vw, 96px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.players-panel { padding-left: 40px; display: flex; flex-direction: column; gap: 18px; min-height: 0; }
+.panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.panel-head .count { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.name-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  column-gap: 32px;
+  border-top: 1px solid var(--rule);
+}
+.name-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 12px 12px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 18px;
+  font-weight: 600;
+}
+.name-list .link-btn { opacity: 0; }
+.name-list li:hover .link-btn, .name-list .link-btn:focus-visible { opacity: 1; }
+@media (hover: none) { .name-list .link-btn { opacity: 1; } }
+.empty-hint { color: var(--ink-3); font-size: 16px; line-height: 1.7; margin: 0; }
+.lobby-actions { margin-top: auto; display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
+
+/* 문제 */
+.question {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(30px, 4.2vw, 58px);
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+}
+.stage > .eyebrow { text-align: center; }
+
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.option {
+  padding: 28px 24px 30px;
+  border-radius: var(--radius);
+  border-top: 6px solid;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity .3s ease;
+}
+.option .letter { font-size: 16px; font-weight: 800; }
+.option .name { font-size: clamp(26px, 3.2vw, 44px); font-weight: 800; letter-spacing: -0.03em; }
+.option-a { background: var(--a-tint); border-color: var(--a); color: var(--a-ink); }
+.option-a .letter { color: var(--a); }
+.option-b { background: var(--b-tint); border-color: var(--b); color: var(--b-ink); }
+.option-b .letter { color: var(--b); }
+
+/* 결과 */
+.option .tally {
+  font-size: clamp(56px, 6.5vw, 96px);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.option .tally small { font-size: .3em; font-weight: 700; margin-left: 4px; }
+.option.result .name { font-size: clamp(20px, 2vw, 28px); }
+.option.winner.option-a { background: var(--a); color: #FFFFFF; }
+.option.winner.option-b { background: var(--b); color: #FFFFFF; }
+.option.winner .letter { color: #FFFFFF; }
+.option.loser { opacity: .4; }
+.option .stamp {
+  margin-top: 4px;
+  padding: 4px 12px;
+  border: 1.5px solid currentColor;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.verdict { text-align: center; margin: 0; font-size: clamp(22px, 2.4vw, 32px); font-weight: 800; letter-spacing: -0.02em; }
+.verdict .sub { display: block; margin-top: 6px; font-size: 16px; font-weight: 600; color: var(--ink-2); letter-spacing: 0; }
+
+.progress-wrap { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.progress-text { font-size: 18px; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.progress-text b { color: var(--ink); font-size: 26px; font-weight: 800; }
+.progress { width: min(520px, 100%); height: 6px; background: var(--paper-2); }
+.progress > span { display: block; height: 100%; width: 0; background: var(--ink); transition: width .3s ease; }
+
+.actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+.roster { border-top: 1px solid var(--rule); padding-top: 14px; }
+.roster .panel-head h2 { font-size: 14px; font-weight: 600; color: var(--ink-3); margin: 0; }
+.roster .panel-head .count { font-size: 14px; color: var(--ink-2); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tag {
+  padding: 5px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--surface);
+}
+.tag.voted { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.tag.out { color: var(--ink-3); background: transparent; text-decoration: line-through; }
+.tag.just-out { color: var(--a); border-color: var(--a); background: transparent; text-decoration: line-through; }
+
+/* 카운트다운 */
+.countdown {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  z-index: 50;
+  font-size: min(36vw, 280px);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 우승 */
+.finale { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.finale .winners { margin: 0; font-size: clamp(40px, 5vw, 72px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+.finale .verdict .sub { margin-top: 0; }
+
+.notice-screen { margin: 40px auto; max-width: 440px; display: flex; flex-direction: column; gap: 14px; }
+.notice-screen h2 { margin: 0; font-size: 24px; }
+.notice-screen p { margin: 0; color: var(--ink-2); line-height: 1.6; }
+.notice-screen .btn { align-self: flex-start; }
+
+@media (max-width: 900px) {
+  .lobby { grid-template-columns: 1fr; gap: 28px; }
+  .join-panel { padding-right: 0; border-right: 0; }
+  .players-panel { padding-left: 0; }
+  .options { grid-template-columns: 1fr; }
+}
+
+/* ───────── 참가자 화면 (/game/play) ───────── */
+.play {
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 14px 16px calc(24px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+}
+.play-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink);
+}
+.play-header .wordmark { font-size: 16px; }
+.me { font-size: 14px; font-weight: 600; color: var(--ink-2); }
+.me .state-live { color: var(--live); }
+.me .state-out { color: var(--ink-3); }
+.play-main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 24px 0; }
+
+.screen { display: flex; flex-direction: column; gap: 18px; }
+.screen-title { margin: 0; font-size: 30px; letter-spacing: -0.035em; line-height: 1.3; }
+.screen-desc { margin: 0; color: var(--ink-2); font-size: 16px; line-height: 1.6; }
+.join-form { display: flex; flex-direction: column; gap: 16px; padding-top: 8px; }
+.center { text-align: center; }
+
+.play .question { font-size: 26px; }
+
+.vote-buttons { display: flex; flex-direction: column; gap: 12px; }
+.vote-btn {
+  min-height: 108px;
+  border: 0;
+  border-left: 6px solid;
+  border-radius: var(--radius);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  text-align: left;
+  transition: background .12s ease, color .12s ease, opacity .12s ease;
+}
+.vote-btn .letter { font-size: 16px; font-weight: 800; flex: 0 0 auto; }
+.vote-btn .picked { margin-left: auto; font-size: 14px; font-weight: 700; flex: 0 0 auto; }
+.vote-btn.a { background: var(--a-tint); border-color: var(--a); color: var(--a-ink); }
+.vote-btn.a .letter { color: var(--a); }
+.vote-btn.b { background: var(--b-tint); border-color: var(--b); color: var(--b-ink); }
+.vote-btn.b .letter { color: var(--b); }
+.vote-btn.a.selected { background: var(--a); color: #FFFFFF; }
+.vote-btn.b.selected { background: var(--b); color: #FFFFFF; }
+.vote-btn.selected .letter { color: #FFFFFF; }
+.vote-buttons.has-choice .vote-btn:not(.selected) { opacity: .45; }
+
+.note {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.note b { color: var(--ink); }
+
+.verdict-word { margin: 0; font-size: 48px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+.verdict-word.live { color: var(--live); }
+.verdict-word.out { color: var(--a); }
+.verdict-word.watch { color: var(--ink-2); }
+
+.mini-result { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mini-result > div { padding: 14px 10px; border-radius: 4px; border-top: 4px solid; text-align: center; }
+.mini-result .label { font-size: 15px; font-weight: 700; }
+.mini-result .num { font-size: 36px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.mini-result .mine-label { font-size: 12px; font-weight: 700; margin-top: 2px; }
+.mini-result .ra { background: var(--a-tint); border-color: var(--a); color: var(--a-ink); }
+.mini-result .rb { background: var(--b-tint); border-color: var(--b); color: var(--b-ink); }
+.mini-result .ra.win { background: var(--a); color: #FFFFFF; }
+.mini-result .rb.win { background: var(--b); color: #FFFFFF; }
+
+.winner-names { margin: 0; font-size: 24px; font-weight: 800; }
