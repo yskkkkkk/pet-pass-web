@@ -23,6 +23,7 @@
   var chipsSig = null;
   var busy = false;
   var countingDown = false;
+  var countdownRound = 0; // 카운트다운을 이미 보여준 라운드
 
   function joinUrl() {
     return location.origin + '/game/play?room=' + code;
@@ -55,9 +56,13 @@
       .then(function () { busy = false; });
   }
 
+  var getState = MG.latestOnly(function () {
+    return MG.get({ action: 'state', code: code, hostToken: hostToken });
+  });
+
   function refresh() {
-    return MG.get({ action: 'state', code: code, hostToken: hostToken })
-      .then(render)
+    return getState()
+      .then(function (data) { if (data) render(data); })
       .catch(function (err) {
         if (err.status === 404) {
           poller.stop();
@@ -86,6 +91,7 @@
 
     var room = data.room;
     var key = room.status + ':' + room.round + ':' + (room.question ? room.question.id : '');
+    if (room.status === 'lobby') countdownRound = 0; // 새 판이 시작되면 라운드 번호가 1부터 다시 시작됨
 
     elRoom.hidden = false;
     elRoom.innerHTML = '방 코드 <b>' + esc(room.code) + '</b>';
@@ -97,9 +103,11 @@
     if (key !== viewKey) {
       var justRevealed = prev && prev.room.status === 'voting' &&
         (room.status === 'revealed' || room.status === 'finished') &&
-        prev.room.round === room.round;
+        prev.room.round === room.round &&
+        countdownRound !== room.round;
 
       if (justRevealed) {
+        countdownRound = room.round;
         playCountdown(function () {
           countingDown = false;
           mount(state);

@@ -71,9 +71,13 @@
 
   /* ───────── 상태 ───────── */
 
+  var getState = MG.latestOnly(function () {
+    return MG.get({ action: 'state', code: code, playerToken: token });
+  });
+
   function refresh() {
-    return MG.get({ action: 'state', code: code, playerToken: token })
-      .then(render)
+    return getState()
+      .then(function (data) { if (data) render(data); })
       .catch(function (err) {
         if (err.status === 404 || err.status === 403) {
           MG.storageRemove(MG.playerKey(code));

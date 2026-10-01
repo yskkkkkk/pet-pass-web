@@ -42,6 +42,23 @@
       .replace(/'/g, '&#39;');
   }
 
+  /**
+   * 응답 순서가 뒤바뀌어도 최신 결과만 받도록 감싼다.
+   * 나중에 보낸 요청의 응답이 이미 반영됐다면, 늦게 도착한 예전 응답은 null로 버린다.
+   */
+  function latestOnly(fetcher) {
+    var sent = 0;
+    var applied = 0;
+    return function () {
+      var id = ++sent;
+      return fetcher.apply(null, arguments).then(function (data) {
+        if (id < applied) return null;
+        applied = id;
+        return data;
+      });
+    };
+  }
+
   /** 화면이 보일 때만 주기적으로 실행되는 폴링 루프 */
   function createPoller(fn, intervalMs) {
     var timer = null;
@@ -101,6 +118,7 @@
     storageRemove: storageRemove,
     escapeHtml: escapeHtml,
     createPoller: createPoller,
+    latestOnly: latestOnly,
     toast: toast,
     hostKey: function (code) { return 'minority-game:host:' + code; },
     playerKey: function (code) { return 'minority-game:player:' + code; }
