@@ -31,7 +31,7 @@
   function notice(title, desc) {
     viewKey = 'notice';
     main.innerHTML =
-      '<div class="notice-screen card">' +
+      '<div class="notice-screen">' +
         '<h2>' + esc(title) + '</h2>' +
         '<p>' + esc(desc) + '</p>' +
         '<a class="btn btn-primary" href="/game">새 방 만들기</a>' +
@@ -90,9 +90,9 @@
     elRoom.hidden = false;
     elRoom.innerHTML = '방 코드 <b>' + esc(room.code) + '</b>';
     elRound.hidden = room.round === 0;
-    elRound.textContent = 'ROUND ' + room.round;
+    elRound.innerHTML = '<b>' + room.round + '</b>라운드';
     elAlive.hidden = room.status === 'lobby';
-    elAlive.textContent = '생존 ' + data.aliveCount + ' / ' + data.players.length + '명';
+    elAlive.innerHTML = '생존 <b>' + data.aliveCount + '</b> / ' + data.players.length + '명';
 
     if (key !== viewKey) {
       var justRevealed = prev && prev.room.status === 'voting' &&
@@ -135,17 +135,21 @@
     var shortUrl = location.host + '/game';
     main.innerHTML =
       '<div class="lobby">' +
-        '<section class="card join-panel">' +
-          '<p class="step">📱 휴대폰 카메라로 QR을 찍어 참가하세요</p>' +
+        '<section class="join-panel">' +
+          '<h2>참가 방법</h2>' +
           '<div class="qr-box" id="qr" aria-label="참가 QR 코드"></div>' +
-          '<p class="join-url">또는 <b>' + esc(shortUrl) + '</b> 접속 후 코드 입력</p>' +
-          '<p class="big-code">' + esc(code) + '</p>' +
+          '<ol class="join-steps">' +
+            '<li>휴대폰 카메라로 QR 코드를 찍거나</li>' +
+            '<li><b>' + esc(shortUrl) + '</b>에 접속해 아래 코드를 입력하세요.</li>' +
+          '</ol>' +
+          '<div class="code-block"><p class="eyebrow">방 코드</p><p class="big-code">' + esc(code) + '</p></div>' +
         '</section>' +
-        '<section class="card players-panel">' +
-          '<div class="panel-head"><h2>참가자</h2><span class="count" id="lobby-count">0<small>명</small></span></div>' +
-          '<div class="chips" id="lobby-chips"></div>' +
-          '<div class="actions" style="margin-top:auto">' +
-            '<button class="btn btn-primary btn-lg" id="btn-start" data-primary>게임 시작 <span class="kbd">Enter</span></button>' +
+        '<section class="players-panel">' +
+          '<div class="panel-head"><h2>참가자</h2><span class="count" id="lobby-count">0명</span></div>' +
+          '<div id="lobby-list"></div>' +
+          '<div class="lobby-actions">' +
+            '<span class="muted" id="lobby-hint"></span>' +
+            '<button class="btn btn-primary btn-lg" id="btn-start" data-primary>게임 시작</button>' +
           '</div>' +
         '</section>' +
       '</div>';
@@ -161,7 +165,7 @@
     }
 
     document.getElementById('btn-start').addEventListener('click', function () { act('start'); });
-    document.getElementById('lobby-chips').addEventListener('click', function (e) {
+    document.getElementById('lobby-list').addEventListener('click', function (e) {
       var btn = e.target.closest('[data-kick]');
       if (!btn) return;
       act('kick', { playerId: btn.getAttribute('data-kick') });
@@ -170,30 +174,31 @@
 
   function updateLobby(data) {
     var players = data.players;
-    document.getElementById('lobby-count').innerHTML = players.length + '<small>명</small>';
+    document.getElementById('lobby-count').textContent = players.length + '명';
     var btn = document.getElementById('btn-start');
     btn.disabled = players.length < 3;
-    btn.title = players.length < 3 ? '최소 3명이 필요해요' : '';
+    document.getElementById('lobby-hint').textContent =
+      players.length < 3 ? '3명 이상 모이면 시작할 수 있습니다' : '';
 
     var sig = JSON.stringify(players.map(function (p) { return [p.id, p.nickname]; }));
     if (sig === chipsSig) return;
     chipsSig = sig;
 
-    var chips = document.getElementById('lobby-chips');
+    var list = document.getElementById('lobby-list');
     if (players.length === 0) {
-      chips.innerHTML = '<p class="empty-hint">아직 아무도 없어요.<br>QR 코드를 찍어 참가해 주세요!</p>';
+      list.innerHTML = '<p class="empty-hint">아직 참가자가 없습니다.</p>';
       return;
     }
-    chips.innerHTML = players.map(function (p) {
-      return '<span class="chip">' + esc(p.nickname) +
-        '<button class="x" type="button" data-kick="' + esc(p.id) + '" aria-label="' + esc(p.nickname) + ' 내보내기">✕</button></span>';
-    }).join('') + (players.length < 3 ? '<p class="empty-hint" style="width:100%">최소 3명이 모이면 시작할 수 있어요</p>' : '');
+    list.innerHTML = '<ul class="name-list">' + players.map(function (p) {
+      return '<li><span>' + esc(p.nickname) + '</span>' +
+        '<button class="link-btn" type="button" data-kick="' + esc(p.id) + '" aria-label="' + esc(p.nickname) + ' 내보내기">내보내기</button></li>';
+    }).join('') + '</ul>';
   }
 
   /* 문제 영역 (투표/결과 공통) */
   function questionBlock(room) {
     var q = room.question;
-    return '<p class="round-label">ROUND ' + room.round + '</p>' +
+    return '<p class="eyebrow">' + room.round + '라운드</p>' +
       '<h1 class="question">' + esc(q ? q.text : '') + '</h1>';
   }
 
@@ -205,17 +210,16 @@
       '<div class="stage">' +
         questionBlock(room) +
         '<div class="options">' +
-          '<div class="option option-a"><span class="letter">A</span>' + esc(q.a) + '</div>' +
-          '<div class="vs">VS</div>' +
-          '<div class="option option-b"><span class="letter">B</span>' + esc(q.b) + '</div>' +
+          '<div class="option option-a"><span class="letter">A</span><span class="name">' + esc(q.a) + '</span></div>' +
+          '<div class="option option-b"><span class="letter">B</span><span class="name">' + esc(q.b) + '</span></div>' +
         '</div>' +
         '<div class="progress-wrap">' +
           '<div class="progress-text" id="vote-progress-text"></div>' +
           '<div class="progress"><span id="vote-progress-bar"></span></div>' +
         '</div>' +
         '<div class="actions">' +
-          '<button class="btn btn-ghost" id="btn-reroll">문제 바꾸기</button>' +
-          '<button class="btn btn-primary btn-lg" id="btn-reveal" data-primary>결과 공개 <span class="kbd">Enter</span></button>' +
+          '<button class="btn btn-quiet btn-lg" id="btn-reroll">문제 바꾸기</button>' +
+          '<button class="btn btn-primary btn-lg" id="btn-reveal" data-primary>결과 공개</button>' +
         '</div>' +
         rosterBlock() +
       '</div>';
@@ -234,15 +238,15 @@
   function updateVoting(data) {
     var pct = data.aliveCount ? Math.round((data.voteCount / data.aliveCount) * 100) : 0;
     document.getElementById('vote-progress-text').innerHTML =
-      '투표 완료 <b>' + data.voteCount + '</b> / ' + data.aliveCount + '명';
+      '<b>' + data.voteCount + '</b> / ' + data.aliveCount + '명 투표';
     document.getElementById('vote-progress-bar').style.width = pct + '%';
     updateRoster(data, 'voting');
   }
 
   function rosterBlock() {
-    return '<section class="card roster">' +
+    return '<section class="roster">' +
       '<div class="panel-head"><h2 id="roster-title">참가자</h2><span class="count" id="roster-count"></span></div>' +
-      '<div class="chips" id="roster-chips"></div>' +
+      '<div class="tags" id="roster-chips"></div>' +
     '</section>';
   }
 
@@ -256,7 +260,7 @@
     var title = document.getElementById('roster-title');
     var count = document.getElementById('roster-count');
     if (mode === 'voting') {
-      title.textContent = '투표 현황 (노란색 = 투표 완료)';
+      title.textContent = '검게 표시된 사람은 투표를 마쳤습니다';
       count.textContent = '';
     } else {
       title.textContent = '참가자';
@@ -266,7 +270,7 @@
     // 생존자 먼저, 탈락자는 뒤로
     var sorted = players.slice().sort(function (a, b) { return (b.alive ? 1 : 0) - (a.alive ? 1 : 0); });
     document.getElementById('roster-chips').innerHTML = sorted.map(function (p) {
-      var cls = 'chip';
+      var cls = 'tag';
       if (!p.alive) cls += p.eliminatedRound === round && mode !== 'voting' ? ' just-out' : ' out';
       else if (mode === 'voting' && p.voted) cls += ' voted';
       return '<span class="' + cls + '">' + esc(p.nickname) + '</span>';
@@ -277,7 +281,6 @@
   function resultOptions(room) {
     var q = room.question;
     var r = room.result;
-    var total = Math.max(r.aCount + r.bCount, 1);
     function cls(choice) {
       if (r.outcome !== 'minority') return '';
       return r.winningChoice === choice ? ' winner' : ' loser';
@@ -286,13 +289,10 @@
       return r.outcome === 'minority' && r.winningChoice === choice ? '<span class="stamp">생존</span>' : '';
     }
     return '<div class="options">' +
-      '<div class="option option-a' + cls('A') + '"><span class="letter">A</span><span class="opt-name">' + esc(q.a) + '</span>' +
-        '<span class="tally">' + r.aCount + '<small>명</small></span>' + stamp('A') +
-        '<span class="bar" data-w="' + Math.round((r.aCount / total) * 100) + '"></span></div>' +
-      '<div class="vs">VS</div>' +
-      '<div class="option option-b' + cls('B') + '"><span class="letter">B</span><span class="opt-name">' + esc(q.b) + '</span>' +
-        '<span class="tally">' + r.bCount + '<small>명</small></span>' + stamp('B') +
-        '<span class="bar" data-w="' + Math.round((r.bCount / total) * 100) + '"></span></div>' +
+      '<div class="option result option-a' + cls('A') + '"><span class="letter">A</span><span class="name">' + esc(q.a) + '</span>' +
+        '<span class="tally">' + r.aCount + '<small>명</small></span>' + stamp('A') + '</div>' +
+      '<div class="option result option-b' + cls('B') + '"><span class="letter">B</span><span class="name">' + esc(q.b) + '</span>' +
+        '<span class="tally">' + r.bCount + '<small>명</small></span>' + stamp('B') + '</div>' +
     '</div>';
   }
 
@@ -302,18 +302,11 @@
     var noVote = r.noVoteCount ? ' (미투표 ' + r.noVoteCount + '명 포함)' : '';
     var sub = out + '명 탈락' + (out ? noVote : '') + ' · ' + r.survivorCount + '명 생존';
     var main;
-    if (r.outcome === 'minority') main = '소수파 「' + esc(optionLabel(room.question, r.winningChoice)) + '」 생존!';
-    else if (r.outcome === 'tie') main = '동점! 투표한 사람은 전원 생존';
-    else if (r.outcome === 'unanimous') main = '만장일치! 소수파가 없어 전원 생존';
-    else { main = '아무도 투표하지 않았어요'; sub = '이번 라운드는 무효예요'; }
+    if (r.outcome === 'minority') main = '소수파 ‘' + esc(optionLabel(room.question, r.winningChoice)) + '’ 생존';
+    else if (r.outcome === 'tie') main = '동점입니다. 투표한 사람은 모두 생존';
+    else if (r.outcome === 'unanimous') main = '모두 같은 쪽을 골랐습니다. 투표한 사람은 모두 생존';
+    else { main = '아무도 투표하지 않았습니다'; sub = '이번 라운드는 무효입니다'; }
     return '<p class="verdict">' + main + '<span class="sub">' + sub + '</span></p>';
-  }
-
-  function animateBars() {
-    requestAnimationFrame(function () {
-      var bars = main.querySelectorAll('.bar[data-w]');
-      for (var i = 0; i < bars.length; i++) bars[i].style.width = bars[i].getAttribute('data-w') + '%';
-    });
   }
 
   function mountRevealed(data) {
@@ -324,13 +317,12 @@
         resultOptions(room) +
         verdictText(room) +
         '<div class="actions">' +
-          '<button class="btn btn-primary btn-lg" id="btn-next" data-primary>다음 라운드 <span class="kbd">Enter</span></button>' +
+          '<button class="btn btn-primary btn-lg" id="btn-next" data-primary>다음 라운드</button>' +
         '</div>' +
         rosterBlock() +
       '</div>';
     document.getElementById('btn-next').addEventListener('click', function () { act('start'); });
     updateRoster(data, 'revealed');
-    animateBars();
   }
 
   /* 게임 종료 */
@@ -340,23 +332,19 @@
     main.innerHTML =
       '<div class="stage">' +
         '<div class="finale">' +
-          '<div class="trophy" aria-hidden="true">🏆</div>' +
-          '<h2>최종 생존자</h2>' +
-          '<div class="chips">' + winners.map(function (p) {
-            return '<span class="chip win">' + esc(p.nickname) + '</span>';
-          }).join('') + '</div>' +
-          '<p class="verdict"><span class="sub">ROUND ' + room.round + ' · 「' + esc(room.question ? room.question.text : '') + '」에서 결정!</span></p>' +
+          '<p class="eyebrow">우승</p>' +
+          '<p class="winners">' + winners.map(function (p) { return esc(p.nickname); }).join(', ') + '</p>' +
+          '<p class="verdict"><span class="sub">' + room.round + '라운드 ‘' + esc(room.question ? room.question.text : '') + '’에서 결정됐습니다</span></p>' +
         '</div>' +
         resultOptions(room) +
         '<div class="actions">' +
-          '<button class="btn btn-primary btn-lg" id="btn-restart" data-primary>같은 멤버로 한 판 더 <span class="kbd">Enter</span></button>' +
-          '<a class="btn btn-ghost" href="/game">새 방 만들기</a>' +
+          '<a class="btn btn-quiet btn-lg" href="/game">새 방 만들기</a>' +
+          '<button class="btn btn-primary btn-lg" id="btn-restart" data-primary>같은 멤버로 한 판 더</button>' +
         '</div>' +
         rosterBlock() +
       '</div>';
     document.getElementById('btn-restart').addEventListener('click', function () { act('restart'); });
     updateRoster(data, 'finished');
-    animateBars();
   }
 
   /* 3-2-1 카운트다운 */
