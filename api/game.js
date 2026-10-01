@@ -6,7 +6,7 @@
  * POST /api/game { action, code, ... }
  *   create                         방 만들기 → { code, hostToken }
  *   join    { nickname }           참가 → { playerToken }
- *   vote    { playerToken, choice } 투표 (A|B), 공개 전까지 변경 가능
+ *   vote    { playerToken, choice, round } 투표 (A|B), 공개 전까지 변경 가능
  *   start   { hostToken }          다음 라운드 시작 (문제 랜덤 출제)
  *   reroll  { hostToken }          현재 라운드 문제 바꾸기
  *   reveal  { hostToken }          결과 공개 + 탈락 처리
@@ -148,6 +148,10 @@ async function actionVote(store, body) {
   if (!me) throw new HttpError(403, '참가자 정보를 찾을 수 없어요.');
   if (!me.alive) throw new HttpError(409, '탈락해서 투표할 수 없어요.');
   if (room.status !== 'voting') throw new HttpError(409, '지금은 투표 시간이 아니에요.');
+  // 다음 라운드로 넘어간 뒤 늦게 도착한 이전 라운드 투표는 받지 않는다.
+  if (body.round !== undefined && Number(body.round) !== room.round) {
+    throw new HttpError(409, '이미 지난 라운드의 투표예요.');
+  }
 
   await store.upsertVote({ room_code: code, round: room.round, player_id: me.id, choice });
   return { ok: true, choice };
