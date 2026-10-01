@@ -1,5 +1,31 @@
 [
   {
+    "name": "루트로우(rootraw)",
+    "address": "서울특별시 동대문구 천장산로7길 56(1층 이문동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5982821850656,
+    "lng": 127.054703676938,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-01T06:08:56.877Z"
+  },
+  {
+    "name": "명동왕만두칼국수",
+    "address": "서울특별시 서초구 방배천로 92(101호,102호,104호 방배동, 세양아르비채)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.484573287516,
+    "lng": 126.983403101465,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-01T06:08:56.877Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,7 +36,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
+    "updated_at": "2026-10-01T06:08:56.877Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,46 +49,33 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
+    "updated_at": "2026-10-01T06:08:56.877Z"
   },
   {
-    "name": "몽드멍",
-    "address": "전남광주통합특별시 서구 상무민주로 115-1(5층 쌍촌동)",
-    "type": "카페",
+    "name": "치키커피",
+    "address": "전남광주통합특별시 광산구 월계로130번길 12(월계동)",
+    "type": "일반음식점",
     "region": "전남광주",
-    "lat": 35.1609385096249,
-    "lng": 126.859258846517,
+    "lat": 35.2130761841236,
+    "lng": 126.839468094964,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
+    "updated_at": "2026-10-01T06:08:56.877Z"
   },
   {
-    "name": "더빌리지샵",
-    "address": "부산광역시 부산진구 동성로25번길 15(2층 전포동)",
-    "type": "카페",
-    "region": "부산",
-    "lat": 35.1526154731084,
-    "lng": 129.06755589952,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
-  },
-  {
-    "name": "린네베이크",
-    "address": "대구광역시 북구 학남로 13(학정동)",
-    "type": "카페",
+    "name": "대한뉘우스",
+    "address": "대구광역시 동구 효목로 34-1(1층 효목동)",
+    "type": "일반음식점",
     "region": "대구",
-    "lat": 35.9486756968402,
-    "lng": 128.566494456435,
+    "lat": 35.8763057609196,
+    "lng": 128.640092378793,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
+    "updated_at": "2026-10-01T06:08:56.877Z"
   },
   {
     "name": "？파크",
@@ -75,71 +88,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
-  },
-  {
-    "name": "카페도도",
-    "address": "충청북도 충주시 연수동산로2길 20-10(1층 연수동)",
-    "type": "카페",
-    "region": "충북",
-    "lat": 36.9851408488423,
-    "lng": 127.941456806691,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
-  },
-  {
-    "name": "연어공주",
-    "address": "충청남도 공주시 관골2길 34(주공6차아파트 상가동 102호 신관동)",
-    "type": "일반음식점",
-    "region": "충남",
-    "lat": 36.475860528984,
-    "lng": 127.133429182235,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
-  },
-  {
-    "name": "강릉카페 이초",
-    "address": "강원특별자치도 강릉시 임영로 157(1~2층 용강동)",
-    "type": "일반음식점",
-    "region": "강원",
-    "lat": 37.7553025260599,
-    "lng": 128.891555122036,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
+    "updated_at": "2026-10-01T06:08:56.877Z"
   },
   {
     "name": "나이로비커피 정선 하이원 M650점",
     "address": "강원특별자치도 정선군 사북읍 하이원길 57-3(박물관 카페)",
     "type": "일반음식점",
-    "region": "강원특별자치도",
+    "region": "강원",
     "lat": 37.2208846598005,
     "lng": 128.815723100537,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
+    "updated_at": "2026-10-01T06:08:56.877Z"
   },
   {
-    "name": "대한뉘우스",
-    "address": "대구광역시 동구 효목로 34-1(1층 효목동)",
-    "type": "일반음식점",
-    "region": "대구광역시",
-    "lat": 35.8763057609196,
-    "lng": 128.640092378793,
+    "name": "한성커피",
+    "address": "서울특별시 강북구 한천로 936(1층 107호 번동, 센트로힐)",
+    "type": "카페",
+    "region": "서울특별시",
+    "lat": 37.634640154201,
+    "lng": 127.036129930794,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-09-30T05:43:02.250Z"
+    "updated_at": "2026-10-01T06:08:56.877Z"
   }
 ]
