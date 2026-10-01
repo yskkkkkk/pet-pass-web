@@ -11,7 +11,9 @@
   var state = null;
   var lastKey = null;
   var lastHtml = null;
-  var pendingChoice = null; // 낙관적 업데이트 중인 선택
+  var myVote = null;     // { round, choice } 이번 라운드에 내가 마지막으로 누른 선택
+  var savedVote = null;  // { round, choice } 서버 저장이 확인된 선택
+  var sending = false;
   var poller = MG.createPoller(refresh, 2000);
 
   /* ───────── 참가 ───────── */
@@ -71,9 +73,13 @@
 
   /* ───────── 상태 ───────── */
 
+  var getState = MG.latestOnly(function () {
+    return MG.get({ action: 'state', code: code, playerToken: token });
+  });
+
   function refresh() {
-    return MG.get({ action: 'state', code: code, playerToken: token })
-      .then(render)
+    return getState()
+      .then(function (data) { if (data) render(data); })
       .catch(function (err) {
         if (err.status === 404 || err.status === 403) {
           MG.storageRemove(MG.playerKey(code));
@@ -84,30 +90,57 @@
       });
   }
 
+  function sameVote(a, b) {
+    return !!a && !!b && a.round === b.round && a.choice === b.choice;
+  }
+
+  function isSaving() {
+    return !!myVote && !sameVote(myVote, savedVote);
+  }
+
   function vote(choice) {
     if (!state || state.room.status !== 'voting' || !state.me.alive) return;
-    if (state.me.choice === choice && pendingChoice === null) return;
-    var before = state.me.choice;
-    pendingChoice = choice;
+    var round = state.room.round;
+    if (myVote && myVote.round === round && myVote.choice === choice) return;
+    myVote = { round: round, choice: choice };
     state.me.choice = choice;
     paint();
     if (navigator.vibrate) navigator.vibrate(15);
+    sendVote();
+  }
 
-    MG.post({ action: 'vote', code: code, playerToken: token, choice: choice })
+  /**
+   * 투표 요청은 한 번에 하나씩 순서대로 보낸다.
+   * 동시에 보내면 서버 도착 순서가 뒤바뀌어 예전 선택(A)이 나중 선택(B)을 덮어쓸 수 있다.
+   * 보내는 사이에 선택을 또 바꾸면, 앞 요청이 끝난 뒤 마지막 선택만 보낸다.
+   */
+  function sendVote() {
+    if (sending || !myVote || sameVote(myVote, savedVote)) return;
+    var target = myVote;
+    sending = true;
+    MG.post({ action: 'vote', code: code, playerToken: token, choice: target.choice, round: target.round })
+      .then(function () { savedVote = target; })
       .catch(function (err) {
-        state.me.choice = before;
+        // 마지막으로 누른 선택이 실패했다면 서버에 저장된 선택으로 되돌린다.
+        if (myVote === target) {
+          myVote = savedVote && savedVote.round === target.round ? savedVote : null;
+          if (state && state.room.round === target.round) state.me.choice = myVote ? myVote.choice : null;
+        }
         MG.toast(err.message);
         poller.now();
       })
       .then(function () {
-        pendingChoice = null;
+        sending = false;
+        sendVote();
         paint();
       });
   }
 
   function render(data) {
-    // 투표 요청이 진행 중이면 서버 값으로 덮어쓰지 않는다.
-    if (pendingChoice !== null && data.room.status === 'voting') data.me.choice = pendingChoice;
+    // 투표 중에는 이번 라운드에 내가 누른 선택이 기준이다. (서버 응답은 저장 직전 값일 수 있음)
+    if (data.room.status === 'voting' && myVote && myVote.round === data.room.round) {
+      data.me.choice = myVote.choice;
+    }
     state = data;
     paint();
   }
@@ -161,7 +194,7 @@
     function btn(c, cls) {
       return '<button class="vote-btn ' + cls + (choice === c ? ' selected' : '') + '" data-choice="' + c + '">' +
         '<span class="letter">' + c + '</span><span>' + esc(label(q, c)) + '</span>' +
-        (choice === c ? '<span class="picked">선택함</span>' : '') + '</button>';
+        (choice === c ? '<span class="picked">' + (isSaving() ? '저장 중…' : '선택함') + '</span>' : '') + '</button>';
     }
     return '<div class="screen">' +
       questionBlock(room) +

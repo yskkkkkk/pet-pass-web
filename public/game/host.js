@@ -23,6 +23,11 @@
   var chipsSig = null;
   var busy = false;
   var countingDown = false;
+  var countdownRound = 0; // 카운트다운을 이미 보여준 라운드
+
+  // 결과 공개를 누른 뒤 실제 마감까지 기다리는 시간.
+  // 공개 직전에 바꾼 투표가 서버에 저장될 여유를 준다. (카운트다운이 도는 동안이라 체감 지연 없음)
+  var REVEAL_GRACE_MS = 1000;
 
   function joinUrl() {
     return location.origin + '/game/play?room=' + code;
@@ -55,9 +60,13 @@
       .then(function () { busy = false; });
   }
 
+  var getState = MG.latestOnly(function () {
+    return MG.get({ action: 'state', code: code, hostToken: hostToken });
+  });
+
   function refresh() {
-    return MG.get({ action: 'state', code: code, hostToken: hostToken })
-      .then(render)
+    return getState()
+      .then(function (data) { if (data) render(data); })
       .catch(function (err) {
         if (err.status === 404) {
           poller.stop();
@@ -86,6 +95,7 @@
 
     var room = data.room;
     var key = room.status + ':' + room.round + ':' + (room.question ? room.question.id : '');
+    if (room.status === 'lobby') countdownRound = 0; // 새 판이 시작되면 라운드 번호가 1부터 다시 시작됨
 
     elRoom.hidden = false;
     elRoom.innerHTML = '방 코드 <b>' + esc(room.code) + '</b>';
@@ -97,9 +107,11 @@
     if (key !== viewKey) {
       var justRevealed = prev && prev.room.status === 'voting' &&
         (room.status === 'revealed' || room.status === 'finished') &&
-        prev.room.round === room.round;
+        prev.room.round === room.round &&
+        countdownRound !== room.round;
 
       if (justRevealed) {
+        countdownRound = room.round;
         playCountdown(function () {
           countingDown = false;
           mount(state);
@@ -227,7 +239,7 @@
     document.getElementById('btn-reveal').addEventListener('click', function () {
       if (state.voteCount < state.aliveCount &&
           !confirm('아직 ' + (state.aliveCount - state.voteCount) + '명이 투표하지 않았어요. 미투표자는 탈락합니다. 공개할까요?')) return;
-      act('reveal');
+      reveal();
     });
     document.getElementById('btn-reroll').addEventListener('click', function () {
       if (state.voteCount > 0 && !confirm('지금까지의 투표가 초기화돼요. 문제를 바꿀까요?')) return;
@@ -347,17 +359,44 @@
     updateRoster(data, 'finished');
   }
 
-  /* 3-2-1 카운트다운 */
-  function playCountdown(done) {
+  /**
+   * 결과 공개: 카운트다운을 먼저 시작하고, REVEAL_GRACE_MS 뒤에 실제로 마감한다.
+   * 집계 결과는 카운트다운이 끝날 때 보여준다.
+   */
+  function reveal() {
+    if (busy || countingDown) return;
+    busy = true;
+    countdownRound = state.room.round;
+    var request = new Promise(function (resolve) { setTimeout(resolve, REVEAL_GRACE_MS); })
+      .then(function () { return MG.post({ action: 'reveal', code: code, hostToken: hostToken }); })
+      .then(function () { return refresh(); })
+      .catch(function (err) { MG.toast(err.message); })
+      .then(function () { busy = false; });
+
+    playCountdown(function () {
+      countingDown = false;
+      mount(state);
+    }, request);
+  }
+
+  /* 3-2-1 카운트다운 (waitFor가 있으면 끝난 뒤 그 작업이 끝날 때까지 기다림) */
+  function playCountdown(done, waitFor) {
     countingDown = true;
     var overlay = document.createElement('div');
     overlay.className = 'countdown';
     document.body.appendChild(overlay);
+
+    var pending = !!waitFor;
+    if (waitFor) waitFor.then(function () { pending = false; });
+
     var n = 3;
     (function step() {
       if (n === 0) {
-        overlay.remove();
-        done();
+        if (pending) overlay.innerHTML = '<span class="countdown-wait">집계 중…</span>';
+        Promise.resolve(waitFor).then(function () {
+          overlay.remove();
+          done();
+        });
         return;
       }
       overlay.innerHTML = '<span>' + n + '</span>';
