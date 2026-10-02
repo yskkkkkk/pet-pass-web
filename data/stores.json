@@ -1,31 +1,5 @@
 [
   {
-    "name": "루트로우(rootraw)",
-    "address": "서울특별시 동대문구 천장산로7길 56(1층 이문동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5982821850656,
-    "lng": 127.054703676938,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-01T06:08:56.877Z"
-  },
-  {
-    "name": "명동왕만두칼국수",
-    "address": "서울특별시 서초구 방배천로 92(101호,102호,104호 방배동, 세양아르비채)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.484573287516,
-    "lng": 126.983403101465,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-01T06:08:56.877Z"
-  },
-  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -36,7 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-01T06:08:56.877Z"
+    "updated_at": "2026-10-02T05:52:35.626Z"
   },
   {
     "name": "카페 ？잔",
@@ -49,33 +23,59 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-01T06:08:56.877Z"
+    "updated_at": "2026-10-02T05:52:35.626Z"
   },
   {
-    "name": "치키커피",
-    "address": "전남광주통합특별시 광산구 월계로130번길 12(월계동)",
-    "type": "일반음식점",
-    "region": "전남광주",
-    "lat": 35.2130761841236,
-    "lng": 126.839468094964,
+    "name": "한성커피",
+    "address": "서울특별시 강북구 한천로 936(1층 107호 번동, 센트로힐)",
+    "type": "카페",
+    "region": "서울",
+    "lat": 37.634640154201,
+    "lng": 127.036129930794,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-01T06:08:56.877Z"
+    "updated_at": "2026-10-02T05:52:35.626Z"
   },
   {
-    "name": "대한뉘우스",
-    "address": "대구광역시 동구 효목로 34-1(1층 효목동)",
+    "name": "부바스",
+    "address": "부산광역시 동래구 온천천로457번길 4(안락동)",
     "type": "일반음식점",
-    "region": "대구",
-    "lat": 35.8763057609196,
-    "lng": 128.640092378793,
+    "region": "부산",
+    "lat": 35.1914840380276,
+    "lng": 129.103171470114,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-01T06:08:56.877Z"
+    "updated_at": "2026-10-02T05:52:35.626Z"
+  },
+  {
+    "name": "하빌리 온천천점",
+    "address": "부산광역시 동래구 온천천로 457(안락동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.1915105789382,
+    "lng": 129.102961277337,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-02T05:52:35.626Z"
+  },
+  {
+    "name": "개울마루",
+    "address": "경기도 안양시 만안구 예술공원로 201(1층 일부호 안양동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.4201024288948,
+    "lng": 126.928182217849,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-02T05:52:35.626Z"
   },
   {
     "name": "？파크",
@@ -88,32 +88,58 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-01T06:08:56.877Z"
+    "updated_at": "2026-10-02T05:52:35.626Z"
   },
   {
-    "name": "나이로비커피 정선 하이원 M650점",
-    "address": "강원특별자치도 정선군 사북읍 하이원길 57-3(박물관 카페)",
-    "type": "일반음식점",
-    "region": "강원",
-    "lat": 37.2208846598005,
-    "lng": 128.815723100537,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-01T06:08:56.877Z"
-  },
-  {
-    "name": "한성커피",
-    "address": "서울특별시 강북구 한천로 936(1층 107호 번동, 센트로힐)",
+    "name": "매일그대와",
+    "address": "경상북도 구미시 금오산로22안길 15-4(1층 원평동)",
     "type": "카페",
-    "region": "서울특별시",
-    "lat": 37.634640154201,
-    "lng": 127.036129930794,
+    "region": "경북",
+    "lat": 36.1257048828393,
+    "lng": 128.331591026542,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-01T06:08:56.877Z"
+    "updated_at": "2026-10-02T05:52:35.626Z"
+  },
+  {
+    "name": "쉼,",
+    "address": "경상남도 양산시 물금읍 화산길 4-1(1층)",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 35.3107385719967,
+    "lng": 128.986380082689,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-02T05:52:35.626Z"
+  },
+  {
+    "name": "달빛 윤슬",
+    "address": "전북특별자치도 부안군 변산면 변산로 3554-5",
+    "type": "일반음식점",
+    "region": "전북",
+    "lat": 35.5836733760449,
+    "lng": 126.504960257033,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-02T05:52:35.626Z"
+  },
+  {
+    "name": "한바다 연가",
+    "address": "전북특별자치도 부안군 변산면 변산로 3554-5(외 1필지)",
+    "type": "일반음식점",
+    "region": "전북",
+    "lat": 35.5836733760449,
+    "lng": 126.504960257033,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-02T05:52:35.626Z"
   }
 ]
