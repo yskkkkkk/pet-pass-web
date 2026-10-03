@@ -1,5 +1,18 @@
 [
   {
+    "name": "공책",
+    "address": "서울특별시 강북구 도봉로76가길 18(1층 102호 미아동, 한영홈타운)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.6324730316068,
+    "lng": 127.026162981321,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-03T05:27:42.365Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,7 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
+    "updated_at": "2026-10-03T05:27:42.365Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,59 +36,46 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
+    "updated_at": "2026-10-03T05:27:42.365Z"
   },
   {
-    "name": "한성커피",
-    "address": "서울특별시 강북구 한천로 936(1층 107호 번동, 센트로힐)",
+    "name": "멍멍아 뛰놀자",
+    "address": "전남광주통합특별시 광양시 용장길 207(1동 2층중 1층일부, 2층일부 성황동)",
     "type": "카페",
-    "region": "서울",
-    "lat": 37.634640154201,
-    "lng": 127.036129930794,
+    "region": "전남광주",
+    "lat": 34.9435364830089,
+    "lng": 127.658521855238,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
+    "updated_at": "2026-10-03T05:27:42.365Z"
   },
   {
-    "name": "부바스",
-    "address": "부산광역시 동래구 온천천로457번길 4(안락동)",
+    "name": "오!샌드위치&샐러드",
+    "address": "울산광역시 중구 번영로 581(1층 남외동)",
     "type": "일반음식점",
-    "region": "부산",
-    "lat": 35.1914840380276,
-    "lng": 129.103171470114,
+    "region": "울산",
+    "lat": 35.5693304493209,
+    "lng": 129.345374864738,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
+    "updated_at": "2026-10-03T05:27:42.365Z"
   },
   {
-    "name": "하빌리 온천천점",
-    "address": "부산광역시 동래구 온천천로 457(안락동)",
-    "type": "일반음식점",
-    "region": "부산",
-    "lat": 35.1915105789382,
-    "lng": 129.102961277337,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
-  },
-  {
-    "name": "개울마루",
-    "address": "경기도 안양시 만안구 예술공원로 201(1층 일부호 안양동)",
+    "name": "노상치킨",
+    "address": "경기도 광명시 소하로 81(8층 전부호 소하동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.4201024288948,
-    "lng": 126.928182217849,
+    "lat": 37.4476382541923,
+    "lng": 126.88402024743,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
+    "updated_at": "2026-10-03T05:27:42.365Z"
   },
   {
     "name": "？파크",
@@ -88,58 +88,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
-  },
-  {
-    "name": "매일그대와",
-    "address": "경상북도 구미시 금오산로22안길 15-4(1층 원평동)",
-    "type": "카페",
-    "region": "경북",
-    "lat": 36.1257048828393,
-    "lng": 128.331591026542,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
-  },
-  {
-    "name": "쉼,",
-    "address": "경상남도 양산시 물금읍 화산길 4-1(1층)",
-    "type": "일반음식점",
-    "region": "경남",
-    "lat": 35.3107385719967,
-    "lng": 128.986380082689,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
-  },
-  {
-    "name": "달빛 윤슬",
-    "address": "전북특별자치도 부안군 변산면 변산로 3554-5",
-    "type": "일반음식점",
-    "region": "전북",
-    "lat": 35.5836733760449,
-    "lng": 126.504960257033,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
-  },
-  {
-    "name": "한바다 연가",
-    "address": "전북특별자치도 부안군 변산면 변산로 3554-5(외 1필지)",
-    "type": "일반음식점",
-    "region": "전북",
-    "lat": 35.5836733760449,
-    "lng": 126.504960257033,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-02T05:52:35.626Z"
+    "updated_at": "2026-10-03T05:27:42.365Z"
   }
 ]
