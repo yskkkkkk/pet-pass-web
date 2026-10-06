@@ -10,7 +10,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-05T05:53:45.239Z"
+    "updated_at": "2026-10-06T06:32:24.602Z"
+  },
+  {
+    "name": "오르노 서울역점",
+    "address": "서울특별시 중구 한강대로 405(경부고속철도서울민자역사 3층 322호 봉래동2가)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5547295613867,
+    "lng": 126.969526328644,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-06T06:32:24.602Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,7 +36,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-05T05:53:45.239Z"
+    "updated_at": "2026-10-06T06:32:24.602Z"
+  },
+  {
+    "name": "멍멍아 뛰놀자",
+    "address": "전남광주통합특별시 광양시 용장길 207(1동 2층중 1층일부 성황동)",
+    "type": "카페",
+    "region": "전남광주",
+    "lat": 34.9435364830089,
+    "lng": 127.658521855238,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-06T06:32:24.602Z"
   },
   {
     "name": "？파크",
@@ -36,6 +62,58 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-05T05:53:45.239Z"
+    "updated_at": "2026-10-06T06:32:24.602Z"
+  },
+  {
+    "name": "북향",
+    "address": "경상북도 포항시 남구 대이로111번길 9(1층 대잠동)",
+    "type": "일반음식점",
+    "region": "경북",
+    "lat": 36.0249616077372,
+    "lng": 129.339979690837,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-06T06:32:24.602Z"
+  },
+  {
+    "name": "화수헌",
+    "address": "경상북도 문경시 산양면 현리3길 9",
+    "type": "일반음식점",
+    "region": "경북",
+    "lat": 36.6391217065533,
+    "lng": 128.256147693071,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-06T06:32:24.602Z"
+  },
+  {
+    "name": "발디 Waldi",
+    "address": "서울특별시 성북구 동소문로 64(1층 동소문동3가)",
+    "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.5912726582928,
+    "lng": 127.012727120269,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-06T06:32:24.602Z"
+  },
+  {
+    "name": "유나즈덕계",
+    "address": "경기도 양주시 덕계로4길 4(케이타워 203호 덕계동)",
+    "type": "일반음식점",
+    "region": "경기도",
+    "lat": 37.8176909043632,
+    "lng": 127.057042259855,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-06T06:32:24.602Z"
   }
 ]
