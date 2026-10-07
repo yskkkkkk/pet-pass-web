@@ -1,5 +1,31 @@
 [
   {
+    "name": "발디 Waldi",
+    "address": "서울특별시 성북구 동소문로 64(1층 동소문동3가)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5912726582928,
+    "lng": 127.012727120269,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-07T06:10:57.674Z"
+  },
+  {
+    "name": "서울안심 마곡점",
+    "address": "서울특별시 강서구 마곡중앙6로 76-3(인터시티365 지하1층 제비01호,제비02호 마곡동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5597174210035,
+    "lng": 126.835794591825,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-07T06:10:57.674Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,20 +36,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-06T06:32:24.602Z"
-  },
-  {
-    "name": "오르노 서울역점",
-    "address": "서울특별시 중구 한강대로 405(경부고속철도서울민자역사 3층 322호 봉래동2가)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5547295613867,
-    "lng": 126.969526328644,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-06T06:32:24.602Z"
+    "updated_at": "2026-10-07T06:10:57.674Z"
   },
   {
     "name": "카페 ？잔",
@@ -36,20 +49,85 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-06T06:32:24.602Z"
+    "updated_at": "2026-10-07T06:10:57.674Z"
   },
   {
-    "name": "멍멍아 뛰놀자",
-    "address": "전남광주통합특별시 광양시 용장길 207(1동 2층중 1층일부 성황동)",
-    "type": "카페",
-    "region": "전남광주",
-    "lat": 34.9435364830089,
-    "lng": 127.658521855238,
+    "name": "코레",
+    "address": "서울특별시 서대문구 증가로 13(1층 일부호 연희동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5694578920532,
+    "lng": 126.931193109684,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-06T06:32:24.602Z"
+    "updated_at": "2026-10-07T06:10:57.674Z"
+  },
+  {
+    "name": "포텐",
+    "address": "서울특별시 송파구 오금로 136(1층 송파동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5109546754847,
+    "lng": 127.109939835993,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-07T06:10:57.674Z"
+  },
+  {
+    "name": "모노스톤",
+    "address": "대전광역시 동구 대전천동로 586(1, 2층 중동)",
+    "type": "일반음식점",
+    "region": "대전",
+    "lat": 36.3321335531685,
+    "lng": 127.427374915522,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-07T06:10:57.674Z"
+  },
+  {
+    "name": "몽 셰리",
+    "address": "대전광역시 서구 문정로150번길 36(1층 일부호 탄방동)",
+    "type": "일반음식점",
+    "region": "대전",
+    "lat": 36.3474914439164,
+    "lng": 127.397267616692,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-07T06:10:57.674Z"
+  },
+  {
+    "name": "모노스톤",
+    "address": "대전광역시 동구 대전천동로 586(1층 중동)",
+    "type": "제과점",
+    "region": "대전",
+    "lat": 36.3321335531685,
+    "lng": 127.427374915522,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-07T06:10:57.674Z"
+  },
+  {
+    "name": "유나즈덕계",
+    "address": "경기도 양주시 덕계로4길 4(케이타워 203호 덕계동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.8176909043632,
+    "lng": 127.057042259855,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-07T06:10:57.674Z"
   },
   {
     "name": "？파크",
@@ -62,58 +140,58 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-06T06:32:24.602Z"
+    "updated_at": "2026-10-07T06:10:57.674Z"
   },
   {
-    "name": "북향",
-    "address": "경상북도 포항시 남구 대이로111번길 9(1층 대잠동)",
+    "name": "동백회수산",
+    "address": "충청남도 홍성군 서부면 남당항로213번길 1(A동 1층 105호)",
     "type": "일반음식점",
-    "region": "경북",
-    "lat": 36.0249616077372,
-    "lng": 129.339979690837,
+    "region": "충남",
+    "lat": 36.5389275932974,
+    "lng": 126.47031595503,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-06T06:32:24.602Z"
+    "updated_at": "2026-10-07T06:10:57.674Z"
   },
   {
-    "name": "화수헌",
-    "address": "경상북도 문경시 산양면 현리3길 9",
+    "name": "보디",
+    "address": "강원특별자치도 춘천시 둥지길 31(1층 효자동)",
     "type": "일반음식점",
-    "region": "경북",
-    "lat": 36.6391217065533,
-    "lng": 128.256147693071,
+    "region": "강원",
+    "lat": 37.873160670521,
+    "lng": 127.737555171382,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-06T06:32:24.602Z"
+    "updated_at": "2026-10-07T06:10:57.674Z"
   },
   {
-    "name": "발디 Waldi",
-    "address": "서울특별시 성북구 동소문로 64(1층 동소문동3가)",
-    "type": "일반음식점",
-    "region": "서울특별시",
-    "lat": 37.5912726582928,
-    "lng": 127.012727120269,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-06T06:32:24.602Z"
-  },
-  {
-    "name": "유나즈덕계",
-    "address": "경기도 양주시 덕계로4길 4(케이타워 203호 덕계동)",
+    "name": "양파",
+    "address": "경기도 수원시 장안구 수원천로428번길 41(1,2층 연무동)",
     "type": "일반음식점",
     "region": "경기도",
-    "lat": 37.8176909043632,
-    "lng": 127.057042259855,
+    "lat": 37.2897226550893,
+    "lng": 127.022615838767,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-06T06:32:24.602Z"
+    "updated_at": "2026-10-07T06:10:57.674Z"
+  },
+  {
+    "name": "오프투커피",
+    "address": "서울특별시 구로구 개봉로16길 9(1층 개봉동)",
+    "type": "제과점",
+    "region": "서울특별시",
+    "lat": 37.4901223626424,
+    "lng": 126.856701453786,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-07T06:10:57.674Z"
   }
 ]
