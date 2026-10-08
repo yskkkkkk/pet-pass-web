@@ -1,31 +1,5 @@
 [
   {
-    "name": "발디 Waldi",
-    "address": "서울특별시 성북구 동소문로 64(1층 동소문동3가)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5912726582928,
-    "lng": 127.012727120269,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
-  },
-  {
-    "name": "서울안심 마곡점",
-    "address": "서울특별시 강서구 마곡중앙6로 76-3(인터시티365 지하1층 제비01호,제비02호 마곡동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5597174210035,
-    "lng": 126.835794591825,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
-  },
-  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -36,7 +10,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
+    "updated_at": "2026-10-08T06:18:33.693Z"
+  },
+  {
+    "name": "이리카페",
+    "address": "서울특별시 마포구 와우산로3길 27(상수동, 1층)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5458669613769,
+    "lng": 126.921600709469,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-08T06:18:33.693Z"
   },
   {
     "name": "카페 ？잔",
@@ -49,85 +36,72 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
+    "updated_at": "2026-10-08T06:18:33.693Z"
   },
   {
-    "name": "코레",
-    "address": "서울특별시 서대문구 증가로 13(1층 일부호 연희동)",
+    "name": "큐컴버드(Cucumbird)",
+    "address": "서울특별시 노원구 중계로14바길 10(불암대중사우나 1층 중계동)",
     "type": "일반음식점",
     "region": "서울",
-    "lat": 37.5694578920532,
-    "lng": 126.931193109684,
+    "lat": 37.6498528510446,
+    "lng": 127.083004868039,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
+    "updated_at": "2026-10-08T06:18:33.693Z"
   },
   {
-    "name": "포텐",
-    "address": "서울특별시 송파구 오금로 136(1층 송파동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5109546754847,
-    "lng": 127.109939835993,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
-  },
-  {
-    "name": "모노스톤",
-    "address": "대전광역시 동구 대전천동로 586(1, 2층 중동)",
-    "type": "일반음식점",
-    "region": "대전",
-    "lat": 36.3321335531685,
-    "lng": 127.427374915522,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
-  },
-  {
-    "name": "몽 셰리",
-    "address": "대전광역시 서구 문정로150번길 36(1층 일부호 탄방동)",
-    "type": "일반음식점",
-    "region": "대전",
-    "lat": 36.3474914439164,
-    "lng": 127.397267616692,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
-  },
-  {
-    "name": "모노스톤",
-    "address": "대전광역시 동구 대전천동로 586(1층 중동)",
+    "name": "오프투커피",
+    "address": "서울특별시 구로구 개봉로16길 9(1층 개봉동)",
     "type": "제과점",
-    "region": "대전",
-    "lat": 36.3321335531685,
-    "lng": 127.427374915522,
+    "region": "서울",
+    "lat": 37.4901223626424,
+    "lng": 126.856701453786,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
+    "updated_at": "2026-10-08T06:18:33.693Z"
   },
   {
-    "name": "유나즈덕계",
-    "address": "경기도 양주시 덕계로4길 4(케이타워 203호 덕계동)",
+    "name": "더펄스트하우스(The 1st house)",
+    "address": "전남광주통합특별시 북구 호동로 7(3층 용봉동)",
+    "type": "카페",
+    "region": "전남광주",
+    "lat": 35.1747942399545,
+    "lng": 126.913403384016,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-08T06:18:33.693Z"
+  },
+  {
+    "name": "보데가 진유당",
+    "address": "경기도 화성시 동탄구 여울로 187(1층 일부102호호 능동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.8176909043632,
-    "lng": 127.057042259855,
+    "lat": 37.2153178295814,
+    "lng": 127.056481036858,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
+    "updated_at": "2026-10-08T06:18:33.693Z"
+  },
+  {
+    "name": "양파",
+    "address": "경기도 수원시 장안구 수원천로428번길 41(1,2층 연무동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.2897226550893,
+    "lng": 127.022615838767,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-08T06:18:33.693Z"
   },
   {
     "name": "？파크",
@@ -140,58 +114,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
+    "updated_at": "2026-10-08T06:18:33.693Z"
   },
   {
-    "name": "동백회수산",
-    "address": "충청남도 홍성군 서부면 남당항로213번길 1(A동 1층 105호)",
-    "type": "일반음식점",
-    "region": "충남",
-    "lat": 36.5389275932974,
-    "lng": 126.47031595503,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
-  },
-  {
-    "name": "보디",
-    "address": "강원특별자치도 춘천시 둥지길 31(1층 효자동)",
+    "name": "봉포초밥&요기포차",
+    "address": "강원특별자치도 고성군 토성면 토성로 103",
     "type": "일반음식점",
     "region": "강원",
-    "lat": 37.873160670521,
-    "lng": 127.737555171382,
+    "lat": 38.2549410323653,
+    "lng": 128.561763364642,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
+    "updated_at": "2026-10-08T06:18:33.693Z"
   },
   {
-    "name": "양파",
-    "address": "경기도 수원시 장안구 수원천로428번길 41(1,2층 연무동)",
+    "name": "고요 코지",
+    "address": "대구광역시 달서구 두류남3길 69(1층 두류동)",
     "type": "일반음식점",
-    "region": "경기도",
-    "lat": 37.2897226550893,
-    "lng": 127.022615838767,
+    "region": "대구광역시",
+    "lat": 35.8544163374933,
+    "lng": 128.572552915143,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
-  },
-  {
-    "name": "오프투커피",
-    "address": "서울특별시 구로구 개봉로16길 9(1층 개봉동)",
-    "type": "제과점",
-    "region": "서울특별시",
-    "lat": 37.4901223626424,
-    "lng": 126.856701453786,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-07T06:10:57.674Z"
+    "updated_at": "2026-10-08T06:18:33.693Z"
   }
 ]
