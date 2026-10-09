@@ -10,20 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
-  },
-  {
-    "name": "이리카페",
-    "address": "서울특별시 마포구 와우산로3길 27(상수동, 1층)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5458669613769,
-    "lng": 126.921600709469,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
+    "updated_at": "2026-10-09T06:20:33.548Z"
   },
   {
     "name": "카페 ？잔",
@@ -36,72 +23,33 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
+    "updated_at": "2026-10-09T06:20:33.548Z"
   },
   {
-    "name": "큐컴버드(Cucumbird)",
-    "address": "서울특별시 노원구 중계로14바길 10(불암대중사우나 1층 중계동)",
+    "name": "고요 코지",
+    "address": "대구광역시 달서구 두류남3길 69(1층 두류동)",
     "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.6498528510446,
-    "lng": 127.083004868039,
+    "region": "대구",
+    "lat": 35.8544163374933,
+    "lng": 128.572552915143,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
+    "updated_at": "2026-10-09T06:20:33.548Z"
   },
   {
-    "name": "오프투커피",
-    "address": "서울특별시 구로구 개봉로16길 9(1층 개봉동)",
-    "type": "제과점",
-    "region": "서울",
-    "lat": 37.4901223626424,
-    "lng": 126.856701453786,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
-  },
-  {
-    "name": "더펄스트하우스(The 1st house)",
-    "address": "전남광주통합특별시 북구 호동로 7(3층 용봉동)",
-    "type": "카페",
-    "region": "전남광주",
-    "lat": 35.1747942399545,
-    "lng": 126.913403384016,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
-  },
-  {
-    "name": "보데가 진유당",
-    "address": "경기도 화성시 동탄구 여울로 187(1층 일부102호호 능동)",
+    "name": "유메마데(yumemade)",
+    "address": "경기도 수원시 영통구 센트럴파크로127번길 144(1층 이의동)",
     "type": "일반음식점",
     "region": "경기",
-    "lat": 37.2153178295814,
-    "lng": 127.056481036858,
+    "lat": 37.2939120040548,
+    "lng": 127.055281450564,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
-  },
-  {
-    "name": "양파",
-    "address": "경기도 수원시 장안구 수원천로428번길 41(1,2층 연무동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.2897226550893,
-    "lng": 127.022615838767,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
+    "updated_at": "2026-10-09T06:20:33.548Z"
   },
   {
     "name": "？파크",
@@ -114,32 +62,19 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
+    "updated_at": "2026-10-09T06:20:33.548Z"
   },
   {
-    "name": "봉포초밥&요기포차",
-    "address": "강원특별자치도 고성군 토성면 토성로 103",
-    "type": "일반음식점",
-    "region": "강원",
-    "lat": 38.2549410323653,
-    "lng": 128.561763364642,
+    "name": "러너웨이커피",
+    "address": "충청북도 청주시 서원구 무심서로 455(1층 사직동)",
+    "type": "카페",
+    "region": "충북",
+    "lat": 36.6321541400304,
+    "lng": 127.480590211705,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
-  },
-  {
-    "name": "고요 코지",
-    "address": "대구광역시 달서구 두류남3길 69(1층 두류동)",
-    "type": "일반음식점",
-    "region": "대구광역시",
-    "lat": 35.8544163374933,
-    "lng": 128.572552915143,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-08T06:18:33.693Z"
+    "updated_at": "2026-10-09T06:20:33.548Z"
   }
 ]
