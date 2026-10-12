@@ -10,7 +10,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-11T06:00:17.290Z"
+    "updated_at": "2026-10-12T06:10:34.880Z"
+  },
+  {
+    "name": "치트키 룸",
+    "address": "서울특별시 성동구 상원6길 11-1(1층 성수동1가)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5490593156727,
+    "lng": 127.049159780791,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-12T06:10:34.880Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,7 +36,59 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-11T06:00:17.290Z"
+    "updated_at": "2026-10-12T06:10:34.880Z"
+  },
+  {
+    "name": "카페디차",
+    "address": "서울특별시 동작구 상도로47길 89(1층 상도1동)",
+    "type": "카페",
+    "region": "서울",
+    "lat": 37.5031427278896,
+    "lng": 126.951734268481,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-12T06:10:34.880Z"
+  },
+  {
+    "name": "듬뿌기",
+    "address": "부산광역시 부산진구 서전로68번길 120(2층 전포동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.152396135679,
+    "lng": 129.067196602204,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-12T06:10:34.880Z"
+  },
+  {
+    "name": "언덕마루광장",
+    "address": "인천광역시 미추홀구 매소홀로386번길 31-6(2층 학익동)",
+    "type": "일반음식점",
+    "region": "인천",
+    "lat": 37.4384621986837,
+    "lng": 126.664933231356,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-12T06:10:34.880Z"
+  },
+  {
+    "name": "비로(VIRO)",
+    "address": "경기도 성남시 수정구 위례서일로3길 37(1층 창곡동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.468313642216,
+    "lng": 127.139295131739,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-12T06:10:34.880Z"
   },
   {
     "name": "？파크",
@@ -36,6 +101,58 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-11T06:00:17.290Z"
+    "updated_at": "2026-10-12T06:10:34.880Z"
+  },
+  {
+    "name": "나이스업커피",
+    "address": "충청북도 청주시 서원구 산미로 154(2층 산남동)",
+    "type": "일반음식점",
+    "region": "충북",
+    "lat": 36.609495083811,
+    "lng": 127.47671720032,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-12T06:10:34.880Z"
+  },
+  {
+    "name": "코티커피베이크",
+    "address": "경상북도 구미시 인동22길 20(대동하이츠 1층 진평동)",
+    "type": "카페",
+    "region": "경북",
+    "lat": 36.0963599507213,
+    "lng": 128.426451079477,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-12T06:10:34.880Z"
+  },
+  {
+    "name": "달달한오븐",
+    "address": "경상북도 구미시 옥계북로 56(1층 옥계동)",
+    "type": "제과점",
+    "region": "경북",
+    "lat": 36.1379703690686,
+    "lng": 128.423640615376,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-12T06:10:34.880Z"
+  },
+  {
+    "name": "오늘이크리스마스라면 사진관카페",
+    "address": "제주특별자치도 서귀포시 성산읍 일주동로5154번길 5(1층)",
+    "type": "일반음식점",
+    "region": "제주",
+    "lat": 33.37743102964,
+    "lng": 126.873289527259,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-12T06:10:34.880Z"
   }
 ]
