@@ -1,29 +1,16 @@
 [
   {
-    "name": "닷",
-    "address": "서울특별시 성동구 상원길 81-1(1층 성수동1가)",
+    "name": "스이",
+    "address": "서울특별시 강북구 수유로 75(1층 우측호 수유동)",
     "type": "일반음식점",
     "region": "서울",
-    "lat": 37.5512799728215,
-    "lng": 127.047255732558,
+    "lat": 37.6363847977609,
+    "lng": 127.021954046766,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
-  },
-  {
-    "name": "서울안심",
-    "address": "서울특별시 강서구 마곡중앙6로 76-3(인터시티365 지하1층 제비01호,제비02호 마곡동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5597174210035,
-    "lng": 126.835794591825,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
+    "updated_at": "2026-10-14T05:03:32.857Z"
   },
   {
     "name": "스페이스 노들 케이",
@@ -36,7 +23,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
+    "updated_at": "2026-10-14T05:03:32.857Z"
+  },
+  {
+    "name": "영원",
+    "address": "서울특별시 서대문구 성산로 303(화인빌딩 2층 연희동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5666167057242,
+    "lng": 126.92387491853,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-14T05:03:32.857Z"
   },
   {
     "name": "카페 ？잔",
@@ -49,20 +49,85 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
+    "updated_at": "2026-10-14T05:03:32.857Z"
   },
   {
-    "name": "정가네푸드",
-    "address": "경기도 용인시 처인구 포곡읍 전대로 53-1(1층 일부)",
+    "name": "쿠카하우스",
+    "address": "서울특별시 마포구 동교로 24(102호 합정동)",
     "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.2834436742963,
-    "lng": 127.219518470798,
+    "region": "서울",
+    "lat": 37.5520410670922,
+    "lng": 126.905274033823,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
+    "updated_at": "2026-10-14T05:03:32.857Z"
+  },
+  {
+    "name": "키노 연희",
+    "address": "서울특별시 서대문구 연희로12길 23(지하1층 연희동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5668187799494,
+    "lng": 126.932430559249,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-14T05:03:32.857Z"
+  },
+  {
+    "name": "엠엠티(MmT)",
+    "address": "서울특별시 성북구 고려대로8길 23(1층 101호 안암동3가)",
+    "type": "카페",
+    "region": "서울",
+    "lat": 37.5848810678081,
+    "lng": 127.02165450904,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-14T05:03:32.857Z"
+  },
+  {
+    "name": "유랑",
+    "address": "서울특별시 마포구 신촌로2길 5-8(1층 동교동)",
+    "type": "제과점",
+    "region": "서울",
+    "lat": 37.5577641660505,
+    "lng": 126.927779698414,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-14T05:03:32.857Z"
+  },
+  {
+    "name": "쏘대찌",
+    "address": "부산광역시 수영구 광남로172번길 14(1층 민락동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.1564033739761,
+    "lng": 129.120051078008,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-14T05:03:32.857Z"
+  },
+  {
+    "name": "해브어베이크",
+    "address": "대전광역시 서구 복수남로36번길 14(1층 복수동)",
+    "type": "카페",
+    "region": "대전",
+    "lat": 36.299137610003,
+    "lng": 127.377697731324,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-14T05:03:32.857Z"
   },
   {
     "name": "？파크",
@@ -75,58 +140,45 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
-  },
-  {
-    "name": "우메(ume)",
-    "address": "경상남도 김해시 김해대로2325번길 32(1층 부원동)",
-    "type": "일반음식점",
-    "region": "경남",
-    "lat": 35.2291981283409,
-    "lng": 128.880803575896,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
-  },
-  {
-    "name": "여행가게와 연필가게",
-    "address": "제주특별자치도 서귀포시 남원읍 태위로 929",
-    "type": "일반음식점",
-    "region": "제주특별자치도",
-    "lat": 33.2861667894078,
-    "lng": 126.744498920948,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
-  },
-  {
-    "name": "엠엠티(MmT)",
-    "address": "서울특별시 성북구 고려대로8길 23(1층 101호 안암동3가)",
-    "type": "카페",
-    "region": "서울특별시",
-    "lat": 37.5848810678081,
-    "lng": 127.02165450904,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
+    "updated_at": "2026-10-14T05:03:32.857Z"
   },
   {
     "name": "와이즈 독 스쿨 애견카페",
     "address": "경기도 군포시 송부로12번길 46(1층 일부호 도마교동)",
     "type": "카페",
-    "region": "경기도",
+    "region": "경기",
     "lat": 37.3137498371004,
     "lng": 126.920232378369,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049Z"
+    "updated_at": "2026-10-14T05:03:32.857Z"
+  },
+  {
+    "name": "히든하우스",
+    "address": "경기도 하남시 하남대로 821(1층 일부호 덕풍동)",
+    "type": "제과점",
+    "region": "경기",
+    "lat": 37.5415950138148,
+    "lng": 127.206466949784,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-14T05:03:32.857Z"
+  },
+  {
+    "name": "여행가게와 연필가게",
+    "address": "제주특별자치도 서귀포시 남원읍 태위로 929",
+    "type": "일반음식점",
+    "region": "제주",
+    "lat": 33.2861667894078,
+    "lng": 126.744498920948,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-14T05:03:32.857Z"
   }
 ]
