@@ -10,7 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-17T04:40:42.488Z"
+    "updated_at": "2026-10-18T04:46:01.977Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,59 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-17T04:40:42.488Z"
-  },
-  {
-    "name": "히썬",
-    "address": "서울특별시 마포구 성미산로29안길 26(1층 우측호 연남동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5654698667978,
-    "lng": 126.923655707573,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-17T04:40:42.488Z"
-  },
-  {
-    "name": "피카프(fikaF)",
-    "address": "서울특별시 금천구 가산로3길 48(1층 일부호 가산동)",
-    "type": "제과점",
-    "region": "서울",
-    "lat": 37.4723492072261,
-    "lng": 126.892880302157,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-17T04:40:42.488Z"
-  },
-  {
-    "name": "커피로드뷰 더시그너스점",
-    "address": "전남광주통합특별시 서구 죽봉대로 52(한국교직원공제회관 1층 농성동)",
-    "type": "카페",
-    "region": "전남광주",
-    "lat": 35.1582664461004,
-    "lng": 126.883467581275,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-17T04:40:42.488Z"
-  },
-  {
-    "name": "유유(悠悠)",
-    "address": "부산광역시 부산진구 동성로 55-1(2층 전포동)",
-    "type": "일반음식점",
-    "region": "부산",
-    "lat": 35.1555011642613,
-    "lng": 129.068184373959,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-17T04:40:42.488Z"
+    "updated_at": "2026-10-18T04:46:01.977Z"
   },
   {
     "name": "？파크",
@@ -88,6 +36,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-17T04:40:42.488Z"
+    "updated_at": "2026-10-18T04:46:01.977Z"
   }
 ]
