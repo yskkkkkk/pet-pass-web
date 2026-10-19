@@ -10,7 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-18T04:46:01.977Z"
+    "updated_at": "2026-10-19T04:54:32.112Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,7 +23,20 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-18T04:46:01.977Z"
+    "updated_at": "2026-10-19T04:54:32.112Z"
+  },
+  {
+    "name": "카츠키",
+    "address": "경기도 하남시 미사강변한강로354번길 24(1층 일부호 망월동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.5591131884009,
+    "lng": 127.200983215845,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-19T04:54:32.112Z"
   },
   {
     "name": "？파크",
@@ -36,6 +49,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-18T04:46:01.977Z"
+    "updated_at": "2026-10-19T04:54:32.112Z"
+  },
+  {
+    "name": "다모아 대게",
+    "address": "경상북도 영덕군 강구면 강구대게길 45",
+    "type": "일반음식점",
+    "region": "경북",
+    "lat": 36.3589086849307,
+    "lng": 129.384922072318,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-19T04:54:32.112Z"
+  },
+  {
+    "name": "위스키 씨어터 클럽",
+    "address": "서울특별시 마포구 독막로32길 10(지층 신수동)",
+    "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.5467152184445,
+    "lng": 126.938763837116,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-19T04:54:32.112Z"
   }
 ]
