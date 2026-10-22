@@ -1,5 +1,18 @@
 [
   {
+    "name": "런치백",
+    "address": "서울특별시 동대문구 왕산로9길 25(1층 용두동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.578220048075,
+    "lng": 127.027577876882,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-22T05:02:47.323Z"
+  },
+  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -10,7 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-21T05:00:54.827Z"
+    "updated_at": "2026-10-22T05:02:47.323Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,33 +36,46 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-21T05:00:54.827Z"
+    "updated_at": "2026-10-22T05:02:47.323Z"
   },
   {
-    "name": "콰상",
-    "address": "서울특별시 광진구 자양번영로3길 7(1층 자양동)",
-    "type": "카페",
-    "region": "서울",
-    "lat": 37.5316364159333,
-    "lng": 127.07459983541,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-21T05:00:54.827Z"
-  },
-  {
-    "name": "구공수산",
-    "address": "경기도 성남시 수정구 위례광장로 21-12(위례드림시티 1층 117호 창곡동)",
+    "name": "메종코콘(maison cocon)",
+    "address": "부산광역시 부산진구 동성로 55-1(2층 전포동)",
     "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.4652695009881,
-    "lng": 127.139207757912,
+    "region": "부산",
+    "lat": 35.1555011642613,
+    "lng": 129.068184373959,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-21T05:00:54.827Z"
+    "updated_at": "2026-10-22T05:02:47.323Z"
+  },
+  {
+    "name": "담아",
+    "address": "부산광역시 강서구 명지국제6로220번길 11(1층 일부 명지동)",
+    "type": "카페",
+    "region": "부산",
+    "lat": 35.0948843102939,
+    "lng": 128.923287844407,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-22T05:02:47.323Z"
+  },
+  {
+    "name": "마당",
+    "address": "인천광역시 옹진군 영흥면 영흥로757번길 15-1(1층 일부호)",
+    "type": "일반음식점",
+    "region": "인천",
+    "lat": 37.2716084132761,
+    "lng": 126.449928482771,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-22T05:02:47.323Z"
   },
   {
     "name": "？파크",
@@ -62,19 +88,19 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-21T05:00:54.827Z"
+    "updated_at": "2026-10-22T05:02:47.323Z"
   },
   {
-    "name": "펠리스카페&호두까기잡화점",
-    "address": "경상남도 남해군 삼동면 독일로 22",
+    "name": "자작나무숲의투데이",
+    "address": "강원특별자치도 인제군 인제읍 자작나무숲길 781",
     "type": "일반음식점",
-    "region": "경남",
-    "lat": 34.7970220635759,
-    "lng": 128.043990651234,
+    "region": "강원",
+    "lat": 38.0092256417067,
+    "lng": 128.196610018832,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-21T05:00:54.827Z"
+    "updated_at": "2026-10-22T05:02:47.323Z"
   }
 ]
