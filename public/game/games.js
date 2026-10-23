@@ -5,6 +5,9 @@
  *   type  'party' 같이 하는 게임: PC 진행 + 휴대폰 참가. 서버 규칙이 lib/game/games/<id>/ 에 있어야 한다.
  *         'solo'  혼자 하는 게임: 브라우저 안에서만 동작. 서버 코드가 필요 없다.
  *   path  게임 첫 화면 주소. 같이 하는 게임은 그 아래에 host(진행)·play(참가) 화면을 둔다.
+ *   minPlayers / maxPlayers  (같이 하는 게임) 시작 가능한 인원
+ *   settings  (같이 하는 게임) 진행자가 대기실에서 바꾸는 설정. 형식은 lib/game/settings.js
+ *             예: { key: 'rounds', label: '라운드 수', type: 'int', min: 3, max: 20, default: 10 }
  */
 (function (root, factory) {
   var games = factory();
@@ -18,7 +21,10 @@
       name: '소수결 게임',
       tagline: '같은 질문에 A와 B 중 하나를 고르고, 더 적은 사람이 고른 쪽만 살아남습니다.',
       players: '3명 이상',
-      path: '/game/minority'
+      path: '/game/minority',
+      minPlayers: 3,
+      maxPlayers: 200,
+      settings: []
     }
   ];
 });

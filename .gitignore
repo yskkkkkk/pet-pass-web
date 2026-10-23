@@ -6,3 +6,7 @@ server_log.txt
 data/*.xlsx
 data/*.xls
 dist/
+.stryker-tmp/
+reports/
+test-results/
+playwright-report/

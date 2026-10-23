@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "_comment": "뮤테이션 테스트: npm run test:mutation. 게임 서버 코드를 조금씩 망가뜨려 단위 테스트가 잡아내는지 확인한다. 95% 미만이면 실패.",
+  "testRunner": "command",
+  "commandRunner": {
+    "command": "node --test \"test/unit/*.test.js\""
+  },
+  "mutate": [
+    "lib/game/**/*.js",
+    "api/game.js",
+    "!lib/game/games/minority/questions.js"
+  ],
+  "ignorePatterns": [
+    "dist",
+    "data",
+    "reports",
+    "docs",
+    ".ai-lab",
+    "public/blog",
+    "scripts",
+    "*.xlsx"
+  ],
+  "coverageAnalysis": "off",
+  "concurrency": 4,
+  "timeoutMS": 20000,
+  "reporters": [
+    "clear-text",
+    "progress",
+    "html",
+    "json"
+  ],
+  "htmlReporter": {
+    "fileName": "reports/mutation/index.html"
+  },
+  "jsonReporter": {
+    "fileName": "reports/mutation/mutation.json"
+  },
+  "thresholds": {
+    "high": 95,
+    "low": 90,
+    "break": 95
+  },
+  "tempDirName": ".stryker-tmp",
+  "cleanTempDir": "always"
+}
