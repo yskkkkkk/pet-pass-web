@@ -61,7 +61,7 @@
           token = data.playerToken;
           MG.storageSet(MG.playerKey(code), token);
           MG.storageSet(NICK_KEY, nick);
-          if (params.get('room') !== code) history.replaceState(null, '', '/game/play?room=' + code);
+          if (params.get('room') !== code) history.replaceState(null, '', '/game/minority/play?room=' + code);
           poller.start();
         })
         .catch(function (err) {

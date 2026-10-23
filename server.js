@@ -97,7 +97,7 @@ app.use(express.json());
 const authLimiter   = createRateLimiter({ max: 10, windowMs: 60_000 });
 const storesLimiter = createRateLimiter({ max: 30, windowMs: 60_000 });
 
-// 소수결 게임 (/game, /game/host, /game/play)
+// 미니게임 (/game 허브, /game/<게임>/host·play — docs/minigame_structure.md)
 app.use('/game', express.static(path.join(__dirname, 'public', 'game'), { extensions: ['html'] }));
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 

@@ -5,7 +5,7 @@
 
 - **Service:** [https://pet-pass-web.vercel.app/](https://pet-pass-web.vercel.app/)
 - **Blog:** [https://pet-pass-web.vercel.app/blog](https://pet-pass-web.vercel.app/blog)
-- **Game (소수결 게임):** [https://pet-pass-web.vercel.app/game](https://pet-pass-web.vercel.app/game) — 설정 방법은 `DEPLOY.md` 4장 참고
+- **Game (미니게임):** [https://pet-pass-web.vercel.app/game](https://pet-pass-web.vercel.app/game) — 설정은 `DEPLOY.md` 4장, 구조와 게임 추가 방법은 `docs/minigame_structure.md` 참고
 
 ---
 

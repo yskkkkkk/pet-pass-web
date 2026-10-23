@@ -529,3 +529,22 @@
 - 유예 시간은 상수 하나로 조정 가능. 카운트다운 중(약 1초 이내) 바꾼 투표도 반영됨
 
 ---
+## [2026-10-23] - Claude (미니게임 허브 구조로 정리)
+### ✅ 작업 요약
+- `/game`을 소수결 단일 게임에서 여러 게임을 담는 "미니게임" 허브 구조로 정리. 기능과 기존 주소는 그대로 유지
+
+### 🔧 변경 사항
+- **허브**: `/game`이 게임 목록(같이 하는 게임 / 혼자 하는 게임) + 참가 코드 입력 화면이 됨. 목록은 `public/game/games.js` 한 곳에서 관리하고, 허브와 서버가 함께 읽음
+- **소수결 이동**: 화면을 `public/game/minority/`로 옮김 (`/game/minority`, `/game/minority/host`, `/game/minority/play`). 전용 스타일은 `minority.css`로 분리
+- **공통 분리**: `public/game/shared/`(공통 스크립트·스타일·QR), `lib/game/core.js`(방 코드·토큰·닉네임·오류)
+- **참가 입구**: `/game/play?room=`이 방 정보(`GET /api/game?action=info`)를 보고 해당 게임 참가 화면으로 보냄. QR도 이 주소를 가리킴
+- **서버**: `api/game.js`는 공통 동작(create/join/kick/info/state 입구)만 처리하고, 게임별 동작은 `lib/game/games/<id>/`(서버 모듈)로 넘김. 소수결 규칙·문제는 `lib/game/games/minority/`로 이동
+- **예전 주소 호환**: `/game/host?room=…#토큰` → `/game/minority/host`로 이동(진행자 권한 유지), `/game/play?room=…` → 참가 입구로 동작
+- **문서**: `docs/minigame_structure.md` (구조, 혼자/같이 하는 게임 추가 순서, 실서버 주의점)
+
+### 📌 비고 (Issues & Decisions)
+- **DB 변경 없음**: 같이 하는 게임이 아직 하나라 방에 게임 종류를 저장하지 않고 모두 소수결로 봄. 두 번째 같이 하는 게임을 추가할 때 `game_rooms.game` 컬럼 추가 (SQL은 문서에 기록)
+- **동작 동일성 확인**: 리팩터링 전후 API 응답을 같은 시나리오로 기록해 비교 — 상태 응답에 `game` 필드가 추가된 것 외에는 동일
+- 서버 함수는 계속 `api/game.js` 하나 (Vercel 함수 개수 제한 고려)
+
+---
