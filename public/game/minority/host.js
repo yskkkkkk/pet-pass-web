@@ -29,6 +29,7 @@
   // 공개 직전에 바꾼 투표가 서버에 저장될 여유를 준다. (카운트다운이 도는 동안이라 체감 지연 없음)
   var REVEAL_GRACE_MS = 1000;
 
+  // 참가는 모든 게임 공통 입구(/game/play)로 받는다. 방의 게임을 확인해 이 게임 참가 화면으로 보내 준다.
   function joinUrl() {
     return location.origin + '/game/play?room=' + code;
   }
@@ -39,7 +40,7 @@
       '<div class="notice-screen">' +
         '<h2>' + esc(title) + '</h2>' +
         '<p>' + esc(desc) + '</p>' +
-        '<a class="btn btn-primary" href="/game">새 방 만들기</a>' +
+        '<a class="btn btn-primary" href="/game/minority">새 방 만들기</a>' +
       '</div>';
   }
 
@@ -350,7 +351,7 @@
         '</div>' +
         resultOptions(room) +
         '<div class="actions">' +
-          '<a class="btn btn-quiet btn-lg" href="/game">새 방 만들기</a>' +
+          '<a class="btn btn-quiet btn-lg" href="/game/minority">새 방 만들기</a>' +
           '<button class="btn btn-primary btn-lg" id="btn-restart" data-primary>같은 멤버로 한 판 더</button>' +
         '</div>' +
         rosterBlock() +

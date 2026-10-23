@@ -1,0 +1,158 @@
+/* ───────── 소수결 게임 전용 ─────────
+ * 공통 스타일(/game/shared/game.css) 위에 얹는다. 선택지 A/B, 결과, 카운트다운, 투표 버튼.
+ */
+
+/* ───────── 진행자 화면 ───────── */
+/* 문제 */
+.question {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(30px, 4.2vw, 58px);
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+}
+.stage > .eyebrow { text-align: center; }
+
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.option {
+  padding: 28px 24px 30px;
+  border-radius: var(--radius);
+  border-top: 6px solid;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity .3s ease;
+}
+.option .letter { font-size: 16px; font-weight: 800; }
+.option .name { font-size: clamp(26px, 3.2vw, 44px); font-weight: 800; letter-spacing: -0.03em; }
+.option-a { background: var(--a-tint); border-color: var(--a); color: var(--a-ink); }
+.option-a .letter { color: var(--a); }
+.option-b { background: var(--b-tint); border-color: var(--b); color: var(--b-ink); }
+.option-b .letter { color: var(--b); }
+
+/* 결과 */
+.option .tally {
+  font-size: clamp(56px, 6.5vw, 96px);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.option .tally small { font-size: .3em; font-weight: 700; margin-left: 4px; }
+.option.result .name { font-size: clamp(20px, 2vw, 28px); }
+.option.winner.option-a { background: var(--a); color: #FFFFFF; }
+.option.winner.option-b { background: var(--b); color: #FFFFFF; }
+.option.winner .letter { color: #FFFFFF; }
+.option.loser { opacity: .4; }
+.option .stamp {
+  margin-top: 4px;
+  padding: 4px 12px;
+  border: 1.5px solid currentColor;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.verdict { text-align: center; margin: 0; font-size: clamp(22px, 2.4vw, 32px); font-weight: 800; letter-spacing: -0.02em; }
+.verdict .sub { display: block; margin-top: 6px; font-size: 16px; font-weight: 600; color: var(--ink-2); letter-spacing: 0; }
+
+.progress-wrap { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.progress-text { font-size: 18px; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.progress-text b { color: var(--ink); font-size: 26px; font-weight: 800; }
+.progress { width: min(520px, 100%); height: 6px; background: var(--paper-2); }
+.progress > span { display: block; height: 100%; width: 0; background: var(--ink); transition: width .3s ease; }
+
+.actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+.roster { border-top: 1px solid var(--rule); padding-top: 14px; }
+.roster .panel-head h2 { font-size: 14px; font-weight: 600; color: var(--ink-3); margin: 0; }
+.roster .panel-head .count { font-size: 14px; color: var(--ink-2); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tag {
+  padding: 5px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--surface);
+}
+.tag.voted { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.tag.out { color: var(--ink-3); background: transparent; text-decoration: line-through; }
+.tag.just-out { color: var(--a); border-color: var(--a); background: transparent; text-decoration: line-through; }
+
+/* 카운트다운 */
+.countdown {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  z-index: 50;
+  font-size: min(36vw, 280px);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown .countdown-wait { font-size: 40px; font-weight: 700; color: var(--ink-2); }
+
+/* 우승 */
+.finale { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.finale .winners { margin: 0; font-size: clamp(40px, 5vw, 72px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+.finale .verdict .sub { margin-top: 0; }
+
+@media (max-width: 900px) {
+  .options { grid-template-columns: 1fr; }
+}
+
+/* ───────── 참가자 화면 ───────── */
+.play .question { font-size: 26px; }
+
+.vote-buttons { display: flex; flex-direction: column; gap: 12px; }
+.vote-btn {
+  min-height: 108px;
+  border: 0;
+  border-left: 6px solid;
+  border-radius: var(--radius);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  text-align: left;
+  transition: background .12s ease, color .12s ease, opacity .12s ease;
+}
+.vote-btn .letter { font-size: 16px; font-weight: 800; flex: 0 0 auto; }
+.vote-btn .picked { margin-left: auto; font-size: 14px; font-weight: 700; flex: 0 0 auto; }
+.vote-btn.a { background: var(--a-tint); border-color: var(--a); color: var(--a-ink); }
+.vote-btn.a .letter { color: var(--a); }
+.vote-btn.b { background: var(--b-tint); border-color: var(--b); color: var(--b-ink); }
+.vote-btn.b .letter { color: var(--b); }
+.vote-btn.a.selected { background: var(--a); color: #FFFFFF; }
+.vote-btn.b.selected { background: var(--b); color: #FFFFFF; }
+.vote-btn.selected .letter { color: #FFFFFF; }
+.vote-buttons.has-choice .vote-btn:not(.selected) { opacity: .45; }
+
+.verdict-word { margin: 0; font-size: 48px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+.verdict-word.live { color: var(--live); }
+.verdict-word.out { color: var(--a); }
+.verdict-word.watch { color: var(--ink-2); }
+
+.mini-result { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mini-result > div { padding: 14px 10px; border-radius: 4px; border-top: 4px solid; text-align: center; }
+.mini-result .label { font-size: 15px; font-weight: 700; }
+.mini-result .num { font-size: 36px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.mini-result .mine-label { font-size: 12px; font-weight: 700; margin-top: 2px; }
+.mini-result .ra { background: var(--a-tint); border-color: var(--a); color: var(--a-ink); }
+.mini-result .rb { background: var(--b-tint); border-color: var(--b); color: var(--b-ink); }
+.mini-result .ra.win { background: var(--a); color: #FFFFFF; }
+.mini-result .rb.win { background: var(--b); color: #FFFFFF; }
+
+.winner-names { margin: 0; font-size: 24px; font-weight: 800; }

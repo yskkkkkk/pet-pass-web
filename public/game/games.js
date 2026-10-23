@@ -1,0 +1,24 @@
+/**
+ * 미니게임 목록 — 허브 화면(/game)과 서버(api/game.js)가 함께 읽는 유일한 목록.
+ *
+ * 게임을 추가하려면 여기에 항목을 하나 추가한다. (자세한 순서는 docs/minigame_structure.md)
+ *   type  'party' 같이 하는 게임: PC 진행 + 휴대폰 참가. 서버 규칙이 lib/game/games/<id>/ 에 있어야 한다.
+ *         'solo'  혼자 하는 게임: 브라우저 안에서만 동작. 서버 코드가 필요 없다.
+ *   path  게임 첫 화면 주소. 같이 하는 게임은 그 아래에 host(진행)·play(참가) 화면을 둔다.
+ */
+(function (root, factory) {
+  var games = factory();
+  if (typeof module === 'object' && module.exports) module.exports = games;
+  else root.MG_GAMES = games;
+})(this, function () {
+  return [
+    {
+      id: 'minority',
+      type: 'party',
+      name: '소수결 게임',
+      tagline: '같은 질문에 A와 B 중 하나를 고르고, 더 적은 사람이 고른 쪽만 살아남습니다.',
+      players: '3명 이상',
+      path: '/game/minority'
+    }
+  ];
+});
