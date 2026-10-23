@@ -158,3 +158,30 @@ test('문제 뽑기: 사용 목록 없이 부르면 처음 뽑는 것으로 본�
   const { question, usedIds } = rules.pickQuestion();
   assert.deepEqual(usedIds, [question.id]);
 });
+
+/** 뽑을 수 있는 문제 전체를 무작위 없이 모은다 (randomInt를 0, 1, 2 … 로 바꿔 끼움) */
+function poolOf(usedIds, excludeId) {
+  const ids = [];
+  let size = null;
+  for (let k = 0; ; k++) {
+    const { question } = rules.pickQuestion(usedIds, excludeId, (min, max) => { size = max; return Math.min(k, max - 1); });
+    ids.push(question.id);
+    if (k >= size - 1) break;
+  }
+  return ids;
+}
+
+test('문제 뽑기(무작위 없이 전부 확인): 안 나온 문제만, 다 쓰면 지금 문제만 빼고 전부', () => {
+  const all = QUESTIONS.map((q) => q.id);
+  assert.deepEqual(poolOf([1, 2, 3]), all.filter((id) => ![1, 2, 3].includes(id)));
+  assert.deepEqual(poolOf([], 7), all.filter((id) => id !== 7), '문제 바꾸기: 지금 문제 제외');
+  assert.deepEqual(poolOf(all, 7), all.filter((id) => id !== 7), '다 쓴 뒤 다시 섞어도 지금 문제 제외');
+  assert.deepEqual(poolOf(all), all, '다 쓴 뒤 다시 섞으면 전부');
+  assert.deepEqual(poolOf(all.filter((id) => id !== 5), 5), all.filter((id) => id !== 5));
+});
+
+test('문제 뽑기: 무작위 함수는 0부터 뽑을 수 있는 개수 사이에서 부른다', () => {
+  const calls = [];
+  rules.pickQuestion([1], null, (min, max) => { calls.push([min, max]); return 0; });
+  assert.deepEqual(calls, [[0, 29]]);
+});

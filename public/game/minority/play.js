@@ -1,19 +1,16 @@
 /* 소수결 게임 · 참가자(모바일) 화면 */
 (function () {
   var esc = MG.escapeHtml;
-  var NICK_KEY = 'minority-game:nickname';
   var params = new URLSearchParams(location.search);
   var code = (params.get('room') || '').replace(/\D/g, '').slice(0, 4);
   var main = document.getElementById('play-main');
   var meBadge = document.getElementById('p-me');
+  document.querySelector('.play-header').appendChild(MG.fx.soundToggle());
 
   var token = code ? MG.storageGet(MG.playerKey(code)) : null;
   var state = null;
   var lastKey = null;
   var lastHtml = null;
-  var myVote = null;     // { round, choice } 이번 라운드에 내가 마지막으로 누른 선택
-  var savedVote = null;  // { round, choice } 서버 저장이 확인된 선택
-  var sending = false;
   var poller = MG.createPoller(refresh, 2000);
 
   /* ───────── 참가 ───────── */
@@ -22,52 +19,15 @@
     poller.stop();
     lastKey = lastHtml = null;
     meBadge.hidden = true;
-    var savedNick = MG.storageGet(NICK_KEY) || '';
-    main.innerHTML =
-      '<div class="screen">' +
-        '<h1 class="screen-title">참가하기</h1>' +
-        '<p class="screen-desc">더 적은 사람이 고른 쪽만 살아남습니다.</p>' +
-        '<form class="join-form" id="join-form" autocomplete="off">' +
-          '<div class="field"><label for="f-code">방 코드</label>' +
-            '<input class="input input-code" id="f-code" inputmode="numeric" maxlength="4" placeholder="0000" value="' + esc(code) + '" required></div>' +
-          '<div class="field"><label for="f-nick">닉네임 (최대 12자)</label>' +
-            '<input class="input" id="f-nick" maxlength="12" placeholder="다른 사람과 겹치지 않게" value="' + esc(savedNick) + '" required></div>' +
-          '<p class="error-text" id="join-error">' + esc(message || '') + '</p>' +
-          '<button class="btn btn-primary btn-lg btn-block" type="submit" id="btn-join">참가하기</button>' +
-        '</form>' +
-      '</div>';
-
-    var codeInput = document.getElementById('f-code');
-    var nickInput = document.getElementById('f-nick');
-    codeInput.addEventListener('input', function () {
-      codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 4);
-    });
-    (code ? nickInput : codeInput).focus();
-
-    document.getElementById('join-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var c = codeInput.value;
-      var nick = nickInput.value.trim();
-      var errEl = document.getElementById('join-error');
-      if (!/^\d{4}$/.test(c)) { errEl.textContent = '방 코드 4자리를 입력해 주세요.'; return codeInput.focus(); }
-      if (!nick) { errEl.textContent = '닉네임을 입력해 주세요.'; return nickInput.focus(); }
-
-      var btn = document.getElementById('btn-join');
-      btn.disabled = true;
-      errEl.textContent = '';
-      MG.post({ action: 'join', code: c, nickname: nick, playerToken: MG.storageGet(MG.playerKey(c)) || undefined })
-        .then(function (data) {
-          code = c;
-          token = data.playerToken;
-          MG.storageSet(MG.playerKey(code), token);
-          MG.storageSet(NICK_KEY, nick);
-          if (params.get('room') !== code) history.replaceState(null, '', '/game/minority/play?room=' + code);
-          poller.start();
-        })
-        .catch(function (err) {
-          errEl.textContent = err.message;
-          btn.disabled = false;
-        });
+    MG.join.show(main, {
+      code: code,
+      desc: '더 적은 사람이 고른 쪽만 살아남습니다.',
+      message: message,
+      onJoined: function (joinedCode, playerToken) {
+        code = joinedCode;
+        token = playerToken;
+        poller.start();
+      }
     });
   }
 
@@ -90,57 +50,36 @@
       });
   }
 
-  function sameVote(a, b) {
-    return !!a && !!b && a.round === b.round && a.choice === b.choice;
-  }
+  // 투표는 한 번에 하나씩 순서대로 보낸다 (늦게 처리된 예전 표가 새 표를 덮어쓰지 않게).
+  // 값은 { round, choice } — 다음 라운드로 넘어간 뒤 도착한 표는 서버가 거절한다.
+  var votes = MG.createSerialSender({
+    equals: function (a, b) { return !!a && !!b && a.round === b.round && a.choice === b.choice; },
+    send: function (v) { return MG.post({ action: 'vote', code: code, playerToken: token, choice: v.choice, round: v.round }); },
+    onSaved: function () { paint(); },
+    onError: function (err) {
+      MG.toast(err.message);
+      poller.now();
+      paint();
+    }
+  });
 
-  function isSaving() {
-    return !!myVote && !sameVote(myVote, savedVote);
+  /** 이번 라운드에 내가 고른 표 (저장 전이라도). 없으면 null */
+  function myVote(round) {
+    var v = votes.wanted();
+    return v && v.round === round ? v : null;
   }
 
   function vote(choice) {
     if (!state || state.room.status !== 'voting' || !state.me.alive) return;
     var round = state.room.round;
-    if (myVote && myVote.round === round && myVote.choice === choice) return;
-    myVote = { round: round, choice: choice };
-    state.me.choice = choice;
+    var current = myVote(round);
+    if (current && current.choice === choice) return;
+    votes.push({ round: round, choice: choice });
     paint();
-    if (navigator.vibrate) navigator.vibrate(15);
-    sendVote();
-  }
-
-  /**
-   * 투표 요청은 한 번에 하나씩 순서대로 보낸다.
-   * 동시에 보내면 서버 도착 순서가 뒤바뀌어 예전 선택(A)이 나중 선택(B)을 덮어쓸 수 있다.
-   * 보내는 사이에 선택을 또 바꾸면, 앞 요청이 끝난 뒤 마지막 선택만 보낸다.
-   */
-  function sendVote() {
-    if (sending || !myVote || sameVote(myVote, savedVote)) return;
-    var target = myVote;
-    sending = true;
-    MG.post({ action: 'vote', code: code, playerToken: token, choice: target.choice, round: target.round })
-      .then(function () { savedVote = target; })
-      .catch(function (err) {
-        // 마지막으로 누른 선택이 실패했다면 서버에 저장된 선택으로 되돌린다.
-        if (myVote === target) {
-          myVote = savedVote && savedVote.round === target.round ? savedVote : null;
-          if (state && state.room.round === target.round) state.me.choice = myVote ? myVote.choice : null;
-        }
-        MG.toast(err.message);
-        poller.now();
-      })
-      .then(function () {
-        sending = false;
-        sendVote();
-        paint();
-      });
+    MG.fx.vibrate(15);
   }
 
   function render(data) {
-    // 투표 중에는 이번 라운드에 내가 누른 선택이 기준이다. (서버 응답은 저장 직전 값일 수 있음)
-    if (data.room.status === 'voting' && myVote && myVote.round === data.room.round) {
-      data.me.choice = myVote.choice;
-    }
     state = data;
     paint();
   }
@@ -170,6 +109,11 @@
     return '<div class="mini-result">' + cell('A', 'ra', r.aCount) + cell('B', 'rb', r.bCount) + '</div>';
   }
 
+  /** 결과 도장 자리 (그린 뒤 paint에서 찍는다) */
+  function verdictStamp(text, tone) {
+    return '<div class="verdict-stamp" data-text="' + esc(text) + '" data-tone="' + tone + '"></div>';
+  }
+
   function screenLobby(data) {
     return '<div class="screen">' +
       '<h1 class="screen-title">' + esc(data.me.nickname) + '님,<br>참가했습니다.</h1>' +
@@ -190,11 +134,14 @@
       '</div>';
     }
 
-    var choice = me.choice;
+    // 투표 중에는 이번 라운드에 내가 누른 선택이 기준이다 (서버 응답은 저장 직전 값일 수 있음)
+    var mine = myVote(room.round);
+    var choice = mine ? mine.choice : me.choice;
+    var saving = !!mine && votes.isSaving();
     function btn(c, cls) {
       return '<button class="vote-btn ' + cls + (choice === c ? ' selected' : '') + '" data-choice="' + c + '">' +
         '<span class="letter">' + c + '</span><span>' + esc(label(q, c)) + '</span>' +
-        (choice === c ? '<span class="picked">' + (isSaving() ? '저장 중…' : '선택함') + '</span>' : '') + '</button>';
+        (choice === c ? '<span class="picked">' + (saving ? '저장 중…' : '선택함') + '</span>' : '') + '</button>';
     }
     return '<div class="screen">' +
       questionBlock(room) +
@@ -214,10 +161,10 @@
 
     if (me.alive) {
       var why = r.outcome === 'minority' ? '소수파를 골랐습니다.' : (r.outcome === 'tie' ? '동점이라 투표한 사람은 모두 생존합니다.' : (r.outcome === 'unanimous' ? '모두 같은 쪽이라 투표한 사람은 모두 생존합니다.' : '이번 라운드는 무효입니다.'));
-      head = '<p class="verdict-word live">생존</p><p class="screen-desc">' + why + ' 다음 라운드를 기다려 주세요.</p>';
+      head = verdictStamp('생존', 'live') + '<p class="screen-desc">' + why + ' 다음 라운드를 기다려 주세요.</p>';
     } else if (outThisRound) {
       var reason = me.choice ? '다수파를 골랐습니다.' : '투표하지 않았습니다.';
-      head = '<p class="verdict-word out">탈락</p><p class="screen-desc">' + reason + ' 남은 게임은 관전할 수 있습니다.</p>';
+      head = verdictStamp('탈락', 'out') + '<p class="screen-desc">' + reason + ' 남은 게임은 관전할 수 있습니다.</p>';
     } else {
       head = '<p class="verdict-word watch">관전 중</p><p class="screen-desc">생존자 ' + data.aliveCount + '명이 다음 라운드를 기다리고 있습니다.</p>';
     }
@@ -231,14 +178,31 @@
   function screenFinished(data) {
     var room = data.room;
     var me = data.me;
-    var head = me.alive
-      ? '<p class="verdict-word live">우승</p><p class="screen-desc">끝까지 살아남았습니다.</p>'
-      : '<p class="verdict-word watch">게임 종료</p><p class="screen-desc">우승: <b>' + data.winners.map(esc).join(', ') + '</b></p>';
+    var winners = '<p class="screen-desc">우승: <b>' + data.winners.map(esc).join(', ') + '</b></p>';
+    var head;
+    if (me.alive) head = verdictStamp('우승', 'live') + '<p class="screen-desc">끝까지 살아남았습니다.</p>';
+    else if (me.eliminatedRound === room.result.round) head = verdictStamp('탈락', 'out') + winners; // 마지막 라운드에 떨어짐
+    else head = '<p class="verdict-word watch">게임 종료</p>' + winners;
     return '<div class="screen center">' + head +
       '<p class="eyebrow">' + room.round + '라운드 결과</p>' +
       miniResult(room, me.choice) +
       '<p class="note">진행자가 새 판을 시작하면 자동으로 이어집니다.</p>' +
     '</div>';
+  }
+
+  /** 결과 도장: 방금 바뀐 화면이면 쾅 찍고 진동·소리, 같은 화면을 다시 그릴 때는 그대로 찍혀 있게 */
+  function applyStamp(fresh) {
+    var box = main.querySelector('.verdict-stamp');
+    if (!box) return;
+    var text = box.getAttribute('data-text');
+    var tone = box.getAttribute('data-tone');
+    if (!fresh) {
+      box.insertAdjacentHTML('beforeend', '<span class="stamp stamp-' + tone + ' still">' + esc(text) + '</span>');
+      return;
+    }
+    MG.fx.stamp(box, text, tone, 150);
+    MG.fx.vibrate(tone === 'out' ? [200, 80, 200] : [60, 40, 60, 40, 120]);
+    setTimeout(function () { MG.fx.play(tone === 'out' ? 'lose' : 'win'); }, 450);
   }
 
   function paint() {
@@ -258,9 +222,12 @@
 
     if (html === lastHtml) return;
     var key = room.status + ':' + room.round + ':' + (room.question ? room.question.id : '') + ':' + me.alive;
+    var fresh = key !== lastKey;
     main.innerHTML = html;
-    if (key === lastKey && main.firstChild) main.firstChild.style.animation = 'none';
-    else if (room.status === 'voting' && me.alive && navigator.vibrate) navigator.vibrate([60, 40, 60]);
+    if (!fresh && main.firstChild) main.firstChild.style.animation = 'none';
+    else if (room.status === 'voting' && me.alive) MG.fx.vibrate([60, 40, 60]);
+    // 처음 열었을 때(lastKey 없음)는 이미 지난 결과라 연출 없이
+    applyStamp(fresh && lastKey !== null);
     lastKey = key;
     lastHtml = html;
   }

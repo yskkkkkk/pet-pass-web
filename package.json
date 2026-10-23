@@ -10,7 +10,9 @@
     "db:sync": "node scripts/sync-stores.js",
     "favicon": "node scripts/generate-favicons.js",
     "test": "node --test \"test/unit/*.test.js\"",
-    "test:mutation": "stryker run"
+    "test:mutation": "stryker run",
+    "test:e2e": "playwright test",
+    "test:sql": "node --test \"test/sql/*.test.mjs\""
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.103.0",
@@ -25,6 +27,7 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11",
     "@playwright/browser-chromium": "^1.59.1",
     "@playwright/test": "^1.59.1",
     "@stryker-mutator/core": "^10.0.0",

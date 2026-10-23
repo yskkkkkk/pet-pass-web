@@ -8,6 +8,8 @@
   "mutate": [
     "lib/game/**/*.js",
     "api/game.js",
+    "public/game/shared/logic.js",
+    "public/game/minority/text.js",
     "!lib/game/games/minority/questions.js"
   ],
   "ignorePatterns": [

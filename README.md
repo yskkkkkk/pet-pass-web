@@ -58,3 +58,4 @@
 2. **Install:** `npm install`
 3. **Local Dev:** `npm start` (Express 서버 실행)
 4. **Build:** `npm run build` (API Key 주입 및 배포 자산 생성)
+5. **Test (미니게임):** `npm test` · `npm run test:sql` · `npm run test:e2e` · `npm run test:mutation` — 자세한 내용은 `docs/minigame_structure.md`
