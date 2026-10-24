@@ -1,18 +1,5 @@
 [
   {
-    "name": "더 하우스 오브 테라로사 서울",
-    "address": "서울특별시 성동구 성수이로24길 3(주 신도리코 서울본사 1층 성수동2가)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5455821902269,
-    "lng": 127.059517151671,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
-  },
-  {
     "name": "스페이스 노들 케이",
     "address": "서울특별시 동작구 현충로 11(1층 본동)",
     "type": "일반음식점",
@@ -23,20 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
-  },
-  {
-    "name": "오르노 마곡점",
-    "address": "서울특별시 강서구 마곡중앙로 105-7(케이스퀘어 마곡 1층 마곡동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5629234842805,
-    "lng": 126.826076887806,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
+    "updated_at": "2026-10-24T04:47:44.258Z"
   },
   {
     "name": "카페 ？잔",
@@ -49,33 +23,46 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
+    "updated_at": "2026-10-24T04:47:44.258Z"
   },
   {
-    "name": "골목포차",
-    "address": "부산광역시 사상구 광장로87번길 64(1층 괘법동)",
+    "name": "카페 카푸찌니",
+    "address": "서울특별시 동대문구 이문로 120(판매시설동 1층 A114호 이문동)",
+    "type": "카페",
+    "region": "서울",
+    "lat": 37.5984702182265,
+    "lng": 127.062682937358,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-24T04:47:44.258Z"
+  },
+  {
+    "name": "후라이드의 품격",
+    "address": "부산광역시 동래구 온천천로457번길 7(안락동)",
     "type": "일반음식점",
     "region": "부산",
-    "lat": 35.1652788163551,
-    "lng": 128.984787555452,
+    "lat": 35.1917103616079,
+    "lng": 129.103225935417,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
+    "updated_at": "2026-10-24T04:47:44.258Z"
   },
   {
-    "name": "샤브드수성들안길직영점",
-    "address": "대구광역시 수성구 들안로 57(2동 2층 상동)",
-    "type": "일반음식점",
+    "name": "누코이",
+    "address": "대구광역시 달서구 야외음악당로39동길 47(1층 두류동)",
+    "type": "카페",
     "region": "대구",
-    "lat": 35.834878570898,
-    "lng": 128.616302265973,
+    "lat": 35.8559269603779,
+    "lng": 128.555468814869,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
+    "updated_at": "2026-10-24T04:47:44.258Z"
   },
   {
     "name": "？파크",
@@ -88,58 +75,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
-  },
-  {
-    "name": "도그라미(DogRami)",
-    "address": "경기도 부천시 원미구 부일로 429(201호 일부호 심곡동, 다온하브)",
-    "type": "카페",
-    "region": "경기",
-    "lat": 37.4868954851607,
-    "lng": 126.777916006865,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
-  },
-  {
-    "name": "다모",
-    "address": "경상남도 함양군 지곡면 병곡지곡로 917",
-    "type": "카페",
-    "region": "경남",
-    "lat": 35.5664621732656,
-    "lng": 127.769633202237,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
-  },
-  {
-    "name": "누코이",
-    "address": "대구광역시 달서구 야외음악당로39동길 47(1층 두류동)",
-    "type": "카페",
-    "region": "대구광역시",
-    "lat": 35.8559269603779,
-    "lng": 128.555468814869,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
-  },
-  {
-    "name": "카페 카푸찌니",
-    "address": "서울특별시 동대문구 이문로 120(판매시설동 1층 A114호 이문동)",
-    "type": "카페",
-    "region": "서울특별시",
-    "lat": 37.5984702182265,
-    "lng": 127.062682937358,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-23T05:03:01.563Z"
+    "updated_at": "2026-10-24T04:47:44.258Z"
   }
 ]
