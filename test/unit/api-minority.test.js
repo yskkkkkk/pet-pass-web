@@ -449,3 +449,11 @@ test('#127 게임이 시작됐거나 꽉 찬 방에 이미 있는 닉네임으�
   assert.equal(started.status, 409);
   assert.equal(started.body.error, '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.');
 });
+
+test('표는 "vote:판번호" 칸에 저장한다 (구조 문서의 저장 형식)', async () => {
+  const { code, hostToken, tokens } = await newRoom(['가', '나', '다']);
+  const s = await post({ action: 'start', code, hostToken });
+  await post({ action: 'vote', code, playerToken: tokens[0], choice: 'B' });
+  const me = await store.getPlayerByToken(code, tokens[0]);
+  assert.deepEqual(await store.listMoves(code, 1, 'vote:' + s.body.room.gen), [{ player_id: me.id, payload: { choice: 'B' } }]);
+});
