@@ -412,6 +412,7 @@ test('#126 공개 뒤 탈락 반영이 실패해도 다음 조회에서 결과 �
   const h = (await hostState(code, hostToken)).body;
   assert.equal(h.room.status, 'finished');
   assert.equal(h.aliveCount, 1, '결과(생존 1명)와 참가자가 맞게 복구');
+  assert.deepEqual(h.players.map((p) => [p.alive, p.eliminatedRound]), [[true, null], [false, 1], [false, 1]], '복구한 응답에도 탈락 라운드');
   const p = (await playerState(code, tokens[1])).body;
   assert.equal(p.me.alive, false);
   assert.deepEqual(p.winners, ['가']);
@@ -433,4 +434,12 @@ test('#126 결과 공개 상태에서 다음 라운드를 시작할 때도 빠�
   const r = await post({ action: 'start', code, hostToken });
   assert.equal(r.status, 200);
   assert.equal((await store.listPlayers(code)).filter((p) => p.alive).length, 3);
+});
+
+test('#127 게임이 시작됐거나 꽉 찬 방에 이미 있는 닉네임으로 들어오면 "시작됨"·"가득 참"을 먼저 알려준다', async () => {
+  const { code, hostToken } = await newRoom(['가', '나', '다']);
+  await post({ action: 'start', code, hostToken });
+  const started = await post({ action: 'join', code, nickname: '가' });
+  assert.equal(started.status, 409);
+  assert.equal(started.body.error, '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.');
 });
