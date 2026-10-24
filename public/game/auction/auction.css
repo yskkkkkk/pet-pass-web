@@ -1,0 +1,306 @@
+/* ───────── 블라인드 경매 전용 ─────────
+ * 공통 스타일(/game/shared/game.css) 위에 얹는다.
+ * 경매 일정표, 물건, 책상과 봉투(입찰 중), 칩을 미는 공개 연출, 휴대폰 입찰 화면.
+ * 손과 봉투 그림은 art.js (잉크선 + 종이색), 움직임은 2.5D(원근 기울기)로만.
+ */
+
+.auction { flex: 1; display: flex; flex-direction: column; gap: 22px; }
+.auction-body { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; align-items: start; }
+.auction-floor { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.auction-side { position: sticky; top: 20px; }
+
+/* 경매 일정표 */
+.lineup { list-style: none; margin: 0; padding: 0 0 4px; display: flex; gap: 6px; overflow-x: auto; }
+.lineup-item {
+  flex: 1 0 86px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px 7px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--surface);
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+.li-round { font-weight: 800; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.li-name { font-weight: 700; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+.li-points { font-weight: 800; font-size: 14px; color: var(--ink); }
+.li-who { min-height: 1.3em; color: var(--ink-3); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lineup-item.current { border: 2px solid var(--ink); padding: 5px 7px 6px; }
+.lineup-item.done { background: transparent; }
+.lineup-item.done .li-name, .lineup-item.done .li-points { color: var(--ink-3); }
+.lineup-mystery { border-style: dashed; }
+.lineup-cursed .li-points { color: var(--a); }
+
+/* 물건 */
+.lot { position: relative; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 6px 0 2px; }
+.lot .eyebrow { margin: 0; }
+.lot-name { margin: 0; font-size: clamp(32px, 4vw, 56px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.2; }
+.lot-points { margin: 0; }
+.lot-rule { margin: 0; color: var(--ink-2); font-size: 16px; }
+.lot-rule b { color: var(--a); }
+.lot > .stamp { right: 10%; top: 20%; font-size: 48px; }
+.points-badge {
+  position: relative;
+  display: inline-block;
+  min-width: 2.6em;
+  padding: 2px 14px;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-size: 24px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  background: var(--surface);
+}
+.lot-mystery .points-badge { border-style: dashed; }
+.lot-cursed .points-badge { border-color: var(--a); color: var(--a); }
+.points-badge.rattle { animation: rattle .12s linear infinite; }
+.points-badge.opened { animation: box-open .45s cubic-bezier(.2, 1.6, .4, 1); }
+.points-badge.dud { color: var(--ink-3); border-color: var(--ink-3); }
+.points-badge.dud::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  box-shadow: -30px -14px 0 var(--ink-3), 26px -18px 0 var(--ink-3), -12px -30px 0 var(--rule), 34px 4px 0 var(--rule), -38px 8px 0 var(--rule);
+  animation: dust 1.2s ease-out both;
+}
+@keyframes rattle {
+  0% { transform: rotate(-6deg) translateX(-2px); }
+  50% { transform: rotate(6deg) translateX(2px); }
+  100% { transform: rotate(-6deg) translateX(-2px); }
+}
+@keyframes box-open { from { transform: scale(.6) rotate(8deg); } to { transform: scale(1) rotate(0); } }
+@keyframes dust { from { opacity: 1; transform: scale(.4); } to { opacity: 0; transform: scale(1.6) translateY(-10px); } }
+
+/* ───────── 입찰 중: 비스듬한 책상과 봉투 ───────── */
+.table { perspective: 1100px; padding: 0 10px; }
+.table-top {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 22px 16px;
+  padding: 26px 22px 30px;
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--paper-2);
+  transform: rotateX(22deg);
+  transform-origin: 50% 100%;
+}
+.seat { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.slot {
+  width: 86px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--rule);
+  border-radius: 6px;
+}
+.slot .envelope-svg { width: 72px; opacity: 0; transform: translateY(-8px) rotate(-4deg); transition: opacity .15s ease, transform .25s ease; }
+.slot.filled { border-color: transparent; }
+.slot.filled .envelope-svg { opacity: 1; transform: rotate(-4deg); }
+.seat:nth-child(even) .slot.filled .envelope-svg { transform: rotate(5deg); }
+.seat-name { font-size: 15px; font-weight: 700; text-align: center; overflow-wrap: anywhere; }
+.seat-caption {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border: 1px solid var(--a);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--a);
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+.seat-caption.pop { animation: caption-pop 2.6s ease-out both; }
+@keyframes caption-pop {
+  0% { opacity: 0; transform: translate(-50%, 8px) rotate(-4deg); }
+  10% { opacity: 1; transform: translate(-50%, 0) rotate(-4deg); }
+  80% { opacity: 1; transform: translate(-50%, -4px) rotate(-4deg); }
+  100% { opacity: 0; transform: translate(-50%, -10px) rotate(-4deg); }
+}
+.bid-progress { margin: 0; text-align: center; font-size: 18px; font-weight: 600; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.bid-progress b { font-size: 26px; font-weight: 800; color: var(--ink); }
+
+/* 화면 아래에서 들어오는 손 (body에 붙는다) */
+.flying-hand { position: fixed; top: 0; left: 0; width: 84px; z-index: 40; pointer-events: none; }
+.flying-hand .hand-svg { display: block; width: 100%; height: auto; }
+.flying-hand .carry { position: absolute; left: 50%; top: -26px; width: 66px; transform: translateX(-50%) rotate(-6deg); opacity: 0; }
+.flying-hand.carrying .carry { opacity: 1; }
+.flying-hand .envelope-svg { width: 100%; display: block; }
+
+/* ───────── 공개: 손이 칩 더미를 밀어 넣는다 ───────── */
+.bidboard { display: flex; flex-direction: column; border-top: 2px solid var(--ink); }
+.bid-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(90px, 160px) minmax(0, 1fr) 120px;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 4px 4px;
+  border-bottom: 1px solid var(--rule);
+}
+.bid-row.pending { visibility: hidden; }
+.bid-row.final { min-height: 64px; }
+.bid-row.final .bid-name, .bid-row.final .bid-amount { font-size: 24px; }
+.bid-name { font-size: 18px; font-weight: 800; overflow-wrap: anywhere; }
+.bid-name small { margin-left: 6px; font-size: 12px; font-weight: 600; color: var(--ink-3); }
+.bid-amount { text-align: right; font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.bid-amount small { margin-left: 2px; font-size: 13px; color: var(--ink-3); }
+.bid-amount em { margin-left: 6px; padding: 1px 6px; border: 1px solid var(--a); border-radius: 3px; color: var(--a); font-size: 12px; font-style: normal; vertical-align: 3px; }
+.bid-row > .stamp { right: 140px; top: 4px; font-size: 26px; }
+.bid-row.dim > :not(.stamp) { opacity: .4; }
+
+.bid-lane { position: relative; height: 58px; overflow: hidden; }
+/* 손 그림은 위를 가리키므로 90도 돌려서 오른쪽으로 미는 손으로 쓴다 (팔은 왼쪽 밖에서 들어온다) */
+.pusher { position: absolute; left: 0; top: 0; width: 96px; height: 100%; opacity: 0; }
+.pusher .hand-svg { position: absolute; left: 22px; top: -18px; width: 50px; height: 95px; transform: rotate(90deg); }
+.bid-row[data-pose="finger"] .pusher .hand-svg { width: 40px; height: 76px; left: 28px; top: -9px; }
+.bid-row[data-pose="heave"] .pusher .hand-svg { top: -30px; }
+.bid-row[data-pose="heave"] .pusher .hand-svg + .hand-svg { top: -6px; left: 12px; }
+.grunt { position: absolute; left: 82px; top: 2px; font-size: 12px; font-weight: 800; color: var(--a); white-space: nowrap; }
+.stack { position: absolute; left: 100px; top: 50%; display: flex; align-items: center; transform: translateY(-50%); }
+.chip {
+  display: block;
+  width: 36px;
+  height: 22px;
+  margin-left: -20px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--surface);
+  outline: 2px dashed var(--a);
+  outline-offset: -7px;
+}
+.chip:first-child { margin-left: 0; }
+.chip:nth-child(even) { transform: translateY(2px) rotate(-8deg); }
+.chip:nth-child(3n) { background: var(--a-tint); }
+
+/* 미는 동작: 손이 왼쪽 밖에서 들어와 더미를 밀고 빠진다 */
+.bid-row.pushing .pusher { animation: hand-push 1s ease-out both; }
+.bid-row.pushing .stack { animation: stack-push .55s ease-out both; }
+.bid-row.pushing[data-pose="heave"] .pusher { animation: hand-heave 1.4s ease-in-out both; }
+.bid-row.pushing[data-pose="heave"] .stack { animation: stack-heave 1.1s ease-in-out both; }
+.bid-row.pushing[data-pose="finger"] .pusher { animation: hand-poke .8s ease-out both; }
+.bid-row.pushing[data-pose="empty"] .pusher { animation: hand-shrug 1.2s ease-in-out both; }
+@keyframes hand-push {
+  0% { opacity: 1; transform: translateX(-90px); }
+  50% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(-110px); }
+}
+@keyframes stack-push { from { transform: translate(-90px, -50%); } to { transform: translate(0, -50%); } }
+@keyframes hand-heave {
+  0% { opacity: 1; transform: translateX(-100px); }
+  25% { opacity: 1; transform: translateX(-40px) rotate(-3deg); }
+  40% { opacity: 1; transform: translateX(-46px) rotate(3deg); }
+  70% { opacity: 1; transform: translateX(0) rotate(-2deg); }
+  100% { opacity: 0; transform: translateX(-130px); }
+}
+@keyframes stack-heave {
+  0% { transform: translate(-100px, -50%); }
+  35% { transform: translate(-40px, -50%); }
+  50% { transform: translate(-44px, -50%); }
+  100% { transform: translate(0, -50%); }
+}
+@keyframes hand-poke {
+  0% { opacity: 1; transform: translateX(-80px); }
+  45% { opacity: 1; transform: translateX(4px); }
+  60% { opacity: 1; transform: translateX(-2px); }
+  100% { opacity: 0; transform: translateX(-90px); }
+}
+@keyframes hand-shrug {
+  0% { opacity: 1; transform: translateX(-80px); }
+  30% { opacity: 1; transform: translateX(0) rotate(0); }
+  45% { opacity: 1; transform: translateX(0) rotate(-12deg); }
+  60% { opacity: 1; transform: translateX(0) rotate(12deg); }
+  100% { opacity: 0; transform: translateX(-90px); }
+}
+
+/* 공중분해: 칩이 사방으로 흩어진다 */
+.bid-row.burst .bid-lane { overflow: visible; }
+.bid-row.burst .chip { animation: burst .9s cubic-bezier(.2, .7, .4, 1) both; }
+@keyframes burst {
+  0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+}
+
+/* 저주 떠넘기기 */
+.curse-tag { display: inline-block; margin-left: 8px; padding: 1px 8px; border: 1px solid var(--a); border-radius: 3px; color: var(--a); font-size: 13px; font-weight: 700; background: var(--surface); }
+
+.suspense { margin: 10px 0 2px; text-align: center; font-size: 22px; font-weight: 800; color: var(--ink-2); }
+.suspense::after { content: ''; animation: dots 1.2s steps(4) infinite; }
+@keyframes dots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+/* 공개 화면: 표가 한눈에 들어오게 물건을 작게, 헤드라인 자리는 미리 비워 둔다 (들어올 때 화면이 밀리지 않게) */
+.auction.revealed { gap: 14px; }
+.auction.revealed #headline-slot { min-height: 72px; }
+.auction.revealed .auction-floor { gap: 14px; }
+.auction.revealed .lot { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 6px 16px; }
+.auction.revealed .lot .eyebrow { flex-basis: 100%; }
+.auction.revealed .lot-name { font-size: clamp(26px, 3vw, 40px); }
+.auction.revealed .lot-rule { display: none; }
+
+/* 텅 빈 지갑 */
+.wallet-empty { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-3); font-size: 14px; font-weight: 700; }
+.wallet-svg { width: 24px; height: auto; }
+
+/* 최종 결과 */
+.final-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 44px; align-items: start; }
+
+@media (max-width: 1000px) {
+  .auction-body, .final-body { grid-template-columns: 1fr; }
+  .auction-side { position: static; }
+}
+
+/* ───────── 휴대폰 ───────── */
+.me b { color: var(--ink); }
+.p-lot { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+.p-lot .eyebrow { margin: 0; }
+.p-lot-name { margin: 0; font-size: 26px; letter-spacing: -0.03em; line-height: 1.25; }
+.p-lot-points { margin: 0; }
+.p-lot .points-badge { font-size: 18px; }
+.p-lot-rule { margin: 0; font-size: 14px; color: var(--ink-2); }
+.p-lot-rule b { color: var(--a); }
+
+.composer { display: flex; flex-direction: column; gap: 12px; }
+.draft { margin: 0; text-align: center; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.draft b { font-size: 64px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+.draft .of { display: block; margin-top: 4px; font-size: 14px; font-weight: 600; color: var(--ink-3); }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.steps .step { min-height: 52px; padding: 0; font-size: 18px; font-variant-numeric: tabular-nums; }
+.steps .all-in { grid-column: span 1; border-color: var(--a); color: var(--a); }
+.steps .all-in.shaking { background: var(--a); color: #FFFFFF; animation: shake .35s linear infinite; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(-2px) rotate(-2deg); }
+  75% { transform: translateX(2px) rotate(2deg); }
+}
+.gulp { margin: 0; text-align: center; color: var(--a); font-size: 20px; font-weight: 800; animation: gulp .6s ease-in-out infinite alternate; }
+@keyframes gulp { from { transform: rotate(-2deg); } to { transform: rotate(2deg) scale(1.04); } }
+.envelope-state { margin: 0; text-align: center; font-size: 14px; color: var(--ink-2); }
+.tease { margin: 0; text-align: center; font-size: 14px; font-weight: 700; color: var(--ink-3); }
+
+.p-bids { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); text-align: left; }
+.p-bids li { display: flex; justify-content: space-between; gap: 10px; padding: 9px 4px; border-bottom: 1px solid var(--rule); font-size: 16px; font-variant-numeric: tabular-nums; }
+.p-bids li.mine { background: var(--paper-2); font-weight: 800; }
+.p-awards { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.p-awards li { padding: 10px 12px; border: 1px solid var(--ink); border-radius: var(--radius-sm); background: var(--surface); }
+.p-awards b { display: block; font-size: 17px; }
+.p-awards span { font-size: 14px; color: var(--ink-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bid-row .pusher, .bid-row .stack, .chip, .points-badge, .seat-caption, .steps .all-in, .gulp { animation: none !important; }
+  .seat-caption.pop { opacity: 1; }
+}
+
+.verdict-word { margin: 0; font-size: 44px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+.verdict-word.watch { color: var(--ink-2); animation: gulp .5s ease-in-out infinite alternate; }

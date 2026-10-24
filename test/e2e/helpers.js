@@ -41,20 +41,29 @@ async function createMinorityRoom(host) {
   return new URL(host.url()).searchParams.get('room');
 }
 
-/** 참가 입구(QR 주소)로 들어와 닉네임으로 참가 */
-async function joinAs(browser, code, nickname) {
+/** 블라인드 경매 방 만들기 → 진행 화면 (code를 돌려줌) */
+async function createAuctionRoom(host) {
+  await host.goto('/game/auction', { waitUntil: 'commit' });
+  await host.click('#btn-create');
+  await host.waitForURL(/\/game\/auction\/host\?room=\d{4}$/, { waitUntil: 'commit' });
+  await host.waitForSelector('#btn-start');
+  return new URL(host.url()).searchParams.get('room');
+}
+
+/** 참가 입구(QR 주소)로 들어와 닉네임으로 참가 (입구가 방의 게임 화면으로 보낸다) */
+async function joinAs(browser, code, nickname, game = 'minority') {
   const phone = await newPhone(browser);
   await phone.goto('/game/play?room=' + code, { waitUntil: 'commit' });
-  await phone.waitForURL(/\/game\/minority\/play\?room=/, { waitUntil: 'commit' });
+  await phone.waitForURL(new RegExp('/game/' + game + '/play\\?room='), { waitUntil: 'commit' });
   await phone.fill('#f-nick', nickname);
   await phone.click('#btn-join');
   await expect(phone.locator('text=참가했습니다')).toBeVisible();
   return phone;
 }
 
-async function joinMany(browser, code, names) {
+async function joinMany(browser, code, names, game) {
   const phones = [];
-  for (const n of names) phones.push(await joinAs(browser, code, n));
+  for (const n of names) phones.push(await joinAs(browser, code, n, game));
   return phones;
 }
 
@@ -107,6 +116,6 @@ function expectNoErrors(...pages) {
 }
 
 module.exports = {
-  newHost, newPhone, createMinorityRoom, joinAs, joinMany, waitForLobbyCount,
+  newHost, newPhone, createMinorityRoom, createAuctionRoom, joinAs, joinMany, waitForLobbyCount,
   delayResponses, delayRequests, countCountdowns, vote, expectNoErrors
 };

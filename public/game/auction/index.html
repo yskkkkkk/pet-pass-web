@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>블라인드 경매</title>
+  <meta name="description" content="한정된 칩으로 몰래 입찰하는 경매 게임. PC로 경매장을 띄우고 휴대폰으로 입찰하세요.">
+  <meta name="theme-color" content="#F5F2EA">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="/game/shared/game.css">
+  <link rel="stylesheet" href="/game/auction/auction.css">
+</head>
+<body>
+  <main class="landing">
+    <a class="back-link" href="/game">← 미니게임 전체</a>
+    <h1>블라인드 경매</h1>
+    <p class="lead">모두 같은 칩으로 시작해서, 라운드마다 올라오는 물건에 몰래 입찰합니다. 가장 많이 건 사람이 물건(점수)을 가져가지만, <b>건 칩은 이기든 지든 사라집니다.</b><br>경매장은 PC 화면에, 입찰은 각자 휴대폰으로 합니다.</p>
+
+    <div class="landing-grid">
+      <section class="landing-col pc-only">
+        <h2>진행하기</h2>
+        <p class="grow">PC나 TV에 띄워 두는 경매장 화면입니다. QR 코드, 물건, 봉투를 낸 사람, 공개 연출, 순위가 나옵니다. 진행자는 입찰하지 않습니다.</p>
+        <button class="btn btn-primary btn-lg btn-block" id="btn-create">새 방 만들기</button>
+        <p class="error-text" id="create-error"></p>
+      </section>
+
+      <section class="landing-col">
+        <h2>참가하기</h2>
+        <form id="join-form" class="field" autocomplete="off">
+          <label for="join-code">진행 화면에 보이는 4자리 코드</label>
+          <input class="input input-code" id="join-code" inputmode="numeric" pattern="\d{4}" maxlength="4" placeholder="0000" required>
+          <button class="btn btn-lg btn-block" type="submit" style="margin-top:8px">참가하기</button>
+        </form>
+      </section>
+    </div>
+
+    <section class="rules">
+      <h3>규칙</h3>
+      <ol>
+        <li>모두 칩 <b>100개</b>(진행자가 바꿀 수 있음)로 시작합니다. 경매 일정표(물건과 점수)는 처음부터 공개됩니다.</li>
+        <li>휴대폰으로 0~남은 칩 사이에서 몰래 입찰합니다. 공개 전까지 바꿀 수 있지만, <b>바꾸면 경매장에 다 보입니다</b>(금액은 비밀).</li>
+        <li>가장 많이 건 사람이 혼자면 물건을 가져갑니다. 최고액이 <b>동점이면 아무도 못 가져가고</b> 칩만 공중분해됩니다.</li>
+        <li><b>미스터리 상자</b>는 열어 봐야 점수(0~5점)를 압니다. <b>저주 물건</b>은 반대로 가장 적게 건 사람이 떠안습니다(−2점).</li>
+        <li>마지막 물건은 항상 3점. 점수 합계로 순위를 정하고, 같으면 남은 칩이 많은 사람이 위입니다.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script src="/game/shared/logic.js"></script>
+  <script src="/game/shared/common.js"></script>
+  <script>
+    (function () {
+      var createBtn = document.getElementById('btn-create');
+      var createError = document.getElementById('create-error');
+
+      createBtn.addEventListener('click', function () {
+        createBtn.disabled = true;
+        createError.textContent = '';
+        MG.post({ action: 'create', game: 'auction' })
+          .then(function (data) {
+            MG.storageSet(MG.hostKey(data.code), data.hostToken);
+            location.href = '/game/auction/host?room=' + data.code + '#' + data.hostToken;
+          })
+          .catch(function (err) {
+            createError.textContent = err.message;
+            createBtn.disabled = false;
+          });
+      });
+
+      var codeInput = document.getElementById('join-code');
+      codeInput.addEventListener('input', function () {
+        codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 4);
+      });
+      document.getElementById('join-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!/^\d{4}$/.test(codeInput.value)) return codeInput.focus();
+        location.href = '/game/play?room=' + codeInput.value;
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -7,7 +7,7 @@
   var text = factory(root.MG || (typeof require === 'function' ? require('../shared/logic.js') : null));
   // Stryker disable next-line all: 브라우저/Node 판별 — Node 테스트에서는 한쪽만 실행돼 확인할 수 없다 (브라우저 쪽은 화면 테스트가 확인)
   if (typeof module === 'object' && module.exports) module.exports = text; else root.MinorityText = text;
-})(this, function (logic) {
+})(globalThis, function (logic) {
   var HEADLINES = {
     minority: [
       '[호외] 소수파 ‘{win}’ 생존… 다수파 {lose}명 집단 탈락',
