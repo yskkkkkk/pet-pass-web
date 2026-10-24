@@ -41,13 +41,27 @@ async function createMinorityRoom(host) {
   return new URL(host.url()).searchParams.get('room');
 }
 
-/** 블라인드 경매 방 만들기 → 진행 화면 (code를 돌려줌) */
+/** 블라인드 경매 방 만들기 (PC 화면으로 진행) → 진행 화면 (code를 돌려줌) */
 async function createAuctionRoom(host) {
   await host.goto('/game/auction', { waitUntil: 'commit' });
-  await host.click('#btn-create');
+  await host.waitForSelector('#art-1 svg');
+  await host.click('#btn-create-pc');
   await host.waitForURL(/\/game\/auction\/host\?room=\d{4}$/, { waitUntil: 'commit' });
   await host.waitForSelector('#btn-start');
   return new URL(host.url()).searchParams.get('room');
+}
+
+/** 블라인드 경매 방 만들기 (휴대폰만으로 진행) → 방장 휴대폰 { boss, code } */
+async function createPhoneAuction(browser, nickname) {
+  const boss = await newPhone(browser);
+  boss.on('dialog', (d) => d.accept());
+  await boss.goto('/game/auction', { waitUntil: 'commit' });
+  await boss.waitForSelector('#art-1 svg'); // 스크립트가 붙기 전에 누르면 폼이 그냥 제출된다
+  await boss.fill('#create-nick', nickname);
+  await boss.click('#btn-create');
+  await boss.waitForURL(/\/game\/auction\/play\?room=\d{4}$/, { waitUntil: 'commit' });
+  await boss.waitForSelector('#btn-start');
+  return { boss, code: new URL(boss.url()).searchParams.get('room') };
 }
 
 /** 참가 입구(QR 주소)로 들어와 닉네임으로 참가 (입구가 방의 게임 화면으로 보낸다) */
@@ -116,6 +130,6 @@ function expectNoErrors(...pages) {
 }
 
 module.exports = {
-  newHost, newPhone, createMinorityRoom, createAuctionRoom, joinAs, joinMany, waitForLobbyCount,
+  newHost, newPhone, createMinorityRoom, createAuctionRoom, createPhoneAuction, joinAs, joinMany, waitForLobbyCount,
   delayResponses, delayRequests, countCountdowns, vote, expectNoErrors
 };

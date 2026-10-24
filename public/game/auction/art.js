@@ -56,5 +56,5 @@
     '</svg>';
   }
 
-  window.AuctionArt = { hand: hand, envelope: envelope, stack: stack, emptyWallet: emptyWallet };
+  window.AuctionArt = Object.assign(window.AuctionArt || {}, { hand: hand, envelope: envelope, stack: stack, emptyWallet: emptyWallet });
 })();

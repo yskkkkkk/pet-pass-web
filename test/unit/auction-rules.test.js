@@ -292,3 +292,11 @@ test('시상식 정의: 상마다 다른 기록, 문구에 {value} 자리(텅장
   }
   assert.equal(rules.CHEAP_MAX, 3);
 });
+
+test('물건 그림: 목록의 모든 물건(일반·상자·저주)에 그림이 있다', () => {
+  const fs = require('node:fs');
+  const art = fs.readFileSync(require.resolve('../../public/game/auction/items-art.js'), 'utf8');
+  const names = [...items.NORMAL[1], ...items.NORMAL[2], ...items.NORMAL[3], items.MYSTERY_NAME, ...items.CURSED];
+  assert.equal(names.length, 41);
+  for (const n of names) assert.ok(art.includes(`'${n}':`), n);
+});

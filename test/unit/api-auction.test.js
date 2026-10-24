@@ -47,24 +47,59 @@ test('방 만들기: 경매 설정 기본값 (10라운드, 칩 100, 돌발 물�
   const r = await post({ action: 'create', game: 'auction' });
   assert.equal(r.body.game, 'auction');
   const s = await hostState(r.body.code, r.body.hostToken);
-  assert.deepEqual(s.body.settings, { rounds: 10, chips: 100, surprises: true });
+  assert.deepEqual(s.body.settings, { rounds: 10, chips: 100, surprises: true, screen: 'pc' });
   assert.equal(s.body.game, 'auction');
   const info = await get({ action: 'info', code: r.body.code });
   assert.deepEqual(info.body, { code: r.body.code, game: 'auction', path: '/game/auction', status: 'lobby' });
+});
+
+test('휴대폰만으로 진행: 방을 만들며 진행 방식을 정하고 방장도 참가자로 들어간다', async () => {
+  const r = await post({ action: 'create', game: 'auction', settings: { screen: 'phone' }, nickname: '  방장 ' });
+  assert.equal(r.status, 200);
+  assert.match(r.body.playerToken, /^[0-9a-f]{32}$/);
+  const { code, hostToken, playerToken } = r.body;
+  const me = (await playerState(code, playerToken)).body;
+  assert.equal(me.me.nickname, '방장');
+  assert.equal(me.settings.screen, 'phone');
+  assert.equal((await post({ action: 'join', code, nickname: '방장' })).status, 409, '방장 닉네임도 중복 검사');
+  const guestToken = (await post({ action: 'join', code, nickname: '손님' })).body.playerToken;
+  assert.equal((await post({ action: 'start', code, hostToken })).status, 200, '방장 휴대폰이 진행');
+  assert.equal((await post({ action: 'bid', code, playerToken, bid: 3 })).status, 200, '방장도 입찰');
+
+  // 휴대폰도 경매장 화면을 그릴 수 있게: 일정표, 봉투 현황, 순위 (금액은 없음)
+  const guest = (await playerState(code, guestToken)).body;
+  assert.equal(guest.lineup.length, 10);
+  assert.deepEqual(guest.players.map((p) => [p.nickname, p.submitted]), [['방장', true], ['손님', false]]);
+  assert.equal(guest.submittedCount, 1);
+  assert.equal(guest.history.length, 0);
+  assert.doesNotMatch(JSON.stringify(guest), /"bid":3/);
+  assert.equal(guest.me.bid, null);
+});
+
+test('방 만들기: 잘못된 설정이나 빈 닉네임은 거절, 닉네임이 없으면 방장은 참가하지 않는다', async () => {
+  const bad = await post({ action: 'create', game: 'auction', settings: { screen: 'tv' } });
+  assert.equal(bad.status, 400);
+  assert.equal(bad.body.error, '진행 화면 값이 올바르지 않아요.');
+  const empty = await post({ action: 'create', game: 'auction', nickname: '   ' });
+  assert.equal(empty.status, 400);
+  assert.equal(empty.body.error, '닉네임을 입력해 주세요.');
+  const pc = await post({ action: 'create', game: 'auction' });
+  assert.equal(pc.body.playerToken, undefined);
+  assert.deepEqual(await store.listPlayers(pc.body.code), []);
 });
 
 test('진행자 설정: 바꾼 설정 전체를 돌려주고 저장, 숫자 선택지는 숫자만', async () => {
   const { code, hostToken } = await newRoom([]);
   const r = await post({ action: 'settings', code, hostToken, settings: { rounds: 5, chips: 50 } });
   assert.equal(r.status, 200);
-  assert.deepEqual(r.body, { settings: { rounds: 5, chips: 50, surprises: true } });
+  assert.deepEqual(r.body, { settings: { rounds: 5, chips: 50, surprises: true, screen: 'pc' } });
   const off = await post({ action: 'settings', code, hostToken, settings: { surprises: false } });
-  assert.deepEqual(off.body.settings, { rounds: 5, chips: 50, surprises: false });
+  assert.deepEqual(off.body.settings, { rounds: 5, chips: 50, surprises: false, screen: 'pc' });
   assert.equal((await post({ action: 'settings', code, hostToken, settings: { chips: '50' } })).status, 400);
   assert.equal((await post({ action: 'settings', code, hostToken, settings: { chips: 70 } })).status, 400);
   const tooMany = await post({ action: 'settings', code, hostToken, settings: { rounds: 16 } });
   assert.equal(tooMany.body.error, '라운드 수은(는) 5~15 사이 정수여야 해요.');
-  assert.deepEqual((await hostState(code, hostToken)).body.settings, { rounds: 5, chips: 50, surprises: false });
+  assert.deepEqual((await hostState(code, hostToken)).body.settings, { rounds: 5, chips: 50, surprises: false, screen: 'pc' });
 });
 
 test('대기실 상태: 참가자는 시작 칩, 0점, 모두 1위, 물건 없음', async () => {

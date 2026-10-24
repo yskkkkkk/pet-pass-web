@@ -48,7 +48,7 @@
 
   function mount(container, opts) {
     var game = opts.game;
-    var settings = game.settings || [];
+    var settings = (game.settings || []).filter(function (f) { return !f.hidden; });
     var minPlayers = game.minPlayers || 2;
     var listSig = null;
     var current = {};

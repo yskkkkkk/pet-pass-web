@@ -188,19 +188,23 @@
   }
 
   /**
-   * 정해 둔 시각에 차례로 실행한다. steps: [{ at: ms, run: function }]
+   * 정해 둔 시각에 차례로 실행한다. steps: [{ at: ms, run: function (late) }]
+   * offsetMs: 이미 이만큼 지난 시점부터 시작한다. 지나간 일은 바로 run(true)로 (연출 없이 결과만) 실행한다
    * @returns {{ done: Promise, cancel: function }} cancel하면 아직 안 한 일은 하지 않는다
    */
-  function timeline(steps) {
+  function timeline(steps, offsetMs) {
+    var offset = offsetMs || 0;
     var timers = [];
     var last = 0;
     var cancelled = false;
+    var ordered = steps.slice().sort(function (a, b) { return a.at - b.at; });
     var done = new Promise(function (resolve) {
-      steps.forEach(function (step) {
+      ordered.forEach(function (step) {
         last = Math.max(last, step.at);
-        timers.push(setTimeout(function () { if (!cancelled) step.run(); }, step.at));
+        if (step.at < offset) step.run(true);
+        else timers.push(setTimeout(function () { if (!cancelled) step.run(false); }, step.at - offset));
       });
-      timers.push(setTimeout(resolve, last));
+      timers.push(setTimeout(resolve, Math.max(0, last - offset)));
     });
     return {
       done: done,
@@ -211,6 +215,36 @@
     };
   }
 
+  /**
+   * 정해진 시각까지 남은 시간을 3·2·1로 센다 (휴대폰마다 받은 시각이 달라도 같은 순간에 끝나게)
+   * @returns {Promise} 0이 되면
+   */
+  function countdownTo(remainingMs) {
+    var end = Date.now() + remainingMs;
+    var overlay = document.createElement('div');
+    overlay.className = 'countdown';
+    overlay.setAttribute('aria-live', 'assertive');
+    document.body.appendChild(overlay);
+    var shown = null;
+    return new Promise(function (resolve) {
+      (function tick() {
+        var left = end - Date.now();
+        if (left <= 0) {
+          overlay.remove();
+          play('go');
+          return resolve();
+        }
+        var n = Math.min(3, Math.ceil(left / 1000));
+        if (n !== shown) {
+          shown = n;
+          overlay.innerHTML = '<span>' + n + '</span>';
+          play('tick');
+        }
+        setTimeout(tick, Math.min(100, left));
+      })();
+    });
+  }
+
   MG.fx = {
     timeline: timeline,
     reducedMotion: reducedMotion,
@@ -219,6 +253,7 @@
     soundToggle: soundToggle,
     vibrate: vibrate,
     countdown: countdown,
+    countdownTo: countdownTo,
     stamp: stamp,
     headline: headline,
     drop: drop

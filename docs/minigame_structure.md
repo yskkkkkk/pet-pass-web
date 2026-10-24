@@ -12,8 +12,8 @@
 | `/game` | 허브 — 게임 목록, 참가 코드 입력 |
 | `/game/play?room=1234` | 같이 하는 게임 참가 입구. QR 코드가 이 주소를 가리킨다. 방의 게임을 확인해 `<게임 경로>/play`로 보낸다 |
 | `/game/<게임>` | 게임 첫 화면 (소개, 방 만들기) |
-| `/game/<게임>/host?room=1234` | 같이 하는 게임 진행 화면 (PC) |
-| `/game/<게임>/play?room=1234` | 같이 하는 게임 참가 화면 (휴대폰) |
+| `/game/<게임>/host?room=1234` | 같이 하는 게임 진행 화면 (PC — 경매는 선택 사항) |
+| `/game/<게임>/play?room=1234` | 같이 하는 게임 참가 화면 (휴대폰. 휴대폰만으로 진행하는 방이면 경매장 화면과 방장 버튼까지) |
 | `/game/host?room=…` | 예전 주소 호환 — 소수결 진행 화면으로 보낸다 |
 
 ## 파일
@@ -26,13 +26,18 @@ public/game/
   host.html             예전 진행 주소 호환
   shared/
     logic.js            순수 로직 (단위·뮤테이션 테스트 대상): latestOnly, createSerialSender, createQueue, escapeHtml, pickOne, fill
-    common.js           서버 요청, 폴링, 저장소, 알림, 진행자 토큰(hostSession), 게임 정보(gameInfo)
-    fx.js               웃음 장치: 카운트다운, 도장, 호외 헤드라인, 이름표 떨어지기, 효과음과 소리 끄기
-    lobby.js            진행자 대기실: QR·방 코드, 참가자 목록·내보내기, 진행자 설정, 시작
+    common.js           서버 요청, 폴링(간격을 함수로도), 저장소, 알림, 진행자 토큰(hostSession), 게임 정보(gameInfo)
+    fx.js               웃음 장치: 카운트다운(countdown, 정해진 시각까지 countdownTo), 도장, 호외 헤드라인, 이름표 떨어지기,
+                        효과음(망치·칩·펑·북 등)과 소리 끄기, 시간표대로 연출하기(timeline — 중간부터 시작 가능)
+    lobby.js            진행자 대기실: QR·방 코드, 참가자 목록·내보내기, 진행자 설정(hidden 설정은 숨김), 시작 (휴대폰에서도 그대로)
     join.js             휴대폰 참가 화면 (방 코드, 닉네임)
+    scoreboard.js       순위표 (순위가 바뀌면 줄이 미끄러져 움직임)
+    awards.js           최종 시상식 (상을 한 장씩, 수상 도장)
     game.css            디자인 토큰과 공통 화면, 대기실·설정, 웃음 장치 모양
     vendor/qrcode.js    QR 생성 (qrcode-generator, MIT)
   minority/             소수결 게임 화면 (index, host, play, text.js 문구, minority.css)
+  auction/              블라인드 경매: show.js(공개 순서·시각·문구, 순수 함수), art.js(손·봉투·칩), items-art.js(물건 그림 41개),
+                        stage.js(경매장 그리기 — PC와 휴대폰 공용), host.js(PC), play.js(휴대폰), auction.css
 
 api/game.js             같이 하는 게임 공통 API — 방 만들기·참가·내보내기·진행자 설정·방 정보·상태 조회 입구
 lib/game/
@@ -44,6 +49,7 @@ lib/game/
   awards.js             최종 시상식 상 고르기, 기록(stats) 올리기
   games/index.js        서버 모듈 연결 (games.js의 party 게임 ↔ 서버 모듈)
   games/minority/       소수결 규칙(rules.js), 문제(questions.js), 동작(index.js)
+  games/auction/        블라인드 경매 규칙(rules.js), 물건(items.js), 동작(index.js)
 
 supabase_game_schema.sql   게임 테이블. 여러 번 실행해도 안전 (바뀔 때마다 전체를 다시 실행)
 test/unit/              단위 테스트 (node --test)
@@ -114,6 +120,14 @@ PR마다 GitHub Actions(`.github/workflows/test.yml`)가 네 가지를 모두 �
 - 바꿔도 결과가 같아서 어떤 테스트로도 구분할 수 없는 뮤턴트(로그 문구 등)는 `// Stryker disable next-line …: 이유`로 이유를 남겨 뺀다.
   `Stryker disable all … restore all` 구간 제외는 함수 안쪽 끝에 두면 restore가 먹지 않아 파일 나머지가 통째로 빠진다. 한 줄 제외(`next-line`)를 쓴다.
 - 무작위가 들어가는 규칙은 무작위 함수를 인자로 바꿔 끼울 수 있게 해서, 테스트는 운에 맡기지 않고 모든 경우를 확인한다.
+
+## 휴대폰만으로 진행하기 (블라인드 경매)
+
+- 첫 화면에서 방장 닉네임을 넣고 "휴대폰으로 시작" → `create { settings: { screen: 'phone' }, nickname }`. 방장은 진행자 토큰과 참가자 토큰을 둘 다 받아 같이 논다
+- `screen` 설정은 `hidden: true`라 대기실에 칸이 없다. 휴대폰 화면은 이 값으로 "경매장 화면"(stage.js)과 "입찰칸만"(PC 방)을 고른다
+- 참가자 상태(playerState)도 진행 화면과 같은 공개 정보(일정표, 봉투 현황, 순위)를 받는다. 입찰 금액은 공개 전까지 본인 것만
+- 공개 연출은 서버가 알려준 "공개 후 경과 시간"(revealAgeMs)으로 모든 휴대폰이 `공개 시각 + 3.5초`에 시작한다. 늦게 받거나 새로고침한 휴대폰은 `fx.timeline`의 offset으로 지난 장면부터 이어서 튼다
+- 휴대폰만으로 진행하는 방은 폴링을 1초로 (PC 방은 2초)
 
 ## 실서버에서 확인된 주의점
 

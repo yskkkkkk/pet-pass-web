@@ -37,14 +37,14 @@ async function bid(phone, amount) {
   for (let i = 0; i < amount % 10; i++) await phone.click('[data-step="1"]');
   await expect(phone.locator('#draft-bid')).toHaveText(String(amount));
   await phone.click('#btn-bid');
-  await expect(phone.locator('#btn-bid')).toHaveText('봉투 넣음 · ' + amount + '칩');
+  await expect(phone.locator('#btn-bid')).toHaveText('넣음 ✓ · ' + amount + '칩');
 }
 
 /** 마감 → 카운트다운 → 공개 연출이 끝나 다음 버튼이 눌릴 때까지 */
 async function revealAndWait(host) {
-  await host.click('#btn-reveal');
+  await host.click('[data-act="reveal"]');
   await expect(host.locator('.bidboard')).toBeVisible();
-  await expect(host.locator('[data-primary]')).toBeEnabled({ timeout: 30_000 });
+  await expect(host.locator('[data-slot="actions"]')).toBeVisible({ timeout: 30_000 });
 }
 
 const STAMP = { win: ['낙찰', '헐값 낙찰'], tie: ['공중분해'], nobid: ['유찰'], cursed: ['저주'] };
@@ -74,7 +74,7 @@ test('2명: 5라운드 끝까지 → 최종 순위·시상식 → 같은 멤버�
   await setRounds(host, 5);
   const phones = await joinMany(browser, code, ['가', '나'], 'auction');
   await waitForLobbyCount(host, 2);
-  await expect(phones[0].locator('.screen-desc')).toContainText('칩 100개');
+  await expect(phones[0].locator('.lobby-chips')).toContainText('100');
 
   await host.click('#btn-start');
   const plan = [[7, 3], [0, 0], [12, 12], [1, 30], [20, 5]];
@@ -82,15 +82,15 @@ test('2명: 5라운드 끝까지 → 최종 순위·시상식 → 같은 멤버�
     await expect(host.locator('.table-top')).toBeVisible();
     await expect(phones[0].locator('.p-lot-name')).toHaveText(await host.locator('.lot-name').textContent());
     for (let i = 0; i < phones.length; i++) await bid(phones[i], plan[r][i]);
-    await expect(host.locator('#bid-progress')).toHaveText('봉투 2 / 2');
+    await expect(host.locator('[data-slot="progress"]')).toContainText('2 / 2');
     await expect(host.locator('.slot.filled')).toHaveCount(2);
     await revealAndWait(host);
     await checkRound(host, phones, code, plan[r]);
-    if (r < plan.length - 1) await host.click('#btn-next');
+    if (r < plan.length - 1) await host.click('[data-act="next"]');
   }
 
-  await expect(host.locator('#btn-final')).toBeVisible();
-  await host.click('#btn-final');
+  await expect(host.locator('[data-act="final"]')).toBeVisible();
+  await host.click('[data-act="final"]');
   const s = await hostApi(host, code);
   expect(s.room.status).toBe('finished');
   await expect(host.locator('.final-ranking .sb-name')).toHaveText(s.ranking.map((x) => new RegExp('^' + x.nickname)));
@@ -101,7 +101,7 @@ test('2명: 5라운드 끝까지 → 최종 순위·시상식 → 같은 멤버�
     await expect(phone.locator('.verdict-stamp .stamp')).toHaveText(me.rank === 1 ? '우승' : me.rank + '위');
   }
 
-  await host.click('#btn-restart');
+  await host.click('[data-act="restart"]');
   await waitForLobbyCount(host, 2);
   await expect(phones[1].locator('text=참가했습니다')).toBeVisible();
   expectNoErrors(host, ...phones);
@@ -131,14 +131,14 @@ test('6명: 시작 칩 50개 설정으로 5라운드, 순위가 서버와 같고
       const amount = Math.min(plan[r][i], chips);
       plan[r][i] = amount;
       if (chips > 0) await bid(phones[i], amount);
-      else await expect(phones[i].locator('.note')).toContainText('칩을 다 썼어요');
+      else await expect(phones[i].locator('.composer.empty')).toBeVisible();
     }
     await revealAndWait(host);
     await checkRound(host, phones, code, plan[r]);
     if (r === 0) await expect(host.locator('.sb-row[data-id] .wallet-empty')).toHaveCount(1);
-    if (r < plan.length - 1) await host.click('#btn-next');
+    if (r < plan.length - 1) await host.click('[data-act="next"]');
   }
-  await host.click('#btn-final');
+  await host.click('[data-act="final"]');
   const s = await hostApi(host, code);
   await expect(host.locator('.final-ranking .sb-rank')).toHaveText(s.ranking.map((x) => String(x.rank)));
   await expect(host.locator('.final-ranking .sb-name')).toHaveText(s.ranking.map((x) => new RegExp('^' + x.nickname)));
@@ -175,7 +175,7 @@ test('새로고침: 공개 뒤 진행 화면은 연출 없이 결과 그대로, 
   await expect(host.locator('.bid-row.shown')).toHaveCount(2);
   await expect(host.locator('.bid-row.pending')).toHaveCount(0);
   await expect(host.locator('.stamp.still').first()).toBeVisible();
-  await expect(host.locator('#btn-next')).toBeEnabled();
+  await expect(host.locator('[data-act="next"]')).toBeVisible();
 
   await phones[1].reload({ waitUntil: 'commit' });
   await expect(phones[1].locator('.verdict-stamp .stamp.still')).toBeVisible();

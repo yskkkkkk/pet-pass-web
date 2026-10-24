@@ -8,7 +8,8 @@
  * GET  /api/game?action=state&code=1234&hostToken=...   진행자 화면 상태 (게임 모듈의 hostState + 공통 필드)
  * GET  /api/game?action=state&code=1234&playerToken=... 참가자 화면 상태 (게임 모듈의 playerState + 공통 필드)
  * POST /api/game { action, code, ... }
- *   create    { game? }                  방 만들기 → { code, hostToken, game }
+ *   create    { game?, settings?, nickname? }  방 만들기 → { code, hostToken, game, playerToken? }
+ *             nickname을 주면 방장도 참가자로 넣는다 (휴대폰만으로 진행: 방장 휴대폰이 진행하면서 같이 논다)
  *   join      { nickname }               참가 → { playerToken }
  *   kick      { hostToken, playerId }    대기실에서 참가자 내보내기
  *   settings  { hostToken, settings }    대기실에서 진행자 설정 바꾸기 → { settings }
@@ -20,7 +21,7 @@ const { isAllowedOrigin } = require('./_cors');
 const { createRateLimiter } = require('../lib/rate-limiter');
 const { getStore, DuplicateError } = require('../lib/game/store');
 const core = require('../lib/game/core');
-const { defaultsOf, applySettings } = require('../lib/game/settings');
+const { applySettings } = require('../lib/game/settings');
 const { DEFAULT_GAME, roomGameId, getPartyGame, isKnownGameAction } = require('../lib/game/games');
 
 const { HttpError } = core;
@@ -76,6 +77,9 @@ async function actionCreate(store, body) {
   const gameId = body.game || DEFAULT_GAME;
   const game = getPartyGame(gameId);
   if (!game) throw new HttpError(400, '방을 만들 수 없는 게임이에요.');
+  const settings = applySettings(game.info.settings, {}, body.settings || {});
+  const nickname = body.nickname === undefined ? null : core.normalizeNickname(body.nickname);
+  if (nickname === '') throw new HttpError(400, '닉네임을 입력해 주세요.');
 
   // 오래된 방 정리 (실패해도 방 생성은 진행)
   // Stryker disable BlockStatement: catch는 로그만 남긴다 (실패를 삼키는 동작은 테스트로 확인)
@@ -91,8 +95,11 @@ async function actionCreate(store, body) {
     const code = core.generateRoomCode();
     const hostToken = core.generateToken();
     try {
-      await store.createRoom({ code, host_token: hostToken, game: gameId, settings: defaultsOf(game.info.settings) });
-      return { code, hostToken, game: gameId };
+      await store.createRoom({ code, host_token: hostToken, game: gameId, settings });
+      if (nickname === null) return { code, hostToken, game: gameId };
+      const playerToken = core.generateToken();
+      await store.addPlayer({ room_code: code, nickname, token: playerToken });
+      return { code, hostToken, game: gameId, playerToken };
     } catch (e) {
       if (!(e instanceof DuplicateError)) throw e;
     }

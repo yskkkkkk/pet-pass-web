@@ -9,6 +9,7 @@
  *   settings  (같이 하는 게임) 진행자가 대기실에서 바꾸는 설정. 형식은 lib/game/settings.js
  *             예: { key: 'rounds', label: '라운드 수', type: 'int', min: 3, max: 20, default: 10 }
  *             choice의 value는 숫자도 된다 (대기실이 고른 항목의 value를 그대로 보낸다)
+ *             hidden: true면 대기실에 입력칸을 그리지 않는다 (방을 만들 때 정하는 값)
  */
 (function (root, factory) {
   var games = factory();
@@ -39,7 +40,8 @@
       settings: [
         { key: 'rounds', label: '라운드 수', type: 'int', min: 5, max: 15, default: 10 },
         { key: 'chips', label: '시작 칩', type: 'choice', options: [{ value: 50, label: '50개' }, { value: 100, label: '100개' }, { value: 200, label: '200개' }], default: 100 },
-        { key: 'surprises', label: '돌발 물건 (미스터리 상자·저주 물건)', type: 'bool', default: true }
+        { key: 'surprises', label: '돌발 물건 (미스터리 상자·저주 물건)', type: 'bool', default: true },
+        { key: 'screen', label: '진행 화면', type: 'choice', options: [{ value: 'phone', label: '휴대폰만' }, { value: 'pc', label: 'PC 화면' }], default: 'pc', hidden: true }
       ]
     }
   ];
