@@ -52,19 +52,28 @@
     var minPlayers = game.minPlayers || 2;
     var listSig = null;
     var current = {};   // 서버가 확인한 설정
-    var pending = {};   // 누른 뒤 아직 저장이 끝나지 않은 값 (연달아 누르면 이 값에서 이어서 계산한다)
+    var pending = {};   // 누른 뒤 아직 저장이 끝나지 않은 값 { value, id } (연달아 누르면 이 값에서 이어서 계산한다)
+    var requestSeq = 0; // 저장 요청 번호 — 값이 같아도 요청은 구별한다 (+,−,+ 뒤의 +처럼 같은 값이 다시 나와도)
     var settingsQueue = MG.createQueue(); // 앞 설정의 응답이 늦어도 이어서 바꾼 설정을 버리지 않는다
+
+    /** 이 대기실이 아직 화면에 있는지 (게임이 시작되면 다른 화면으로 바뀐다) */
+    function mounted() {
+      return container.contains(root);
+    }
 
     /** 설정 하나를 바꾼다: 화면에 바로 보여주고, 줄을 세워 저장한다. 저장이 끝나면(실패해도) 서버 값을 따른다 */
     function change(field, value) {
       var patch = {};
       patch[field.key] = value;
-      pending[field.key] = value;
+      requestSeq += 1;
+      var id = requestSeq;
+      pending[field.key] = { value: value, id: id };
       renderSettings(current);
       settingsQueue(function () { return opts.onSettings(patch); }).then(function () {
-        if (pending[field.key] !== value) return; // 그 사이 또 눌렀으면 마지막 값이 끝날 때까지 기다린다
+        // 그 사이 또 눌렀으면 마지막 요청이 끝날 때까지 누른 값을 유지한다
+        if (!pending[field.key] || pending[field.key].id !== id) return;
         delete pending[field.key];
-        renderSettings(current);
+        if (mounted()) renderSettings(current);
       });
     }
 
@@ -103,7 +112,11 @@
       qrEl.textContent = joinUrl(opts.code);
     }
 
-    container.querySelector('#btn-start').addEventListener('click', function () { opts.onStart(); });
+    var root = container.querySelector('.lobby');
+    // 시작은 저장 중인 설정 뒤에 줄을 세운다 (화면의 설정과 다른 설정으로 시작하지 않게)
+    container.querySelector('#btn-start').addEventListener('click', function () {
+      settingsQueue(function () { return opts.onStart(); });
+    });
     container.querySelector('#lobby-list').addEventListener('click', function (e) {
       var btn = e.target.closest('[data-kick]');
       if (btn) opts.onKick(btn.getAttribute('data-kick'));
@@ -116,7 +129,7 @@
         box.addEventListener('click', function (e) {
           var btn = e.target.closest('[data-step]');
           if (!btn) return;
-          var base = field.key in pending ? pending[field.key] : Number(current[field.key]);
+          var base = field.key in pending ? pending[field.key].value : Number(current[field.key]);
           var next = Math.min(field.max, Math.max(field.min, base + Number(btn.getAttribute('data-step'))));
           if (next === base) return;
           change(field, next);
@@ -134,7 +147,7 @@
         var box = container.querySelector('.setting[data-key="' + field.key + '"]');
         var input = box.querySelector('[data-value]');
         if (current[field.key] === undefined) current[field.key] = field.default;
-        var value = field.key in pending ? pending[field.key] : current[field.key];
+        var value = field.key in pending ? pending[field.key].value : current[field.key];
         if (field.type === 'int') {
           input.textContent = value;
           box.querySelector('[data-step="-1"]').disabled = value <= field.min;

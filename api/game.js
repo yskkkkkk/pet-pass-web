@@ -133,13 +133,14 @@ async function actionJoin(ctx) {
     throw e;
   }
 
-  // 검사와 저장 사이에 게임이 시작됐거나 다른 사람이 먼저 마지막 자리를 채웠으면, 방금 넣은 나를 빼고 거절한다.
+  // 검사와 저장 사이에 다른 사람이 먼저 마지막 자리를 채웠으면, 방금 넣은 나를 빼고 거절한다.
   // (먼저 들어온 순서로 자리를 정해서, 동시에 들어와도 정원 안의 사람은 남는다)
-  const after = await store.getRoom(room.code);
+  // 그 사이에 게임이 시작됐으면 빼지 않는다: 시작 요청이 나를 이미 셌을 수 있고(최소 인원), 게임들은 늦게 들어온
+  // 참가자도 처리한다 (경매: 시작 칩, 소수결: 생존자).
   const order = (await store.listPlayers(room.code)).findIndex((p) => p.id === added.id);
-  if (after.status !== 'lobby' || order >= ctx.game.info.maxPlayers) {
+  if (order >= ctx.game.info.maxPlayers) {
     await store.deletePlayer(room.code, added.id);
-    throw new HttpError(409, after.status !== 'lobby' ? '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.' : '방 인원이 가득 찼어요.');
+    throw new HttpError(409, '방 인원이 가득 찼어요.');
   }
   return { playerToken, nickname };
 }

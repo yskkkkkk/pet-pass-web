@@ -404,49 +404,33 @@ test('#124 판 번호: 새 판마다 올라가고, 지난 판 번호를 붙인 �
   assert.equal((await bid(room, 0, 5, { round: 1, gen: gen2 })).status, 200);
 });
 
-test('#126 공개 뒤 참가자 갱신이 실패해도 다음 조회에서 정산 기록대로 복구, 여러 번 조회해도 한 번만', async (t) => {
+test('#126 공개는 방 한 줄 조건부 쓰기 한 번: 참가자 줄을 쓰지 않고, 방 쓰기가 실패하면 아무것도 반영되지 않아 다시 공개할 수 있다', async (t) => {
   const room = await started(['가', '나'], [item(3), item(3)]);
   await bid(room, 0, 30);
   await bid(room, 1, 10);
-  const original = store.updatePlayers;
-  let fail = true;
-  store.updatePlayers = async (...args) => {
-    if (fail) { fail = false; throw new Error('DB 끊김'); }
-    return original(...args);
-  };
-  t.after(() => { store.updatePlayers = original; });
+  const updatePlayers = store.updatePlayers;
+  store.updatePlayers = async () => { throw new Error('공개는 참가자 줄을 쓰면 안 됨'); };
+  t.after(() => { store.updatePlayers = updatePlayers; });
+
+  const updateRoom = store.updateRoom;
+  store.updateRoom = async () => { throw new Error('DB 끊김'); };
   const { error } = console;
   console.error = () => {};
-  const r = await host(room, 'reveal');
+  const failed = await host(room, 'reveal');
   console.error = error;
-  assert.equal(r.status, 500);
-  assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.data), [{}, {}], '갱신 실패로 칩이 그대로인 상태');
+  store.updateRoom = updateRoom;
+  assert.equal(failed.status, 500);
+  let h = (await hostState(room.code, room.hostToken)).body;
+  assert.equal(h.room.status, 'playing', '실패하면 그대로');
+  assert.deepEqual(h.players.map((p) => p.chips), [100, 100]);
 
-  const h = (await hostState(room.code, room.hostToken)).body;
-  assert.equal(h.room.status, 'revealed');
-  assert.deepEqual(h.players.map((p) => [p.chips, p.score]), [[70, 3], [90, 0]], '조회하면서 복구');
-  await hostState(room.code, room.hostToken);
-  await playerState(room.code, room.tokens[1]);
-  assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.data.chips), [70, 90], '여러 번 조회해도 한 번만 빠진다');
-  assert.equal(h.result.settled, undefined, '정산 기록은 응답에 넣지 않음');
+  assert.equal((await host(room, 'reveal')).status, 200, '다시 공개');
+  h = (await hostState(room.code, room.hostToken)).body;
+  assert.deepEqual(h.players.map((p) => [p.chips, p.score]), [[70, 3], [90, 0]]);
+  assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.data), [{}, {}], '칩은 방에만');
 });
 
-test('#126 다음 물건으로 넘어가기 전에도 빠진 정산을 마저 반영', async (t) => {
-  const room = await started(['가', '나'], [item(3), item(3)]);
-  await bid(room, 0, 4);
-  const original = store.updatePlayers;
-  store.updatePlayers = async () => { throw new Error('DB 끊김'); };
-  const { error } = console;
-  console.error = () => {};
-  await host(room, 'reveal');
-  console.error = error;
-  store.updatePlayers = original;
-  t.after(() => { store.updatePlayers = original; });
-  assert.equal((await host(room, 'next')).status, 200);
-  assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.data.chips), [96, 100]);
-});
-
-test('#127 참가 검사와 저장 사이에 게임이 시작되면 거절하고 방금 넣은 참가자를 지운다', async (t) => {
+test('#127 참가 검사와 저장 사이에 게임이 시작되면 그 참가자는 남는다 (늦게 들어온 사람은 시작 칩으로)', async (t) => {
   const room = await newRoom(['가', '나']);
   const original = store.addPlayer;
   store.addPlayer = async (player) => {
@@ -455,9 +439,10 @@ test('#127 참가 검사와 저장 사이에 게임이 시작되면 거절하고
   };
   t.after(() => { store.addPlayer = original; });
   const r = await post({ action: 'join', code: room.code, nickname: '늦은이' });
-  assert.equal(r.status, 409);
-  assert.equal(r.body.error, '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.');
-  assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.nickname), ['가', '나']);
+  assert.equal(r.status, 200);
+  const p = (await playerState(room.code, r.body.playerToken)).body;
+  assert.equal(p.me.chips, 100);
+  assert.equal(p.room.status, 'playing');
 });
 
 test('#127 마지막 자리에 둘이 동시에 들어오면 먼저 들어온 사람만 남는다', async (t) => {
@@ -484,36 +469,4 @@ test('#127 꽉 찬 방에 이미 있는 닉네임으로 들어오면 "가득 참
   const r = await post({ action: 'join', code: room.code, nickname: '사람0' });
   assert.equal(r.status, 409);
   assert.equal(r.body.error, '방 인원이 가득 찼어요.');
-});
-
-test('#126 일부만 갱신되고 실패하면 빠진 사람만 다시 쓰고, 복구된 뒤에는 더 쓰지 않는다', async (t) => {
-  const room = await started(['가', '나', '다'], [item(3), item(3)]);
-  await bid(room, 0, 30);
-  await bid(room, 1, 10);
-  await bid(room, 2, 5);
-  const original = store.updatePlayers;
-  const calls = [];
-  let fail = true;
-  store.updatePlayers = async (code, updates) => {
-    calls.push(updates.map((u) => u.id));
-    if (fail) {
-      fail = false;
-      await original(code, updates.slice(0, 1)); // 첫 사람만 저장하고 끊김
-      throw new Error('DB 끊김');
-    }
-    return original(code, updates);
-  };
-  t.after(() => { store.updatePlayers = original; });
-  const { error } = console;
-  console.error = () => {};
-  await host(room, 'reveal');
-  console.error = error;
-  const ids = (await store.listPlayers(room.code)).map((p) => p.id);
-
-  const h = (await hostState(room.code, room.hostToken)).body;
-  assert.deepEqual(calls[1], [ids[1], ids[2]], '빠진 두 사람만 다시 쓴다');
-  assert.deepEqual(h.players.map((p) => p.chips), [70, 90, 95]);
-  await hostState(room.code, room.hostToken);
-  await playerState(room.code, room.tokens[0]);
-  assert.equal(calls.length, 2, '복구된 뒤에는 조회해도 쓰지 않는다');
 });

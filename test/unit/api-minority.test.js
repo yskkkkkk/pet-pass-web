@@ -395,45 +395,51 @@ test('#125 공개 뒤 늦게 저장된 표가 있어도 휴대폰의 "내 선택
   assert.equal((await hostState(code, hostToken)).body.room.result.choices, undefined);
 });
 
-test('#126 공개 뒤 탈락 반영이 실패해도 다음 조회에서 결과 기록대로 복구', async (t) => {
+test('#126 공개는 방 한 줄 조건부 쓰기 한 번: 탈락을 참가자 줄에 따로 쓰지 않고, 방 쓰기가 실패하면 다시 공개할 수 있다', async (t) => {
   const { code, hostToken, tokens } = await newRoom(['가', '나', '다']);
   await post({ action: 'start', code, hostToken });
   await post({ action: 'vote', code, playerToken: tokens[0], choice: 'A' });
   for (const tk of tokens.slice(1)) await post({ action: 'vote', code, playerToken: tk, choice: 'B' });
-  const original = store.eliminatePlayers;
-  store.eliminatePlayers = async () => { throw new Error('DB 끊김'); };
+  const eliminate = store.eliminatePlayers;
+  store.eliminatePlayers = async () => { throw new Error('공개는 참가자 줄을 쓰면 안 됨'); };
+  t.after(() => { store.eliminatePlayers = eliminate; });
+
+  const updateRoom = store.updateRoom;
+  store.updateRoom = async () => { throw new Error('DB 끊김'); };
   const { error } = console;
   console.error = () => {};
-  const r = await post({ action: 'reveal', code, hostToken });
+  const failed = await post({ action: 'reveal', code, hostToken });
   console.error = error;
-  store.eliminatePlayers = original;
-  t.after(() => { store.eliminatePlayers = original; });
-  assert.equal(r.status, 500);
+  store.updateRoom = updateRoom;
+  assert.equal(failed.status, 500);
+  assert.equal((await hostState(code, hostToken)).body.aliveCount, 3, '실패하면 그대로');
+
+  const r = await post({ action: 'reveal', code, hostToken });
+  assert.equal(r.status, 200);
   const h = (await hostState(code, hostToken)).body;
   assert.equal(h.room.status, 'finished');
-  assert.equal(h.aliveCount, 1, '결과(생존 1명)와 참가자가 맞게 복구');
-  assert.deepEqual(h.players.map((p) => [p.alive, p.eliminatedRound]), [[true, null], [false, 1], [false, 1]], '복구한 응답에도 탈락 라운드');
+  assert.equal(h.aliveCount, 1);
+  assert.deepEqual(h.players.map((p) => [p.alive, p.eliminatedRound]), [[true, null], [false, 1], [false, 1]]);
   const p = (await playerState(code, tokens[1])).body;
   assert.equal(p.me.alive, false);
   assert.deepEqual(p.winners, ['가']);
 });
 
-test('#126 결과 공개 상태에서 다음 라운드를 시작할 때도 빠진 탈락을 먼저 반영', async (t) => {
+test('이 구조 전에 만든 방(탈락 목록 없음)은 참가자 줄의 탈락 기록을 쓰고, 다음 공개부터 방에 기록한다', async () => {
   const { code, hostToken, tokens } = await newRoom(['가', '나', '다', '라', '마', '바', '사']);
   await post({ action: 'start', code, hostToken });
-  for (const tk of tokens.slice(0, 4)) await post({ action: 'vote', code, playerToken: tk, choice: 'A' }); // A 4 / B 3 → A 탈락, 3명 생존
-  for (const tk of tokens.slice(4)) await post({ action: 'vote', code, playerToken: tk, choice: 'B' });
-  const original = store.eliminatePlayers;
-  store.eliminatePlayers = async () => { throw new Error('DB 끊김'); };
-  const { error } = console;
-  console.error = () => {};
-  await post({ action: 'reveal', code, hostToken });
-  console.error = error;
-  store.eliminatePlayers = original;
-  t.after(() => { store.eliminatePlayers = original; });
-  const r = await post({ action: 'start', code, hostToken });
-  assert.equal(r.status, 200);
-  assert.equal((await store.listPlayers(code)).filter((p) => p.alive).length, 3);
+  const row = await store.getRoom(code);
+  const players = await store.listPlayers(code);
+  await store.eliminatePlayers(code, [players[6].id], 0); // 예전 방식으로 기록된 탈락
+  await store.updateRoom(code, { state: { gen: row.state.gen } });
+  let h = (await hostState(code, hostToken)).body;
+  assert.equal(h.aliveCount, 6);
+  assert.equal((await post({ action: 'vote', code, playerToken: tokens[6], choice: 'A' })).status, 409);
+  for (const tk of tokens.slice(0, 4)) await post({ action: 'vote', code, playerToken: tk, choice: 'A' });
+  for (const tk of tokens.slice(4, 6)) await post({ action: 'vote', code, playerToken: tk, choice: 'B' });
+  await post({ action: 'reveal', code, hostToken }); // A 4 탈락, B 2 생존 → 종료
+  h = (await hostState(code, hostToken)).body;
+  assert.deepEqual(h.players.map((p) => p.eliminatedRound), [1, 1, 1, 1, null, null, 0]);
 });
 
 test('#127 게임이 시작됐거나 꽉 찬 방에 이미 있는 닉네임으로 들어오면 "시작됨"·"가득 참"을 먼저 알려준다', async () => {
