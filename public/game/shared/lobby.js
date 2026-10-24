@@ -4,7 +4,8 @@
  *
  *   var lobby = MG.lobby.mount(container, {
  *     code, game,                 // game: 게임 목록(games.js)의 항목
- *     onStart(), onKick(id), onSettings(patch)
+ *     onStart(), onKick(id),
+ *     onSettings(patch)           // 저장 요청 Promise를 돌려준다. 대기실이 바꾼 순서대로 하나씩 부른다
  *   });
  *   lobby.update(state);          // state: 서버의 진행자 상태 ({ players, settings })
  */
@@ -45,6 +46,7 @@
     var minPlayers = game.minPlayers || 2;
     var listSig = null;
     var current = {};
+    var settingsQueue = MG.createQueue(); // 앞 설정의 응답이 늦어도 이어서 바꾼 설정을 버리지 않는다
 
     container.innerHTML =
       '<div class="lobby">' +
@@ -98,13 +100,13 @@
           if (next === current[field.key]) return;
           var patch = {};
           patch[field.key] = next;
-          opts.onSettings(patch);
+          settingsQueue(function () { return opts.onSettings(patch); });
         });
       } else {
         box.querySelector('[data-value]').addEventListener('change', function (e) {
           var patch = {};
           patch[field.key] = field.type === 'bool' ? e.target.checked : e.target.value;
-          opts.onSettings(patch);
+          settingsQueue(function () { return opts.onSettings(patch); });
         });
       }
     });

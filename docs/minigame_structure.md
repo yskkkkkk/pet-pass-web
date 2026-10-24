@@ -25,7 +25,7 @@ public/game/
   play.html             참가 입구
   host.html             예전 진행 주소 호환
   shared/
-    logic.js            순수 로직 (단위·뮤테이션 테스트 대상): latestOnly, createSerialSender, escapeHtml, pickOne, fill
+    logic.js            순수 로직 (단위·뮤테이션 테스트 대상): latestOnly, createSerialSender, createQueue, escapeHtml, pickOne, fill
     common.js           서버 요청, 폴링, 저장소, 알림, 진행자 토큰(hostSession), 게임 정보(gameInfo)
     fx.js               웃음 장치: 카운트다운, 도장, 호외 헤드라인, 이름표 떨어지기, 효과음과 소리 끄기
     lobby.js            진행자 대기실: QR·방 코드, 참가자 목록·내보내기, 진행자 설정, 시작
@@ -121,5 +121,6 @@ PR마다 GitHub Actions(`.github/workflows/test.yml`)가 네 가지를 모두 �
 
 - 상태 조회는 `MG.latestOnly()`로 감싸서, 늦게 도착한 예전 응답이 화면을 되돌리지 않게 한다
 - 같은 사람이 연달아 보내는 요청(투표 변경 등)은 `MG.createSerialSender`로 한 번에 하나씩 순서대로 보낸다
+- 바꾼 것마다 따로 보내야 하는 요청(진행자 설정)은 `MG.createQueue`로 줄을 세운다. "처리 중이면 무시"하는 잠금(busy)에 태우면 앞 응답을 기다리는 동안 바꾼 것이 조용히 버려진다 (대기실이 이미 줄을 세우므로 `onSettings`는 요청 Promise만 돌려주면 된다)
 - 마감처럼 "누르는 순간"이 중요한 동작은 약간의 유예를 둔다 (소수결은 결과 공개 1초 유예)
 - 지금은 1.5~2초 폴링이라 라운드제 게임에 맞다. 먼저 누르는 사람이 이기는 반응속도 게임은 맞지 않는다

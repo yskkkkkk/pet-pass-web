@@ -92,6 +92,20 @@
     };
   }
 
+  /**
+   * 일을 한 번에 하나씩 순서대로 한다. 앞 일이 끝나기 전에 들어온 일은 버리지 않고 기다렸다가 한다.
+   * 앞 일이 실패해도 다음 일은 한다. run(task) → task()의 결과 Promise
+   * (진행자 설정처럼 바꾼 것마다 따로 보내야 하는 요청에 쓴다. 마지막 값만 필요하면 createSerialSender)
+   */
+  function createQueue() {
+    var tail = Promise.resolve();
+    return function run(task) {
+      var result = tail.then(function () { return task(); });
+      tail = result.catch(function () {});
+      return result;
+    };
+  }
+
   /** 목록에서 하나를 고른다. rnd는 0 이상 1 미만 (테스트에서 고정값을 넣는다) */
   function pickOne(list, rnd) {
     var r = rnd === undefined ? Math.random() : rnd;
@@ -109,6 +123,7 @@
     escapeHtml: escapeHtml,
     latestOnly: latestOnly,
     createSerialSender: createSerialSender,
+    createQueue: createQueue,
     pickOne: pickOne,
     fill: fill
   };

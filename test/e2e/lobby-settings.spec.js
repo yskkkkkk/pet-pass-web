@@ -58,3 +58,28 @@ test('설정 화면: 최솟값·최댓값에서는 버튼이 막힌다', async (
   await expect(host.locator('.setting[data-key=rounds] [data-step="1"]')).toBeDisabled();
   await expect(host.locator('.setting[data-key=rounds] [data-step="-1"]')).toBeEnabled();
 });
+
+test('설정 화면: 앞 설정의 응답이 늦어도 이어서 바꾼 설정이 빠지지 않고 순서대로 간다', async ({ browser }) => {
+  const host = await newHost(browser);
+  await host.route('**/game/games.js', async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text()).replace('settings: []', 'settings: ' + JSON.stringify(FAKE));
+    await route.fulfill({ response, body });
+  });
+  const sent = [];
+  // 실서버처럼 설정 저장 응답이 1.5초 걸린다 (서버 도착 순서대로 기록)
+  await host.route('**/api/game', async (route) => {
+    const post = route.request().postData() || '';
+    if (route.request().method() !== 'POST' || !post.includes('"settings"')) return route.continue();
+    sent.push(JSON.parse(post).settings);
+    await new Promise((r) => setTimeout(r, 1500));
+    return route.continue();
+  });
+
+  await createMinorityRoom(host);
+  await host.check('.setting[data-key=wild] input');
+  await host.selectOption('.setting[data-key=mode] select', 'hard');
+  await host.click('.setting[data-key=rounds] [data-step="-1"]');
+  await expect.poll(() => sent.length, { timeout: 10000 }).toBe(3);
+  expect(sent).toEqual([{ wild: true }, { mode: 'hard' }, { rounds: 9 }]);
+});

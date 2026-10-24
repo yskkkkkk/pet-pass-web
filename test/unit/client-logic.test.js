@@ -203,6 +203,35 @@ test('순차 전송: 고른 값이 없으면 저장 중이 아님', () => {
   assert.equal(s.saved(), null);
 });
 
+/* ───────── createQueue ───────── */
+
+test('순서 대기열: 앞 일이 끝나기 전에 넣은 일은 버리지 않고 기다렸다가 순서대로 한다', async () => {
+  const run = MG.createQueue();
+  const started = [];
+  const jobs = [deferred(), deferred(), deferred()];
+  const results = jobs.map((d, i) => run(() => { started.push(i); return d.promise; }));
+  await Promise.resolve();
+  assert.deepEqual(started, [0]);
+  jobs[0].resolve('a');
+  assert.equal(await results[0], 'a');
+  await flush();
+  assert.deepEqual(started, [0, 1]);
+  jobs[1].resolve('b');
+  jobs[2].resolve('c');
+  assert.deepEqual(await Promise.all(results), ['a', 'b', 'c']);
+  assert.deepEqual(started, [0, 1, 2]);
+});
+
+test('순서 대기열: 앞 일이 실패해도 다음 일은 하고, 실패는 그 일의 결과로 전달', async () => {
+  const run = MG.createQueue();
+  const failed = run(() => Promise.reject(new Error('x')));
+  const thrown = run(() => { throw new Error('y'); });
+  const next = run(() => 'ok');
+  await assert.rejects(failed, /x/);
+  await assert.rejects(thrown, /y/);
+  assert.equal(await next, 'ok');
+});
+
 /* ───────── 소수결 헤드라인 ───────── */
 
 const Q = { a: '짜장면', b: '짬뽕' };

@@ -147,7 +147,12 @@
       game: GAME,
       onStart: function () { act('start'); },
       onKick: function (id) { act('kick', { playerId: id }); },
-      onSettings: function (patch) { act('settings', { settings: patch }); }
+      // 설정은 act의 busy 잠금을 쓰지 않는다 (잠금 중에 바꾼 설정이 버려짐). 순서는 대기실이 맞춘다
+      onSettings: function (patch) {
+        return MG.post({ action: 'settings', code: code, hostToken: hostToken, settings: patch })
+          .then(function () { return refresh(); })
+          .catch(function (err) { MG.toast(err.message); });
+      }
     });
   }
 
