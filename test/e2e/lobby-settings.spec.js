@@ -5,7 +5,7 @@
  * 실제 설정 저장은 설정이 있는 첫 게임(블라인드 경매)에서 화면 테스트로 확인한다.
  */
 const { test, expect } = require('@playwright/test');
-const { newHost, createMinorityRoom } = require('./helpers');
+const { newHost, createMinorityRoom, createAuctionRoom } = require('./helpers');
 
 const FAKE = [
   { key: 'rounds', label: '라운드 수', type: 'int', min: 3, max: 12, default: 10 },
@@ -82,4 +82,76 @@ test('설정 화면: 앞 설정의 응답이 늦어도 이어서 바꾼 설정�
   await host.click('.setting[data-key=rounds] [data-step="-1"]');
   await expect.poll(() => sent.length, { timeout: 10000 }).toBe(3);
   expect(sent).toEqual([{ wild: true }, { mode: 'hard' }, { rounds: 9 }]);
+});
+
+test('#129 숫자 설정을 빠르게 두 번 누르면 저장이 느려도 두 칸 올라간다 (+, + → 12, 이어서 +, − → 12 그대로)', async ({ browser }) => {
+  const host = await newHost(browser);
+  const sent = [];
+  await host.route('**/api/game', async (route) => {
+    const post = route.request().postData() || '';
+    if (route.request().method() !== 'POST' || !post.includes('"settings"')) return route.continue();
+    sent.push(JSON.parse(post).settings);
+    await new Promise((r) => setTimeout(r, 1200));
+    return route.continue();
+  });
+  const code = await createAuctionRoom(host);
+  const out = host.locator('.setting[data-key=rounds] output');
+  await expect(out).toHaveText('10');
+  await host.click('.setting[data-key=rounds] [data-step="1"]');
+  await host.click('.setting[data-key=rounds] [data-step="1"]');
+  await expect(out).toHaveText('12');
+  await expect.poll(() => sent.length, { timeout: 10_000 }).toBe(2);
+  expect(sent).toEqual([{ rounds: 11 }, { rounds: 12 }]);
+  await host.click('.setting[data-key=rounds] [data-step="1"]');
+  await host.click('.setting[data-key=rounds] [data-step="-1"]');
+  await expect.poll(() => sent.length, { timeout: 10_000 }).toBe(4);
+  expect(sent.slice(2)).toEqual([{ rounds: 13 }, { rounds: 12 }]);
+  await expect.poll(async () => host.evaluate(async (c) => {
+    const t = localStorage.getItem('minority-game:host:' + c);
+    return (await (await fetch('/api/game?action=state&code=' + c + '&hostToken=' + t)).json()).settings.rounds;
+  }, code), { timeout: 10_000 }).toBe(12);
+  await expect(out).toHaveText('12');
+});
+
+test('#129 +, −, + 뒤 마지막 저장을 기다리는 중에 또 +: 의도한 12로 저장 / 저장 대기 중에 시작해도 화면의 설정으로 시작', async ({ browser }) => {
+  const host = await newHost(browser);
+  const sent = [];
+  await host.route('**/api/game', async (route) => {
+    const post = route.request().postData() || '';
+    if (route.request().method() !== 'POST' || !post.includes('"settings"')) return route.continue();
+    sent.push(JSON.parse(post).settings);
+    await new Promise((r) => setTimeout(r, 800));
+    return route.continue();
+  });
+  const code = await createAuctionRoom(host);
+  const serverRounds = () => host.evaluate(async (c) => {
+    const t = localStorage.getItem('minority-game:host:' + c);
+    return (await (await fetch('/api/game?action=state&code=' + c + '&hostToken=' + t)).json());
+  }, code);
+  const out = host.locator('.setting[data-key=rounds] output');
+  const plus = '.setting[data-key=rounds] [data-step="1"]';
+  const minus = '.setting[data-key=rounds] [data-step="-1"]';
+
+  await host.click(plus);
+  await host.click(minus);
+  await host.click(plus);
+  await expect.poll(() => sent.length, { timeout: 10_000 }).toBe(3); // 마지막(11) 저장을 기다리는 중
+  await host.click(plus);
+  await expect(out).toHaveText('12');
+  await expect.poll(async () => (await serverRounds()).settings.rounds, { timeout: 10_000 }).toBe(12);
+  expect(sent).toEqual([{ rounds: 11 }, { rounds: 10 }, { rounds: 11 }, { rounds: 12 }]);
+  await expect(out).toHaveText('12');
+
+  // 두 명 참가 → 저장 대기 중에 시작
+  for (const n of ['가', '나']) {
+    await host.evaluate(async ([c, nick]) => fetch('/api/game', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'join', code: c, nickname: nick }) }), [code, n]);
+  }
+  await expect(host.locator('#lobby-count')).toHaveText('2명');
+  await host.click(minus);
+  await host.click('#btn-start');
+  await expect(host.locator('.table-top')).toBeVisible({ timeout: 10_000 });
+  const s = await serverRounds();
+  expect(s.settings.rounds).toBe(11);
+  expect(s.room.rounds).toBe(11);
+  expect(host.errors).toEqual([]);
 });

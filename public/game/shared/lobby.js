@@ -40,13 +40,42 @@
       }).join('') + '</select></div>';
   }
 
+  /** 고른 항목의 원래 value (숫자 value도 문자열이 아니라 숫자로 보낸다) */
+  function optionValue(field, text) {
+    var found = field.options.filter(function (o) { return String(o.value) === text; })[0];
+    return found ? found.value : text;
+  }
+
   function mount(container, opts) {
     var game = opts.game;
-    var settings = game.settings || [];
+    var settings = (game.settings || []).filter(function (f) { return !f.hidden; });
     var minPlayers = game.minPlayers || 2;
     var listSig = null;
-    var current = {};
+    var current = {};   // 서버가 확인한 설정
+    var pending = {};   // 누른 뒤 아직 저장이 끝나지 않은 값 { value, id } (연달아 누르면 이 값에서 이어서 계산한다)
+    var requestSeq = 0; // 저장 요청 번호 — 값이 같아도 요청은 구별한다 (+,−,+ 뒤의 +처럼 같은 값이 다시 나와도)
     var settingsQueue = MG.createQueue(); // 앞 설정의 응답이 늦어도 이어서 바꾼 설정을 버리지 않는다
+
+    /** 이 대기실이 아직 화면에 있는지 (게임이 시작되면 다른 화면으로 바뀐다) */
+    function mounted() {
+      return container.contains(root);
+    }
+
+    /** 설정 하나를 바꾼다: 화면에 바로 보여주고, 줄을 세워 저장한다. 저장이 끝나면(실패해도) 서버 값을 따른다 */
+    function change(field, value) {
+      var patch = {};
+      patch[field.key] = value;
+      requestSeq += 1;
+      var id = requestSeq;
+      pending[field.key] = { value: value, id: id };
+      renderSettings(current);
+      settingsQueue(function () { return opts.onSettings(patch); }).then(function () {
+        // 그 사이 또 눌렀으면 마지막 요청이 끝날 때까지 누른 값을 유지한다
+        if (!pending[field.key] || pending[field.key].id !== id) return;
+        delete pending[field.key];
+        if (mounted()) renderSettings(current);
+      });
+    }
 
     container.innerHTML =
       '<div class="lobby">' +
@@ -83,7 +112,11 @@
       qrEl.textContent = joinUrl(opts.code);
     }
 
-    container.querySelector('#btn-start').addEventListener('click', function () { opts.onStart(); });
+    var root = container.querySelector('.lobby');
+    // 시작은 저장 중인 설정 뒤에 줄을 세운다 (화면의 설정과 다른 설정으로 시작하지 않게)
+    container.querySelector('#btn-start').addEventListener('click', function () {
+      settingsQueue(function () { return opts.onStart(); });
+    });
     container.querySelector('#lobby-list').addEventListener('click', function (e) {
       var btn = e.target.closest('[data-kick]');
       if (btn) opts.onKick(btn.getAttribute('data-kick'));
@@ -96,17 +129,14 @@
         box.addEventListener('click', function (e) {
           var btn = e.target.closest('[data-step]');
           if (!btn) return;
-          var next = Math.min(field.max, Math.max(field.min, Number(current[field.key]) + Number(btn.getAttribute('data-step'))));
-          if (next === current[field.key]) return;
-          var patch = {};
-          patch[field.key] = next;
-          settingsQueue(function () { return opts.onSettings(patch); });
+          var base = field.key in pending ? pending[field.key].value : Number(current[field.key]);
+          var next = Math.min(field.max, Math.max(field.min, base + Number(btn.getAttribute('data-step'))));
+          if (next === base) return;
+          change(field, next);
         });
       } else {
         box.querySelector('[data-value]').addEventListener('change', function (e) {
-          var patch = {};
-          patch[field.key] = field.type === 'bool' ? e.target.checked : e.target.value;
-          settingsQueue(function () { return opts.onSettings(patch); });
+          change(field, field.type === 'bool' ? e.target.checked : optionValue(field, e.target.value));
         });
       }
     });
@@ -116,8 +146,8 @@
       settings.forEach(function (field) {
         var box = container.querySelector('.setting[data-key="' + field.key + '"]');
         var input = box.querySelector('[data-value]');
-        var value = current[field.key] === undefined ? field.default : current[field.key];
-        current[field.key] = value;
+        if (current[field.key] === undefined) current[field.key] = field.default;
+        var value = field.key in pending ? pending[field.key].value : current[field.key];
         if (field.type === 'int') {
           input.textContent = value;
           box.querySelector('[data-step="-1"]').disabled = value <= field.min;
@@ -125,7 +155,7 @@
         } else if (field.type === 'bool') {
           input.checked = !!value;
         } else if (document.activeElement !== input) {
-          input.value = value;
+          input.value = String(value);
         }
       });
     }

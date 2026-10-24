@@ -37,8 +37,9 @@
     try { localStorage.removeItem(key); } catch (e) { /* noop */ }
   }
 
-  /** 화면이 보일 때만 주기적으로 실행되는 폴링 루프 */
+  /** 화면이 보일 때만 주기적으로 실행되는 폴링 루프. intervalMs는 숫자 또는 매번 간격을 돌려주는 함수 */
   function createPoller(fn, intervalMs) {
+    var interval = typeof intervalMs === 'function' ? intervalMs : function () { return intervalMs; };
     var timer = null;
     var running = false;
     var stopped = false;
@@ -51,14 +52,14 @@
 
     function tick() {
       if (stopped || running) return;
-      if (document.hidden) return schedule(intervalMs);
+      if (document.hidden) return schedule(interval());
       running = true;
       Promise.resolve()
         .then(fn)
         .catch(function () { /* 다음 주기에 재시도 */ })
         .then(function () {
           running = false;
-          schedule(intervalMs);
+          schedule(interval());
         });
     }
 

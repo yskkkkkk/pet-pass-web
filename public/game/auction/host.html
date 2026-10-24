@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>블라인드 경매 · 진행자</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#F5F2EA">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="/game/shared/game.css">
+  <link rel="stylesheet" href="/game/auction/auction.css">
+</head>
+<body>
+  <div class="host">
+    <header class="host-header">
+      <nav class="crumbs"><a class="wordmark" href="/game">미니게임</a><span class="crumb-sep">/</span><a class="crumb" href="/game/auction">블라인드 경매</a></nav>
+      <div class="meta">
+        <span id="h-round" hidden></span>
+        <span id="h-room" hidden></span>
+      </div>
+    </header>
+
+    <main class="host-main" id="host-main">
+      <p class="muted">불러오는 중…</p>
+    </main>
+    <footer class="host-footer">Enter 키를 누르면 화면의 검은 버튼이 실행됩니다.</footer>
+  </div>
+
+  <script src="/game/games.js"></script>
+  <script src="/game/shared/vendor/qrcode.js"></script>
+  <script src="/game/shared/logic.js"></script>
+  <script src="/game/shared/common.js"></script>
+  <script src="/game/shared/fx.js"></script>
+  <script src="/game/shared/lobby.js"></script>
+  <script src="/game/shared/scoreboard.js"></script>
+  <script src="/game/shared/awards.js"></script>
+  <script src="/game/auction/show.js"></script>
+  <script src="/game/auction/art.js"></script>
+  <script src="/game/auction/items-art.js"></script>
+  <script src="/game/auction/stage.js"></script>
+  <script src="/game/auction/host.js"></script>
+</body>
+</html>

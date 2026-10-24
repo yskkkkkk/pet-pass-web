@@ -5,7 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { HttpError } = require('../../lib/game/core');
 const { defaultsOf, applySettings } = require('../../lib/game/settings');
-const { requirePlayer, submitMove, transition } = require('../../lib/game/round');
+const { listRoundMoves, moveKind, requirePlayer, submitMove, transition } = require('../../lib/game/round');
 const { rankPlayers } = require('../../lib/game/scoreboard');
 const { pickAwards, bumpStat } = require('../../lib/game/awards');
 const { createMemoryStore } = require('../../lib/game/store');
@@ -86,8 +86,21 @@ test('제출: 저장되고 같은 단계는 덮어씀, 기본 단계 main', asyn
   assert.equal(r.me.id, me.id);
   await submitMove(ctx({ playerToken: 't', round: 1 }), { payload: { bid: 5 } });
   await submitMove(ctx({ playerToken: 't', round: '1' }), { kind: 'swap', payload: { swap: true } });
-  assert.deepEqual(await store.listMoves('1000', 1), [{ player_id: me.id, payload: { bid: 5 } }]);
-  assert.deepEqual(await store.listMoves('1000', 1, 'swap'), [{ player_id: me.id, payload: { swap: true } }]);
+  assert.deepEqual(await store.listMoves('1000', 1, 'main:0'), [{ player_id: me.id, payload: { bid: 5 } }]);
+  assert.deepEqual(await store.listMoves('1000', 1, 'swap:0'), [{ player_id: me.id, payload: { swap: true } }]);
+});
+
+test('제출 칸 이름: 단계 + 판 번호. 판이 바뀌면 지난 판의 제출은 읽히지 않는다', async () => {
+  const { store, ctx, me } = await setup();
+  assert.equal(moveKind({ state: {} }), 'main:0');
+  assert.equal(moveKind({ state: { gen: 4 } }, 'vote'), 'vote:4');
+  await submitMove(ctx({ playerToken: 't' }), { payload: { bid: 1 } });
+  const room = await store.getRoom('1000');
+  assert.deepEqual(await listRoundMoves(store, room), [{ player_id: me.id, payload: { bid: 1 } }]);
+  assert.deepEqual(await listRoundMoves(store, { ...room, state: { gen: 1 } }), [], '다음 판에서는 안 보임');
+  assert.deepEqual(await listRoundMoves(store, room, 'swap'), []);
+  await assert.rejects(submitMove(ctx({ playerToken: 't', gen: 1 }), { payload: {} }), isHttp(409, /이미 지난 라운드/));
+  await submitMove(ctx({ playerToken: 't', gen: 0 }), { payload: { bid: 2 } });
 });
 
 test('제출: 상태가 맞지 않으면 409, 받을 상태를 바꿀 수 있음', async () => {
@@ -99,14 +112,14 @@ test('제출: 상태가 맞지 않으면 409, 받을 상태를 바꿀 수 있음
 test('제출: 지난 라운드 번호면 409', async () => {
   const { ctx, store } = await setup({ round: 3 });
   await assert.rejects(submitMove(ctx({ playerToken: 't', round: 2 }), { payload: {} }), isHttp(409, /이미 지난 라운드/));
-  assert.deepEqual(await store.listMoves('1000', 3), []);
+  assert.deepEqual(await store.listMoves('1000', 3, 'main:0'), []);
 });
 
 test('제출: 탈락자는 409, allowOut이면 가능', async () => {
   const { ctx, store, me } = await setup({ alive: false });
   await assert.rejects(submitMove(ctx({ playerToken: 't' }), { payload: {} }), isHttp(409, /탈락해서 참여할 수 없어요/));
   await submitMove(ctx({ playerToken: 't' }), { payload: { ok: 1 }, allowOut: true });
-  assert.deepEqual(await store.listMoves('1000', 1), [{ player_id: me.id, payload: { ok: 1 } }]);
+  assert.deepEqual(await store.listMoves('1000', 1, 'main:0'), [{ player_id: me.id, payload: { ok: 1 } }]);
 });
 
 test('조건부 마감: 상태·라운드가 맞을 때만, ctx.room을 새 값으로 바꿈', async () => {
