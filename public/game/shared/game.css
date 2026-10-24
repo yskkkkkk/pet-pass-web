@@ -388,3 +388,114 @@ button { font: inherit; color: inherit; }
   line-height: 1.6;
 }
 .note b { color: var(--ink); }
+
+/* ───────── 진행자 설정 (대기실) ───────── */
+.lobby-settings { border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.lobby-settings h3 { margin: 0; font-size: 14px; font-weight: 600; color: var(--ink-3); }
+.setting { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.setting-label { font-size: 16px; font-weight: 600; }
+.setting .input { min-height: 40px; width: auto; font-size: 15px; }
+.stepper { display: inline-flex; align-items: center; gap: 8px; }
+.stepper .btn { min-height: 36px; width: 36px; padding: 0; font-size: 18px; }
+.stepper output { min-width: 2.5em; text-align: center; font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* ───────── 웃음 장치 (shared/fx.js) ───────── */
+.sound-toggle {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: transparent;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.sound-toggle[aria-pressed="false"] { color: var(--ink-3); text-decoration: line-through; }
+
+/* 3·2·1 */
+.countdown {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  z-index: 50;
+  font-size: min(36vw, 280px);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.countdown > span { animation: count-pop .7s ease-out; }
+.countdown .countdown-wait { font-size: 40px; font-weight: 700; color: var(--ink-2); animation: none; }
+@keyframes count-pop { from { transform: scale(1.25); opacity: .2; } to { transform: scale(1); opacity: 1; } }
+
+/* 도장: 비스듬히 쾅 */
+.has-stamp { position: relative; }
+.stamp {
+  position: absolute;
+  z-index: 2;
+  padding: 0.08em 0.4em;
+  border: 0.12em solid currentColor;
+  border-radius: 0.18em;
+  font-weight: 900;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  background: rgba(255, 253, 248, 0.6);
+  transform: rotate(-12deg);
+  pointer-events: none;
+  animation: stamp-in .32s cubic-bezier(.2, 1.6, .4, 1) both;
+}
+.stamp.still { animation: none; }
+.stamp-out { color: var(--a); }
+.stamp-live { color: var(--live); }
+.stamp-ink { color: var(--ink); }
+@keyframes stamp-in {
+  0% { transform: rotate(-12deg) scale(2.4); opacity: 0; }
+  60% { transform: rotate(-12deg) scale(0.92); opacity: 1; }
+  100% { transform: rotate(-12deg) scale(1); opacity: 1; }
+}
+.thud { animation: thud .25s ease-out; }
+@keyframes thud {
+  0%, 100% { transform: translate(0, 0); }
+  30% { transform: translate(2px, 3px); }
+  60% { transform: translate(-2px, -1px); }
+}
+
+/* 호외 헤드라인: 신문처럼 위아래 줄, 왼쪽부터 펼쳐짐 */
+.headline {
+  margin: 0;
+  padding: 10px 4px 12px;
+  border-top: 4px double var(--ink);
+  border-bottom: 1px solid var(--ink);
+  text-align: center;
+  font-size: clamp(22px, 2.6vw, 34px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+.headline span { display: inline-block; animation: headline-in .6s ease-out both; }
+@keyframes headline-in {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+.play .headline { font-size: 20px; }
+
+/* 이름표 떨어지기: 차례로 툭 떨어져 비뚤게 남는다 */
+.falling { display: inline-block; animation: fall .7s cubic-bezier(.5, 0, .7, 1.4) var(--d, 0ms) both; }
+@keyframes fall {
+  0% { transform: translateY(-14px) rotate(0); opacity: 1; }
+  70% { transform: translateY(12px) rotate(var(--r, 10deg)); }
+  100% { transform: translateY(8px) rotate(var(--r, 10deg)); opacity: 1; }
+}
+
+/* 휴대폰 결과 도장 자리 */
+.verdict-stamp { position: relative; height: 96px; display: flex; align-items: center; justify-content: center; }
+.verdict-stamp .stamp { position: static; display: inline-block; font-size: 52px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp, .headline span, .falling, .thud, .countdown > span { animation: none !important; }
+  .falling { transform: rotate(var(--r, 10deg)); }
+}
+

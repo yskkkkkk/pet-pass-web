@@ -592,3 +592,26 @@
 - 웃음 장치는 기존 디자인 톤(종이·인쇄물)에 맞는 것만 쓰고, 네온·반짝이·파티클은 쓰지 않음
 
 ---
+## [2026-10-23] - Claude (미니게임 0단계: 공통 기반 + 테스트·뮤테이션 테스트)
+### ✅ 작업 요약
+- 같이 하는 게임 5종을 올릴 공통 기반을 만들고, 소수결을 그 위로 옮김. 단위·SQL·화면·뮤테이션 테스트를 도입해 PR마다 자동 실행
+
+### 🔧 변경 사항
+- **DB** (`supabase_game_schema.sql`, 여러 번 실행해도 안전): `game_rooms.game/settings/state`, `game_players.data`, `game_moves`(라운드별 제출, kind로 단계 구분), 상태 `playing` 추가
+- **서버**: 방 만들 때 게임 종류·설정 기본값 저장, 진행자 설정 변경(`settings`), 알 수 없는 요청을 방 조회 전에 거절, 잘못된 JSON 안내
+  - `lib/game/settings.js`(설정 검사), `round.js`(제출·조건부 마감), `scoreboard.js`(순위), `awards.js`(시상식)
+  - 저장소: `updatePlayers`, `upsertMove/listMoves/deleteMoves`, 메모리 저장소 id를 UUID로
+- **화면 공통**: `shared/logic.js`(순수 로직: latestOnly, createSerialSender, pickOne, fill), `fx.js`(웃음 장치), `lobby.js`(대기실·설정), `join.js`(참가)
+- **소수결**: 공통 대기실·참가 화면 사용, 투표 전송을 `createSerialSender`로, 웃음 장치 적용(호외 헤드라인, 생존·탈락·우승 도장, 탈락자 이름표 떨어지기, 휴대폰 도장·진동·효과음, 소리 끄기)
+- **테스트**: 단위 130(`npm test`), SQL 6(`npm run test:sql`, PGlite), 화면 17(`npm run test:e2e`, Playwright), 뮤테이션 99.63%(`npm run test:mutation`, Stryker, 95% 미만 실패), `.github/workflows/test.yml`
+
+### 📌 비고 (Issues & Decisions)
+- 뮤테이션 테스트로 드러난 테스트 구멍(오래된 방 정리 범위, 재시도 횟수, 최대 인원 경계, 동시 클릭, 탈락 라운드 덮어쓰기 등)을 테스트로 메움. 기존 코드 기준 86.99% → 99.63%
+- 바꿔도 결과가 같은 뮤턴트는 코드 단순화로 없애거나 `Stryker disable next-line …: 이유`로 이유를 남김
+- `Stryker disable all … restore all`을 함수 안쪽 끝에 두면 restore가 먹지 않아 파일 전체가 빠지는 것을 발견 — 한 줄 제외로 바꿈 (문서에 기록)
+- 문제 뽑기 테스트가 무작위에 기대 약 18% 확률로 버그를 놓치던 것을 발견 — 무작위 함수를 바꿔 끼울 수 있게 해서 모든 경우를 확인
+- 남은 뮤턴트 4개(설정 저장, 다른 게임 전용 action 거절)는 설정이 있는 게임·두 번째 게임이 생기는 1단계에서 잡음
+- 순위표·시상식·순차 공개 화면은 1단계로 넘김 (서버 계산은 완료)
+- 배포 전 필요: Supabase에서 `supabase_game_schema.sql` 다시 실행
+
+---

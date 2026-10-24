@@ -1,5 +1,9 @@
-/* 소수결 게임 공통 유틸 */
+/**
+ * 미니게임 화면 공통 도구 — 서버 요청, 폴링, 저장소, 알림, 진행자/참가자 토큰
+ * shared/logic.js 다음에 읽는다. (순수 로직은 logic.js에 있다)
+ */
 (function () {
+  var MG = window.MG;
   var API = '/api/game';
 
   function request(method, params) {
@@ -31,32 +35,6 @@
   }
   function storageRemove(key) {
     try { localStorage.removeItem(key); } catch (e) { /* noop */ }
-  }
-
-  function escapeHtml(str) {
-    return String(str == null ? '' : str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
-  /**
-   * 응답 순서가 뒤바뀌어도 최신 결과만 받도록 감싼다.
-   * 나중에 보낸 요청의 응답이 이미 반영됐다면, 늦게 도착한 예전 응답은 null로 버린다.
-   */
-  function latestOnly(fetcher) {
-    var sent = 0;
-    var applied = 0;
-    return function () {
-      var id = ++sent;
-      return fetcher.apply(null, arguments).then(function (data) {
-        if (id < applied) return null;
-        applied = id;
-        return data;
-      });
-    };
   }
 
   /** 화면이 보일 때만 주기적으로 실행되는 폴링 루프 */
@@ -110,17 +88,42 @@
     el._t = setTimeout(function () { el.classList.remove('show'); }, 2600);
   }
 
-  window.MG = {
+  // 저장 키 이름은 소수결 시절 그대로 둔다 (진행 중인 참가자가 그대로 이어지도록)
+  function hostKey(code) { return 'minority-game:host:' + code; }
+  function playerKey(code) { return 'minority-game:player:' + code; }
+
+  /**
+   * 진행자 토큰. 방을 만든 직후에는 URL 해시로 넘겨받고, 저장한 뒤 주소창에서 지운다.
+   * @returns {string|null}
+   */
+  function hostSession(code) {
+    if (location.hash.length > 1) {
+      var token = location.hash.slice(1);
+      storageSet(hostKey(code), token);
+      history.replaceState(null, '', location.pathname + location.search);
+      return token;
+    }
+    return storageGet(hostKey(code));
+  }
+
+  /** 게임 목록(games.js)에서 게임 정보 */
+  function gameInfo(id) {
+    var list = window.MG_GAMES || [];
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return null;
+  }
+
+  Object.assign(MG, {
     get: function (params) { return request('GET', params); },
     post: function (params) { return request('POST', params); },
     storageGet: storageGet,
     storageSet: storageSet,
     storageRemove: storageRemove,
-    escapeHtml: escapeHtml,
     createPoller: createPoller,
-    latestOnly: latestOnly,
     toast: toast,
-    hostKey: function (code) { return 'minority-game:host:' + code; },
-    playerKey: function (code) { return 'minority-game:player:' + code; }
-  };
+    hostKey: hostKey,
+    playerKey: playerKey,
+    hostSession: hostSession,
+    gameInfo: gameInfo
+  });
 })();
