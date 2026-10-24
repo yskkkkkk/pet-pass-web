@@ -36,8 +36,9 @@
     var finalSet = {};
     finalIdsOf(result).forEach(function (id) { finalSet[id] = true; });
 
-    var rows = result.bids.map(function (b, i) { return { id: b.id, bid: b.bid, i: i }; });
-    rows.sort(function (a, b) { return (cursed ? b.bid - a.bid : a.bid - b.bid) || a.i - b.i; });
+    // 금액이 같으면 원래(참가) 순서 그대로 — 자바스크립트 정렬은 같은 값의 순서를 지킨다 (ES2019)
+    var rows = result.bids.map(function (b) { return { id: b.id, bid: b.bid }; });
+    rows.sort(function (a, b) { return cursed ? b.bid - a.bid : a.bid - b.bid; });
     var early = rows.filter(function (r) { return !finalSet[r.id]; });
     var last = rows.filter(function (r) { return finalSet[r.id]; });
 
