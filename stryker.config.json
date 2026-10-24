@@ -10,7 +10,8 @@
     "api/game.js",
     "public/game/shared/logic.js",
     "public/game/minority/text.js",
-    "!lib/game/games/minority/questions.js"
+    "!lib/game/games/minority/questions.js",
+    "!lib/game/games/auction/items.js"
   ],
   "ignorePatterns": [
     "dist",

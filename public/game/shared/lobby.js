@@ -40,6 +40,12 @@
       }).join('') + '</select></div>';
   }
 
+  /** 고른 항목의 원래 value (숫자 value도 문자열이 아니라 숫자로 보낸다) */
+  function optionValue(field, text) {
+    var found = field.options.filter(function (o) { return String(o.value) === text; })[0];
+    return found ? found.value : text;
+  }
+
   function mount(container, opts) {
     var game = opts.game;
     var settings = game.settings || [];
@@ -105,7 +111,7 @@
       } else {
         box.querySelector('[data-value]').addEventListener('change', function (e) {
           var patch = {};
-          patch[field.key] = field.type === 'bool' ? e.target.checked : e.target.value;
+          patch[field.key] = field.type === 'bool' ? e.target.checked : optionValue(field, e.target.value);
           settingsQueue(function () { return opts.onSettings(patch); });
         });
       }
@@ -125,7 +131,7 @@
         } else if (field.type === 'bool') {
           input.checked = !!value;
         } else if (document.activeElement !== input) {
-          input.value = value;
+          input.value = String(value);
         }
       });
     }

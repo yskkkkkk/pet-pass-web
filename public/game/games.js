@@ -8,6 +8,7 @@
  *   minPlayers / maxPlayers  (같이 하는 게임) 시작 가능한 인원
  *   settings  (같이 하는 게임) 진행자가 대기실에서 바꾸는 설정. 형식은 lib/game/settings.js
  *             예: { key: 'rounds', label: '라운드 수', type: 'int', min: 3, max: 20, default: 10 }
+ *             choice의 value는 숫자도 된다 (대기실이 고른 항목의 value를 그대로 보낸다)
  */
 (function (root, factory) {
   var games = factory();
@@ -25,6 +26,21 @@
       minPlayers: 3,
       maxPlayers: 200,
       settings: []
+    },
+    {
+      id: 'auction',
+      type: 'party',
+      name: '블라인드 경매',
+      tagline: '한정된 칩으로 몰래 입찰해서, 가장 많이 건 사람이 물건을 가져갑니다. 칩은 이기든 지든 사라져요.',
+      players: '2~15명',
+      path: '/game/auction',
+      minPlayers: 2,
+      maxPlayers: 15,
+      settings: [
+        { key: 'rounds', label: '라운드 수', type: 'int', min: 5, max: 15, default: 10 },
+        { key: 'chips', label: '시작 칩', type: 'choice', options: [{ value: 50, label: '50개' }, { value: 100, label: '100개' }, { value: 200, label: '200개' }], default: 100 },
+        { key: 'surprises', label: '돌발 물건 (미스터리 상자·저주 물건)', type: 'bool', default: true }
+      ]
     }
   ];
 });
