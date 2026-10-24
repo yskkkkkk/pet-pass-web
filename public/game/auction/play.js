@@ -106,10 +106,11 @@
   }
 
   // 입찰은 한 번에 하나씩 순서대로 보낸다 (늦게 처리된 예전 금액이 새 금액을 덮어쓰지 않게).
-  // 값은 { round, bid } — 다음 물건으로 넘어간 뒤 도착한 입찰은 서버가 거절한다.
+  // 값은 { round, gen, bid } — gen(판 번호)은 새 판마다 바뀐다 ("한 판 더" 뒤의 1라운드와 구별).
+  // 다음 물건·지난 판의 입찰은 서버가 거절한다.
   var bids = MG.createSerialSender({
-    equals: function (a, b) { return !!a && !!b && a.round === b.round && a.bid === b.bid; },
-    send: function (v) { return MG.post({ action: 'bid', code: code, playerToken: token, bid: v.bid, round: v.round }); },
+    equals: function (a, b) { return !!a && !!b && a.round === b.round && a.gen === b.gen && a.bid === b.bid; },
+    send: function (v) { return MG.post({ action: 'bid', code: code, playerToken: token, bid: v.bid, round: v.round, gen: v.gen }); },
     onSaved: function () { paint(); },
     onError: function (err) {
       MG.toast(err.message);
@@ -121,16 +122,16 @@
   /** 이번 라운드에 낸 봉투 금액 (저장 전이라도 내가 마지막으로 낸 값). 없으면 null */
   function sentBid(data) {
     var v = bids.wanted();
-    if (v && v.round === data.room.round) return v.bid;
+    if (v && v.round === data.room.round && v.gen === data.room.gen) return v.bid;
     return data.me.bid;
   }
 
   function render(data) {
     state = data;
     receivedAt = Date.now();
-    if (data.room.status === 'playing' && draft.round !== data.room.round) {
+    if (data.room.status === 'playing' && (draft.round !== data.room.round || draft.gen !== data.room.gen)) {
       var sent = sentBid(data);
-      draft = { round: data.room.round, bid: sent === null ? 0 : sent };
+      draft = { round: data.room.round, gen: data.room.gen, bid: sent === null ? 0 : sent };
     }
     if (data.room.status === 'playing') rankingBefore = data.ranking;
     if (data.room.status === 'lobby') showFinal = false;
@@ -458,7 +459,7 @@
     if (step) return setDraft(draft.bid + Number(step.getAttribute('data-step')));
     if (set) return setDraft(set.getAttribute('data-set') === 'all' ? state.me.chips : 0);
     if (name === 'submit') {
-      bids.push({ round: state.room.round, bid: draft.bid });
+      bids.push({ round: state.room.round, gen: state.room.gen, bid: draft.bid });
       MG.fx.vibrate(15);
       paint();
     }

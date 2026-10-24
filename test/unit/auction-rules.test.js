@@ -230,9 +230,9 @@ test('정산: 칩 차감, 낙찰자 점수, 시상식 기록', () => {
   );
   const out = rules.settle(ps, result, { round: 4, rounds: 10, startChips: 100 });
   assert.deepEqual(out, [
-    { id: 'p0', patch: { data: { chips: 7, score: 5, stats: { spent: 3, cheapWins: 1 } } } },
-    { id: 'p1', patch: { data: { chips: 100, score: 0, stats: { spent: 0, zeroBids: 1 } } } },
-    { id: 'p2', patch: { data: { chips: 3, score: 0, stats: { spent: 3 } } } }
+    { id: 'p0', patch: { data: { chips: 7, score: 5, stats: { spent: 3, cheapWins: 1 }, settledRound: 4 } } },
+    { id: 'p1', patch: { data: { chips: 100, score: 0, stats: { spent: 0, zeroBids: 1 }, settledRound: 4 } } },
+    { id: 'p2', patch: { data: { chips: 3, score: 0, stats: { spent: 3 }, settledRound: 4 } } }
   ]);
   assert.deepEqual(ps[0].data, { chips: 10, score: 2, stats: {} }, '원래 data는 그대로');
 });
@@ -246,9 +246,9 @@ test('정산: 동점은 공중분해 기록, 올인·탕진(먼저 탕진할수�
   const result = rules.resolveAuction(players([8, 20, 0]), moves([8, 8, 0]), NORMAL3);
   const out = rules.settle(ps, result, { round: 3, rounds: 10, startChips: 100 });
   assert.deepEqual(out.map((o) => o.patch.data), [
-    { chips: 0, score: 0, stats: { spent: 8, burst: 8, allIn: 1, brokeAt: 8 } },
-    { chips: 12, score: 0, stats: { spent: 8, burst: 8 } },
-    { chips: 0, score: 1, stats: { spent: 0 } }
+    { chips: 0, score: 0, stats: { spent: 8, burst: 8, allIn: 1, brokeAt: 8 }, settledRound: 3 },
+    { chips: 12, score: 0, stats: { spent: 8, burst: 8 }, settledRound: 3 },
+    { chips: 0, score: 1, stats: { spent: 0 }, settledRound: 3 }
   ]);
   const lastRound = rules.settle([ps[0]], rules.resolveAuction(players([8]), moves([8]), NORMAL3), { round: 10, rounds: 10, startChips: 100 });
   assert.equal(lastRound[0].patch.data.stats.brokeAt, 1, '마지막 라운드에 탕진하면 1');
@@ -259,8 +259,8 @@ test('정산: 저주 물건은 떠안은 사람 점수가 깎이고 기록', () 
   const result = rules.resolveAuction(players([10, 10]), moves([4, 1]), { kind: 'cursed', points: -2 });
   const out = rules.settle(ps, result, { round: 1, rounds: 5, startChips: 10 });
   assert.deepEqual(out.map((o) => o.patch.data), [
-    { chips: 6, score: 3, stats: { spent: 4 } },
-    { chips: 9, score: 1, stats: { spent: 1, cursed: 1 } }
+    { chips: 6, score: 3, stats: { spent: 4 }, settledRound: 1 },
+    { chips: 9, score: 1, stats: { spent: 1, cursed: 1 }, settledRound: 1 }
   ]);
 });
 

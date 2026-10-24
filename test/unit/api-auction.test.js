@@ -106,7 +106,7 @@ test('대기실 상태: 참가자는 시작 칩, 0점, 모두 1위, 물건 없�
   const room = await newRoom(['가', '나'], { chips: 200 });
   const h = (await hostState(room.code, room.hostToken)).body;
   assert.equal(h.role, 'host');
-  assert.deepEqual(h.room, { code: room.code, status: 'lobby', round: 0, rounds: 0 });
+  assert.deepEqual(h.room, { code: room.code, status: 'lobby', round: 0, rounds: 0, gen: 0 });
   assert.deepEqual(h.players.map((p) => [p.nickname, p.chips, p.score, p.submitted, p.changes]), [['가', 200, 0, false, 0], ['나', 200, 0, false, 0]]);
   assert.deepEqual(h.lineup, []);
   assert.deepEqual(h.history, []);
@@ -133,7 +133,7 @@ test('시작: 진행자만, 2명 이상, 한 번만. 시작하면 1라운드 입
   await post({ action: 'join', code: one.code, nickname: '나' });
   const ok = await host(one, 'start');
   assert.equal(ok.status, 200);
-  assert.deepEqual(ok.body.room, { code: one.code, status: 'playing', round: 1, rounds: 7 });
+  assert.deepEqual(ok.body.room, { code: one.code, status: 'playing', round: 1, rounds: 7, gen: 1 });
   const again = await host(one, 'start');
   assert.equal(again.status, 409);
   assert.equal(again.body.error, '이미 게임이 시작됐어요.');
@@ -282,7 +282,7 @@ test('다음 물건: 공개 뒤에만, 한 번만. 판정과 공개 시각을 �
   assert.equal((await post({ action: 'next', code: room.code, hostToken: 'x' })).status, 403);
   await host(room, 'reveal');
   const ok = await host(room, 'next');
-  assert.deepEqual(ok.body.room, { code: room.code, status: 'playing', round: 2, rounds: 3 });
+  assert.deepEqual(ok.body.room, { code: room.code, status: 'playing', round: 2, rounds: 3, gen: 1 });
   const h = (await hostState(room.code, room.hostToken)).body;
   assert.equal(h.result, null);
   assert.equal(h.revealAgeMs, null);
@@ -360,7 +360,7 @@ test('처음부터: 진행자만, 대기실로 돌아가 칩·점수·입찰을 
   await host(room, 'reveal');
   assert.equal((await post({ action: 'restart', code: room.code, hostToken: 'x' })).status, 403);
   const r = await host(room, 'restart');
-  assert.deepEqual(r.body.room, { code: room.code, status: 'lobby', round: 0, rounds: 0 });
+  assert.deepEqual(r.body.room, { code: room.code, status: 'lobby', round: 0, rounds: 0, gen: 1 });
   const players = await store.listPlayers(room.code);
   assert.deepEqual(players.map((p) => p.data), [{}, {}]);
   assert.deepEqual(await store.listMoves(room.code, 1), []);
@@ -382,4 +382,98 @@ test('다른 게임 전용 요청은 거절: 소수결 방에 입찰, 경매 방
   assert.equal(onAuction.body.error, '알 수 없는 요청입니다.');
   const reroll = await post({ action: 'reroll', code: auction.code, hostToken: auction.hostToken });
   assert.equal(reroll.status, 400);
+});
+
+/* ───────── 리뷰 이슈 #124 #126 #127 ───────── */
+
+test('#124 판 번호: 새 판마다 올라가고, 지난 판 번호를 붙인 늦은 입찰은 거절', async () => {
+  const room = await started(['가', '나'], [item(3), item(3)]);
+  const gen1 = (await hostState(room.code, room.hostToken)).body.room.gen;
+  assert.equal(gen1, 1);
+  assert.equal((await bid(room, 0, 5, { round: 1, gen: gen1 })).status, 200);
+  await host(room, 'reveal');
+  await host(room, 'restart');
+  assert.equal((await hostState(room.code, room.hostToken)).body.room.gen, 1, '대기실에서는 그대로');
+  await host(room, 'start');
+  const gen2 = (await hostState(room.code, room.hostToken)).body.room.gen;
+  assert.equal(gen2, 2);
+  const late = await bid(room, 0, 5, { round: 1, gen: gen1 });
+  assert.equal(late.status, 409);
+  assert.equal(late.body.error, '이미 지난 라운드예요.');
+  assert.equal((await playerState(room.code, room.tokens[0])).body.me.bid, null, '지난 판 입찰이 새 판에 들어가지 않음');
+  assert.equal((await bid(room, 0, 5, { round: 1, gen: gen2 })).status, 200);
+});
+
+test('#126 공개 뒤 참가자 갱신이 실패해도 다음 조회에서 정산 기록대로 복구, 여러 번 조회해도 한 번만', async (t) => {
+  const room = await started(['가', '나'], [item(3), item(3)]);
+  await bid(room, 0, 30);
+  await bid(room, 1, 10);
+  const original = store.updatePlayers;
+  let fail = true;
+  store.updatePlayers = async (...args) => {
+    if (fail) { fail = false; throw new Error('DB 끊김'); }
+    return original(...args);
+  };
+  t.after(() => { store.updatePlayers = original; });
+  const { error } = console;
+  console.error = () => {};
+  const r = await host(room, 'reveal');
+  console.error = error;
+  assert.equal(r.status, 500);
+  assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.data), [{}, {}], '갱신 실패로 칩이 그대로인 상태');
+
+  const h = (await hostState(room.code, room.hostToken)).body;
+  assert.equal(h.room.status, 'revealed');
+  assert.deepEqual(h.players.map((p) => [p.chips, p.score]), [[70, 3], [90, 0]], '조회하면서 복구');
+  await hostState(room.code, room.hostToken);
+  await playerState(room.code, room.tokens[1]);
+  assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.data.chips), [70, 90], '여러 번 조회해도 한 번만 빠진다');
+  assert.equal(h.result.settled, undefined, '정산 기록은 응답에 넣지 않음');
+});
+
+test('#126 다음 물건으로 넘어가기 전에도 빠진 정산을 마저 반영', async (t) => {
+  const room = await started(['가', '나'], [item(3), item(3)]);
+  await bid(room, 0, 4);
+  const original = store.updatePlayers;
+  store.updatePlayers = async () => { throw new Error('DB 끊김'); };
+  const { error } = console;
+  console.error = () => {};
+  await host(room, 'reveal');
+  console.error = error;
+  store.updatePlayers = original;
+  t.after(() => { store.updatePlayers = original; });
+  assert.equal((await host(room, 'next')).status, 200);
+  assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.data.chips), [96, 100]);
+});
+
+test('#127 참가 검사와 저장 사이에 게임이 시작되면 거절하고 방금 넣은 참가자를 지운다', async (t) => {
+  const room = await newRoom(['가', '나']);
+  const original = store.addPlayer;
+  store.addPlayer = async (player) => {
+    await host(room, 'start');
+    return original(player);
+  };
+  t.after(() => { store.addPlayer = original; });
+  const r = await post({ action: 'join', code: room.code, nickname: '늦은이' });
+  assert.equal(r.status, 409);
+  assert.equal(r.body.error, '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.');
+  assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.nickname), ['가', '나']);
+});
+
+test('#127 마지막 자리에 둘이 동시에 들어오면 먼저 들어온 사람만 남는다', async (t) => {
+  const names = Array.from({ length: 14 }, (_, i) => '사람' + i);
+  const room = await newRoom(names);
+  const original = store.addPlayer;
+  store.addPlayer = async (player) => {
+    store.addPlayer = original;
+    await original({ room_code: room.code, nickname: '먼저', token: 'x' }); // 다른 요청이 먼저 마지막 자리를 채움
+    return original(player);
+  };
+  t.after(() => { store.addPlayer = original; });
+  const r = await post({ action: 'join', code: room.code, nickname: '나중' });
+  assert.equal(r.status, 409);
+  assert.equal(r.body.error, '방 인원이 가득 찼어요.');
+  const list = (await store.listPlayers(room.code)).map((p) => p.nickname);
+  assert.equal(list.length, 15);
+  assert.equal(list[14], '먼저');
 });

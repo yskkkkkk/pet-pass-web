@@ -51,8 +51,22 @@
     var settings = (game.settings || []).filter(function (f) { return !f.hidden; });
     var minPlayers = game.minPlayers || 2;
     var listSig = null;
-    var current = {};
+    var current = {};   // 서버가 확인한 설정
+    var pending = {};   // 누른 뒤 아직 저장이 끝나지 않은 값 (연달아 누르면 이 값에서 이어서 계산한다)
     var settingsQueue = MG.createQueue(); // 앞 설정의 응답이 늦어도 이어서 바꾼 설정을 버리지 않는다
+
+    /** 설정 하나를 바꾼다: 화면에 바로 보여주고, 줄을 세워 저장한다. 저장이 끝나면(실패해도) 서버 값을 따른다 */
+    function change(field, value) {
+      var patch = {};
+      patch[field.key] = value;
+      pending[field.key] = value;
+      renderSettings(current);
+      settingsQueue(function () { return opts.onSettings(patch); }).then(function () {
+        if (pending[field.key] !== value) return; // 그 사이 또 눌렀으면 마지막 값이 끝날 때까지 기다린다
+        delete pending[field.key];
+        renderSettings(current);
+      });
+    }
 
     container.innerHTML =
       '<div class="lobby">' +
@@ -102,17 +116,14 @@
         box.addEventListener('click', function (e) {
           var btn = e.target.closest('[data-step]');
           if (!btn) return;
-          var next = Math.min(field.max, Math.max(field.min, Number(current[field.key]) + Number(btn.getAttribute('data-step'))));
-          if (next === current[field.key]) return;
-          var patch = {};
-          patch[field.key] = next;
-          settingsQueue(function () { return opts.onSettings(patch); });
+          var base = field.key in pending ? pending[field.key] : Number(current[field.key]);
+          var next = Math.min(field.max, Math.max(field.min, base + Number(btn.getAttribute('data-step'))));
+          if (next === base) return;
+          change(field, next);
         });
       } else {
         box.querySelector('[data-value]').addEventListener('change', function (e) {
-          var patch = {};
-          patch[field.key] = field.type === 'bool' ? e.target.checked : optionValue(field, e.target.value);
-          settingsQueue(function () { return opts.onSettings(patch); });
+          change(field, field.type === 'bool' ? e.target.checked : optionValue(field, e.target.value));
         });
       }
     });
@@ -122,8 +133,8 @@
       settings.forEach(function (field) {
         var box = container.querySelector('.setting[data-key="' + field.key + '"]');
         var input = box.querySelector('[data-value]');
-        var value = current[field.key] === undefined ? field.default : current[field.key];
-        current[field.key] = value;
+        if (current[field.key] === undefined) current[field.key] = field.default;
+        var value = field.key in pending ? pending[field.key] : current[field.key];
         if (field.type === 'int') {
           input.textContent = value;
           box.querySelector('[data-step="-1"]').disabled = value <= field.min;

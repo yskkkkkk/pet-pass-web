@@ -125,11 +125,21 @@ async function actionJoin(ctx) {
   if (players.length >= ctx.game.info.maxPlayers) throw new HttpError(409, '방 인원이 가득 찼어요.');
 
   const playerToken = core.generateToken();
+  let added;
   try {
-    await store.addPlayer({ room_code: room.code, nickname, token: playerToken });
+    added = await store.addPlayer({ room_code: room.code, nickname, token: playerToken });
   } catch (e) {
     if (e instanceof DuplicateError) throw new HttpError(409, '이미 사용 중인 닉네임이에요.');
     throw e;
+  }
+
+  // 검사와 저장 사이에 게임이 시작됐거나 다른 사람이 먼저 마지막 자리를 채웠으면, 방금 넣은 나를 빼고 거절한다.
+  // (먼저 들어온 순서로 자리를 정해서, 동시에 들어와도 정원 안의 사람은 남는다)
+  const after = await store.getRoom(room.code);
+  const order = (await store.listPlayers(room.code)).findIndex((p) => p.id === added.id);
+  if (after.status !== 'lobby' || order >= ctx.game.info.maxPlayers) {
+    await store.deletePlayer(room.code, added.id);
+    throw new HttpError(409, after.status !== 'lobby' ? '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.' : '방 인원이 가득 찼어요.');
   }
   return { playerToken, nickname };
 }

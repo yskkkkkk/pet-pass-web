@@ -51,10 +51,11 @@
   }
 
   // 투표는 한 번에 하나씩 순서대로 보낸다 (늦게 처리된 예전 표가 새 표를 덮어쓰지 않게).
-  // 값은 { round, choice } — 다음 라운드로 넘어간 뒤 도착한 표는 서버가 거절한다.
+  // 값은 { round, gen, choice } — gen(판 번호)은 문제 바꾸기·새 판마다 바뀐다.
+  // 다음 라운드·지난 문제·지난 판의 표는 서버가 거절한다.
   var votes = MG.createSerialSender({
-    equals: function (a, b) { return !!a && !!b && a.round === b.round && a.choice === b.choice; },
-    send: function (v) { return MG.post({ action: 'vote', code: code, playerToken: token, choice: v.choice, round: v.round }); },
+    equals: function (a, b) { return !!a && !!b && a.round === b.round && a.gen === b.gen && a.choice === b.choice; },
+    send: function (v) { return MG.post({ action: 'vote', code: code, playerToken: token, choice: v.choice, round: v.round, gen: v.gen }); },
     onSaved: function () { paint(); },
     onError: function (err) {
       MG.toast(err.message);
@@ -63,18 +64,17 @@
     }
   });
 
-  /** 이번 라운드에 내가 고른 표 (저장 전이라도). 없으면 null */
-  function myVote(round) {
+  /** 이번 라운드·이번 문제에 내가 고른 표 (저장 전이라도). 없으면 null */
+  function myVote(room) {
     var v = votes.wanted();
-    return v && v.round === round ? v : null;
+    return v && v.round === room.round && v.gen === room.gen ? v : null;
   }
 
   function vote(choice) {
     if (!state || state.room.status !== 'voting' || !state.me.alive) return;
-    var round = state.room.round;
-    var current = myVote(round);
+    var current = myVote(state.room);
     if (current && current.choice === choice) return;
-    votes.push({ round: round, choice: choice });
+    votes.push({ round: state.room.round, gen: state.room.gen, choice: choice });
     paint();
     MG.fx.vibrate(15);
   }
@@ -135,7 +135,7 @@
     }
 
     // 투표 중에는 이번 라운드에 내가 누른 선택이 기준이다 (서버 응답은 저장 직전 값일 수 있음)
-    var mine = myVote(room.round);
+    var mine = myVote(room);
     var choice = mine ? mine.choice : me.choice;
     var saving = !!mine && votes.isSaving();
     function btn(c, cls) {

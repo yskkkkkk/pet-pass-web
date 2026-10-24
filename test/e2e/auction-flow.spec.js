@@ -104,6 +104,10 @@ test('2명: 5라운드 끝까지 → 최종 순위·시상식 → 같은 멤버�
   await host.click('[data-act="restart"]');
   await waitForLobbyCount(host, 2);
   await expect(phones[1].locator('text=참가했습니다')).toBeVisible();
+  // #124: 한 판 더의 1라운드에는 지난 판 1라운드에 낸 봉투가 남지 않는다
+  await host.click('#btn-start');
+  await expect(phones[0].locator('#btn-bid')).toContainText('넣기');
+  await expect(phones[0].locator('#draft-bid')).toHaveText('0');
   expectNoErrors(host, ...phones);
 });
 
