@@ -2,6 +2,7 @@
 
 > 규칙과 설계는 `docs/minigame_plan.md`, 구조는 `docs/minigame_structure.md`.
 > 단계 하나 = PR 하나. 끝난 항목은 `[x]`로 바꾸고 PR 번호를 적는다.
+> 현재 코드·계획서 점검에서 발견한 결함과 선행 설계 결정은 [이슈 목록](issues/README.md)에서 관리한다.
 
 ## 순서를 정한 이유
 
