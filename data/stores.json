@@ -10,7 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-24T04:47:44.258Z"
+    "updated_at": "2026-10-25T04:56:15.605Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,46 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-24T04:47:44.258Z"
-  },
-  {
-    "name": "카페 카푸찌니",
-    "address": "서울특별시 동대문구 이문로 120(판매시설동 1층 A114호 이문동)",
-    "type": "카페",
-    "region": "서울",
-    "lat": 37.5984702182265,
-    "lng": 127.062682937358,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-24T04:47:44.258Z"
-  },
-  {
-    "name": "후라이드의 품격",
-    "address": "부산광역시 동래구 온천천로457번길 7(안락동)",
-    "type": "일반음식점",
-    "region": "부산",
-    "lat": 35.1917103616079,
-    "lng": 129.103225935417,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-24T04:47:44.258Z"
-  },
-  {
-    "name": "누코이",
-    "address": "대구광역시 달서구 야외음악당로39동길 47(1층 두류동)",
-    "type": "카페",
-    "region": "대구",
-    "lat": 35.8559269603779,
-    "lng": 128.555468814869,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-24T04:47:44.258Z"
+    "updated_at": "2026-10-25T04:56:15.605Z"
   },
   {
     "name": "？파크",
@@ -75,6 +36,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-24T04:47:44.258Z"
+    "updated_at": "2026-10-25T04:56:15.605Z"
   }
 ]
