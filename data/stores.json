@@ -10,7 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-25T04:56:15.605Z"
+    "updated_at": "2026-10-26T04:59:16.877Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,7 +23,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-25T04:56:15.605Z"
+    "updated_at": "2026-10-26T04:59:16.877Z"
   },
   {
     "name": "？파크",
@@ -36,6 +36,32 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-25T04:56:15.605Z"
+    "updated_at": "2026-10-26T04:59:16.877Z"
+  },
+  {
+    "name": "레드베릴즈(Red Beryl's)",
+    "address": "부산광역시 수영구 민락로34번길 54-1(1층 일부호 민락동)",
+    "type": "일반음식점",
+    "region": "부산광역시",
+    "lat": 35.1583726203755,
+    "lng": 129.124316245506,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-26T04:59:16.877Z"
+  },
+  {
+    "name": "신주옥미 포레스트 화성왕림점",
+    "address": "경기도 화성시 효행구 봉담읍 삼천병마로 1016(청담타운 3동 1층)",
+    "type": "일반음식점",
+    "region": "경기도",
+    "lat": 37.1984868122587,
+    "lng": 126.940892503198,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-26T04:59:16.877Z"
   }
 ]
