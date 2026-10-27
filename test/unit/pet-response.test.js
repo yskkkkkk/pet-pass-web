@@ -35,6 +35,18 @@ test('XML: 0건(항목 없음)·빈 태그·공백만 있는 이름은 등록 �
   assert.equal(parsePetResponse(xml('<item><kindNm>푸들</kindNm></item>')).item.kindNm, '푸들');
 });
 
+test('XML: 화면에 쓰는 칸을 모두 꺼낸다 (목록에 없는 태그는 버림)', () => {
+  const tags = { dogNm: '초코', kindNm: '푸들', sexNm: '암컷', neuterYn: '중성', orgNm: '성남시', officNm: '분당구청', birthDt: '20240301', dogRegNo: '410123456789012', rfidCd: 'R1' };
+  const body = '<item>' + Object.entries(tags).map(([k, v]) => `<${k}>${v}</${k}>`).join('') + '<secret>x</secret></item>';
+  assert.deepEqual(parsePetResponse(xml(body)).item, tags);
+});
+
+test('XML 선언이 없는 글자 응답도 XML로 읽는다', () => {
+  const r = parsePetResponse('<response><header><resultCode>00</resultCode></header><body><item><dogNm>콩</dogNm></item></body></response>');
+  assert.equal(r.resultCode, '00');
+  assert.equal(r.item.dogNm, '콩');
+});
+
 test('XML: 태그 안 줄바꿈·앞뒤 공백은 정리하고, 결과 코드가 없으면 null', () => {
   const r = parsePetResponse('<?xml version="1.0"?><response><body><item><dogNm>\n  초코 \n</dogNm></item></body></response>');
   assert.equal(r.item.dogNm, '초코');
@@ -66,6 +78,7 @@ test('등록 정보 판단: 이름(dogNm)이 있어야 한다', () => {
   assert.equal(hasPetData({ dogNm: '초코' }), true);
   assert.equal(NO_DATA.success, false);
   assert.match(NO_DATA.errorTitle, /등록 정보를 확인할 수 없어요/);
+  assert.match(NO_DATA.error, /승인 대기 중일 수 있습니다/);
 });
 
 /* ───────── 두 API가 같은 판단 ───────── */

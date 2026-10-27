@@ -216,15 +216,13 @@ const BACKUP_FIELDS = ['name', 'address', 'type', 'region', 'lat', 'lng', 'verif
  */
 function buildBackupSnapshot(processedKeys, toUpsert, dbStoreMap) {
   const changed = new Map(toUpsert.map((s) => [`${s.name}|${s.address}`, s]));
-  const rows = [];
-  for (const key of processedKeys) {
+  // 키(name|address)의 문자 코드 순 — 실행 환경의 언어 설정과 관계없이 같은 순서
+  return [...processedKeys].sort().map((key) => {
     const source = changed.get(key) || dbStoreMap.get(key);
     const row = {};
     for (const field of BACKUP_FIELDS) row[field] = source[field] === undefined ? null : source[field];
-    rows.push(row);
-  }
-  const keyOf = (r) => `${r.name}|${r.address}`;
-  return rows.sort((a, b) => (keyOf(a) < keyOf(b) ? -1 : keyOf(a) > keyOf(b) ? 1 : 0));
+    return row;
+  });
 }
 
 /**

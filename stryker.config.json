@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
-  "_comment": "뮤테이션 테스트: npm run test:mutation. 게임 서버 코드를 조금씩 망가뜨려 단위 테스트가 잡아내는지 확인한다. 95% 미만이면 실패.",
+  "_comment": "뮤테이션 테스트: npm run test:mutation. 게임 서버 코드와 펫패스의 순수 로직(매장 요청 순서, 동물등록 응답 해석, 동기화 백업 계산)을 조금씩 망가뜨려 단위 테스트가 잡아내는지 확인한다. 95% 미만이면 실패.",
   "testRunner": "command",
   "commandRunner": {
     "command": "node --test \"test/unit/*.test.js\""
@@ -11,6 +11,9 @@
     "public/game/shared/logic.js",
     "public/game/minority/text.js",
     "public/game/auction/show.js",
+    "public/store-requests.js",
+    "lib/pet-response.js",
+    "scripts/sync-stores.js:217-226",
     "!lib/game/games/minority/questions.js",
     "!lib/game/games/auction/items.js"
   ],
@@ -21,7 +24,6 @@
     "docs",
     ".ai-lab",
     "public/blog",
-    "scripts",
     "*.xlsx"
   ],
   "coverageAnalysis": "off",
