@@ -119,29 +119,13 @@ async function actionJoin(ctx) {
     if (existing) return { playerToken: body.playerToken, nickname: existing.nickname };
   }
 
-  if (room.status !== 'lobby') throw new HttpError(409, '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.');
-
-  const players = await store.listPlayers(room.code);
-  if (players.length >= ctx.game.info.maxPlayers) throw new HttpError(409, '방 인원이 가득 찼어요.');
-
+  // 대기실인지·자리가 남았는지 확인과 참가를 한 번에 (참가끼리, 그리고 시작과 겹쳐도 차례로 처리된다)
   const playerToken = core.generateToken();
-  let added;
-  try {
-    added = await store.addPlayer({ room_code: room.code, nickname, token: playerToken });
-  } catch (e) {
-    if (e instanceof DuplicateError) throw new HttpError(409, '이미 사용 중인 닉네임이에요.');
-    throw e;
-  }
-
-  // 검사와 저장 사이에 다른 사람이 먼저 마지막 자리를 채웠으면, 방금 넣은 나를 빼고 거절한다.
-  // (먼저 들어온 순서로 자리를 정해서, 동시에 들어와도 정원 안의 사람은 남는다)
-  // 그 사이에 게임이 시작됐으면 빼지 않는다: 시작 요청이 나를 이미 셌을 수 있고(최소 인원), 게임들은 늦게 들어온
-  // 참가자도 처리한다 (경매: 시작 칩, 소수결: 생존자).
-  const order = (await store.listPlayers(room.code)).findIndex((p) => p.id === added.id);
-  if (order >= ctx.game.info.maxPlayers) {
-    await store.deletePlayer(room.code, added.id);
-    throw new HttpError(409, '방 인원이 가득 찼어요.');
-  }
+  const joined = await store.joinRoom({ room_code: room.code, nickname, token: playerToken, max: ctx.game.info.maxPlayers });
+  if (joined === 'started') throw new HttpError(409, '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.');
+  if (joined === 'full') throw new HttpError(409, '방 인원이 가득 찼어요.');
+  if (joined === 'duplicate') throw new HttpError(409, '이미 사용 중인 닉네임이에요.');
+  if (joined === 'missing') throw new HttpError(404, '방을 찾을 수 없어요. 코드를 확인해 주세요.');
   return { playerToken, nickname };
 }
 
