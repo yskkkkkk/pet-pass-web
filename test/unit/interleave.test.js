@@ -223,3 +223,84 @@ test('배포 전에 저장된 소수결 결과(사람별 선택 기록 없음)�
   assert.equal(p.status, 200);
   assert.equal(p.body.me.choice, 'A');
 });
+
+test('참가 확인 뒤 방이 정리되면(오래된 방 정리와 겹침) 404', async () => {
+  const r = await room('auction', ['가', '나']);
+  const gate = pauseAt(store, 'joinRoom');
+  const late = post({ action: 'join', code: r.code, nickname: '다' });
+  await gate.reached;
+  await store.deleteRoomsOlderThan(new Date(Date.now() + 60_000).toISOString());
+  gate.resume();
+  const j = await late;
+  assert.equal(j.status, 404);
+  assert.equal(j.body.error, '방을 찾을 수 없어요. 코드를 확인해 주세요.');
+});
+
+test('경매: 저장 직전에 멈춘 입찰이 공개 뒤에 저장되려 하면 거절 (결과에도 없다)', async () => {
+  const r = await room('auction', ['가', '나']);
+  await host(r, 'start');
+  await post({ action: 'bid', code: r.code, playerToken: r.tokens[1], bid: 3, round: 1 });
+  const gate = pauseAt(store, 'submitMove');
+  const slow = post({ action: 'bid', code: r.code, playerToken: r.tokens[0], bid: 9, round: 1 });
+  await gate.reached;
+  const shown = await host(r, 'reveal');
+  assert.equal(shown.status, 200);
+  gate.resume();
+  const late = await slow;
+  assert.equal(late.status, 409);
+  assert.equal(late.body.error, '이미 마감됐어요.');
+  const bids = (await hostState(r)).body.result.bids;
+  assert.deepEqual(bids.map((b) => [b.nickname, b.bid, b.submitted]), [['가', 0, false], ['나', 3, true]]);
+});
+
+for (const [game, names, submit] of [
+  ['minority', ['가', '나', '다'], (r, tk) => post({ action: 'vote', code: r.code, playerToken: tk, choice: 'A' })],
+  ['auction', ['가', '나'], (r, tk) => post({ action: 'bid', code: r.code, playerToken: tk, bid: 1, round: 1 })]
+]) {
+  test(`${game}: 공개가 둘 겹치면(마감 중에 다시 누름) 한쪽만 반영되고 늦은 쪽은 409`, async (t) => {
+    const r = await room(game, names);
+    await host(r, 'start');
+    for (const tk of r.tokens) await submit(r, tk);
+    const gate = pauseAt(store, 'listMoves');
+    t.after(gate.restore);
+    const first = host(r, 'reveal');
+    await gate.reached;
+    const second = await host(r, 'reveal'); // 마감 중이라 이어서 끝낸다
+    assert.equal(second.status, 200);
+    gate.resume();
+    const late = await first;
+    assert.equal(late.status, 409);
+    assert.equal(late.body.error, '이미 결과가 공개됐어요.');
+    const s = (await hostState(r)).body;
+    assert.equal(s.room.status, 'revealed');
+    assert.equal(s.room.round, 1);
+  });
+}
+
+test('경매: 마감 중 상태는 화면에 입찰 중으로 보이고(제출 수 포함), 다시 눌러 공개를 끝낼 수 있다', async (t) => {
+  const r = await room('auction', ['가', '나']);
+  await host(r, 'start');
+  for (const tk of r.tokens) await post({ action: 'bid', code: r.code, playerToken: tk, bid: 2, round: 1 });
+  const original = store.listPlayers;
+  let calls = 0;
+  store.listPlayers = async (...args) => {
+    calls++;
+    if (calls === 1) throw new Error('DB 끊김');
+    return original.apply(store, args);
+  };
+  t.after(() => { store.listPlayers = original; });
+  const { error } = console;
+  console.error = () => {};
+  const failed = await host(r, 'reveal');
+  console.error = error;
+  store.listPlayers = original;
+  assert.equal(failed.status, 500);
+  assert.equal((await store.getRoom(r.code)).status, 'closing');
+  const h = (await hostState(r)).body;
+  assert.equal(h.room.status, 'playing');
+  assert.equal(h.submittedCount, 2);
+  assert.equal((await playerState(r, 0)).body.room.status, 'playing');
+  const again = await host(r, 'reveal');
+  assert.equal(again.status, 200);
+  assert.equal(again.body.room.status, 'revealed');
+});
