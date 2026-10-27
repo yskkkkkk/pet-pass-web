@@ -5,6 +5,9 @@ const { api, call } = require('./helpers');
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const handler = require('../../api/game');
+const { getStore } = require('../../lib/game/store');
+
+const store = getStore();
 
 const { get, post } = api(handler);
 
@@ -75,7 +78,7 @@ test('상태: 진행자/참가자 응답 모양 (대기실)', async () => {
   assert.equal(h.body.role, 'host');
   assert.equal(h.body.aliveCount, 4);
   assert.equal(h.body.voteCount, 0);
-  assert.deepEqual(h.body.room, { code, status: 'lobby', round: 0, question: null, result: null });
+  assert.deepEqual(h.body.room, { code, status: 'lobby', round: 0, gen: 0, question: null, result: null });
   assert.deepEqual(h.body.players.map((p) => p.nickname), ['가', '나', '다', '라']);
   assert.deepEqual(Object.keys(h.body.players[0]).sort(), ['alive', 'eliminatedRound', 'id', 'nickname', 'voted']);
 
@@ -258,7 +261,7 @@ test('결과 공개 → 다음 라운드 → 종료 → 재시작', async () => 
 
   assert.equal((await post({ action: 'restart', code, hostToken: 'x' })).status, 403);
   const rs = await post({ action: 'restart', code, hostToken });
-  assert.deepEqual(rs.body.room, { code, status: 'lobby', round: 0, question: null, result: null });
+  assert.deepEqual(rs.body.room, { code, status: 'lobby', round: 0, gen: 2, question: null, result: null });
   const after = await hostState(code, hostToken);
   assert.ok(after.body.players.every((p) => p.alive && p.eliminatedRound === null));
   const again = await post({ action: 'start', code, hostToken });
@@ -356,4 +359,101 @@ test('문제 바꾸기 중 결과가 먼저 공개되면 문제를 바꾸지 않
     assert.equal(reroll.status, 200, '문제 바꾸기가 먼저였다면 공개는 바뀐 문제로');
   }
   assert.equal(h.room.status, 'revealed');
+});
+
+/* ───────── 리뷰 이슈 #124 #125 #126 ───────── */
+
+test('#124 문제 바꾸기와 새 판마다 판 번호가 올라가고, 지난 번호의 늦은 표는 거절', async () => {
+  const { code, hostToken, tokens } = await newRoom(['가', '나', '다']);
+  const s1 = await post({ action: 'start', code, hostToken });
+  const gen1 = s1.body.room.gen;
+  assert.equal(gen1, 1);
+  assert.equal((await post({ action: 'vote', code, playerToken: tokens[0], choice: 'A', round: 1, gen: gen1 })).status, 200);
+  const rr = await post({ action: 'reroll', code, hostToken });
+  assert.equal(rr.body.room.gen, 2, '문제를 바꾸면 같은 라운드라도 번호가 바뀐다');
+  const late = await post({ action: 'vote', code, playerToken: tokens[0], choice: 'A', round: 1, gen: gen1 });
+  assert.equal(late.status, 409);
+  assert.equal((await playerState(code, tokens[0])).body.me.choice, null);
+  assert.equal((await post({ action: 'vote', code, playerToken: tokens[0], choice: 'A', round: 1, gen: 2 })).status, 200);
+  await post({ action: 'restart', code, hostToken });
+  const s2 = await post({ action: 'start', code, hostToken });
+  assert.equal(s2.body.room.round, 1);
+  assert.equal(s2.body.room.gen, 3, '한 판 더 뒤의 1라운드도 다른 번호');
+});
+
+test('#125 공개 뒤 늦게 저장된 표가 있어도 휴대폰의 "내 선택"은 집계된 표 기준', async () => {
+  const { code, hostToken, tokens } = await newRoom(['가', '나', '다']);
+  await post({ action: 'start', code, hostToken });
+  for (const t of tokens) await post({ action: 'vote', code, playerToken: t, choice: 'A' });
+  await post({ action: 'reveal', code, hostToken });
+  const me = await store.getPlayerByToken(code, tokens[0]);
+  await store.upsertVote({ room_code: code, round: 1, player_id: me.id, choice: 'B' }); // 마감과 겹쳐 늦게 저장된 표
+  const p = (await playerState(code, tokens[0])).body;
+  assert.equal(p.me.choice, 'A');
+  assert.equal(p.room.result.aCount, 3);
+  assert.equal(p.room.result.choices, undefined, '사람별 선택 기록은 응답에 넣지 않음');
+  assert.equal((await hostState(code, hostToken)).body.room.result.choices, undefined);
+});
+
+test('#126 공개는 방 한 줄 조건부 쓰기 한 번: 탈락을 참가자 줄에 따로 쓰지 않고, 방 쓰기가 실패하면 다시 공개할 수 있다', async (t) => {
+  const { code, hostToken, tokens } = await newRoom(['가', '나', '다']);
+  await post({ action: 'start', code, hostToken });
+  await post({ action: 'vote', code, playerToken: tokens[0], choice: 'A' });
+  for (const tk of tokens.slice(1)) await post({ action: 'vote', code, playerToken: tk, choice: 'B' });
+  const eliminate = store.eliminatePlayers;
+  store.eliminatePlayers = async () => { throw new Error('공개는 참가자 줄을 쓰면 안 됨'); };
+  t.after(() => { store.eliminatePlayers = eliminate; });
+
+  const updateRoom = store.updateRoom;
+  store.updateRoom = async () => { throw new Error('DB 끊김'); };
+  const { error } = console;
+  console.error = () => {};
+  const failed = await post({ action: 'reveal', code, hostToken });
+  console.error = error;
+  store.updateRoom = updateRoom;
+  assert.equal(failed.status, 500);
+  assert.equal((await hostState(code, hostToken)).body.aliveCount, 3, '실패하면 그대로');
+
+  const r = await post({ action: 'reveal', code, hostToken });
+  assert.equal(r.status, 200);
+  const h = (await hostState(code, hostToken)).body;
+  assert.equal(h.room.status, 'finished');
+  assert.equal(h.aliveCount, 1);
+  assert.deepEqual(h.players.map((p) => [p.alive, p.eliminatedRound]), [[true, null], [false, 1], [false, 1]]);
+  const p = (await playerState(code, tokens[1])).body;
+  assert.equal(p.me.alive, false);
+  assert.deepEqual(p.winners, ['가']);
+});
+
+test('이 구조 전에 만든 방(탈락 목록 없음)은 참가자 줄의 탈락 기록을 쓰고, 다음 공개부터 방에 기록한다', async () => {
+  const { code, hostToken, tokens } = await newRoom(['가', '나', '다', '라', '마', '바', '사']);
+  await post({ action: 'start', code, hostToken });
+  const row = await store.getRoom(code);
+  const players = await store.listPlayers(code);
+  await store.eliminatePlayers(code, [players[6].id], 0); // 예전 방식으로 기록된 탈락
+  await store.updateRoom(code, { state: { gen: row.state.gen } });
+  let h = (await hostState(code, hostToken)).body;
+  assert.equal(h.aliveCount, 6);
+  assert.equal((await post({ action: 'vote', code, playerToken: tokens[6], choice: 'A' })).status, 409);
+  for (const tk of tokens.slice(0, 4)) await post({ action: 'vote', code, playerToken: tk, choice: 'A' });
+  for (const tk of tokens.slice(4, 6)) await post({ action: 'vote', code, playerToken: tk, choice: 'B' });
+  await post({ action: 'reveal', code, hostToken }); // A 4 탈락, B 2 생존 → 종료
+  h = (await hostState(code, hostToken)).body;
+  assert.deepEqual(h.players.map((p) => p.eliminatedRound), [1, 1, 1, 1, null, null, 0]);
+});
+
+test('#127 게임이 시작됐거나 꽉 찬 방에 이미 있는 닉네임으로 들어오면 "시작됨"·"가득 참"을 먼저 알려준다', async () => {
+  const { code, hostToken } = await newRoom(['가', '나', '다']);
+  await post({ action: 'start', code, hostToken });
+  const started = await post({ action: 'join', code, nickname: '가' });
+  assert.equal(started.status, 409);
+  assert.equal(started.body.error, '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.');
+});
+
+test('표는 "vote:판번호" 칸에 저장한다 (구조 문서의 저장 형식)', async () => {
+  const { code, hostToken, tokens } = await newRoom(['가', '나', '다']);
+  const s = await post({ action: 'start', code, hostToken });
+  await post({ action: 'vote', code, playerToken: tokens[0], choice: 'B' });
+  const me = await store.getPlayerByToken(code, tokens[0]);
+  assert.deepEqual(await store.listMoves(code, 1, 'vote:' + s.body.room.gen), [{ player_id: me.id, payload: { choice: 'B' } }]);
 });

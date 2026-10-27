@@ -1,5 +1,5 @@
 /**
- * 웃음 장치 — 카운트다운, 도장, 호외 헤드라인, 이름표 떨어지기, 효과음
+ * 웃음 장치 — 카운트다운, 도장, 호외 헤드라인, 이름표 떨어지기, 효과음, 시간표대로 연출하기(timeline)
  * 종이·인쇄물 톤에 맞춘 움직임만 쓴다. (모양은 shared/game.css의 "웃음 장치" 구역)
  * shared/logic.js, shared/common.js 다음에 읽는다.
  */
@@ -35,7 +35,20 @@
     stamp: [{ freq: 120, to: 50, dur: 0.2, type: 'triangle', gain: 0.3 }, { noise: true, dur: 0.07, gain: 0.2 }],
     fall: [{ freq: 760, to: 120, dur: 0.7, type: 'sawtooth', gain: 0.035 }],
     win: [{ freq: 523, dur: 0.12, gain: 0.08 }, { freq: 659, dur: 0.12, gain: 0.08, at: 0.12 }, { freq: 784, dur: 0.32, gain: 0.08, at: 0.24 }],
-    lose: [{ freq: 330, to: 150, dur: 0.5, type: 'triangle', gain: 0.12 }]
+    lose: [{ freq: 330, to: 150, dur: 0.5, type: 'triangle', gain: 0.12 }],
+    // 경매사 망치 땅! 땅! 땅!
+    gavel: [0, 0.32, 0.64].map(function (at) { return { freq: 180, to: 70, dur: 0.12, type: 'triangle', gain: 0.35, at: at }; })
+      .concat([0, 0.32, 0.64].map(function (at) { return { noise: true, dur: 0.04, gain: 0.25, at: at }; })),
+    // 칩 더미 밀기 (자글자글)
+    chips: [0, 0.05, 0.11, 0.16, 0.23].map(function (at) { return { freq: 2400 + at * 3000, dur: 0.03, type: 'square', gain: 0.025, at: at }; }),
+    // 공중분해
+    poof: [{ noise: true, dur: 0.45, gain: 0.18 }, { freq: 300, to: 60, dur: 0.4, type: 'sine', gain: 0.1 }],
+    // 손이 휙 들어오고 나간다
+    swish: [{ noise: true, dur: 0.16, gain: 0.05 }],
+    // 상자 덜컹
+    box: [{ freq: 90, to: 60, dur: 0.12, type: 'square', gain: 0.12 }, { freq: 90, to: 60, dur: 0.12, type: 'square', gain: 0.12, at: 0.22 }],
+    // 북소리 (뜸 들이기)
+    drum: [0, 0.12, 0.24, 0.36, 0.48, 0.6, 0.72, 0.84].map(function (at) { return { freq: 110, to: 80, dur: 0.08, type: 'triangle', gain: 0.12, at: at }; })
   };
 
   function playPart(ac, p) {
@@ -174,12 +187,73 @@
     setTimeout(function () { play('fall'); }, delayMs || 0);
   }
 
+  /**
+   * 정해 둔 시각에 차례로 실행한다. steps: [{ at: ms, run: function (late) }]
+   * offsetMs: 이미 이만큼 지난 시점부터 시작한다. 지나간 일은 바로 run(true)로 (연출 없이 결과만) 실행한다
+   * @returns {{ done: Promise, cancel: function }} cancel하면 아직 안 한 일은 하지 않는다
+   */
+  function timeline(steps, offsetMs) {
+    var offset = offsetMs || 0;
+    var timers = [];
+    var last = 0;
+    var cancelled = false;
+    var ordered = steps.slice().sort(function (a, b) { return a.at - b.at; });
+    var done = new Promise(function (resolve) {
+      ordered.forEach(function (step) {
+        last = Math.max(last, step.at);
+        if (step.at < offset) step.run(true);
+        else timers.push(setTimeout(function () { if (!cancelled) step.run(false); }, step.at - offset));
+      });
+      timers.push(setTimeout(resolve, Math.max(0, last - offset)));
+    });
+    return {
+      done: done,
+      cancel: function () {
+        cancelled = true;
+        timers.forEach(clearTimeout);
+      }
+    };
+  }
+
+  /**
+   * 정해진 시각까지 남은 시간을 3·2·1로 센다 (휴대폰마다 받은 시각이 달라도 같은 순간에 끝나게)
+   * @returns {Promise} 0이 되면
+   */
+  function countdownTo(remainingMs) {
+    var end = Date.now() + remainingMs;
+    var overlay = document.createElement('div');
+    overlay.className = 'countdown';
+    overlay.setAttribute('aria-live', 'assertive');
+    document.body.appendChild(overlay);
+    var shown = null;
+    return new Promise(function (resolve) {
+      (function tick() {
+        var left = end - Date.now();
+        if (left <= 0) {
+          overlay.remove();
+          play('go');
+          return resolve();
+        }
+        var n = Math.min(3, Math.ceil(left / 1000));
+        if (n !== shown) {
+          shown = n;
+          overlay.innerHTML = '<span>' + n + '</span>';
+          play('tick');
+        }
+        setTimeout(tick, Math.min(100, left));
+      })();
+    });
+  }
+
   MG.fx = {
+    timeline: timeline,
+    reducedMotion: reducedMotion,
     play: play,
     soundOn: soundOn,
     soundToggle: soundToggle,
     vibrate: vibrate,
     countdown: countdown,
+    countdownTo: countdownTo,
     stamp: stamp,
     headline: headline,
     drop: drop

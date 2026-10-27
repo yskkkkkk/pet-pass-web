@@ -44,4 +44,34 @@ function api(handler) {
   };
 }
 
-module.exports = { call, api, nextIp };
+/**
+ * 끼어들기 도구: 저장소 함수 하나가 다음에 불릴 때 그 자리에서 멈춰 둔다.
+ * 멈춘 사이 다른 요청(공개·재시작·시작 …)을 끼우고 resume()하면, 실서버에서 요청이 엇갈리는 순서를 그대로 만든다.
+ *   const gate = pauseAt(store, 'listPlayers');
+ *   const slow = get(...);            // listPlayers에서 멈춤
+ *   await gate.reached;               // 멈춘 걸 확인
+ *   await post(...restart...);        // 끼어들기
+ *   gate.resume(); await slow;
+ * when(args)로 멈출 호출을 고를 수 있다. 한 번 멈추면 원래 함수로 돌아간다.
+ */
+function pauseAt(store, method, when = () => true) {
+  const original = store[method];
+  let release;
+  let reachedResolve;
+  const reached = new Promise((r) => { reachedResolve = r; });
+  const gate = new Promise((r) => { release = r; });
+  store[method] = async (...args) => {
+    if (!when(...args)) return original.apply(store, args);
+    store[method] = original;
+    reachedResolve();
+    await gate;
+    return original.apply(store, args);
+  };
+  return {
+    reached,
+    resume: () => release(),
+    restore: () => { store[method] = original; }
+  };
+}
+
+module.exports = { call, api, nextIp, pauseAt };

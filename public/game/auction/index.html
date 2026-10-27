@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>블라인드 경매</title>
+  <meta name="description" content="한정된 칩으로 몰래 입찰하는 경매 게임. PC로 경매장을 띄우고 휴대폰으로 입찰하세요.">
+  <meta name="theme-color" content="#F5F2EA">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="/game/shared/game.css">
+  <link rel="stylesheet" href="/game/auction/auction.css">
+</head>
+<body>
+  <main class="landing auction-landing">
+    <a class="back-link" href="/game">← 미니게임</a>
+    <h1>블라인드 경매</h1>
+    <div class="how" aria-label="규칙">
+      <div class="how-step"><span class="how-art" id="art-1"></span><b>몰래 입찰</b></div>
+      <div class="how-step"><span class="how-art" id="art-2"></span><b>최고가가 낙찰</b></div>
+      <div class="how-step"><span class="how-art" id="art-3"></span><b>칩은 무조건 사라짐</b></div>
+    </div>
+
+    <section class="start-box">
+      <form id="create-form" class="start-form" autocomplete="off">
+        <label for="create-nick">방장 닉네임</label>
+        <div class="start-row">
+          <input class="input" id="create-nick" maxlength="12" placeholder="닉네임" required>
+          <button class="btn btn-primary btn-lg" type="submit" id="btn-create">휴대폰으로 시작</button>
+        </div>
+        <p class="error-text" id="create-error"></p>
+      </form>
+      <form id="join-form" class="start-form" autocomplete="off">
+        <label for="join-code">방 코드로 참가</label>
+        <div class="start-row">
+          <input class="input input-code" id="join-code" inputmode="numeric" pattern="\d{4}" maxlength="4" placeholder="0000" required>
+          <button class="btn btn-lg" type="submit">참가</button>
+        </div>
+      </form>
+      <p class="pc-start"><button class="link-btn" id="btn-create-pc" type="button">TV·PC 화면으로 진행하기</button></p>
+    </section>
+
+    <details class="rules">
+      <summary>규칙 자세히</summary>
+      <ol>
+        <li>모두 같은 칩으로 시작. 경매 일정(물건·점수)은 처음부터 공개.</li>
+        <li>0~남은 칩 사이로 몰래 입찰. 공개 전까지 바꿀 수 있지만 <b>바꾸면 다 보여요</b>(금액은 비밀).</li>
+        <li>최고가가 혼자면 낙찰. <b>동점이면 공중분해</b>, 칩만 날아가요.</li>
+        <li><b>?상자</b>는 0~5점. <b>저주 물건</b>은 최저가가 떠안아요(−2점).</li>
+        <li>마지막 물건은 3점. 점수 합계 → 같으면 남은 칩.</li>
+      </ol>
+    </details>
+  </main>
+
+  <script src="/game/shared/logic.js"></script>
+  <script src="/game/shared/common.js"></script>
+  <script src="/game/auction/art.js"></script>
+  <script src="/game/auction/items-art.js"></script>
+  <script>
+    (function () {
+      var A = window.AuctionArt;
+      document.getElementById('art-1').innerHTML = A.envelope();
+      document.getElementById('art-2').innerHTML = A.item({ name: '금 간 황금 트로피', kind: 'normal' });
+      document.getElementById('art-3').innerHTML = '<span class="stack">' + A.stack(5) + '</span>';
+
+      var NICK_KEY = 'minority-game:nickname';
+      var nick = document.getElementById('create-nick');
+      nick.value = MG.storageGet(NICK_KEY) || '';
+      var createError = document.getElementById('create-error');
+
+      function create(body, buttons) {
+        buttons.forEach(function (b) { b.disabled = true; });
+        createError.textContent = '';
+        return MG.post(Object.assign({ action: 'create', game: 'auction' }, body))
+          .then(function (data) {
+            MG.storageSet(MG.hostKey(data.code), data.hostToken);
+            if (data.playerToken) {
+              MG.storageSet(MG.playerKey(data.code), data.playerToken);
+              MG.storageSet(NICK_KEY, body.nickname.trim());
+              location.href = '/game/auction/play?room=' + data.code;
+            } else {
+              location.href = '/game/auction/host?room=' + data.code + '#' + data.hostToken;
+            }
+          })
+          .catch(function (err) {
+            createError.textContent = err.message;
+            buttons.forEach(function (b) { b.disabled = false; });
+          });
+      }
+
+      var btnCreate = document.getElementById('btn-create');
+      var btnPc = document.getElementById('btn-create-pc');
+      document.getElementById('create-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!nick.value.trim()) return nick.focus();
+        create({ nickname: nick.value, settings: { screen: 'phone' } }, [btnCreate, btnPc]);
+      });
+      btnPc.addEventListener('click', function () { create({}, [btnCreate, btnPc]); });
+
+      var codeInput = document.getElementById('join-code');
+      codeInput.addEventListener('input', function () {
+        codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 4);
+      });
+      document.getElementById('join-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!/^\d{4}$/.test(codeInput.value)) return codeInput.focus();
+        location.href = '/game/play?room=' + codeInput.value;
+      });
+    })();
+  </script>
+</body>
+</html>

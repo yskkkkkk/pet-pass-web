@@ -4,13 +4,13 @@
 const { test, expect } = require('@playwright/test');
 const { newHost, newPhone, createMinorityRoom, joinAs, expectNoErrors } = require('./helpers');
 
-test('허브: 같이 하는 게임 목록에 소수결, 게임이 없는 칸은 숨김', async ({ browser }) => {
+test('허브: 같이 하는 게임 목록에 소수결·블라인드 경매, 게임이 없는 칸은 숨김', async ({ browser }) => {
   const pc = await newHost(browser);
   await pc.goto('/game', { waitUntil: 'commit' });
-  await expect(pc.locator('[data-type=party] .game-name')).toHaveText(['소수결 게임']);
-  await expect(pc.locator('[data-type=party] .game-meta')).toHaveText('3명 이상');
+  await expect(pc.locator('[data-type=party] .game-name')).toHaveText(['소수결 게임', '블라인드 경매']);
+  await expect(pc.locator('[data-type=party] .game-meta')).toHaveText(['3명 이상', '2~15명']);
   await expect(pc.locator('[data-type=solo]')).toBeHidden();
-  await pc.click('.game-item');
+  await pc.click('.game-item >> nth=0');
   await expect(pc).toHaveURL(/\/game\/minority\/?$/);
   await expect(pc.locator('#btn-create')).toBeVisible();
   expectNoErrors(pc);

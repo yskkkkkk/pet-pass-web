@@ -7,7 +7,7 @@
   var logic = factory();
   // Stryker disable next-line all: 브라우저/Node 판별 — Node 테스트에서는 한쪽만 실행돼 확인할 수 없다 (브라우저 쪽은 화면 테스트가 확인)
   if (typeof module === 'object' && module.exports) module.exports = logic; else root.MG = Object.assign(root.MG || {}, logic);
-})(this, function () {
+})(globalThis, function () {
   function escapeHtml(str) {
     return String(str === null || str === undefined ? '' : str)
       .replace(/&/g, '&amp;')

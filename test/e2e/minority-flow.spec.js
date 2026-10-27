@@ -94,6 +94,10 @@ test('대기실에서 내보내기, 문제 바꾸기, 진행자 새로고침 후
   await host.click('#btn-reroll');
   await expect(host.locator('.question')).not.toHaveText(first);
   await expect(host.locator('#vote-progress-text')).toHaveText('0 / 3명 투표');
+  // #124: 문제를 바꾸면 휴대폰의 선택도 풀리고, 같은 A를 다시 눌러도 새 문제의 표로 저장된다
+  await expect(phones[0].locator('.vote-btn.selected')).toHaveCount(0);
+  await vote(phones[0], 'A');
+  await expect(host.locator('#vote-progress-text')).toHaveText('1 / 3명 투표');
 
   await host.reload({ waitUntil: 'commit' });
   await expect(host.locator('#btn-reveal')).toBeVisible();
