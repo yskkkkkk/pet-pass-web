@@ -64,5 +64,8 @@
 
 ## 5. 관리자 운영 팁
 - `api/stores.js`는 **Supabase `stores` 테이블**(`verified=true` 행)을 조회합니다. `data/stores.json`은 동기화 결과의 로컬 백업일 뿐, 런타임에서 참조하지 않습니다.
+- `data/stores.json`은 **동기화가 끝난 뒤의 전체 매장 목록(스냅샷)**입니다. 바뀐 게 없는 날에도 전체를 쓰고, 엑셀에서 사라져 지운 매장은 빠집니다. 일일 동기화가 git에 커밋하므로 이력이 남습니다.
+  - 복구: 빈 DB(또는 새 프로젝트)에 `node scripts/migrate-to-supabase.js`를 실행하면 이 파일 전체를 `UPSERT`합니다. 이 파일에 없는 DB 행을 지우지는 않습니다.
+  - 대량 삭제 방지(30% 초과)로 동기화가 멈춘 날, DB 반영이 실패한 날에는 파일을 새로 쓰지 않아 마지막으로 성공한 동기화의 상태가 남습니다.
 - 매장 데이터는 GitHub Actions 일일 동기화(`.github/workflows/daily_sync.yml`)가 식품안전나라 데이터를 받아 Supabase에 `UPSERT`하는 방식으로 자동 갱신됩니다.
 - 매장을 수동으로 추가/수정하려면 Supabase `stores` 테이블에서 직접 편집하세요. (`verified=false` 행은 사용자에게 노출되지 않습니다.)
