@@ -1,3 +1,7 @@
+/**
+ * data/stores.json(동기화가 남긴 전체 매장 스냅샷)을 Supabase stores 테이블에 UPSERT한다 — 새 DB 초기화·복구용.
+ * 파일에 없는 DB 행은 지우지 않는다. (파일 형식: scripts/sync-stores.js의 buildBackupSnapshot)
+ */
 const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');

@@ -54,7 +54,8 @@ let totalMatchedStores = 0;
 let currentOffset = 0;
 const PAGE_SIZE = 50;
 let hasMoreStores = false;
-let isLoadingStores = false;
+// 매장 목록 요청 순서 (store-requests.js): 지난 조건의 늦은 응답은 버리고, 마지막 조건은 꼭 보낸다
+const storeRequests = StoreRequests.create();
 let selectedStore = null;
 let currentBoundsFilter = null;
 let currentFilteredStores = [];
@@ -657,18 +658,20 @@ function buildStoresQuery(offset) {
 }
 
 async function fetchStoresPage({ append = false } = {}) {
-  if (isLoadingStores) return;
-  isLoadingStores = true;
+  const ticket = storeRequests.begin(append);
+  if (!ticket) return;
 
   if (!append) {
     renderSkeleton();
   }
 
   const nextOffset = append ? currentOffset : 0;
+  // 조건이 없는(전국 전체) 요청의 지역별 건수만 드롭다운 기준으로 쓴다
+  const isWholeCountry = currentCategory === '전체' && currentRegion1 === '전국' && currentSearch.trim() === '' && !currentBoundsFilter;
 
   try {
     const query = buildStoresQuery(nextOffset);
-    const response = await fetch(`/api/stores?${query}`);
+    const response = await fetch(`/api/stores?${query}`, { signal: ticket.signal });
     if (!response.ok) throw new Error('데이터 로딩 실패');
 
     const payload = await response.json();
@@ -678,9 +681,12 @@ async function fetchStoresPage({ append = false } = {}) {
     const regionCounts = payload.regionCounts;
 
     // 필터링이 수행되더라도 드롭다운은 항상 '전체 데이터 기준'을 보여주어야 함
-    if (regionCounts && globalRegionCounts === null) {
+    if (regionCounts && isWholeCountry && globalRegionCounts === null) {
       globalRegionCounts = regionCounts;
     }
+
+    // 그 사이 조건이 바뀌었으면 이 응답(목록·건수·offset)은 버린다
+    if (!storeRequests.isCurrent(ticket)) return;
 
     if (append) {
       stores = stores.concat(items);
@@ -700,10 +706,14 @@ async function fetchStoresPage({ append = false } = {}) {
     renderStores(stores);
     updateMapMarkers(stores);
   } catch (err) {
+    // 다른 조건의 요청이 시작돼 취소됐거나 늦게 실패한 요청은 화면을 건드리지 않는다
+    if (!storeRequests.isCurrent(ticket)) return;
+    // 실패한 조건은 반영된 것이 아니므로, 같은 조건으로 다시 시도할 수 있게 한다
+    if (!append) lastFilterKey = '';
     console.error('매장 정보를 가져오는데 실패했습니다:', err);
     storeList.innerHTML = `<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">매장 정보를 불러올 수 없습니다. 서버 상태를 확인해주세요.</div>`;
   } finally {
-    isLoadingStores = false;
+    storeRequests.end(ticket);
   }
 }
 
