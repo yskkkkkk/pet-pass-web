@@ -94,12 +94,12 @@ test('소수결: 지난 결과를 읽던 조회가 늦어지는 사이 한 판 �
 test('소수결: 판 번호 검사를 통과하고 저장 직전에 멈춘 표가 문제 바꾸기 뒤에 저장돼도 새 문제의 표가 아니다', async () => {
   const r = await room('minority', ['가', '나', '다']);
   const started = await host(r, 'start');
-  const gate = pauseAt(store, 'upsertMove');
+  const gate = pauseAt(store, 'submitMove');
   const slow = post({ action: 'vote', code: r.code, playerToken: r.tokens[0], choice: 'A', round: 1, gen: started.body.room.gen });
   await gate.reached;
   await host(r, 'reroll');
   gate.resume();
-  await slow;
+  assert.equal((await slow).status, 409, '저장하는 순간 DB가 거절');
 
   const s = (await hostState(r)).body;
   assert.equal(s.voteCount, 0);
@@ -109,7 +109,7 @@ test('소수결: 판 번호 검사를 통과하고 저장 직전에 멈춘 표�
 test('소수결: 저장 직전에 멈춘 표가 한 판 더·시작 뒤에 저장돼도 새 판 1라운드 표가 아니다', async () => {
   const r = await room('minority', ['가', '나', '다']);
   await host(r, 'start');
-  const gate = pauseAt(store, 'upsertMove');
+  const gate = pauseAt(store, 'submitMove');
   const slow = post({ action: 'vote', code: r.code, playerToken: r.tokens[0], choice: 'A', round: 1 });
   await gate.reached;
   await host(r, 'restart');
@@ -122,7 +122,7 @@ test('소수결: 저장 직전에 멈춘 표가 한 판 더·시작 뒤에 저�
 test('소수결: 새 표가 저장된 뒤 지난 문제의 표가 늦게 저장돼도 새 표를 덮어쓰지 않는다', async () => {
   const r = await room('minority', ['가', '나', '다']);
   await host(r, 'start');
-  const gate = pauseAt(store, 'upsertMove');
+  const gate = pauseAt(store, 'submitMove');
   const slow = post({ action: 'vote', code: r.code, playerToken: r.tokens[0], choice: 'A' });
   await gate.reached;
   const re = await host(r, 'reroll');
@@ -136,7 +136,7 @@ test('소수결: 새 표가 저장된 뒤 지난 문제의 표가 늦게 저장�
 test('경매: 저장 직전에 멈춘 입찰이 한 판 더·시작 뒤에 저장돼도 새 판 입찰이 아니다', async () => {
   const r = await room('auction', ['가', '나']);
   await host(r, 'start');
-  const gate = pauseAt(store, 'upsertMove');
+  const gate = pauseAt(store, 'submitMove');
   const slow = post({ action: 'bid', code: r.code, playerToken: r.tokens[0], bid: 9, round: 1 });
   await gate.reached;
   await host(r, 'restart');
@@ -147,21 +147,66 @@ test('경매: 저장 직전에 멈춘 입찰이 한 판 더·시작 뒤에 저�
   assert.equal((await hostState(r)).body.submittedCount, 0);
 });
 
-test('참가와 시작이 겹쳐도 시작한 인원 그대로 진행한다 (방금 들어온 사람을 지워 1명으로 진행하지 않음)', async (t) => {
-  const r = await room('auction', ['가']);
-  const original = store.addPlayer;
-  store.addPlayer = async (player) => {
-    store.addPlayer = original;
-    const added = await original.call(store, player);
-    assert.equal((await host(r, 'start')).status, 200, '시작이 방금 들어온 사람까지 센다');
-    return added;
-  };
-  t.after(() => { store.addPlayer = original; });
-  const j = await post({ action: 'join', code: r.code, nickname: '나' });
-  assert.equal(j.status, 200);
-  const s = (await hostState(r)).body;
-  assert.equal(s.room.status, 'playing');
-  assert.equal(s.players.length, 2);
+test('참가와 시작이 겹치면: 시작 전에 들어온 참가는 명단에 포함, 시작 뒤 참가는 거절 (지워서 인원이 줄지 않음)', async () => {
+  const r = await room('auction', ['가', '나']);
+  const gate = pauseAt(store, 'joinRoom');
+  const late = post({ action: 'join', code: r.code, nickname: '다' });
+  await gate.reached;
+  assert.equal((await host(r, 'start')).status, 200);
+  gate.resume();
+  const j = await late;
+  assert.equal(j.status, 409);
+  assert.equal(j.body.error, '이미 게임이 시작됐어요. 다음 판을 기다려 주세요.');
+  assert.deepEqual((await hostState(r)).body.players.map((p) => p.nickname), ['가', '나']);
+});
+
+test('마지막 자리에 여럿이 동시에 들어와도 한 명만 들어간다', async () => {
+  const names = Array.from({ length: 14 }, (_, i) => '사람' + i);
+  const r = await room('auction', names);
+  const results = await Promise.all(['가', '나', '다'].map((n) => post({ action: 'join', code: r.code, nickname: n })));
+  assert.deepEqual(results.map((x) => x.status).sort(), [200, 409, 409]);
+  assert.equal((await store.listPlayers(r.code)).length, 15);
+});
+
+test('마감과 겹친 표: 잠그기 전에 저장됐으면 결과에 반영, 잠근 뒤면 거절되어 저장되지 않음', async (t) => {
+  const r = await room('minority', ['가', '나', '다']);
+  await host(r, 'start');
+  for (const tk of r.tokens) await post({ action: 'vote', code: r.code, playerToken: tk, choice: 'A' });
+
+  // 공개가 마감 중으로 잠근 뒤 표를 읽기 직전에 멈춘 사이, 한 사람이 B로 바꾼다
+  const gate = pauseAt(store, 'listMoves');
+  t.after(gate.restore);
+  const revealing = host(r, 'reveal');
+  await gate.reached;
+  const change = await post({ action: 'vote', code: r.code, playerToken: r.tokens[0], choice: 'B' });
+  assert.equal(change.status, 409, '마감 중이라 거절');
+  assert.equal(change.body.error, '지금은 투표 시간이 아니에요.');
+  gate.resume();
+  const done = await revealing;
+  assert.equal(done.body.room.result.aCount, 3);
+  assert.equal((await playerState(r, 0)).body.me.choice, 'A', '결과·저장된 표·내 선택이 같다');
+});
+
+test('마감 중 상태는 화면에 투표 중으로 보이고, 중간에 멈춘 공개는 다시 눌러 끝낼 수 있다', async (t) => {
+  const r = await room('minority', ['가', '나', '다']);
+  await host(r, 'start');
+  for (const tk of r.tokens) await post({ action: 'vote', code: r.code, playerToken: tk, choice: 'A' });
+  const original = store.listMoves;
+  store.listMoves = async () => { throw new Error('DB 끊김'); };
+  const { error } = console;
+  console.error = () => {};
+  const failed = await host(r, 'reveal');
+  console.error = error;
+  store.listMoves = original;
+  t.after(() => { store.listMoves = original; });
+  assert.equal(failed.status, 500);
+  assert.equal((await store.getRoom(r.code)).status, 'closing');
+  const h = (await hostState(r)).body;
+  assert.equal(h.room.status, 'voting');
+  assert.equal(h.voteCount, 3);
+  const again = await host(r, 'reveal');
+  assert.equal(again.status, 200);
+  assert.equal(again.body.room.status, 'revealed');
 });
 
 test('배포 전에 저장된 소수결 결과(사람별 선택 기록 없음)도 참가자 화면이 열린다', async () => {

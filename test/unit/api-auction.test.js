@@ -430,39 +430,6 @@ test('#126 공개는 방 한 줄 조건부 쓰기 한 번: 참가자 줄을 쓰�
   assert.deepEqual((await store.listPlayers(room.code)).map((p) => p.data), [{}, {}], '칩은 방에만');
 });
 
-test('#127 참가 검사와 저장 사이에 게임이 시작되면 그 참가자는 남는다 (늦게 들어온 사람은 시작 칩으로)', async (t) => {
-  const room = await newRoom(['가', '나']);
-  const original = store.addPlayer;
-  store.addPlayer = async (player) => {
-    await host(room, 'start');
-    return original(player);
-  };
-  t.after(() => { store.addPlayer = original; });
-  const r = await post({ action: 'join', code: room.code, nickname: '늦은이' });
-  assert.equal(r.status, 200);
-  const p = (await playerState(room.code, r.body.playerToken)).body;
-  assert.equal(p.me.chips, 100);
-  assert.equal(p.room.status, 'playing');
-});
-
-test('#127 마지막 자리에 둘이 동시에 들어오면 먼저 들어온 사람만 남는다', async (t) => {
-  const names = Array.from({ length: 14 }, (_, i) => '사람' + i);
-  const room = await newRoom(names);
-  const original = store.addPlayer;
-  store.addPlayer = async (player) => {
-    store.addPlayer = original;
-    await original({ room_code: room.code, nickname: '먼저', token: 'x' }); // 다른 요청이 먼저 마지막 자리를 채움
-    return original(player);
-  };
-  t.after(() => { store.addPlayer = original; });
-  const r = await post({ action: 'join', code: room.code, nickname: '나중' });
-  assert.equal(r.status, 409);
-  assert.equal(r.body.error, '방 인원이 가득 찼어요.');
-  const list = (await store.listPlayers(room.code)).map((p) => p.nickname);
-  assert.equal(list.length, 15);
-  assert.equal(list[14], '먼저');
-});
-
 test('#127 꽉 찬 방에 이미 있는 닉네임으로 들어오면 "가득 참"을 먼저 알려준다', async () => {
   const names = Array.from({ length: 15 }, (_, i) => '사람' + i);
   const room = await newRoom(names);

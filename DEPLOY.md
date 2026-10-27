@@ -51,10 +51,12 @@
 1. **DB 테이블 생성·갱신**: Supabase SQL Editor에서 `supabase_game_schema.sql` 전체를 실행합니다.
    - 여러 번 실행해도 안전합니다 (기존 데이터는 그대로 두고 없는 칸·테이블만 추가).
    - **이 파일이 바뀐 PR은 배포(병합) 전에 먼저 실행**하세요. 새 코드가 새 칸을 바로 쓰기 때문입니다.
+   - 2026-10-27 버전부터는 참가·제출을 DB 함수(`game_join`, `game_submit_move`)로 처리합니다. 실행하지 않으면 참가와 투표·입찰이 실패합니다.
 2. **환경 변수 추가**: Vercel Dashboard → Environment Variables에 `SUPABASE_SECRET_KEY`(Supabase secret / service_role 키)를 추가합니다.
    - 게임 테이블은 RLS 정책이 없어 서버에서 secret 키로만 접근합니다. 키는 브라우저에 노출되지 않습니다.
    - 키가 없으면 `/api/game`이 503을 반환합니다.
-3. **사용법**: PC에서 `/game` → 게임 선택(예: 소수결 게임) → "새 방 만들기" → 참가자는 휴대폰으로 QR을 찍거나 `/game`에서 4자리 코드 입력.
+3. **사용법**: `/game` → 게임 선택 → 방 만들기 → 참가자는 휴대폰으로 QR을 찍거나 `/game`에서 4자리 코드 입력.
+   - 블라인드 경매는 휴대폰만으로 진행이 기본입니다 (방장 휴대폰이 진행하며 참가). 소수결은 PC 진행 화면이 필요합니다.
    - 구조와 게임 추가 방법은 `docs/minigame_structure.md` 참고
 4. **로컬 테스트**: `SUPABASE_SECRET_KEY` 없이 `npm start` 하면 메모리 저장소로 동작합니다. (`GAME_STORE=memory`로 강제 가능)
 5. 12시간 넘게 갱신이 없는 방은 새 방을 만들 때 자동 정리됩니다.

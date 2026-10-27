@@ -257,3 +257,44 @@ test('표: 같은 사람·라운드는 덮어쓰고, 라운드·방별로 분리
   assert.deepEqual(await s.listVotes('1000', 2), []);
   assert.equal((await s.listVotes('2000', 1)).length, 1, '다른 방 표는 그대로');
 });
+
+test('검사+참가 joinRoom: 없는 방 → 시작됨 → 가득 참 → 닉네임 중복 순서로 판단, ok면 참가', async () => {
+  const store = createMemoryStore();
+  assert.equal(await store.joinRoom({ room_code: '9000', nickname: '가', token: 't', max: 2 }), 'missing');
+  await store.createRoom({ code: '9000', host_token: 'h' });
+  assert.equal(await store.joinRoom({ room_code: '9000', nickname: '가', token: 't1', max: 2 }), 'ok');
+  assert.equal(await store.joinRoom({ room_code: '9000', nickname: '가', token: 't2', max: 2 }), 'duplicate');
+  assert.equal(await store.joinRoom({ room_code: '9000', nickname: '나', token: 't2', max: 2 }), 'ok');
+  assert.equal(await store.joinRoom({ room_code: '9000', nickname: '가', token: 't3', max: 2 }), 'full', '가득 차면 닉네임보다 먼저');
+  const me = await store.getPlayerByToken('9000', 't1');
+  assert.deepEqual({ ...me, id: undefined, joined_at: undefined }, { id: undefined, nickname: '가', alive: true, eliminated_round: null, joined_at: undefined, data: {} });
+  assert.match(me.id, /^[0-9a-f-]{36}$/);
+  await store.createRoom({ code: '9001', host_token: 'h' });
+  assert.equal(await store.joinRoom({ room_code: '9001', nickname: '가', token: 't9', max: 1 }), 'ok', '다른 방의 사람은 세지 않음');
+  await store.updateRoom('9000', { status: 'playing' });
+  assert.equal(await store.joinRoom({ room_code: '9000', nickname: '다', token: 't4', max: 9 }), 'started');
+  assert.equal((await store.listPlayers('9000')).length, 2);
+});
+
+test('검사+저장 submitMove: 받는 상태·라운드·판 번호가 모두 맞을 때만 저장, 같은 칸은 덮어씀', async () => {
+  const store = createMemoryStore();
+  const base = { room_code: '9100', round: 1, gen: 2, player_id: 'p', kind: 'vote:2', statuses: ['voting'] };
+  assert.equal(await store.submitMove({ ...base, payload: {} }), false, '없는 방');
+  await store.createRoom({ code: '9100', host_token: 'h', status: 'voting', round: 1, state: { gen: 2 } });
+  assert.equal(await store.submitMove({ ...base, payload: { choice: 'A' } }), true);
+  assert.equal(await store.submitMove({ ...base, payload: { choice: 'B' } }), true);
+  assert.deepEqual(await store.listMoves('9100', 1, 'vote:2'), [{ player_id: 'p', payload: { choice: 'B' } }]);
+  assert.equal(await store.submitMove({ ...base, round: 2, payload: {} }), false);
+  assert.equal(await store.submitMove({ ...base, gen: 1, payload: {} }), false);
+  assert.equal(await store.submitMove({ ...base, statuses: ['playing'], payload: {} }), false);
+  const payload = { choice: 'A' };
+  await store.updateRoom('9100', { state: {} });
+  assert.equal(await store.submitMove({ ...base, gen: 0, kind: 'vote:0', payload }), true, '판 번호 없는 방은 0');
+  payload.choice = 'Z';
+  assert.deepEqual(await store.listMoves('9100', 1, 'vote:0'), [{ player_id: 'p', payload: { choice: 'A' } }], '저장한 값은 복사본');
+  await store.updateRoom('9100', { status: 'closing' });
+  assert.equal(await store.submitMove({ ...base, gen: 0, kind: 'vote:0', payload: { choice: 'B' } }), false, '마감 중이면 거절');
+  assert.deepEqual(await store.listMoves('9100', 1, 'vote:0'), [{ player_id: 'p', payload: { choice: 'A' } }]);
+  await store.deleteRoomsOlderThan(new Date(Date.now() + 1000).toISOString());
+  assert.deepEqual(await store.listMoves('9100', 1, 'vote:0'), [], '방을 지우면 제출도');
+});

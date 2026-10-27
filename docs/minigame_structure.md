@@ -73,13 +73,14 @@ test/e2e/               화면 테스트 (Playwright)
 
 | 테이블 | 쓰임 |
 |---|---|
-| `game_rooms` | 방. `game`(게임 종류), `settings`(진행자 설정), `state`(게임별 방 상태), `status`(lobby / voting / playing / revealed / finished) |
+| `game_rooms` | 방. `game`(게임 종류), `settings`(진행자 설정), `state`(게임별 방 상태·판 번호·칩/탈락), `status`(lobby / voting / playing / closing / revealed / finished) |
 | `game_players` | 참가자. `data`(점수·칩·비밀 정보 같은 사람별 상태) |
 | `game_moves` | 라운드별 제출. `kind` = 단계 이름 + 판 번호 (예: `vote:3`, `main:2`). 소수결 표도 여기에 저장 |
 | `game_votes` | 예전 소수결 표 (이 구조 전에 공개된 결과를 읽을 때만 쓴다) |
 
 - 새 게임은 진행 중 상태로 `playing`을 쓰고, 세부 단계는 `state`에 둔다.
 - 스키마를 바꾸면 `test/sql/schema.test.mjs`가 "예전 DB에 두 번 실행해도 기존 데이터가 그대로인지"를 확인한다.
+- DB 함수 `game_join`, `game_submit_move`는 서버(service_role)만 부를 수 있다. 같은 테스트 파일에서 판단 결과를 확인한다 (동시 잠금 자체는 PGlite가 연결 하나라 시험하지 못하고, Postgres의 행 잠금 규칙에 기댄다).
 
 ## 혼자 하는 게임 추가하기
 
@@ -134,6 +135,8 @@ PR마다 GitHub Actions(`.github/workflows/test.yml`)가 네 가지를 모두 �
 실서버에서는 요청마다 따로 실행된다. 한 요청이 "읽고 → 쓰기" 사이에 있을 때 다른 요청(공개, 다음, 한 판 더, 시작, 참가)이 끼어들 수 있다. 응답이 느린 경우만 흉내 내면 이런 순서는 못 잡는다.
 
 **원칙**
+- **확인과 저장은 DB가 한 번에.** 참가는 `store.joinRoom`(DB 함수 `game_join`: 방 줄을 잠그고 대기실·정원 확인 후 참가), 제출은 `store.submitMove`(`game_submit_move`: 방 줄을 잠그고 상태·라운드·판 번호 확인 후 저장)로만 한다. 서버 코드에서 "읽고 확인 → 따로 저장"으로 나누면 그 사이에 마감·시작이 끼어든다. 메모리 저장소는 같은 판단 순서를 await 없이 처리한다.
+- **마감은 잠그고 나서 읽는다.** 공개는 `round.beginClose`로 방을 `closing`(마감 중)으로 바꾼 뒤 제출을 읽고, `closing`에서만 결과로 넘어간다. 마감과 겹친 제출은 "잠그기 전에 저장되어 결과에 반영" 또는 "거절" 둘 중 하나다. `closing`은 화면에는 투표·입찰 중으로 보이고, 공개가 중간에 실패하면 다시 눌러 이어 간다.
 - **한 동작의 쓰기는 방 한 줄에, 조건부로 한 번.** 판정·정산·탈락처럼 같이 바뀌어야 하는 값은 `room.state`에 함께 두고 `round.transition`(상태·라운드 조건부)으로 쓴다. 방을 쓰고 참가자 줄을 또 쓰면 사이에 실패·끼어들기가 생긴다. 경매의 칩·점수(`state.players`), 소수결의 탈락(`state.out`)이 이렇게 되어 있다.
 - **읽은 값으로 나중에 "고치는" 쓰기를 하지 않는다.** 읽은 뒤에 판이 바뀌면 "같은 값"이 지난 판의 값이 된다 (조회 중 복구가 새 판을 오염시킨 반례).
 - **제출은 판 번호가 붙은 칸에 저장한다** (`round.moveKind` → `'main:3'`). 검사를 통과하고 저장 직전에 멈춘 지난 판 제출은 아무도 읽지 않는 칸에 들어간다. 판 번호(`state.gen`)는 새 판 시작·문제 바꾸기마다 올라가고, 한 판 더(대기실로)에서는 유지한다.

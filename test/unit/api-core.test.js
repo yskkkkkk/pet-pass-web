@@ -96,7 +96,7 @@ test('방 만들기: 겹침이 아닌 저장소 오류는 다시 시도하지 �
 test('참가: 저장소 오류는 닉네임 중복이 아니라 500', async (t) => {
   quiet(t);
   const { code } = await lobby([]);
-  patchStore(t, 'addPlayer', () => async () => { throw new Error('연결 끊김'); });
+  patchStore(t, 'joinRoom', () => async () => { throw new Error('연결 끊김'); });
   const r = await post({ action: 'join', code, nickname: '가' });
   assert.equal(r.status, 500);
 });
