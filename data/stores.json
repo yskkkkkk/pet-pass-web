@@ -10,7 +10,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-26T04:59:16.877Z"
+    "updated_at": "2026-10-27T05:16:40.525Z"
   },
   {
     "name": "카페 ？잔",
@@ -23,7 +23,59 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-26T04:59:16.877Z"
+    "updated_at": "2026-10-27T05:16:40.525Z"
+  },
+  {
+    "name": "헤이쥬드",
+    "address": "서울특별시 마포구 와우산로37길 7(3층 동교동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5558959334096,
+    "lng": 126.930456482443,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-27T05:16:40.525Z"
+  },
+  {
+    "name": "레드베릴즈(Red Beryl's)",
+    "address": "부산광역시 수영구 민락로34번길 54-1(1층 일부호 민락동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.1583726203755,
+    "lng": 129.124316245506,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-27T05:16:40.525Z"
+  },
+  {
+    "name": "레이나",
+    "address": "대구광역시 중구 동덕로 35-1(대봉동)",
+    "type": "일반음식점",
+    "region": "대구",
+    "lat": 35.8582839990058,
+    "lng": 128.604604377271,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-27T05:16:40.525Z"
+  },
+  {
+    "name": "신주옥미 포레스트 화성왕림점",
+    "address": "경기도 화성시 효행구 봉담읍 삼천병마로 1016(청담타운 3동 1층)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.1984868122587,
+    "lng": 126.940892503198,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-27T05:16:40.525Z"
   },
   {
     "name": "？파크",
@@ -36,32 +88,58 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-26T04:59:16.877Z"
+    "updated_at": "2026-10-27T05:16:40.525Z"
   },
   {
-    "name": "레드베릴즈(Red Beryl's)",
-    "address": "부산광역시 수영구 민락로34번길 54-1(1층 일부호 민락동)",
-    "type": "일반음식점",
-    "region": "부산광역시",
-    "lat": 35.1583726203755,
-    "lng": 129.124316245506,
+    "name": "카페 하랑",
+    "address": "경상남도 하동군 북천면 경서대로 2053-13(북천면 방화리 156)",
+    "type": "카페",
+    "region": "경남",
+    "lat": 35.1131913990131,
+    "lng": 127.85456872953,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-26T04:59:16.877Z"
+    "updated_at": "2026-10-27T05:16:40.525Z"
   },
   {
-    "name": "신주옥미 포레스트 화성왕림점",
-    "address": "경기도 화성시 효행구 봉담읍 삼천병마로 1016(청담타운 3동 1층)",
+    "name": "서홍정원",
+    "address": "제주특별자치도 서귀포시 솜반천로55번길 12-8(1층 서홍동)",
     "type": "일반음식점",
-    "region": "경기도",
-    "lat": 37.1984868122587,
-    "lng": 126.940892503198,
+    "region": "제주",
+    "lat": 33.2525878046595,
+    "lng": 126.554413726655,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-26T04:59:16.877Z"
+    "updated_at": "2026-10-27T05:16:40.525Z"
+  },
+  {
+    "name": "도랑커피로스터스",
+    "address": "강원특별자치도 강릉시 성산면 경강로 1119",
+    "type": "카페",
+    "region": "강원",
+    "lat": 37.719169035767,
+    "lng": 128.811413886538,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-27T05:16:40.525Z"
+  },
+  {
+    "name": "치비커피하우스",
+    "address": "서울특별시 성동구 광나루로11길 13(상가 101호 송정동)",
+    "type": "카페",
+    "region": "서울특별시",
+    "lat": 37.5493056334808,
+    "lng": 127.066004186166,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-27T05:16:40.525Z"
   }
 ]
