@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { parsePetResponse, hasPetData, NO_DATA } = require('../lib/pet-response');
 const { createRateLimiter } = require('../lib/rate-limiter');
 
 const rateLimiter = createRateLimiter({ max: 10, windowMs: 60_000 });
@@ -61,52 +62,21 @@ module.exports = async (req, res) => {
       headers: { 'accept': '*/*' }
     });
 
-    let header, body;
+    // XML/JSON을 같은 모양으로 맞추고, "성공 코드"와 "등록 정보 있음"을 따로 확인한다
+    // (조회 결과가 없어도 성공 코드가 온다 — 그때 테스트 동물로 대신하지 않는다)
+    const { resultCode, resultMsg, item } = parsePetResponse(response.data);
 
-    // _type=json을 요청했지만 서버에서 XML을 반환하는 경우에 대비한 방어 코드
-    if (typeof response.data === 'string' && response.data.includes('<?xml')) {
-      const getValue = (tag) => {
-        const match = response.data.match(new RegExp(`<${tag}>(.*?)<\/${tag}>`));
-        return match ? match[1] : null;
-      };
-      header = { resultCode: getValue('resultCode'), resultMsg: getValue('resultMsg') };
-      body = { item: {
-        dogNm: getValue('dogNm'),
-        kindNm: getValue('kindNm'),
-        sexNm: getValue('sexNm'),
-        neuterYn: getValue('neuterYn'),
-        orgNm: getValue('orgNm')
-      }};
-    } else {
-      header = response.data?.response?.header;
-      body = response.data?.response?.body;
-    }
-
-    const isSuccess = header?.resultCode === '00';
-    const hasData = body?.item && (body.item.dogNm || Object.keys(body.item).length > 5);
-
-    if (isSuccess) {
-      const petData = hasData ? body.item : {
-        dogNm: "두부",
-        kindNm: "말티즈 (테스트)",
-        sexNm: "암컷",
-        neuterYn: "중성",
-        dogRegNo: dogRegNo,
-        ownerBirth: ownerBirth,
-        orgNm: "서울특별시 강남구",
-        officNm: "역삼1동 주민센터",
-        vaccinationStatus: "완료 (2026-04-01)"
-      };
-
+    if (resultCode === '00') {
+      if (!hasPetData(item)) return res.status(200).json(NO_DATA);
       return res.status(200).json({
         success: true,
-        message: hasData ? "국가동물보호정보시스템 인증에 성공하였습니다." : "정부 시스템 인증 성공 (테스트 데이터 모드입니다.)",
-        data: petData
+        message: "국가동물보호정보시스템 인증에 성공하였습니다.",
+        data: { ...item, dogRegNo: item.dogRegNo || dogRegNo, ownerBirth }
       });
     } else {
       return res.status(400).json({
         success: false,
-        error: header?.resultMsg || "인증 실패"
+        error: resultMsg || "인증 실패"
       });
     }
   } catch (error) {

@@ -1,6 +1,7 @@
 const { handlePreflight, applyCors } = require('./_cors');
 const axios = require('axios');
 const { createRateLimiter } = require('../lib/rate-limiter');
+const { parsePetResponse, hasPetData, NO_DATA } = require('../lib/pet-response');
 
 const rateLimiter = createRateLimiter({ max: 10, windowMs: 60_000 });
 
@@ -91,40 +92,15 @@ module.exports = async (req, res) => {
       }
     }
 
-    let header, body;
+    // XML/JSON을 같은 모양으로 맞추고, "성공 코드"와 "등록 정보 있음"을 따로 확인한다
+    const { resultCode, resultMsg, item } = parsePetResponse(response.data);
 
-    if (typeof response.data === 'string' && response.data.includes('<?xml')) {
-      const getValue = (tag) => {
-        const match = response.data.match(new RegExp(`<${tag}>(.*?)<\/${tag}>`));
-        return match ? match[1] : null;
-      };
-      header = { resultCode: getValue('resultCode'), resultMsg: getValue('resultMsg') };
-      body = { item: {
-        dogNm: getValue('dogNm'),
-        kindNm: getValue('kindNm'),
-        sexNm: getValue('sexNm'),
-        neuterYn: getValue('neuterYn'),
-        orgNm: getValue('orgNm'),
-        birthDt: getValue('birthDt')
-      }};
-    } else {
-      header = response.data?.response?.header;
-      body = response.data?.response?.body;
-    }
-
-    const isSuccess = header?.resultCode === '00';
-    const hasData = body?.item && (body.item.dogNm || Object.keys(body.item).length > 5);
-
-    if (isSuccess) {
-      if (!hasData) {
-        return res.status(200).json({
-          success: false,
-          errorTitle: "등록 정보를 확인할 수 없어요",
-          error: "국가동물보호관리시스템에 등록된 정보를 가져오지 못했습니다. 번호가 정확한데도 계속 안 된다면, 아직 승인 대기 중일 수 있습니다."
-        });
+    if (resultCode === '00') {
+      if (!hasPetData(item)) {
+        return res.status(200).json(NO_DATA);
       }
 
-      const petData = { ...body.item };
+      const petData = { ...item };
       petData.dogRegNo = petData.dogRegNo || dogRegNo;
       petData.ownerBirth = petData.ownerBirth || ownerBirth;
 
@@ -134,7 +110,7 @@ module.exports = async (req, res) => {
         data: petData
       });
     } else {
-      const errMsg = ERROR_MESSAGES[header?.resultMsg] || header?.resultMsg || "인증 실패";
+      const errMsg = ERROR_MESSAGES[resultMsg] || resultMsg || "인증 실패";
       return res.status(400).json({
         success: false,
         error: errMsg

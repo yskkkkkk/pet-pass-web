@@ -203,6 +203,28 @@ function correctBrokenName(name) {
   return NAME_CORRECTIONS.get(normalized) ?? name;
 }
 
+// data/stores.json 백업에 남기는 칸 (stores 테이블에서 id·created_at을 뺀 것, 마이그레이션 도구가 읽는 칸)
+const BACKUP_FIELDS = ['name', 'address', 'type', 'region', 'lat', 'lng', 'verified', 'phone_number', 'description', 'naver_smartplace_link', 'updated_at'];
+
+/**
+ * 동기화가 끝난 뒤 DB에 남는 전체 매장 = data/stores.json 백업 내용 (이슈 #130)
+ * 이번에 바꾼 행은 바꾼 값으로, 바뀌지 않아 건너뛴 행은 DB에 있던 값으로 넣고, 엑셀에서 사라져 지운 행은 뺀다.
+ * 이름·주소 순으로 고정해서, 매일 커밋되는 파일의 차이에 실제 변경만 보이게 한다.
+ * @param {Set<string>} processedKeys 엑셀에서 읽은 매장 키(name|address) — 동기화 뒤 DB에 남는 매장
+ * @param {object[]} toUpsert 이번에 새로 넣거나 바꾼 행
+ * @param {Map<string, object>} dbStoreMap 동기화 전 DB 행 (키 → 행)
+ */
+function buildBackupSnapshot(processedKeys, toUpsert, dbStoreMap) {
+  const changed = new Map(toUpsert.map((s) => [`${s.name}|${s.address}`, s]));
+  // 키(name|address)의 문자 코드 순 — 실행 환경의 언어 설정과 관계없이 같은 순서
+  return [...processedKeys].sort().map((key) => {
+    const source = changed.get(key) || dbStoreMap.get(key);
+    const row = {};
+    for (const field of BACKUP_FIELDS) row[field] = source[field] === undefined ? null : source[field];
+    return row;
+  });
+}
+
 /**
  * 반려동물 동반 가능 업소 데이터를 식품안전나라에서 가져와 Supabase DB로 저장하는 스크립트
  */
@@ -437,11 +459,14 @@ async function syncPetFriendlyStores() {
     }
 
     // 8. 로컬 백업 (부가 단계): 실패해도 전체 동기화 성공/실패를 바꾸지 않는다.
+    // 변경분이 아니라 동기화 뒤 전체 상태를 남긴다 (변경이 없는 날에도 전체 목록 — 복구·마이그레이션 입력용)
     let backupWarning = null;
     try {
+      const snapshot = buildBackupSnapshot(processedKeys, toUpsert, dbStoreMap);
       const dataDir = path.join(process.cwd(), 'data');
       if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-      fs.writeFileSync(path.join(dataDir, 'stores.json'), JSON.stringify(toUpsert, null, 2), 'utf8');
+      fs.writeFileSync(path.join(dataDir, 'stores.json'), JSON.stringify(snapshot, null, 2), 'utf8');
+      console.log(`💾 전체 백업 저장: data/stores.json (${snapshot.length}건)`);
     } catch (backupError) {
       backupWarning = `로컬 백업 실패: ${backupError.message}`;
       console.warn(`⚠️ ${backupWarning}`);
@@ -477,4 +502,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { syncPetFriendlyStores, correctBrokenName, hasBrokenKoreanText };
+module.exports = { syncPetFriendlyStores, correctBrokenName, hasBrokenKoreanText, buildBackupSnapshot };
