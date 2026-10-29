@@ -2155,7 +2155,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-28T05:55:58.473+00:00"
   },
   {
     "name": "거제굴집 돈까스",
@@ -6162,6 +6162,19 @@
     "updated_at": "2026-04-23T14:09:17.432+00:00"
   },
   {
+    "name": "대박포차",
+    "address": "부산광역시 강서구 과학산단2로20번길 40(1층 일부 지사동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.1505185303673,
+    "lng": 128.835014803847,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-29T06:00:26.535Z"
+  },
+  {
     "name": "대석288",
     "address": "경상남도 양산시 상북면 홍룡로 117(제1동~제13동, 1층)",
     "type": "일반음식점",
@@ -7095,7 +7108,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-28T05:55:58.473+00:00"
   },
   {
     "name": "도온",
@@ -10777,6 +10790,19 @@
     "updated_at": "2026-04-28T04:09:48.983+00:00"
   },
   {
+    "name": "매드포갈릭 스타필드마켓군산점",
+    "address": "전북특별자치도 군산시 구암3.1로 137(스타필드마켓 2층 경암동)",
+    "type": "일반음식점",
+    "region": "전북",
+    "lat": 35.9831607212072,
+    "lng": 126.734007380515,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-29T06:00:26.535Z"
+  },
+  {
     "name": "매슬로우커피(Masslowcoffee)",
     "address": "경기도 부천시 원미구 부천로85번길 46(102호 심곡동, 썬라이즈시티)",
     "type": "일반음식점",
@@ -12360,7 +12386,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-28T05:55:58.473+00:00"
   },
   {
     "name": "몽화원",
@@ -13442,6 +13468,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "바이콩즈",
+    "address": "충청남도 공주시 반포면 동학사1로 82",
+    "type": "일반음식점",
+    "region": "충남",
+    "lat": 36.3654886336705,
+    "lng": 127.256134364766,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-29T06:00:26.535Z"
+  },
+  {
     "name": "바크(Bark) 12 텍사스 스모크 하우스",
     "address": "경기도 양주시 옥정로6길 18(209호 옥정동)",
     "type": "일반음식점",
@@ -13777,7 +13816,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-28T05:55:58.473+00:00"
   },
   {
     "name": "버우드 Burwood",
@@ -13921,6 +13960,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-22T05:49:25.784+00:00"
+  },
+  {
+    "name": "베리굿즈",
+    "address": "경기도 화성시 만세구 남양읍 시청로 52(1층 일부호)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.2050067722336,
+    "lng": 126.82098161982,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-29T06:00:26.535Z"
   },
   {
     "name": "베리담",
@@ -14207,19 +14259,6 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-09-08T04:50:41.802+00:00"
-  },
-  {
-    "name": "보스턴 샐러드 하우스",
-    "address": "부산광역시 강서구 과학산단2로20번길 40(1층 일부 지사동)",
-    "type": "일반음식점",
-    "region": "부산",
-    "lat": 35.1505185303673,
-    "lng": 128.835014803847,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
     "name": "보오",
@@ -14934,7 +14973,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-28T05:55:58.473+00:00"
   },
   {
     "name": "브리즈(Breeze)",
@@ -15013,6 +15052,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-08-01T03:56:36.82+00:00"
+  },
+  {
+    "name": "블랙쉽 니트카페(Black Sheep Knit Cafe)",
+    "address": "서울특별시 영등포구 도림로 475(1층 103호 문래동4가)",
+    "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.5161360002639,
+    "lng": 126.890656931106,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-29T06:00:26.535Z"
   },
   {
     "name": "블랙시드 선유도",
@@ -16884,7 +16936,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-28T05:55:58.473+00:00"
   },
   {
     "name": "선데이 서플라이(sunday supply)",
@@ -18990,7 +19042,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-29T06:00:26.535Z"
   },
   {
     "name": "스페이스임원",
@@ -21892,6 +21944,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "연다원",
+    "address": "전북특별자치도 고창군 아산면 복분자로 184-81",
+    "type": "카페",
+    "region": "전북특별자치도",
+    "lat": 35.491202530067,
+    "lng": 126.62778698764,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-29T06:00:26.535Z"
+  },
+  {
     "name": "연미정",
     "address": "서울특별시 마포구 동교로 262-11(Bau Haus 1층 연남동)",
     "type": "일반음식점",
@@ -22579,6 +22644,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-05-06T04:09:51.566+00:00"
+  },
+  {
+    "name": "오리박사",
+    "address": "경상북도 포항시 북구 양학천로 82(죽도동,1층)",
+    "type": "일반음식점",
+    "region": "경북",
+    "lat": 36.0207500562207,
+    "lng": 129.36026477073,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-29T06:00:26.535Z"
   },
   {
     "name": "오마이살롱(oh my salon)",
@@ -27609,7 +27687,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-28T05:55:58.473+00:00"
   },
   {
     "name": "치치 양주옥정점",
@@ -28649,7 +28727,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-29T06:00:26.535Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -33563,7 +33641,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-28T05:55:58.473+00:00"
   },
   {
     "name": "포케담다",
@@ -34019,19 +34097,6 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-06-13T04:55:11.995+00:00"
-  },
-  {
-    "name": "플라우드(Flawood)",
-    "address": "부산광역시 연제구 거제대로230번길 18(1층 일부호 거제동)",
-    "type": "카페",
-    "region": "부산",
-    "lat": 35.1874749633136,
-    "lng": 129.074501370217,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
     "name": "플랑리브르(PLAN LIBRE)",
@@ -37008,6 +37073,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-28T05:55:58.473Z"
+    "updated_at": "2026-10-29T06:00:26.535Z"
   }
 ]
