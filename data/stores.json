@@ -4707,16 +4707,16 @@
   },
   {
     "name": "네이처스 세븐(nature's seven)",
-    "address": "부산광역시 해운대구 마린시티2로 33(104동 139-1호 일부호 우동, 해운대두산위브더제니스)",
-    "type": "카페",
-    "region": "부산",
+    "address": "부산광역시 해운대구 마린시티2로 33(104동 139-1호 우동, 해운대두산위브더제니스)",
+    "type": "일반음식점",
+    "region": "부산광역시",
     "lat": 35.1572036560166,
     "lng": 129.144817207267,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-04-22T05:49:25.784+00:00"
+    "updated_at": "2026-10-30T06:01:23.719Z"
   },
   {
     "name": "네이처푸드테라스",
@@ -6172,7 +6172,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-29T06:00:26.535+00:00"
   },
   {
     "name": "대석288",
@@ -9074,6 +9074,19 @@
     "updated_at": "2026-05-29T16:07:23.74+00:00"
   },
   {
+    "name": "로라의정원",
+    "address": "충청북도 충주시 소태면 소태로 378",
+    "type": "일반음식점",
+    "region": "충북",
+    "lat": 37.100493115479,
+    "lng": 127.854792442122,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-30T06:01:23.719Z"
+  },
+  {
     "name": "로로",
     "address": "경상남도 김해시 진영읍 김해대로58번길 2(1층)",
     "type": "제과점",
@@ -10800,7 +10813,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-29T06:00:26.535+00:00"
   },
   {
     "name": "매슬로우커피(Masslowcoffee)",
@@ -13156,6 +13169,19 @@
     "updated_at": "2026-05-28T16:31:33.666+00:00"
   },
   {
+    "name": "밀크로우",
+    "address": "경기도 안양시 만안구 박달로 551(1층 일부호 안양동)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.4028277951138,
+    "lng": 126.913980489455,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-30T06:01:23.719Z"
+  },
+  {
     "name": "밀향루",
     "address": "경상남도 거제시 신부로1길 23(장승포동)",
     "type": "일반음식점",
@@ -13478,7 +13504,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-29T06:00:26.535+00:00"
   },
   {
     "name": "바크(Bark) 12 텍사스 스모크 하우스",
@@ -13972,7 +13998,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-29T06:00:26.535+00:00"
   },
   {
     "name": "베리담",
@@ -15057,14 +15083,14 @@
     "name": "블랙쉽 니트카페(Black Sheep Knit Cafe)",
     "address": "서울특별시 영등포구 도림로 475(1층 103호 문래동4가)",
     "type": "일반음식점",
-    "region": "서울특별시",
+    "region": "서울",
     "lat": 37.5161360002639,
     "lng": 126.890656931106,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-30T06:01:23.719Z"
   },
   {
     "name": "블랙시드 선유도",
@@ -19042,7 +19068,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-30T06:01:23.719Z"
   },
   {
     "name": "스페이스임원",
@@ -20475,6 +20501,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "아트스타 라운지",
+    "address": "경기도 안양시 만안구 예술공원로 189(1층 일부호 안양동)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.4199717483639,
+    "lng": 126.926806378488,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-30T06:01:23.719Z"
+  },
+  {
     "name": "아트제이크루(ARTJ CREW)",
     "address": "울산광역시 중구 북부순환도로 842(1층 서동)",
     "type": "카페",
@@ -21814,6 +21853,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "엠디1040카페콩",
+    "address": "경기도 안양시 만안구 경수대로1201번길 33(1층 석수동)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.4159255372637,
+    "lng": 126.912600579902,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-30T06:01:23.719Z"
+  },
+  {
     "name": "엠엠티(MmT)",
     "address": "서울특별시 성북구 고려대로8길 23(1층 101호 안암동3가)",
     "type": "카페",
@@ -21931,6 +21983,19 @@
     "updated_at": "2026-05-06T14:44:34.688+00:00"
   },
   {
+    "name": "여행가게와 연필가게",
+    "address": "제주특별자치도 서귀포시 남원읍 태위로 929",
+    "type": "일반음식점",
+    "region": "제주",
+    "lat": 33.2861667894078,
+    "lng": 126.744498920948,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-30T06:01:23.719Z"
+  },
+  {
     "name": "연남토마 롯데몰 동부산점",
     "address": "부산광역시 기장군 기장읍 기장해안로 147(롯데동부산프리미엄 구이구이코너 3층)",
     "type": "카페",
@@ -21947,14 +22012,14 @@
     "name": "연다원",
     "address": "전북특별자치도 고창군 아산면 복분자로 184-81",
     "type": "카페",
-    "region": "전북특별자치도",
+    "region": "전북",
     "lat": 35.491202530067,
     "lng": 126.62778698764,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-30T06:01:23.719Z"
   },
   {
     "name": "연미정",
@@ -22656,7 +22721,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-29T06:00:26.535+00:00"
   },
   {
     "name": "오마이살롱(oh my salon)",
@@ -28727,7 +28792,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-30T06:01:23.719Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -37073,6 +37138,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-29T06:00:26.535Z"
+    "updated_at": "2026-10-30T06:01:23.719Z"
   }
 ]
