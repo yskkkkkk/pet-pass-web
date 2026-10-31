@@ -1131,6 +1131,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "ONIS(오니스)",
+    "address": "부산광역시 부산진구 동성로 43(1층 일부호 전포동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.1543697226338,
+    "lng": 129.068228586058,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-31T05:56:50.592Z"
+  },
+  {
     "name": "OU_TOPOS(우토포스)",
     "address": "서울특별시 서초구 방배로39길 42-7(1층 방배동)",
     "type": "일반음식점",
@@ -4082,19 +4095,6 @@
     "updated_at": "2026-04-23T03:50:22.679+00:00"
   },
   {
-    "name": "꼼꼼화당",
-    "address": "전남광주통합특별시 북구 우치로100번길 84(1층 문흥동)",
-    "type": "카페",
-    "region": "전남광주",
-    "lat": 35.1765081818093,
-    "lng": 126.917025605305,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-07-03T04:13:32.449+00:00"
-  },
-  {
     "name": "꼼마제빵소",
     "address": "경상남도 거제시 거제중앙로15길 30(1동 1층 고현동)",
     "type": "일반음식점",
@@ -4563,6 +4563,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "내츄럴",
+    "address": "경기도 의정부시 가능로 76(지상1층 의정부동)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.7466607990105,
+    "lng": 127.039427458371,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-31T05:56:50.592Z"
+  },
+  {
     "name": "너의 고요",
     "address": "전북특별자치도 전주시 완산구 전주천동로 60(교동)",
     "type": "카페",
@@ -4709,14 +4722,14 @@
     "name": "네이처스 세븐(nature's seven)",
     "address": "부산광역시 해운대구 마린시티2로 33(104동 139-1호 우동, 해운대두산위브더제니스)",
     "type": "일반음식점",
-    "region": "부산광역시",
+    "region": "부산",
     "lat": 35.1572036560166,
     "lng": 129.144817207267,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-31T05:56:50.592Z"
   },
   {
     "name": "네이처푸드테라스",
@@ -9084,7 +9097,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-30T06:01:23.719+00:00"
   },
   {
     "name": "로로",
@@ -11466,6 +11479,19 @@
     "updated_at": "2026-06-25T04:37:40.459+00:00"
   },
   {
+    "name": "메종그리즈",
+    "address": "서울특별시 노원구 노원로1라길 5(1층 공릉동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.6206883454979,
+    "lng": 127.08167852468,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-31T05:56:50.592Z"
+  },
+  {
     "name": "메종누벨",
     "address": "경상남도 양산시 물금읍 물금중앙길 40",
     "type": "제과점",
@@ -12922,6 +12948,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "미떼이(mittei)",
+    "address": "서울특별시 성북구 고려대로 26(1층 안암동2가)",
+    "type": "제과점",
+    "region": "서울",
+    "lat": 37.5860888529736,
+    "lng": 127.022118833367,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-31T05:56:50.592Z"
+  },
+  {
     "name": "미미미 신논현",
     "address": "서울특별시 강남구 강남대로116길 10(5층 논현동)",
     "type": "일반음식점",
@@ -13179,7 +13218,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-30T06:01:23.719+00:00"
   },
   {
     "name": "밀향루",
@@ -15090,7 +15129,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-30T06:01:23.719+00:00"
   },
   {
     "name": "블랙시드 선유도",
@@ -16835,7 +16874,7 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
-    "name": "서울안심",
+    "name": "서울안심 더 프라임",
     "address": "서울특별시 강서구 마곡중앙6로 76-3(인터시티365 지하1층 제비01호,제비02호 마곡동)",
     "type": "일반음식점",
     "region": "서울",
@@ -16845,7 +16884,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-13T06:53:41.049+00:00"
+    "updated_at": "2026-10-31T05:56:50.592Z"
   },
   {
     "name": "서원안길(주)",
@@ -19068,7 +19107,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-31T05:56:50.592Z"
   },
   {
     "name": "스페이스임원",
@@ -20511,7 +20550,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-30T06:01:23.719+00:00"
   },
   {
     "name": "아트제이크루(ARTJ CREW)",
@@ -21863,7 +21902,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-30T06:01:23.719+00:00"
   },
   {
     "name": "엠엠티(MmT)",
@@ -21993,7 +22032,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-30T06:01:23.719+00:00"
   },
   {
     "name": "연남토마 롯데몰 동부산점",
@@ -22019,7 +22058,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-30T06:01:23.719+00:00"
   },
   {
     "name": "연미정",
@@ -28792,7 +28831,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-31T05:56:50.592Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -34203,6 +34242,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "플러스마이너스밀크티(PLUSMINUSMILKTEA)",
+    "address": "강원특별자치도 동해시 일출로 383(1,2층 대진동)",
+    "type": "카페",
+    "region": "강원",
+    "lat": 37.5750388297913,
+    "lng": 129.116643382174,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-10-31T05:56:50.592Z"
+  },
+  {
     "name": "플러스마이너스밀크티카페삼척점",
     "address": "강원특별자치도 삼척시 새천년도로 47(삼광당 정하동)",
     "type": "카페",
@@ -37138,6 +37190,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-30T06:01:23.719Z"
+    "updated_at": "2026-10-31T05:56:50.592Z"
   }
 ]
