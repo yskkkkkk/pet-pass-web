@@ -1141,7 +1141,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-10-31T05:56:50.592+00:00"
   },
   {
     "name": "OU_TOPOS(우토포스)",
@@ -4573,7 +4573,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-10-31T05:56:50.592+00:00"
   },
   {
     "name": "너의 고요",
@@ -4729,7 +4729,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-10-31T05:56:50.592+00:00"
   },
   {
     "name": "네이처푸드테라스",
@@ -11489,7 +11489,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-10-31T05:56:50.592+00:00"
   },
   {
     "name": "메종누벨",
@@ -12958,7 +12958,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-10-31T05:56:50.592+00:00"
   },
   {
     "name": "미미미 신논현",
@@ -16884,7 +16884,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-10-31T05:56:50.592+00:00"
   },
   {
     "name": "서원안길(주)",
@@ -19107,7 +19107,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-11-01T06:24:34.676Z"
   },
   {
     "name": "스페이스임원",
@@ -28769,6 +28769,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "카페 트루미",
+    "address": "전남광주통합특별시 곡성군 옥과면 리문5길 9-4",
+    "type": "카페",
+    "region": "전남광주",
+    "lat": 35.2754305587114,
+    "lng": 127.136295447806,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-01T06:24:34.676Z"
+  },
+  {
     "name": "카페 틈",
     "address": "경기도 부천시 원미구 소향로 11(코오롱파크뷰 1층 102호, 103호 상동)",
     "type": "카페",
@@ -28831,7 +28844,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-11-01T06:24:34.676Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -34252,7 +34265,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-10-31T05:56:50.592+00:00"
   },
   {
     "name": "플러스마이너스밀크티카페삼척점",
@@ -37190,6 +37203,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-10-31T05:56:50.592Z"
+    "updated_at": "2026-11-01T06:24:34.676Z"
   }
 ]
