@@ -4472,6 +4472,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "남해왼손농장 맛집",
+    "address": "경상남도 남해군 서면 스포츠로498번길 3(2동)",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 34.8144390373444,
+    "lng": 127.855642680486,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-02T06:25:53.903Z"
+  },
+  {
     "name": "납작슬리퍼",
     "address": "경기도 고양시 일산동구 백마로 195(1-1141호 장항동, 일산방송COMPLEX방송관련시설)",
     "type": "일반음식점",
@@ -19107,7 +19120,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-01T06:24:34.676Z"
+    "updated_at": "2026-11-02T06:25:53.903Z"
   },
   {
     "name": "스페이스임원",
@@ -22059,6 +22072,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-10-30T06:01:23.719+00:00"
+  },
+  {
+    "name": "연림",
+    "address": "제주특별자치도 서귀포시 열리로 74(2층 상예동)",
+    "type": "일반음식점",
+    "region": "제주",
+    "lat": 33.2471164771337,
+    "lng": 126.390586055338,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-02T06:25:53.903Z"
   },
   {
     "name": "연미정",
@@ -28779,7 +28805,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-01T06:24:34.676Z"
+    "updated_at": "2026-11-01T06:24:34.676+00:00"
   },
   {
     "name": "카페 틈",
@@ -28844,7 +28870,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-01T06:24:34.676Z"
+    "updated_at": "2026-11-02T06:25:53.903Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -37203,6 +37229,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-01T06:24:34.676Z"
+    "updated_at": "2026-11-02T06:25:53.903Z"
   }
 ]
