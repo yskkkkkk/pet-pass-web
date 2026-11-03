@@ -4482,7 +4482,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-02T06:25:53.903Z"
+    "updated_at": "2026-11-02T06:25:53.903+00:00"
   },
   {
     "name": "납작슬리퍼",
@@ -4561,6 +4561,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-08-11T02:31:18.075+00:00"
+  },
+  {
+    "name": "내재",
+    "address": "충청남도 공주시 창벽로 420(1,2층 상왕동)",
+    "type": "일반음식점",
+    "region": "충남",
+    "lat": 36.4451501863237,
+    "lng": 127.180001979552,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-03T06:59:19.709Z"
   },
   {
     "name": "내적친밀",
@@ -19120,7 +19133,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-02T06:25:53.903Z"
+    "updated_at": "2026-11-03T06:59:19.709Z"
   },
   {
     "name": "스페이스임원",
@@ -19277,6 +19290,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-08-11T02:31:18.075+00:00"
+  },
+  {
+    "name": "시골쥐의 카페",
+    "address": "인천광역시 강화군 선원면 중앙로413번길 6(희소식)",
+    "type": "카페",
+    "region": "인천",
+    "lat": 37.7142449706517,
+    "lng": 126.467919157826,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-03T06:59:19.709Z"
   },
   {
     "name": "시골집",
@@ -19628,19 +19654,6 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-22T05:49:25.784+00:00"
-  },
-  {
-    "name": "신주옥미 포레스트 화성왕림점",
-    "address": "경기도 화성시 효행구 봉담읍 삼천병마로 1016(청담타운 3동 1층)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.1984868122587,
-    "lng": 126.940892503198,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-10-27T05:16:40.525+00:00"
   },
   {
     "name": "신창해물라면와랑식탁",
@@ -21658,6 +21671,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "에스리떼 미사",
+    "address": "경기도 하남시 미사대로 550(현대지식산업센터 한강미사 제1층 제씨 1-0039호 덕풍동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.556769335043,
+    "lng": 127.206467727213,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-03T06:59:19.709Z"
+  },
+  {
     "name": "에스프레소 인더홀(espresso in the hole)",
     "address": "경기도 용인시 기흥구 공세로47번길 78(2층 일부호 고매동)",
     "type": "일반음식점",
@@ -21838,6 +21864,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-22T05:49:25.784+00:00"
+  },
+  {
+    "name": "엔학고레",
+    "address": "충청남도 공주시 반포면 불장골길 113-12(1-2층)",
+    "type": "일반음식점",
+    "region": "충남",
+    "lat": 36.3980646643567,
+    "lng": 127.265762703337,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-03T06:59:19.709Z"
   },
   {
     "name": "엘 깜뽀 데 떼레노",
@@ -22084,7 +22123,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-02T06:25:53.903Z"
+    "updated_at": "2026-11-02T06:25:53.903+00:00"
   },
   {
     "name": "연미정",
@@ -28870,7 +28909,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-02T06:25:53.903Z"
+    "updated_at": "2026-11-03T06:59:19.709Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -34229,6 +34268,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "프린세스피크닉카페",
+    "address": "충청남도 공주시 치미마을길 74(신관동)",
+    "type": "카페",
+    "region": "충남",
+    "lat": 36.476568329826,
+    "lng": 127.124306239792,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-03T06:59:19.709Z"
+  },
+  {
     "name": "프릳츠",
     "address": "제주특별자치도 서귀포시 성산읍 일출로 222(1층)",
     "type": "일반음식점",
@@ -37229,6 +37281,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-02T06:25:53.903Z"
+    "updated_at": "2026-11-03T06:59:19.709Z"
   }
 ]
