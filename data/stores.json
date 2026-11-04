@@ -221,6 +221,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "(주)파주팜랜드",
+    "address": "경기도 파주시 탄현면 새오리로 318-32(1층)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.8100266695894,
+    "lng": 126.692143063633,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
+  },
+  {
     "name": "(주)플레이버타운",
     "address": "서울특별시 성동구 서울숲4길 18-7(1,2층 성수동1가)",
     "type": "일반음식점",
@@ -1194,19 +1207,6 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-22T05:49:25.784+00:00"
-  },
-  {
-    "name": "PeakEnd",
-    "address": "인천광역시 강화군 강화읍 남문로 43(1층)",
-    "type": "카페",
-    "region": "인천",
-    "lat": 37.7417911878594,
-    "lng": 126.488028146779,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-08-21T02:01:03.595+00:00"
   },
   {
     "name": "SECOND BREATH(세컨브레스)",
@@ -4573,7 +4573,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-03T06:59:19.709Z"
+    "updated_at": "2026-11-03T06:59:19.709+00:00"
   },
   {
     "name": "내적친밀",
@@ -7254,6 +7254,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "독스테이션",
+    "address": "경기도 파주시 탄현면 새오리로 126(1층)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.7951773368985,
+    "lng": 126.687339037967,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
+  },
+  {
     "name": "돈대회쎈타",
     "address": "인천광역시 강화군 내가면 해안서로 914",
     "type": "일반음식점",
@@ -8201,6 +8214,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-08-27T09:59:42.404+00:00"
+  },
+  {
+    "name": "뛰뛰멍",
+    "address": "경기도 파주시 월롱면 엘지로 438-197(1,2동 1층)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.8267936998353,
+    "lng": 126.76165993851,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
   },
   {
     "name": "뜰아래채",
@@ -9280,6 +9306,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-22T05:49:25.784+00:00"
+  },
+  {
+    "name": "로컬스(LOCALS.)",
+    "address": "서울특별시 서초구 서래로 12(1층 반포동, 우덕빌딩)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.4959658808753,
+    "lng": 126.998343665419,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
   },
   {
     "name": "로투스",
@@ -12348,6 +12387,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-09-30T05:43:02.25+00:00"
+  },
+  {
+    "name": "몽몽정원",
+    "address": "강원특별자치도 원주시 소초면 범골길 47-12(1층)",
+    "type": "일반음식점",
+    "region": "강원",
+    "lat": 37.3754574208731,
+    "lng": 127.995491731607,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
   },
   {
     "name": "몽베르트",
@@ -18551,6 +18603,19 @@
     "updated_at": "2026-10-02T05:52:35.626+00:00"
   },
   {
+    "name": "슈베르몽",
+    "address": "경기도 파주시 조리읍 사근절길 17-100",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.7656368959949,
+    "lng": 126.829686957339,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
+  },
+  {
     "name": "슈크림",
     "address": "인천광역시 강화군 화도면 마니산로410번길 176",
     "type": "카페",
@@ -19133,7 +19198,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-03T06:59:19.709Z"
+    "updated_at": "2026-11-04T06:41:33.087Z"
   },
   {
     "name": "스페이스임원",
@@ -19302,7 +19367,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-03T06:59:19.709Z"
+    "updated_at": "2026-11-03T06:59:19.709+00:00"
   },
   {
     "name": "시골집",
@@ -21502,6 +21567,19 @@
     "updated_at": "2026-07-11T03:47:52.109+00:00"
   },
   {
+    "name": "엉클샵(Uncle Shop)",
+    "address": "경기도 수원시 장안구 수성로245번길 46(1,2층 정자동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.291359915609,
+    "lng": 126.998183958663,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
+  },
+  {
     "name": "에그밀",
     "address": "서울특별시 마포구 포은로 146(명현빌딩 1층 101-1호 망원동)",
     "type": "카페",
@@ -21681,7 +21759,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-03T06:59:19.709Z"
+    "updated_at": "2026-11-03T06:59:19.709+00:00"
   },
   {
     "name": "에스프레소 인더홀(espresso in the hole)",
@@ -21876,7 +21954,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-03T06:59:19.709Z"
+    "updated_at": "2026-11-03T06:59:19.709+00:00"
   },
   {
     "name": "엘 깜뽀 데 떼레노",
@@ -25831,6 +25909,19 @@
     "updated_at": "2026-08-27T09:59:42.404+00:00"
   },
   {
+    "name": "자유로멍놀러와 애견테마파크",
+    "address": "경기도 파주시 탄현면 자유로 3810-97",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.8279093470944,
+    "lng": 126.715131313493,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
+  },
+  {
     "name": "자이언트 트리(giant tree)",
     "address": "대구광역시 중구 국채보상로149길 34-10(동인동3가)",
     "type": "일반음식점",
@@ -28909,7 +29000,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-03T06:59:19.709Z"
+    "updated_at": "2026-11-04T06:41:33.087Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -34278,7 +34369,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-03T06:59:19.709Z"
+    "updated_at": "2026-11-03T06:59:19.709+00:00"
   },
   {
     "name": "프릳츠",
@@ -34474,6 +34565,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-22T05:49:25.784+00:00"
+  },
+  {
+    "name": "플루프",
+    "address": "경기도 파주시 조리읍 탑삭골1길 31-7(1층)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.7334866591288,
+    "lng": 126.793112203467,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
   },
   {
     "name": "플린더스",
@@ -36712,6 +36816,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "홍콩다방 스타필드안성점",
+    "address": "경기도 안성시 공도읍 서동대로 3930-39(스타필드 안성 지1층 B120호)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 36.9946334108693,
+    "lng": 127.147249620616,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-04T06:41:33.087Z"
+  },
+  {
     "name": "화덕에 구어락",
     "address": "부산광역시 기장군 기장읍 기장해안로 615-6(1층)",
     "type": "일반음식점",
@@ -37281,6 +37398,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-03T06:59:19.709Z"
+    "updated_at": "2026-11-04T06:41:33.087Z"
   }
 ]
