@@ -231,7 +231,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "(주)플레이버타운",
@@ -1038,6 +1038,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-29T14:29:44.612+00:00"
+  },
+  {
+    "name": "LeMare(레마레)",
+    "address": "인천광역시 옹진군 영흥면 영흥서로 521(1, 2층)",
+    "type": "일반음식점",
+    "region": "인천",
+    "lat": 37.2750222835117,
+    "lng": 126.452758043333,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-05T07:00:21.952Z"
   },
   {
     "name": "MAKERS ATELIER",
@@ -7264,7 +7277,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "돈대회쎈타",
@@ -7694,6 +7707,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-22T05:49:25.784+00:00"
+  },
+  {
+    "name": "드말리 베이커리 앤 다이닝",
+    "address": "경기도 하남시 미사강변한강로 353(1층 일부호, 2층 망월동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.5599539124949,
+    "lng": 127.202456814014,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-05T07:00:21.952Z"
   },
   {
     "name": "듬뿌기",
@@ -8226,7 +8252,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "뜰아래채",
@@ -9318,7 +9344,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "로투스",
@@ -12399,7 +12425,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "몽베르트",
@@ -18613,7 +18639,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "슈크림",
@@ -19198,7 +19224,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-05T07:00:21.952Z"
   },
   {
     "name": "스페이스임원",
@@ -21577,7 +21603,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "에그밀",
@@ -22438,6 +22464,19 @@
     "updated_at": "2026-05-26T04:38:48.633+00:00"
   },
   {
+    "name": "옛날그집",
+    "address": "충청남도 당진시 면천면 동문1길 12-7",
+    "type": "일반음식점",
+    "region": "충남",
+    "lat": 36.816771173084,
+    "lng": 126.668607569782,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-05T07:00:21.952Z"
+  },
+  {
     "name": "오!샌드위치&샐러드",
     "address": "울산광역시 중구 번영로 581(1층 남외동)",
     "type": "일반음식점",
@@ -22592,6 +22631,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-09-23T04:53:37.022+00:00"
+  },
+  {
+    "name": "오드아워(oddhours)",
+    "address": "서울특별시 광진구 자양로41길 24(1층 구의동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5503730267681,
+    "lng": 127.089321553426,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-05T07:00:21.952Z"
   },
   {
     "name": "오드커피하우스(odee coffee house)",
@@ -23749,6 +23801,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-05-28T04:46:24.26+00:00"
+  },
+  {
+    "name": "올통",
+    "address": "경기도 시흥시 비둘기공원2길 26(대림상사 1층 일부호 대야동)",
+    "type": "일반음식점",
+    "region": "경기도",
+    "lat": 37.4409393924863,
+    "lng": 126.791471943624,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-05T07:00:21.952Z"
   },
   {
     "name": "올트",
@@ -25919,7 +25984,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "자이언트 트리(giant tree)",
@@ -29000,7 +29065,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-05T07:00:21.952Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -34577,7 +34642,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "플린더스",
@@ -36826,7 +36891,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-04T06:41:33.087+00:00"
   },
   {
     "name": "화덕에 구어락",
@@ -37398,6 +37463,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-04T06:41:33.087Z"
+    "updated_at": "2026-11-05T07:00:21.952Z"
   }
 ]
