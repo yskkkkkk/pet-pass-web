@@ -455,6 +455,19 @@
     "updated_at": "2026-07-06T04:46:25.592+00:00"
   },
   {
+    "name": "24시간이개모자라",
+    "address": "경기도 시흥시 진말로9번길 2(부석프라자 4층 408호일부호 장곡동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.3784640235878,
+    "lng": 126.785268524363,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
+  },
+  {
     "name": "24시참새방앗간",
     "address": "충청남도 보령시 해수욕장4길 102(신흑동)",
     "type": "일반음식점",
@@ -923,6 +936,19 @@
     "updated_at": "2026-07-03T04:13:32.449+00:00"
   },
   {
+    "name": "HANH한",
+    "address": "전남광주통합특별시 목포시 비파로43번길 14(1층 상동)",
+    "type": "제과점",
+    "region": "전남광주",
+    "lat": 34.8021291697381,
+    "lng": 126.425648393765,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
+  },
+  {
     "name": "HAP(햅)",
     "address": "경기도 여주시 현암로 11-43(1층 102호 현암동)",
     "type": "카페",
@@ -1014,19 +1040,6 @@
     "updated_at": "2026-07-03T04:13:32.449+00:00"
   },
   {
-    "name": "LUV PLUTO 러브 플루토",
-    "address": "서울특별시 서대문구 불광천길 180(지하1층, 1층 101호 북가좌동, 아임빌)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.5828926311258,
-    "lng": 126.910043531668,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-04-22T05:49:25.784+00:00"
-  },
-  {
     "name": "LYON (리옹))",
     "address": "경기도 화성시 효행구 봉담읍 오래4길 3-1",
     "type": "일반음식점",
@@ -1050,7 +1063,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-05T07:00:21.952Z"
+    "updated_at": "2026-11-05T07:00:21.952+00:00"
   },
   {
     "name": "MAKERS ATELIER",
@@ -7719,7 +7732,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-05T07:00:21.952Z"
+    "updated_at": "2026-11-05T07:00:21.952+00:00"
   },
   {
     "name": "듬뿌기",
@@ -8944,6 +8957,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "레이지모닝 크레센트",
+    "address": "대구광역시 중구 경상감영길 275(1층 동인동1가)",
+    "type": "카페",
+    "region": "대구",
+    "lat": 35.8711866545477,
+    "lng": 128.602437102658,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
+  },
+  {
     "name": "레이지크해비탯 동탄점",
     "address": "경기도 화성시 동탄구 동탄순환대로3길 28-8(1층 송동)",
     "type": "일반음식점",
@@ -9631,6 +9657,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-22T05:49:25.784+00:00"
+  },
+  {
+    "name": "르쁘띠포즈",
+    "address": "서울특별시 광진구 아차산로78길 167(1층 광장동)",
+    "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.5478249603523,
+    "lng": 127.108713312025,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
   },
   {
     "name": "르쿠에르",
@@ -11867,6 +11906,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-09-22T05:09:13.512+00:00"
+  },
+  {
+    "name": "모노디트리",
+    "address": "부산광역시 금정구 장전로12번길 17(1~2층 장전동)",
+    "type": "제과점",
+    "region": "부산",
+    "lat": 35.2286143709493,
+    "lng": 129.087674575755,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
   },
   {
     "name": "모노스톤",
@@ -19224,7 +19276,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-05T07:00:21.952Z"
+    "updated_at": "2026-11-06T07:00:00.597Z"
   },
   {
     "name": "스페이스임원",
@@ -22464,19 +22516,6 @@
     "updated_at": "2026-05-26T04:38:48.633+00:00"
   },
   {
-    "name": "옛날그집",
-    "address": "충청남도 당진시 면천면 동문1길 12-7",
-    "type": "일반음식점",
-    "region": "충남",
-    "lat": 36.816771173084,
-    "lng": 126.668607569782,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-11-05T07:00:21.952Z"
-  },
-  {
     "name": "오!샌드위치&샐러드",
     "address": "울산광역시 중구 번영로 581(1층 남외동)",
     "type": "일반음식점",
@@ -22643,7 +22682,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-05T07:00:21.952Z"
+    "updated_at": "2026-11-05T07:00:21.952+00:00"
   },
   {
     "name": "오드커피하우스(odee coffee house)",
@@ -23686,6 +23725,19 @@
     "updated_at": "2026-09-26T05:09:18.497+00:00"
   },
   {
+    "name": "온푸드딜리버리",
+    "address": "경기도 파주시 금정7길 20(1층 일부 금촌동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.7577465496586,
+    "lng": 126.774781087985,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
+  },
+  {
     "name": "온후주",
     "address": "경상남도 양산시 물금읍 화합4길 3-13(1층)",
     "type": "일반음식점",
@@ -23806,14 +23858,14 @@
     "name": "올통",
     "address": "경기도 시흥시 비둘기공원2길 26(대림상사 1층 일부호 대야동)",
     "type": "일반음식점",
-    "region": "경기도",
+    "region": "경기",
     "lat": 37.4409393924863,
     "lng": 126.791471943624,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-05T07:00:21.952Z"
+    "updated_at": "2026-11-06T07:00:00.597Z"
   },
   {
     "name": "올트",
@@ -26247,6 +26299,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "잴밀(ZAELMIL)",
+    "address": "서울특별시 서대문구 불광천길 180(지하1층, 1층 101호 북가좌동, 아임빌)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.5828926311258,
+    "lng": 126.910043531668,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
+  },
+  {
     "name": "저스트시즌(just season)",
     "address": "서울특별시 도봉구 도봉로110다길 26(1층 101호 창동, 현대빌리지)",
     "type": "카페",
@@ -27545,6 +27610,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-04-22T05:49:25.784+00:00"
+  },
+  {
+    "name": "참다랑어막주는집",
+    "address": "전남광주통합특별시 여수시 화산로 129(화장동)",
+    "type": "일반음식점",
+    "region": "전남광주",
+    "lat": 34.7770623720222,
+    "lng": 127.650296311966,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
   },
   {
     "name": "채도",
@@ -29065,7 +29143,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-05T07:00:21.952Z"
+    "updated_at": "2026-11-06T07:00:00.597Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -32578,6 +32656,19 @@
     "updated_at": "2026-05-26T16:06:22.594+00:00"
   },
   {
+    "name": "톤아날로그(Tone analogue)",
+    "address": "서울특별시 마포구 토정로17길 8(1층 신수동)",
+    "type": "일반음식점",
+    "region": "서울특별시",
+    "lat": 37.5449836630298,
+    "lng": 126.935849523649,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
+  },
+  {
     "name": "통영식탁",
     "address": "경상남도 통영시 동문로 39-1(1층 정량동)",
     "type": "일반음식점",
@@ -33330,6 +33421,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-06-21T05:21:49.939+00:00"
+  },
+  {
+    "name": "퍼퍼커피",
+    "address": "부산광역시 연제구 과정로276번길 23(1층 일부호 연산동)",
+    "type": "일반음식점",
+    "region": "부산",
+    "lat": 35.1891462579498,
+    "lng": 129.097396716931,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-06T07:00:00.597Z"
   },
   {
     "name": "퍼프퍼프",
@@ -37463,6 +37567,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-05T07:00:21.952Z"
+    "updated_at": "2026-11-06T07:00:00.597Z"
   }
 ]
