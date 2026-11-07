@@ -465,7 +465,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-06T07:00:00.597+00:00"
   },
   {
     "name": "24시참새방앗간",
@@ -946,7 +946,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-06T07:00:00.597+00:00"
   },
   {
     "name": "HAP(햅)",
@@ -7540,6 +7540,19 @@
     "updated_at": "2026-07-16T03:43:49.955+00:00"
   },
   {
+    "name": "두그루",
+    "address": "경기도 파주시 지목로 68(파비뇽아울렛1동 A-101호 문발동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.725817375984,
+    "lng": 126.698524600208,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-07T06:13:28.430Z"
+  },
+  {
     "name": "두두",
     "address": "경기도 용인시 기흥구 용구대로 1998(101호 상갈동)",
     "type": "카페",
@@ -8892,6 +8905,19 @@
     "updated_at": "2026-09-04T04:50:28.504+00:00"
   },
   {
+    "name": "레오카페",
+    "address": "경상남도 창원시 마산합포구 합포로 258(1층 산호동)",
+    "type": "일반음식점",
+    "region": "경남",
+    "lat": 35.220149214836,
+    "lng": 128.587220913258,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-07T06:13:28.430Z"
+  },
+  {
     "name": "레이나",
     "address": "대구광역시 중구 동덕로 35-1(대봉동)",
     "type": "일반음식점",
@@ -8967,7 +8993,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-06T07:00:00.597+00:00"
   },
   {
     "name": "레이지크해비탯 동탄점",
@@ -9662,14 +9688,14 @@
     "name": "르쁘띠포즈",
     "address": "서울특별시 광진구 아차산로78길 167(1층 광장동)",
     "type": "일반음식점",
-    "region": "서울특별시",
+    "region": "서울",
     "lat": 37.5478249603523,
     "lng": 127.108713312025,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-07T06:13:28.430Z"
   },
   {
     "name": "르쿠에르",
@@ -11918,7 +11944,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-06T07:00:00.597+00:00"
   },
   {
     "name": "모노스톤",
@@ -17082,19 +17108,6 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
-    "name": "서초커피작업실(Gilmajoong-gil)",
-    "address": "서울특별시 서초구 서운로1길 25(1층 서초동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.4843270937384,
-    "lng": 127.028204198741,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-04-22T05:49:25.784+00:00"
-  },
-  {
     "name": "서촌다과방",
     "address": "서울특별시 종로구 필운대로 6(1층 필운동)",
     "type": "일반음식점",
@@ -19276,7 +19289,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-07T06:13:28.430Z"
   },
   {
     "name": "스페이스임원",
@@ -23128,7 +23141,7 @@
   },
   {
     "name": "오솔길",
-    "address": "경기도 화성시 만세구 서신면 제부말길 82-5(1동 전체호)",
+    "address": "경기도 화성시 만세구 서신면 제부말길 82-5(1, 2, 3동)",
     "type": "카페",
     "region": "경기",
     "lat": 37.1696357347075,
@@ -23137,7 +23150,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-04-23T14:09:17.432+00:00"
+    "updated_at": "2026-11-07T06:13:28.430Z"
   },
   {
     "name": "오스테리아 브니엘",
@@ -23735,7 +23748,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-06T07:00:00.597+00:00"
   },
   {
     "name": "온후주",
@@ -23865,7 +23878,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-06T07:00:00.597+00:00"
   },
   {
     "name": "올트",
@@ -26309,7 +26322,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-06T07:00:00.597+00:00"
   },
   {
     "name": "저스트시즌(just season)",
@@ -27287,19 +27300,6 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
-    "name": "지니커피",
-    "address": "경기도 파주시 지목로 68(파비뇽아울렛1동 A-101호 문발동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 37.725817375984,
-    "lng": 126.698524600208,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-07-16T03:43:49.955+00:00"
-  },
-  {
     "name": "지리커피",
     "address": "경기도 수원시 장안구 경수대로775번길 68(2층 일부호 영화동)",
     "type": "일반음식점",
@@ -27586,6 +27586,19 @@
     "updated_at": "2026-04-27T14:24:50.826+00:00"
   },
   {
+    "name": "착한야장",
+    "address": "인천광역시 영종구 자연대로 37(2층 208호 중산동)",
+    "type": "일반음식점",
+    "region": "인천광역시",
+    "lat": 37.488180321321,
+    "lng": 126.559877742119,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-07T06:13:28.430Z"
+  },
+  {
     "name": "참나무골",
     "address": "경기도 부천시 원미구 송내대로74번길 34(상동)",
     "type": "일반음식점",
@@ -27622,7 +27635,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-06T07:00:00.597+00:00"
   },
   {
     "name": "채도",
@@ -29143,7 +29156,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-07T06:13:28.430Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -30288,6 +30301,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-09-18T04:53:43.165+00:00"
+  },
+  {
+    "name": "카페일리터 의정부민락점",
+    "address": "경기도 의정부시 오목로 196(민락2지구 제일풍경채 센텀-애비뉴모나코 지상1층 1-090호 민락동)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.7440510248763,
+    "lng": 127.099113696287,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-07T06:13:28.430Z"
   },
   {
     "name": "카페임",
@@ -31538,6 +31564,19 @@
     "updated_at": "2026-04-22T05:49:25.784+00:00"
   },
   {
+    "name": "콩나물사랑",
+    "address": "서울특별시 서초구 서운로1길 25(1층 서초동)",
+    "type": "일반음식점",
+    "region": "서울",
+    "lat": 37.4843270937384,
+    "lng": 127.028204198741,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-07T06:13:28.430Z"
+  },
+  {
     "name": "콩스키친",
     "address": "강원특별자치도 춘천시 춘천로185번길 15(1층 운교동)",
     "type": "일반음식점",
@@ -32659,14 +32698,14 @@
     "name": "톤아날로그(Tone analogue)",
     "address": "서울특별시 마포구 토정로17길 8(1층 신수동)",
     "type": "일반음식점",
-    "region": "서울특별시",
+    "region": "서울",
     "lat": 37.5449836630298,
     "lng": 126.935849523649,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-07T06:13:28.430Z"
   },
   {
     "name": "통영식탁",
@@ -33433,7 +33472,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-06T07:00:00.597+00:00"
   },
   {
     "name": "퍼프퍼프",
@@ -37567,6 +37606,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-06T07:00:00.597Z"
+    "updated_at": "2026-11-07T06:13:28.430Z"
   }
 ]
