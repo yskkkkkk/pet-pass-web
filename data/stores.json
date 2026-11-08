@@ -7550,7 +7550,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-07T06:13:28.43+00:00"
   },
   {
     "name": "두두",
@@ -8915,7 +8915,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-07T06:13:28.43+00:00"
   },
   {
     "name": "레이나",
@@ -9695,7 +9695,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-07T06:13:28.43+00:00"
   },
   {
     "name": "르쿠에르",
@@ -19289,7 +19289,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-08T06:18:57.292Z"
   },
   {
     "name": "스페이스임원",
@@ -23150,7 +23150,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-07T06:13:28.43+00:00"
   },
   {
     "name": "오스테리아 브니엘",
@@ -27589,14 +27589,14 @@
     "name": "착한야장",
     "address": "인천광역시 영종구 자연대로 37(2층 208호 중산동)",
     "type": "일반음식점",
-    "region": "인천광역시",
+    "region": "인천",
     "lat": 37.488180321321,
     "lng": 126.559877742119,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-08T06:18:57.292Z"
   },
   {
     "name": "참나무골",
@@ -29156,7 +29156,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-08T06:18:57.292Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -30313,7 +30313,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-07T06:13:28.43+00:00"
   },
   {
     "name": "카페임",
@@ -31574,7 +31574,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-07T06:13:28.43+00:00"
   },
   {
     "name": "콩스키친",
@@ -32705,7 +32705,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-07T06:13:28.43+00:00"
   },
   {
     "name": "통영식탁",
@@ -37606,6 +37606,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.430Z"
+    "updated_at": "2026-11-08T06:18:57.292Z"
   }
 ]
