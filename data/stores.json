@@ -19289,7 +19289,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-08T06:18:57.292Z"
+    "updated_at": "2026-11-09T06:52:38.290Z"
   },
   {
     "name": "스페이스임원",
@@ -25909,6 +25909,19 @@
     "updated_at": "2026-07-11T03:47:52.109+00:00"
   },
   {
+    "name": "일상사",
+    "address": "경기도 과천시 과천대로7길 33(디테크타워 상가B동 지1층 B111호 갈현동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 37.4137969768203,
+    "lng": 126.977169450381,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-09T06:52:38.290Z"
+  },
+  {
     "name": "일상적",
     "address": "서울특별시 중랑구 사가정로49길 34(1층 면목동)",
     "type": "일반음식점",
@@ -27596,7 +27609,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-08T06:18:57.292Z"
+    "updated_at": "2026-11-08T06:18:57.292+00:00"
   },
   {
     "name": "참나무골",
@@ -29156,7 +29169,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-08T06:18:57.292Z"
+    "updated_at": "2026-11-09T06:52:38.290Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -37606,6 +37619,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-08T06:18:57.292Z"
+    "updated_at": "2026-11-09T06:52:38.290Z"
   }
 ]
