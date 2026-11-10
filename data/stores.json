@@ -5096,19 +5096,6 @@
     "updated_at": "2026-05-04T14:28:42.792+00:00"
   },
   {
-    "name": "놀면뭐하개",
-    "address": "서울특별시 금천구 남부순환로 1390(전영수내과의원 4층 독산동)",
-    "type": "일반음식점",
-    "region": "서울",
-    "lat": 37.479839203517,
-    "lng": 126.905213073868,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-04-22T05:49:25.784+00:00"
-  },
-  {
     "name": "놀스",
     "address": "대구광역시 중구 북성로 92(1층 북성로1가)",
     "type": "카페",
@@ -9243,6 +9230,19 @@
     "updated_at": "2026-07-29T03:45:57.899+00:00"
   },
   {
+    "name": "로버스(robbers)",
+    "address": "경기도 광주시 중앙로 147(1층 경안동)",
+    "type": "카페",
+    "region": "경기",
+    "lat": 37.4128322368132,
+    "lng": 127.256897546232,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-10T07:29:49.984Z"
+  },
+  {
     "name": "로스터리 늘(ROASTERY NNIL)",
     "address": "부산광역시 동래구 여고로127번길 68(상가동 1층 1호 사직동, 동래백산아파트)",
     "type": "일반음식점",
@@ -9686,16 +9686,16 @@
   },
   {
     "name": "르쁘띠포즈",
-    "address": "서울특별시 광진구 아차산로78길 167(1층 광장동)",
+    "address": "서울특별시 광진구 아차산로78길 169(인스타빌딩 1층 광장동)",
     "type": "일반음식점",
     "region": "서울",
-    "lat": 37.5478249603523,
-    "lng": 127.108713312025,
+    "lat": 37.5477467019732,
+    "lng": 127.10857367004,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-07T06:13:28.43+00:00"
+    "updated_at": "2026-11-10T07:29:49.984Z"
   },
   {
     "name": "르쿠에르",
@@ -19289,7 +19289,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-09T06:52:38.290Z"
+    "updated_at": "2026-11-10T07:29:49.984Z"
   },
   {
     "name": "스페이스임원",
@@ -25919,7 +25919,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-09T06:52:38.290Z"
+    "updated_at": "2026-11-09T06:52:38.29+00:00"
   },
   {
     "name": "일상적",
@@ -29169,7 +29169,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-09T06:52:38.290Z"
+    "updated_at": "2026-11-10T07:29:49.984Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -37619,6 +37619,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-09T06:52:38.290Z"
+    "updated_at": "2026-11-10T07:29:49.984Z"
   }
 ]
