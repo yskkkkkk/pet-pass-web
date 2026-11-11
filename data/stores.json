@@ -5993,6 +5993,19 @@
     "updated_at": "2026-09-04T04:50:28.504+00:00"
   },
   {
+    "name": "달리봐(Dalibar)",
+    "address": "강원특별자치도 춘천시 충혼길34번길 13(1층 온의동)",
+    "type": "일반음식점",
+    "region": "강원특별자치도",
+    "lat": 37.8621092021048,
+    "lng": 127.720357213803,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-11T06:46:34.295Z"
+  },
+  {
     "name": "달마시안 스타필드수원점",
     "address": "경기도 수원시 장안구 수성로 175(스타필드 수원 1층 1250호 정자동)",
     "type": "일반음식점",
@@ -9240,7 +9253,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-10T07:29:49.984Z"
+    "updated_at": "2026-11-10T07:29:49.984+00:00"
   },
   {
     "name": "로스터리 늘(ROASTERY NNIL)",
@@ -9695,7 +9708,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-10T07:29:49.984Z"
+    "updated_at": "2026-11-10T07:29:49.984+00:00"
   },
   {
     "name": "르쿠에르",
@@ -11285,16 +11298,16 @@
   },
   {
     "name": "멍멍드림",
-    "address": "전남광주통합특별시 나주시 다도면 방산리 1474-2 (1층 일부)",
+    "address": "전남광주통합특별시 나주시 다도면 방산리 1474-2 1층 및 2층 전체",
     "type": "카페",
     "region": "전남광주",
-    "lat": 34.946000974175,
-    "lng": 126.870702220896,
+    "lat": 34.9460016049144,
+    "lng": 126.870702000963,
     "verified": true,
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-07-03T04:13:32.449+00:00"
+    "updated_at": "2026-11-11T06:46:34.295Z"
   },
   {
     "name": "멍멍숲",
@@ -19289,7 +19302,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-10T07:29:49.984Z"
+    "updated_at": "2026-11-11T06:46:34.295Z"
   },
   {
     "name": "스페이스임원",
@@ -20174,6 +20187,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-07-29T03:45:57.899+00:00"
+  },
+  {
+    "name": "아구듬뿍알곤마니 평택역점",
+    "address": "경기도 평택시 평택1로20번길 33(평택동)",
+    "type": "일반음식점",
+    "region": "경기",
+    "lat": 36.9940152088729,
+    "lng": 127.088871818828,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-11T06:46:34.295Z"
   },
   {
     "name": "아그집",
@@ -23710,6 +23736,19 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-07-24T03:49:51.626+00:00"
+  },
+  {
+    "name": "온모조모",
+    "address": "전북특별자치도 남원시 산내면 대정길 111",
+    "type": "일반음식점",
+    "region": "전북",
+    "lat": 35.419896209165,
+    "lng": 127.62799077169,
+    "verified": true,
+    "phone_number": null,
+    "description": null,
+    "naver_smartplace_link": null,
+    "updated_at": "2026-11-11T06:46:34.295Z"
   },
   {
     "name": "온어스(ONUS)",
@@ -29169,7 +29208,7 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-10T07:29:49.984Z"
+    "updated_at": "2026-11-11T06:46:34.295Z"
   },
   {
     "name": "카페(cafe) 잇다",
@@ -32043,19 +32082,6 @@
     "description": null,
     "naver_smartplace_link": null,
     "updated_at": "2026-05-07T14:47:42.046+00:00"
-  },
-  {
-    "name": "큰언니불꽃한우곱창",
-    "address": "경기도 평택시 평택1로20번길 33(평택동)",
-    "type": "일반음식점",
-    "region": "경기",
-    "lat": 36.9940152088729,
-    "lng": 127.088871818828,
-    "verified": true,
-    "phone_number": null,
-    "description": null,
-    "naver_smartplace_link": null,
-    "updated_at": "2026-05-22T15:19:34.547+00:00"
   },
   {
     "name": "클러터",
@@ -37619,6 +37645,6 @@
     "phone_number": null,
     "description": null,
     "naver_smartplace_link": null,
-    "updated_at": "2026-11-10T07:29:49.984Z"
+    "updated_at": "2026-11-11T06:46:34.295Z"
   }
 ]
